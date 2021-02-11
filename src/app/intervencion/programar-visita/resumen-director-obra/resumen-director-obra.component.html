@@ -1,0 +1,79 @@
+<form [formGroup]="formCriteria" (ngSubmit)="search()" fxLayout="column">
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0" class="w-100">
+    <div fxFlex>
+      <sigma-form-select [(ngModel)]="criteria.directorObra" formControlName="directorObra"
+        [placeholder]="constants.directorObra" [path]="constants.path_administracion_usuario_director_obra"
+        [listBy]="'nombresYapellidos'">
+      </sigma-form-select>
+    </div>
+
+    <div fxFlex>
+      <button type="submit" mat-raised-button color="primary" class="m-1" (click)="search()">
+        <mat-icon>search</mat-icon> {{ constants.buscar }}
+      </button>
+      <button (click)="limpiar()" mat-raised-button color="warn" class="m-1">
+        <mat-icon>clear</mat-icon> {{ constants.limpiar }}
+      </button>
+      <button class="mt-10" [disabled]="dataSource.totalElements$.source['_value'] <= 0" mat-raised-button
+        color="primary" class="m-1" (click)="exportAsXLSX()">
+        <mat-icon>get_app</mat-icon>
+        {{ constants.exportar }}
+        <mat-icon *ngIf="cargandoExcel">
+          <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+        </mat-icon>
+      </button>
+    </div>
+  </div>
+</form>
+
+<div class="w-100 mat-elevation-z8 mt-10 mb-10" fxLayout="column">
+  <div *ngIf="(dataSource.loading$ | async)" fxLayout="column" fxLayoutAlign="center center">
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+
+  <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+    <mat-icon class="m-1">sms_failed</mat-icon>
+    <h4> {{dataSource.errorMessage$ | async}}</h4>
+  </div>
+
+  <mat-table #table [dataSource]="dataSource" [hidden]="(dataSource.loading$ | async)" matSort
+    [style.display]="(dataSource.loading$ | async) ? 'none' : 'block'">
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+
+    <ng-container matColumnDef="directorObraNombre">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.directorObra }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let directorObra" [attr.data-label]="constants.directorObra">
+        {{ directorObra.directorObraNombre ? directorObra.directorObraNombre : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="numeroVisitasSinRealizar">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>
+        {{ constants.numeroVisitasProgramadasSinRealizar }} </mat-header-cell>
+      <mat-cell *matCellDef="let directorObra" [attr.data-label]="constants.numeroVisitasProgramadasSinRealizar">
+        {{ directorObra.numeroVisitasSinRealizar }} </mat-cell>
+    </ng-container>  
+
+    <ng-container matColumnDef="zona">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.zona }} </mat-header-cell>
+      <mat-cell *matCellDef="let directorObra" [attr.data-label]="constants.zona">
+        {{ directorObra.zona }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef> {{ constants.acciones }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let directorObra" [attr.data-label]="constants.acciones">
+        <button mat-raised-button color="primary" (click)="verProgramacion(directorObra)">
+          <mat-icon matTooltip="{{ constants.verProgramacion }}" matTooltipPosition="above">remove_red_eye</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-row *matRowDef="let row; columns: columns"></mat-row>
+  </mat-table>
+
+  <mat-paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size"
+    [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>

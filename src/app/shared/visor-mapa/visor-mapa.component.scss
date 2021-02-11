@@ -1,0 +1,16 @@
+/* import the required JSAPI css */
+@import url('https://js.arcgis.com/4.10/esri/css/main.css');
+
+.esri-view {
+  min-height: 400px;
+  width: 100%;
+}
+
+@media (max-width: 1800px) {
+
+  .esri-view {
+    min-height: 300px;
+    width: 100%; 
+  }
+
+} 

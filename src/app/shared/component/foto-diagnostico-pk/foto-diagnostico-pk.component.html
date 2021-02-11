@@ -1,0 +1,31 @@
+<div *ngIf="!mantenimiento" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50"></mat-spinner>
+</div>
+<div class="w-100">
+  <div *ngIf="mantenimiento">
+    <div *ngIf="mantenimiento.diagnostico">
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+        <sigma-show-file fxFlex *ngIf="mantenimiento.diagnostico.fotos[0]"
+          [id]=mantenimiento.diagnostico.fotos[0].archivo.id [showFile]=true>
+        </sigma-show-file>
+        <sigma-show-file fxFlex *ngIf="mantenimiento.diagnostico.fotos[1]"
+          [id]=mantenimiento.diagnostico.fotos[1].archivo.id [showFile]=true>
+        </sigma-show-file>
+        <sigma-show-file fxFlex *ngIf="mantenimiento.diagnostico.fotos[2]"
+          [id]=mantenimiento.diagnostico.fotos[2].archivo.id [showFile]=true>
+        </sigma-show-file>
+      </div>
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+        <sigma-show-file fxFlex *ngIf="mantenimiento.diagnostico.fotos[3]"
+          [id]=mantenimiento.diagnostico.fotos[3].archivo.id [showFile]=true>
+        </sigma-show-file>
+        <sigma-show-file fxFlex *ngIf="mantenimiento.diagnostico.fotos[4]"
+          [id]=mantenimiento.diagnostico.fotos[4].archivo.id [showFile]=true>
+        </sigma-show-file>
+        <sigma-show-file fxFlex *ngIf="mantenimiento.diagnostico.fotos[5]"
+          [id]=mantenimiento.diagnostico.fotos[5].archivo.id [showFile]=true>
+        </sigma-show-file>
+      </div>
+    </div>
+  </div>
+</div>

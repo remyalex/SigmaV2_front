@@ -1,0 +1,122 @@
+
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+
+<div [hidden]="currentAction !== 'list'">
+
+  <div fxLayout=" column" fxLayout.gt-sm="row wrap">
+    <div fxFlex="100" class="flex-p">
+      <mat-tab-group>
+        <mat-tab label="Enviar Solicitud a actualización de diagnóstico SMVL" *ngIf="condicion" >
+          <sigma-grid-mantenimientos #grid [data]="data"  [columns]="columns"
+            [condicion]="condicion"
+            [defaultFilters]="defaultFilters"
+            [filters]="filtersTransicionesSmvl" 
+            [singleActions]="accionesVerDetalles"
+            (executeOnSingle)="ejecutarDetalles($event)"  
+            [showKmCarril]="false">
+          </sigma-grid-mantenimientos>
+
+        </mat-tab>
+      </mat-tab-group>
+      
+      <div fxLayout="row" fxLayoutAlign="end" class="mt-10 mb-10">
+        <mat-dialog-actions>
+          <button type="submit" mat-raised-button color="primary" class="m-1" (click)="enviarSolicitud($event)">
+            <mat-icon class="m-1">send</mat-icon> {{ constants.enviarSolicitud }}
+          </button>
+        </mat-dialog-actions>
+      </div>
+    
+    </div>
+  </div>
+</div>
+
+   <div *ngIf="currentAction == constants.verDiagnosticoMejoramiento">
+    <div fxLayout="row" fxLayoutAlign="start" class="mt-10 mb-10">
+      <mat-dialog-actions>
+        <button mat-stroked-button class="m-1" color="primary" (click)="onBack()">
+          <mat-icon>arrow_back_ios</mat-icon> 
+          {{ constants.IrAtras }}
+        </button>
+      </mat-dialog-actions>
+    </div>
+
+    <sigma-ver-diagnostico [mantenimiento]="mantenimiento" [mostrarButtonsBackCancelar]="false"></sigma-ver-diagnostico> 
+  </div>
+  
+  <div *ngIf="currentAction == constants.VerDiagnosticoIntervencion">
+    <div fxLayout="row" fxLayoutAlign="start" class="mt-10 mb-10">
+      <mat-dialog-actions>
+        <button mat-stroked-button class="m-1" color="primary" (click)="onBack()">
+          <mat-icon>arrow_back_ios</mat-icon> 
+          {{ constants.IrAtras }}
+        </button>
+      </mat-dialog-actions>
+    </div>
+
+    <sigma-visita-verificacion-admin-detail
+    *ngIf="mantenimiento != undefined && mantenimiento != null"
+    [(mantenimiento)]="mantenimiento" [mostrarButtonsBackCancelar]="false"></sigma-visita-verificacion-admin-detail>
+
+    <div *ngIf="mantenimiento == undefined || mantenimiento == null" class="msj_no_results">
+      fxLayout="row" fxLayoutAlign="center center">
+      <mat-icon class="m-1">sms_failed</mat-icon>
+      <h4> No se encontró información de visita de verificación</h4>
+    </div>
+   </div>
+
+    <!-- Seccion Solicitud SMVL -->
+    <div *ngIf="currentAction == 'solicitudSmvl'">
+      
+      <mat-tab-group>
+      <mat-tab *ngFor="let transicion of transicionesMasivas" label="{{transicion.nombre}}">
+        <div fxLayout="row" fxLayoutAlign="start" class="flex-p">
+          <mat-dialog-actions>
+            <button mat-stroked-button class="m-1" color="primary" (click)="onBack()">
+              <mat-icon>arrow_back_ios</mat-icon> 
+              {{ constants.IrAtras }}
+            </button>
+          </mat-dialog-actions>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" class="p-16 m-0 mat-card-content"> 
+          <div fxFlex>
+            <mat-form-field class="w-100">
+            <input matInput placeholder="Fecha de Radicado" 
+              value={{this.fechaRadicadoSMVL}} autocomplete="off" type="text" readonly>
+            </mat-form-field>
+          </div>
+    
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="Número de Radicado" 
+              value={{this.numeroRadicadoSMVL}} autocomplete="off" type="text" readonly>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <sigma-grid-mantenimientos #grid2 [data]="data" [transicion]="transicion"
+          [defaultFilters]="defaultFilters"  [condicion]="condicion" 
+          [columns]="columnsSmvl" [filters]="filtersSmvl" 
+          [masiveActions]="accionesMasivasSmvl" [showCheckMasive]="true"
+          (executeOnMasiveAction)="ejecutar($event)"
+          (executeOnMasiveTransition)="executeMasiveTransition($event)"
+          [showKmCarril]="false"
+          [showTransitionComponent]="showTransitionComponent"
+          [showActividadAgrupada]="false">
+        </sigma-grid-mantenimientos>
+        
+        <!--
+          <sigma-mantenimiento-records [mantId]="data.mantenimiento.id"></sigma-mantenimiento-records>
+        -->
+      </mat-tab>
+    </mat-tab-group>
+      
+    </div>
+
+
+
+    

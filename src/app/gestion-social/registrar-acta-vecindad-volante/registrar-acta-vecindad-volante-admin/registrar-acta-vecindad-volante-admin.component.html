@@ -1,0 +1,42 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="processing">
+
+  <div *ngIf="currentAction == 'list'">
+    <div fxLayout="row" fxLayout.lt-md="column">
+      <div fxFlex="100" class="flex-p">
+        <mat-tab-group [selectedIndex]="tabSeleccionado.value" (selectedIndexChange)="seleccionarGrid($event)">
+          <mat-tab *ngIf="condicion" label="Registro de Volante">
+            <sigma-grid-mantenimientos #grid [data]="data" [condicion]="condicion" [columns]="columns"
+              [filters]="filters" [singleActions]="actions" (executeOnSingle)="ejecutar($event)">
+            </sigma-grid-mantenimientos>
+          </mat-tab>
+          <mat-tab *ngFor="let transicion of transicionesMasivas" label="{{transicion.nombre}}">
+            <sigma-grid-mantenimientos #grid [data]="data" [transicion]="transicion" [columns]="columns"
+              [filters]="filters" [singleActions]="actions" (executeOnSingle)="ejecutar($event)"
+              (executeOnMasiveTransition)="executeMasiveTransition($event)">
+            </sigma-grid-mantenimientos>
+          </mat-tab>
+    </mat-tab-group>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="currentAction == 'listVolantes'">
+    <sigma-social-registrar-acta-vecindad-volante-list [mantenimiento]="mantenimiento" (back)="back($event)">
+    </sigma-social-registrar-acta-vecindad-volante-list>
+  </div>
+
+  <div *ngIf="currentAction == 'consultaSocialVolante'">
+    <sigma-social-acta-volante-list-exp [mantenimiento]="mantenimiento" (back)="back($event)">
+    </sigma-social-acta-volante-list-exp>
+  </div>
+
+  <div *ngIf="currentAction == 'aficheVolante'">
+    <sigma-social-acta-afiche-volante-list [mantenimiento]="mantenimiento" (back)="back($event)">
+    </sigma-social-acta-afiche-volante-list>
+  </div>
+
+</div>

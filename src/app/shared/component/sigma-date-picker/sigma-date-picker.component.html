@@ -1,0 +1,54 @@
+<div *ngIf="type == constans.datepicker.types.timer">
+  <mat-form-field fxFlex="100%">
+    <input [placeholder]="placeholder" class="hover-element-pointer" matInput [owlDateTimeTrigger]="target"
+      [owlDateTime]="target" [formControl]="inputControl" (dateTimeChange)="changeValue($event)" readonly>
+    <mat-icon matSuffix [owlDateTimeTrigger]="target" class="hover-element-pointer">
+      access_time
+    </mat-icon>
+    <mat-icon matSuffix class="hover-element-pointer" color="warn" (click)="clearInputCalendar()">
+      delete
+    </mat-icon>
+    <owl-date-time [pickerType]="constans.datepicker.types.timer" #target="owlDateTime"></owl-date-time>
+  </mat-form-field>
+</div>
+
+<div *ngIf="type == constans.datepicker.types.calendar">
+  <mat-form-field fxFlex="100%">
+    <input matInput [placeholder]="placeholder" class="hover-element-pointer" [owlDateTimeTrigger]="target"
+      [owlDateTime]="target" [formControl]="inputControl" (dateTimeChange)="changeValue($event)" readonly
+      [max]="maxDate" [min]="minDate">
+    <mat-icon matSuffix [owlDateTimeTrigger]="target" class="hover-element-pointer">
+      calendar_today
+    </mat-icon>
+    <mat-icon matSuffix class="hover-element-pointer" color="warn" (click)="clearInputCalendar()">
+      delete
+    </mat-icon>
+    <owl-date-time [pickerType]="constans.datepicker.types.calendar" #target="owlDateTime"></owl-date-time>
+  </mat-form-field>
+</div>
+
+<div *ngIf="type == constans.datepicker.types.dateTime">
+  <mat-form-field fxFlex="100%">
+    <input matInput [placeholder]="placeholder" class="hover-element-pointer" [owlDateTimeTrigger]="target"
+      [owlDateTime]="target" [formControl]="inputControl" (dateTimeChange)="changeValue($event)" readonly
+      [max]="maxDate" [min]="minDate">
+    <mat-icon matSuffix [owlDateTimeTrigger]="target" class="hover-element-pointer">
+      calendar_today
+    </mat-icon>
+    <mat-icon matSuffix class="hover-element-pointer" color="warn" (click)="clearInputCalendar(target)">
+      delete
+    </mat-icon>
+    <owl-date-time #target="owlDateTime"></owl-date-time>
+  </mat-form-field>
+</div>
+
+<!-- Ejemplo de uso -->
+<!--<sigma-date-picker 
+  [objeto]="objeto" -> Obligatorio
+  [target]="'atributo'" -> Obligatorio
+  [maxTarget]="'atributo'" -> (Valor opcional, sirve de validación)
+  [minTarget]="'atributo'" -> (Valor opcional, sirve de validación)
+  [type]="this.constants.datepicker.types.dateTime" -> opciones disponibles (timer|calendar|datetime)
+  [placeholder]="placeholder" -> (Valor opcional)
+>
+</sigma-date-picker>-->

@@ -1,0 +1,55 @@
+<h2 mat-dialog-title>{{ constants.editar }}</h2>
+
+<div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+  <h5>{{ constants.informacionCampoObligatorio }}</h5>
+</div>
+
+<mat-dialog-content [formGroup]="form" *sigmaIsGranted="constants.permiso_administracion_upz_edit">
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="{{ constants.id }}" formControlName="id" [(ngModel)]="upz.id"
+          type="text"  [readonly]="true" >
+      </mat-form-field>
+    </div>
+
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="{{ constants.nombre }}" formControlName="nombre" [(ngModel)]="upz.nombre"
+          autocomplete="off" type="text" required pattern="^(?!\s*$).+">
+        <mat-error *ngIf="form.get('nombre').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+        <mat-error *ngIf="form.get('nombre').hasError('pattern')"> {{ constants.campoNoVacio }} </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="{{ constants.descripcion }}" formControlName="valor" [(ngModel)]="upz.valor"
+          autocomplete="off" type="text" required pattern="^(?!\s*$).+">
+        <mat-error *ngIf="form.get('valor').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+        <mat-error *ngIf="form.get('valor').hasError('pattern')"> {{ constants.campoNoVacio }} </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div fxFlex class="py-1">
+      <mat-checkbox formControlName="activo" [(ngModel)]="upz.activo" name="activo" id="activo">{{ constants.activo }}
+      </mat-checkbox>
+    </div>
+  </div>
+
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()" [disabled]='disableSubmit'>
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+  </button>
+  <button mat-raised-button [disabled]='disableSubmit' color="primary" (click)="save()"
+    *sigmaIsGranted="constants.permiso_administracion_upz_edit">
+    <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,265 @@
+<div fxLayout="column" [formGroup]="firstFormGroup">
+  <mat-card-content class="p-16 m-0">
+
+    <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.civ }}" [value]="mantenimiento.civ" name="civ"
+              formControlName="civ" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.pk }}" [value]="mantenimiento.pk" name="pk" formControlName="pk"
+              readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.barrio }}"
+              [value]="mantenimiento.barrio ? mantenimiento.barrio.nombre : '' " name="barrio" formControlName="barrio"
+              readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.localidad }}"
+              [value]="mantenimiento.localidad ? mantenimiento.localidad.nombre : '' " name="localidad"
+              formControlName="localidad" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+    </div>
+
+    <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.upz }}"
+              [value]="mantenimiento.upz ? mantenimiento.upz.nombre : '' " name="upz" formControlName="upz" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.ejeVial }}" [value]="mantenimiento.ejeVial" name="ejeVial"
+              formControlName="ejeVial" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.ejeVialDesde }}" [value]="mantenimiento.desde" name="ejeVialDesde"
+              formControlName="ejeVialDesde" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.ejeVialHasta }}" [value]="mantenimiento.hasta" name="ejeVialHasta"
+              formControlName="ejeVialHasta" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+    </div>
+
+    <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.logitudCiv }}" [value]="mantenimiento.longitud" name="longitud"
+              formControlName="longitud" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.anchoCiv }}" [value]="mantenimiento.ancho" name="ancho"
+              formControlName="ancho" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.areaCiv }}" [value]="mantenimiento.area" name="area"
+              formControlName="area" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <sigma-form-select formControlName="programa" [(ngModel)]="mantenimiento.programa"
+            [path]="constants.path_workflow_diagnostico_encabezado_programa"
+            [placeholder]="constants.ProgramaIntervencion" [listBy]="'descripcion'">
+          </sigma-form-select>
+        </div>
+      </div>
+
+    </div>
+
+    <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.areaIntervencion }}" [value]="mantenimiento.longitud" (ngModelChange)="areIntervencionValidate($event)"
+              name="longitud" formControlName="areIntervencion" [required]="areIntervencionValid" [numericInput]="true">
+            <mat-hint *ngIf="areIntervencionValid" align="start"> <strong
+                style="color:red;font-weight:normal">{{ constants.longitud_maxima }} 14.2 </strong></mat-hint>
+            <mat-error *ngIf="firstFormGroup.get('areIntervencion').hasError('required')">
+              {{ constants.campoRequerido }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.longitudTotalIntervenida }}" [value]="mantenimiento.ancho"
+              name="ancho" formControlName="longitudTotalIntervencion" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.tipoIntervencion }}" [value]="tipoIntervencion" name="area"
+              formControlName="tipoIntervencion" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <sigma-form-select [path]="constants.path_lista_items_clima_maniana"
+            [(ngModel)]="cuadrillaGeneral.climaManiana" formControlName="climaManiana"
+            placeholder="{{ constants.climaManiana }}" [listBy]="'descripcion'">
+          </sigma-form-select>
+        </div>
+      </div>
+
+    </div>
+
+    <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <sigma-form-select [path]="constants.path_lista_items_clima_tarde" [(ngModel)]="cuadrillaGeneral.climaTarde"
+            formControlName="climaTarde" placeholder="{{ constants.climaTarde }}" [listBy]="'descripcion'">
+          </sigma-form-select>
+        </div>
+      </div>
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <sigma-form-select [path]="constants.path_lista_items_clima_noche" [(ngModel)]="cuadrillaGeneral.climaNoche"
+            formControlName="climaNoche" placeholder="{{ constants.climaNoche }}" [listBy]="'descripcion'">
+          </sigma-form-select>
+        </div>
+      </div>
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.tipoPmt }}"
+              [value]="mantenimiento.solicitudesPmt ? mantenimiento.solicitudesPmt[0].tipoPmt.descripcion : ''"
+              name="tipoPmt" formControlName="tipoPmt" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.coi }}"
+              [value]="mantenimiento.solicitudesPmt ? mantenimiento.solicitudesPmt[0].coi : ''" name="coi"
+              formControlName="coi" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+    </div>
+
+    <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.fechaDesde }}"
+              [value]="mantenimiento.solicitudesPmt ? mantenimiento.solicitudesPmt[0].fechaInicio : ''"
+              name="fechaDesde" formControlName="fechaInicio" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.fechaHasta }}"
+              [value]="mantenimiento.solicitudesPmt ? mantenimiento.solicitudesPmt[0].fechaFin : ''" name="fechaHasta"
+              formControlName="fechaHasta" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <sigma-form-select [path]="constants.path_lista_items_vigilancia"
+            placeholder="{{ constants.serviceVigilancia }}" [(ngModel)]="cuadrillaGeneral.servicioVigilancia"
+            formControlName="serviceVigilancia" [listBy]="'descripcion'">
+          </sigma-form-select>
+        </div>
+      </div>
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <sigma-form-select [path]="constants.path_lista_items_vigilancia_horas"
+            placeholder="{{ constants.serviceVigilanciaHoras }}" [(ngModel)]="cuadrillaGeneral.vigilanciaHora"
+            formControlName="serviceVigilanciaHoras" [listBy]="'descripcion'">
+          </sigma-form-select>
+        </div>
+      </div>
+
+    </div>
+
+    <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+    <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+      <button type="button" [disabled]="!componentVisible" *sigmaIsGranted="constants.registro_diario_cuadrilla_general"
+        class="m-1" mat-raised-button color="primary" (click)="onSubmit()">
+        <mat-icon class="m-1">save</mat-icon> {{ constants.guardarSeccion }}
+      </button>
+    </div>
+
+  </mat-card-content>
+
+</div>

@@ -1,0 +1,151 @@
+<div>
+  <div>
+    <mat-card-content fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxLayoutWrap fxLayoutGap="0.5%"
+      fxLayoutAlign="right">
+      <div fxFlex="50%"></div>
+      <div fxFlex="50%" fxLayoutAlign="end">
+        <button mat-raised-button color="primary" class="m-1 mb-10" (click)="create();"
+          *sigmaIsGranted="constants.permiso_administracion_tipocargueestructura_create">
+          <mat-icon class="m-1">note_add</mat-icon> {{ constants.crearNuevo }}
+        </button>
+        <!-- <button layout="row" mat-raised-button color="primary" class="m-1" (click)="exportAsXLSX()"
+          *sigmaIsGranted="constants.permiso_administracion_tipocargueestructura_export"
+          [disabled]="tipoCargue.estructuras.length <= 0">
+          <mat-icon>get_app</mat-icon>
+          {{ constants.exportar }}
+          <mat-icon *ngIf="cargandoExcel">
+            <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+          </mat-icon>
+        </button> -->
+      </div>
+    </mat-card-content>
+  </div>
+</div>
+
+<div class="mat-elevation-z8">
+  <div *ngIf="tipoCargue.estructuras.length <= 0" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+    <mat-icon class="m-1">sms_failed</mat-icon>
+    <h4> {{ constants.errorMessage }}</h4>
+  </div>
+
+  <mat-table #table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="activo">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.activo }} </mat-header-cell>
+      <mat-cell *matCellDef="let tipocargueestructura" [attr.data-label]="constants.activo">
+        <span class="dev-color-red" [hidden]="tipocargueestructura.activo">{{ constants.no }}</span>
+        <span class="dev-color-green" [hidden]="!tipocargueestructura.activo">{{ constants.si }}</span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="campo">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.campo }} </mat-header-cell>
+      <mat-cell *matCellDef="let tipocargueestructura" [attr.data-label]="constants.campo">
+        {{tipocargueestructura.campo}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="descripcion">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.descripcion }} </mat-header-cell>
+      <mat-cell *matCellDef="let tipocargueestructura" [attr.data-label]="constants.descripcion">
+        {{tipocargueestructura.descripcion}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="fechaMaxima">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaMaxima }} </mat-header-cell>
+      <mat-cell *matCellDef="let tipocargueestructura" [attr.data-label]="constants.fechaMaxima">
+        {{tipocargueestructura.fechaMaxima}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="fechaMinima">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaMinima }} </mat-header-cell>
+      <mat-cell *matCellDef="let tipocargueestructura" [attr.data-label]="constants.fechaMinima">
+        {{tipocargueestructura.fechaMinima}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.id }} </mat-header-cell>
+      <mat-cell *matCellDef="let tipocargueestructura" [attr.data-label]="constants.id">
+        {{tipocargueestructura.id}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="listaId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.listaId }} </mat-header-cell>
+      <mat-cell *matCellDef="let tipocargueestructura" [attr.data-label]="constants.listaId">
+        {{ tipocargueestructura.lista ? tipocargueestructura.lista.nombre : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="longitudMaxima">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.longitudMaxima }} </mat-header-cell>
+      <mat-cell *matCellDef="let tipocargueestructura" [attr.data-label]="constants.longitudMaxima">
+        {{tipocargueestructura.longitudMaxima}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="numeroMaximo">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.numeroMaximo }} </mat-header-cell>
+      <mat-cell *matCellDef="let tipocargueestructura" [attr.data-label]="constants.numeroMaximo">
+        {{tipocargueestructura.numeroMaximo}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="numeroMinimo">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.numeroMinimo }} </mat-header-cell>
+      <mat-cell *matCellDef="let tipocargueestructura" [attr.data-label]="constants.numeroMinimo">
+        {{tipocargueestructura.numeroMinimo}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="requeridoId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.requeridoId }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let tipocargueestructura" [attr.data-label]="constants.requeridoId">
+        <span class="dev-color-red" [hidden]="tipocargueestructura.requerido">{{ constants.no }}</span>
+        <span class="dev-color-green" [hidden]="!tipocargueestructura.requerido">{{ constants.si }}</span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="tipoCargueId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.tipoCargueId }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let tipocargueestructura" [attr.data-label]="constants.tipoCargueId">
+        {{ tipocargueestructura.tipoCargue ? tipocargueestructura.tipoCargue.valor : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="tipoDatoId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.tipoDatoId }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let tipocargueestructura" [attr.data-label]="constants.tipoDatoId">
+        {{ tipocargueestructura.tipoDato ? tipocargueestructura.tipoDato.valor : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+      <mat-cell *matCellDef="let tipocargueestructura; let key = index;" [attr.data-label]="constants.acciones">
+        <button mat-raised-button color="primary" (click)="detail(tipocargueestructura)" class="m-1"
+          *sigmaIsGranted="constants.permiso_administracion_tipocargueestructura_view">
+          <mat-icon matTooltip="Detalles" matTooltipPosition="above">open_in_new</mat-icon>
+        </button>
+        <button mat-raised-button color="primary" (click)="edit(dataSource.filteredData.indexOf(tipocargueestructura), tipocargueestructura)" class="m-1"
+          *sigmaIsGranted="constants.permiso_administracion_tipocargueestructura_update">
+          <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+        </button>
+        <button mat-raised-button color="warn" (click)="delete(dataSource.filteredData.indexOf(tipocargueestructura), tipocargueestructura)" class="m-1"
+          *sigmaIsGranted="constants.permiso_administracion_tipocargueestructura_delete">
+          <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [length]="dataSource?.filteredData.length" [pageSize]="criteria.size"
+    [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+</div>

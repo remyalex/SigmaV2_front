@@ -1,0 +1,117 @@
+<h2 mat-dialog-title>{{ constants.detalle }} {{ constants.usuarioString }}</h2>
+
+<mat-dialog-content *sigmaIsGranted="constants.permiso_administracion_usuario_view">
+  <mat-list>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.nombres }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ usuario.nombres }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.apellidos }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ usuario.apellidos }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.correoElectronico }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ usuario.correoElectronico }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.identificacion }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ usuario.identificacion }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.login }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ usuario.usuario }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.origenId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ usuario.origen ? usuario.origen.descripcion : '' }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.estado }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ usuario.estado ? usuario.estado.descripcion : '' }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.roles }}</b>:
+        </div>
+        <div fxFlex="60">
+          <span *ngFor="let rol of usuario.roles; let i = index; first as first; last as last">
+            <span>"{{ rol.nombre }}"</span>
+            <span *ngIf="!last"> - </span>
+          </span>
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="mb-10">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.zonaAsociada }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ usuario.zona ? usuario.zona.nombre : 'Sin zona asignada' }}
+        </div>
+      </div>
+    </mat-list-item>
+
+  </mat-list>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cerrar }}
+  </button>
+</mat-dialog-actions>

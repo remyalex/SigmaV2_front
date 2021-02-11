@@ -1,0 +1,83 @@
+<h2 mat-dialog-title>{{ constants.editar }} Disponibilidad lugares</h2>
+
+<div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+  <h5>{{ constants.informacionCampoObligatorio }}</h5>
+</div>
+
+<mat-dialog-content [formGroup]="form" *sigmaIsGranted="constants.permiso_administracion_lugardisponibilidad_update">
+  <input type="hidden" formControlName="id" [(ngModel)]="lugardisponibilidad.id">
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <sigma-form-autocomplete [path]="constants.path_administracion_lugardisponibilidad_lugarId"
+        [placeholder]="constants.lugarId" formControlName="lugar" [(ngModel)]="lugardisponibilidad.lugar"
+        [errors]="errorsLugar">
+      </sigma-form-autocomplete>
+    </div>
+
+    <div fxFlex>
+      <sigma-form-calendar formControlName="fechaDesde" [(ngModel)]="lugardisponibilidad.fechaDesde"
+        [placeholder]="constants.fechaDesde" [objeto]="lugardisponibilidad" [maxTarget]="'fechaHasta'"
+        [type]="constants.datepicker.types.calendar">
+      </sigma-form-calendar>
+    </div>
+
+    <div fxFlex>
+      <sigma-form-calendar formControlName="fechaHasta" [(ngModel)]="lugardisponibilidad.fechaHasta"
+        [placeholder]="constants.fechaHasta" [objeto]="lugardisponibilidad" [minTarget]="'fechaDesde'"
+        [type]="constants.datepicker.types.calendar">
+      </sigma-form-calendar>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <sigma-form-calendar formControlName="intervalo" [(ngModel)]="lugardisponibilidad.intervalo"
+        [placeholder]="constants.intervalo" [type]="constants.datepicker.types.timer" 
+        [errors]="errorsInterval">
+      </sigma-form-calendar>
+    </div>
+
+    <div fxFlex>
+      <sigma-form-select formControlName="turnoId" [(ngModel)]="lugardisponibilidad.turno"
+        [path]="constants.path_administracion_lugardisponibilidad_turnoId" [placeholder]="constants.turnoId">
+      </sigma-form-select>
+    </div>
+
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    
+    <div fxFlex>
+      <div class="w-100">
+        <mat-checkbox formControlName="activo" [(ngModel)]="lugardisponibilidad.activo" name="activo" id="activo">
+          {{ constants.activo }}
+        </mat-checkbox>
+      </div>
+    </div>
+
+    <div fxFlex></div>
+  </div>
+
+  <button type="button" [disabled]="!this.calendariocompletado" (click)="mostrar = !mostrar" mat-raised-button
+    color="primary" class="m-1">{{ mostrar ? 'Ocultar' : 'Disponibilidad' }}
+    <mat-icon *ngIf="this.cargandoDisponibilidad">
+      <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+    </mat-icon>
+  </button>
+  <sigma-schedule *ngIf="mostrar" [listaCalendario]="events" (viewDateChange)="getEventMonthChanged($event)"></sigma-schedule>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions fxLayoutAlign="end">
+  <button mat-button class="m-1" color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon>
+    {{ constants.cancelar }}
+  </button>
+  <button mat-raised-button class="m-1" color="primary" [disabled]="disableSubmit" (click)="onSubmit()"
+    *sigmaIsGranted="constants.permiso_administracion_lugardisponibilidad_update">
+    <mat-icon class="m-1">save</mat-icon>
+    {{ constants.guardar }}
+  </button>
+</mat-dialog-actions>

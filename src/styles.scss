@@ -1,0 +1,689 @@
+// @import url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i');
+// @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import "app/theme/styles/external/fonts.googleapis-material-icon";
+@import "app/theme/styles/external/fonts.googleapis-roboto";
+// @import url('https://cdn.quilljs.com/1.2.2/quill.snow.css');
+// @import url('https://cdn.quilljs.com/1.2.2/quill.bubble.css');
+@import "app/theme/styles/external/quill_bubble";
+@import "app/theme/styles/external/quill_snow";
+// indigo-pink, deeppurple-amber, purple-green and pink-bluegrey.
+//@import '~@angular/material/prebuilt-themes/indigo-pink';
+@import "app/theme/styles/skins/umv";
+
+@import "app/theme/styles/base";
+@import "app/theme/styles/theme";
+@import "app/theme/styles/libs-override";
+@import "app/theme/styles/rtl";
+
+// Importa css del datetimepicker
+@import "~ng-pick-datetime/assets/style/picker.min.css";
+
+/*---- Estilos Personalizados Plantilla UMV ----*/
+//Mixin
+@mixin table-umv {
+    .consolidado .mat-table.col-x { 
+        .mat-cell,
+        .mat-header-cell  {
+            min-width: 250px;
+        }
+        .mat-header-cell {
+            text-transform: capitalize;
+        }
+    }
+    .mat-table.col-x { 
+        .mat-cell,
+        .mat-header-cell  {
+            min-width: 150px;
+        }
+    }
+    .mat-table{  
+        //min-width:inherit;
+        height: max-content; 
+        width: 100%;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch!important;
+        touch-action: auto !important;
+        -ms-touch-action: auto!important;
+        .mat-raised-button {
+            min-width: 40px;
+            padding: 0 8px;
+        }        
+        .mat-cell,
+        .mat-header-cell {
+            padding-right: 1vh!important;
+            word-break: break-word;
+        }
+        .mat-header-cell{
+            text-align: left!important;
+        }
+        .mat-row,
+        .mat-header-row {
+            width: 100%;
+            min-width: fit-content;
+        }
+        .mat-header-row {
+            border-bottom-color:$secundary-color;
+        }
+        .mat-row{
+            border-bottom-color:rgba(0, 0, 0, 0.12);
+        }
+        .mat-header-cell{
+            color: $primary-color;
+            font-size: 1em;
+            font-weight: 700;
+        }
+        .mat-sort-header-button{
+            text-align: left!important;
+        }
+        .mat-sort-header-arrow {
+            color: $secundary-color;
+        }
+    }    
+
+    .mat-row, .mat-header-row {  
+        min-width: 2800px;  
+        width: 100%;  
+     }  
+}
+
+*{
+    font-feature-settings: "liga" 1;    
+}
+/* Clases para modificar contenedores */
+.m-10{
+    margin: 10px!important;
+}
+.mt-10{
+    margin-top: 10px!important;
+}
+.mt-13{
+    margin-top: 13px!important;
+}
+.mt-20{
+    margin-top: 20px!important;
+}
+.mb-10{
+    margin-bottom: 10px!important;
+}
+.mb-20{
+    margin-bottom: 20px!important;
+}
+.ml-10{
+    margin-left: 10px!important;
+}
+.mr-10{
+    margin-right: 10px!important;
+}
+.mr-20{
+    margin-right: 20px!important;
+}
+.min-h-18{
+    min-height: 18.8vh;
+}
+.p-8 {
+    padding: 8px!important;
+}
+.p-16 {
+    padding: 16px!important;
+}
+.pt-16{
+    padding-top: 16px!important
+}
+.pl-8 {
+    padding-left: 8px!important;
+}
+.pl-16{
+    padding-left: 16px!important;
+}
+.p-tab {
+    padding: 8px 1px!important;
+}
+.none{
+    display: none!important;
+}
+.msj_obligatorio{
+    background-color: rgb(247, 238, 238);
+    color: #dd2c00;
+    margin-top: -5px; 
+    padding: 6px 16px;
+    width: 100%;   
+}
+.msj_no_results{
+    background-color: #FFF3E0;
+    color: #b85219;
+    padding: 2px;
+    width: 100%;
+}
+.msj_results_ok{
+    background-color: #f1f4ef;
+    color: #006a27;
+    padding: 10px;
+    margin-top: -5px;
+    width: 100%;  
+}
+.msj_accion{
+    background-color:rgb(247, 247, 247);
+    color: #004064;
+    padding: 2px 10px;
+    width: 100%;
+}
+.color-visitas{
+    color:#b95218;
+    font-weight: bold;
+    font-size: 2vh; 
+}
+.c-mod{
+    background-color: rgb(247, 247, 247)!important;
+}
+
+.c-mod h3, .c-mod-w h3 {
+    color:white;
+    font-weight: normal;
+}
+
+.sigma-sum{
+    background-color:rgb(247, 247, 247);
+    color: #b95219;
+    font-size: 1.4em;
+    border-left: 7px solid $primary-color;
+    padding:10px 24px 10px 0; 
+    margin: 15px 0;
+    b {
+        margin: 0 0 0 10px;
+    }
+}
+.inner-sidenav-content{
+    padding: 0!important;
+}
+canvas.estadisticas{
+    min-width: auto!important;
+    min-height: auto!important;
+    max-width: 800px!important;
+    max-height: 400px!important;
+    -webkit-transform: scale(1,1);
+    -o-transform: scale(1,1);
+    -moz-transform: scale(1,1);
+    -ms-transform: scale(1,1);
+    transform: scale(1,1);
+}
+.mat-menu-panel{
+    max-width: 320px!important;
+}
+// .mat-vertical-content {
+//     padding: 0 24px 24px 24px;
+// }
+.app.umv{
+    @include table-umv;
+    .mat-form-field{
+        line-height:1.25!important;
+    }
+}
+.umv-input-hidden {
+    .mat-form-field{
+        .mat-form-field-underline {
+            background-color: transparent!important;
+            .mat-form-field-ripple{
+                background-color: transparent!important;
+            }
+        }
+    }
+}
+.umv-chip{
+    background-color: #607D8B;
+    border-radius: 5px;
+    color:white;
+    display: inline-block;
+    font-size: 12px;
+    padding: 6px 4px;
+    max-width: 125px;
+}
+/* Step by step */
+.mat-horizontal-content-container{
+    padding: 0 24px 0px 24px!important;
+}
+/* Mapas */
+:root {
+    --mapa-oculto: 1;
+}
+.map-view{
+    font-size: 12px !important;
+    padding: 2px 10px!important;
+    line-height: 26px!important;
+   .mat-icon{
+        height: 14px;
+        width: 14px;
+        font-size: 14px!important;
+   } 
+}
+.esri-menu__list {
+    max-height: 240px!important;
+    overflow-y: auto!important;
+}
+
+.esri-view-height-medium .esri-search--sources .esri-search__sources-menu .esri-menu__list  {
+    max-height: 540px!important; 
+}
+
+.fixed-map{
+    background-color: white; 
+    position: sticky;
+    top:0px;
+    z-index: 10000;
+}
+
+.fixed-seccion {
+    position: sticky;
+    overflow:auto;
+    min-height: 10%;
+    max-height: 100%;
+    height: auto;  
+    
+}
+
+html[style="--mapa-oculto:1;"] .ps__rail-y {
+    display: none!important;
+} 
+
+.margin-checkbox {
+    margin: 10px;
+}
+/* Roles */
+div.record-picker{
+    overflow-x: auto!important;    
+}
+.record-picker li{
+    width: 765px!important;
+}
+/* Table Radio-button */
+.mat-table .mat-radio-button{
+    margin-left: 0px!important;
+}
+/* Table input */
+.table-input{
+    margin: 10px 0 0;
+    overflow: hidden;
+    width: 120px;
+}
+.table-select{
+    width: 120px;
+}
+
+#main-content {
+    max-height: 80vh;
+    bottom: 0px;
+    display: inline-block;
+}
+
+span#layerActive {
+    color: #6e6e6e;
+    font-size: 7px;
+    padding: 3px;
+    background-color: rgba(255, 255, 255, 0.4);
+    display: block;
+    width: 27px;
+    height: 27px;
+}
+/* Menú lateral */
+perfect-scrollbar.sidenav-menu-outer.user-block-show {
+    height: 90vh!important;
+}
+
+.mat-drawer{
+    background-color: white;
+    color:$primary-color;
+    .mat-icon{
+        color:$secundary-color;
+    }
+    .active-link{
+        background-color: $accent-color;
+        .mat-icon{
+            color:white;
+        }
+    }
+    .sub-menu.show .menu-item .mat-button-wrapper {
+        line-height: 16px!important;
+        text-align: left!important;
+    }  
+    .sub-menu .menu-titulo,
+    .sub-menu.show .menu-titulo {
+        word-break: break-word;
+        white-space: pre-line; 
+    }
+    .sub-menu .menu-expand-icon{
+        top: 2px;
+    }
+}
+
+/* Fondo General */
+.mat-drawer-container{
+    background-color: whitesmoke;
+}
+.mat-card-header{
+    background-color: $primary-color;
+    margin-bottom: 5px;
+}
+.mat-card-subtitle{
+    margin-bottom: 0px!important;
+}
+.mat-card-subtitle h2,
+.mat-card-subtitle h3,
+.mat-card-title h5{
+    color:#FFF;
+    font-weight: 400;
+} 
+/* Botones */
+.mat-button,
+.mat-raised-button:not([class*='mat-elevation-z']){
+    font-weight: 400!important;
+}
+/* Detail Items */
+.mat-list-item{
+    height:max-content!important;
+}
+.detail-item{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    word-break: break-word;
+}
+/* Tablas */
+@include table-umv;
+/* Selects*/
+.mat-select-panel .mat-option.mat-selected:not(.mat-option-multiple),
+.mat-select-panel .mat-option.mat-active{
+    background-color: $primary-color;
+    color: white!important;
+}
+.mat-select-panel .mat-option.mat-active .mat-pseudo-checkbox{
+    color:white;  
+  }
+.mat-option:hover:not(.mat-option-disabled, .mat-option.mat-selected.mat-active .mat-option-text), 
+.mat-option:focus:not(.mat-option-disabled){
+    background-color: rgba( $primary-color, .05 );
+    color:$primary-color!important;
+}
+
+.mat-option .mat-selected .mat-active,
+.mat-primary .mat-option.mat-selected:not(.mat-option-disabled, .mat-selected.mat-option-text:hover){
+    color: white!important;
+}
+
+.mat-option .mat-option-multiple .mat-active .mat-selected{
+    color:#1565c0!important;
+    font-weight: 600;    
+}
+.mat-option-multiple .mat-selected .mat-option-text:hover{
+    color:$primary-color;
+}
+.mat-primary .mat-pseudo-checkbox-checked .mat-option-text{
+    color:white!important;
+}
+
+.mat-select-panel {
+    max-width: fit-content!important;
+    overflow: auto!important;
+}
+.mat-option{
+    text-overflow: unset!important;
+    overflow: visible!important;
+}
+.mat-option-text{
+    overflow: visible!important;
+}
+
+/*Paginador*/
+.mat-paginator, .mat-paginator-page-size .mat-select-trigger{
+    font-size:14px;
+}
+.mat-dialog-content{
+    margin-bottom: 15px!important;
+    max-height: 100%!important;
+    overflow: visible!important;
+}
+.cdk-global-overlay-wrapper .cdk-overlay-pane, 
+.cdk-overlay-pane.edit-modalbox,
+.cdk-overlay-pane.custom-modalbox{
+    max-width: 90vw!important;
+    height: max-content!important;
+    overflow: auto!important;
+    .mat-snack-bar-container{
+        margin: 0 auto;
+        width: 100%!important;
+        color:white;
+    }
+    .error-snackbar{
+        background-color: #dd2c00;
+    }   
+}
+
+.owl-dt-control .owl-dt-control-content{
+    font-size:0.9em;
+}
+/* Modales */
+.mat-dialog-title{
+    margin: 0 0 10px;   
+}
+.edit-modalbox,
+.custom-modalbox{
+   // width: auto!important;
+    max-width: 90vw!important;
+}
+.custom-modalbox{
+    min-width: 30%!important;
+}
+.edit-modalbox {
+    min-width: 60%!important;
+}
+
+.sidenav-container-tablero-control {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    max-width: 100%;
+    min-height: 230px;
+  }
+
+  .sidenav-container-tablero-control-div-panel-derecho {
+    overflow: auto;
+    white-space: nowrap;
+    padding: 0px 0px 5px 0px ;
+  }
+
+  .mat-tree {
+    padding: 0px 20px 10px 0px;
+  }
+
+  .mat-radio-button {
+    margin-left: 16px;
+  }
+/* Select list */
+.mat-select-trigger{
+    height: 1.2em!important;
+}
+
+.aux-data-error {
+	font-size: 75%;
+	margin-top: -1.4em;
+	padding: -5px;
+	padding: -5px;
+}
+/* Responsive */
+
+@media (max-width: 3000px) {
+    .fixed-seccion {
+        max-height: calc(68% * var(--mapa-oculto));
+    }
+}    
+
+@media (max-width: 2800px) {
+    .fixed-seccion {
+        max-height: calc(65% * var(--mapa-oculto));
+    }
+}    
+
+@media (max-width: 2500px) {
+    .fixed-seccion {
+        max-height: calc(62% * var(--mapa-oculto));
+    }
+}    
+
+@media (max-width: 2200px) {
+    .fixed-seccion {
+        max-height: calc(55%* var(--mapa-oculto));
+    }
+}    
+
+@media (max-width: 1920px) {
+    .fixed-seccion {
+        max-height: calc(55% * var(--mapa-oculto));
+    }
+}
+
+@media (max-width: 1800px) {
+    .fixed-seccion {
+        max-height: calc(66% * var(--mapa-oculto));
+    }
+}
+
+@media (max-width: 1680px) {
+    .fixed-seccion {
+        max-height: calc(66% * var(--mapa-oculto));
+    }
+} 
+
+@media (max-width: 1536px) {
+    .fixed-seccion {
+        max-height: calc(56% * var(--mapa-oculto));
+    }
+}
+
+@media (max-width: 1440px) {
+    .fixed-seccion {
+        max-height: calc(56% * var(--mapa-oculto));
+    }
+} 
+
+@media (max-width: 1368px) {
+    perfect-scrollbar.sidenav-menu-outer.user-block-show {
+        height: 80vh!important;
+    }
+    .custom-modalbox{
+        min-width: 40%!important;
+    }
+    .edit-modalbox {
+        min-width: 80%!important;
+    }
+    .mat-cell,
+    .mat-header-cell {
+        //max-width: inherit;
+        min-width:150px!important;
+    }
+}
+
+@media (max-width: 1280px) {
+    .fixed-seccion {
+        max-height: calc(54% * var(--mapa-oculto));
+    }
+}
+
+/* TABLA RESPONSIVE */
+@media screen and (max-width: 960px) {
+    .mat-table {
+      border: 0;
+      vertical-align: middle
+    } 
+    .mat-table caption {
+      font-size: 1em;
+    }  
+    .mat-table .mat-row {
+      border-bottom: 5px solid #ddd;
+      display: block;
+    }   
+    .mat-table .mat-row:nth-child(even) {background:#f5f5f5}
+    .mat-table .mat-row:nth-child(odd) {background: #FFF}   
+    .mat-table .mat-cell {
+      border-bottom: 1px solid #ddd;
+      display: block;
+      font-size: 1em;
+      text-align: right;
+      min-height: fit-content!important;
+      padding: 1vh 0;
+    }
+    .mat-table .mat-cell:before {
+      content: attr(data-label);
+      float: left;
+      font-weight: normal;
+      padding:0 2vh;
+      font-size: .85em;
+      color: #004064;
+      font-weight: 700;
+      position: relative; 
+      z-index: 1100;
+    }
+    .mat-table .mat-cell:last-child {
+      border-bottom: 0;
+    }
+    .mat-header-row{
+        display: none;
+    }
+    .dev-color-green:not([hidden]),
+    .dev-color-red:not([hidden]) {
+        display: inline-flex;
+    }
+    .mat-footer-row::after, .mat-header-row::after, .mat-row::after {
+        display: none!important;
+        min-height: inherit;
+        content: '';
+    }
+    .table-input{
+        width:400px; 
+    } 
+    .mr-20{
+        margin-right:0px!important;
+    } 
+  }
+/* /TABLA RESPONSIVE */
+
+@media (max-width: 900px) {
+    perfect-scrollbar.sidenav-menu-outer.user-block-show {
+        height: 85vh!important;
+    }
+    .custom-modalbox{
+        min-width: 60%!important;
+    }
+    .edit-modalbox {
+        min-width: 90%!important;
+    }
+    .esri-view {
+        min-height: 300px!important;
+    }
+    .fixed-map{
+        position: static;
+    }    
+}
+
+@media (max-width: 600px) {
+    perfect-scrollbar.sidenav-menu-outer.user-block-show {
+        height: 86vh!important;
+    }
+    .custom-modalbox{
+        min-width: 70%!important;       
+    }
+    .mat-dialog-actions .mat-button+.mat-button, 
+    .mat-dialog-actions .mat-button+.mat-raised-button, 
+    .mat-dialog-actions .mat-raised-button+.mat-button, 
+    .mat-dialog-actions .mat-raised-button+.mat-raised-button{
+        margin-left: 0px!important;   
+    }
+    .mat-vertical-content {
+        padding: 0 8px 8px 8px!important;
+    }
+    .mat-vertical-stepper-header {
+        padding: 24px 0!important;
+    }
+    .mat-vertical-content-container {
+        margin-left: 11px!important;
+    }
+} 

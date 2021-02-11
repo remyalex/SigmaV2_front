@@ -1,0 +1,111 @@
+<h2 mat-dialog-title>{{ constants.detalle }}</h2>
+
+<mat-dialog-content *sigmaIsGranted="constants.permiso_administracion_recurso_view">
+  <mat-list>
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.activo }}</b>:
+        </div>
+        <div class="p-tab" fxFlex="60">
+          <span class="dev-color-red" [hidden]="recurso.activo">{{ constants.no }}</span>
+          <span class="dev-color-green" [hidden]="!recurso.activo">{{ constants.si }}</span>
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.equipoId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ recurso.equipoValor }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.fechaDesde }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ recurso.fechaDesde }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.fechaHasta }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ recurso.fechaHasta }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.id }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ recurso.id }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.intervalo }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ recurso.intervalo }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.tipoAsignacionId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ recurso.tipoAsignacionValor }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.tipoDisponibilidadId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ recurso.tipoDisponibilidadValor }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="mb-10">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.turnoId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ recurso.turnoValor }}
+        </div>
+      </div>
+    </mat-list-item>  
+  </mat-list>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions fxLayoutAlign="end">
+  <button mat-button color="warn" (click)="close()">{{ constants.cerrar }}</button>
+</mat-dialog-actions>

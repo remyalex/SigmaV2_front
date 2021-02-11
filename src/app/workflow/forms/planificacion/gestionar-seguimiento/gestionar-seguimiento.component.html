@@ -1,0 +1,80 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+  
+  <div [hidden]="processing">
+    <div [hidden]="currentAction !== 'list'">
+      <div fxLayout=" column">
+        <div fxFlex="100" class="flex-p">
+          <mat-tab-group [selectedIndex]="tabSeleccionado.value"
+               (selectedIndexChange)="seleccionarGrid($event)">
+            <mat-tab *ngFor="let transicion of transicionesMasivas" label="{{transicion.nombre}}">
+              <sigma-grid-mantenimientos  #grid [data]="data" [transicion]="transicion" [columns]="columns"
+                [filters]="filters" [showActividadAgrupada]="false"
+                [showKmCarril]="false" [showCheckMasive]="true" [showTransitionComponent]="verTransicion"
+                [masiveActions]="asignarRadicadoIntervencion" (executeOnMasiveAction)="ejecutar($event)"
+                [excludeEstadoPk]="['Diagnosticado','Verificado','Por ejecutar', 'En ejecución','Seguimiento','Terminado (Excluido)','Viable priorizacion','Terminado','Historico migrado','Terminado (No viable)','Terminado (Reserva rechazada)','Terminado (Sin Intervención)','Terminado (Actualización diagnóstico)','Terminado (Vigencia diagnóstico)','Terminado (Vigencia diagnóstico)','Terminado','Suspendido','Prediagnostico','Terminado (Cambio Geometria)','Reservado','Terminado (Buen estado - seguimiento)','Terminado (Buen estado)']" >
+              </sigma-grid-mantenimientos>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+      
+    <!-- Seccion Radicado Intervencion -->
+    <div *ngIf="currentAction == 'radicadoIntervencion'">
+      <div class="p-16 m-0">
+        <mat-card class="p-0 c-mod">
+          <mat-card-header fxLayoutAlign="center">
+            <mat-card-subtitle>
+              <h3>Vincular Radicado de Intervencion</h3>
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content class="p-16 m-0" [formGroup]="formularioConsultaRadicadoIntervencion">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+              <div fxFlex>
+                <mat-form-field class="w-100">
+                  <input matInput autocomplete="off" placeholder="Buscar radicado" [(ngModel)]="intervencionConsultaRadicadoIntervencion"
+                    formControlName="intervencionConsultaRadicadoIntervencion" [required]="true">
+                </mat-form-field>
+              </div>
+              <div fxFlex="30">
+                <button mat-button mat-raised-button color="primary" (click)="buscarRadicadoIntervencion()">
+                  <mat-icon class="m-1">search</mat-icon>
+                  Buscar Radicado
+                </button>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+              <div fxFlex>
+                <mat-form-field class="w-100">
+                  <input matInput placeholder="Radicado" formControlName="solicitudRadicadoIntervencion"
+                    [ngModel]="radicadoRespuestaIntervencion" readonly>
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-card-content>
+          <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+            <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+              <mat-dialog-actions>
+                <button class="m-1" mat-button color="warn" (click)="cancelRadIntervencion()">
+                  <mat-icon class="m-1">close</mat-icon>
+                  Cancelar
+                </button>
+                <button mat-button mat-raised-button class="m-1" color="primary"
+                  [disabled]="radicadoRespuestaIntervencion == null || processing"
+                  (click)="saveRadicadoIntervencion()">
+                  <mat-icon class="m-1">save</mat-icon>
+                  Guardar
+                </button>
+              </mat-dialog-actions>
+            </div>
+        </mat-card>
+      </div>
+
+      <sigma-seleccion-transicion *ngIf="verTransicion" [(data)]="data"
+      [transiciones]="transicionesMasivas"
+      (executeTransition)="executeTransitions()"></sigma-seleccion-transicion>
+    </div>
+
+  </div>

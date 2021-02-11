@@ -1,0 +1,15 @@
+<div fxLayout="column" fxLayout.gt-sm="row wrap">
+  <div fxFlex="100" class="flex-p" >
+    <mat-card>
+      <mat-card-content>
+        <div fxLayoutAlign="end" *ngIf="showCreate">
+            <button *sigmaIsGranted="constants.permiso_produccion_registrar_formulas_create"  mat-raised-button color="primary" class="m-1 mb-10" (click)="create();">
+                <mat-icon class="m-1">note_add</mat-icon> Crear Nuevo
+            </button>
+        </div>
+        <app-registrar-formulas-mezcla-laboratorio-list *sigmaIsGranted="constants.permiso_produccion_registrar_formulas_list" (showCreate)="ejecutar($event)" ></app-registrar-formulas-mezcla-laboratorio-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+</div>

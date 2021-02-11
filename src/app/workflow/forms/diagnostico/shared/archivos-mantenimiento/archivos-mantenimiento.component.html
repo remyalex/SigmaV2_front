@@ -1,0 +1,28 @@
+<h2 mat-dialog-title>Adicionar archivo</h2>
+
+<mat-dialog-content [formGroup]="form">
+  <div fxLayout="row" fxLayout.lt-md="column">
+    <sigma-form-upload-file class="w-100" formControlName="archivo" [(ngModel)]="archivoMantenimiento.archivo"
+      [placeholder]="constants.archivo" [accept]="accept" [showFile]="false" [sizeFile]="20">
+    </sigma-form-upload-file>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column">
+    <div fxFlex>
+      <sigma-form-textarea formControlName="observacion" [(ngModel)]="archivoMantenimiento.observaciones"
+        placeholder="Observación" [rows]="5">
+      </sigma-form-textarea>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> Cancelar
+  </button>
+  <button mat-raised-button color="primary" (click)="save()" [disabled]="loading === true || !archivoMantenimiento.archivo.id">
+    <mat-icon class="m-1">save</mat-icon> Guardar
+  </button>
+</mat-dialog-actions>

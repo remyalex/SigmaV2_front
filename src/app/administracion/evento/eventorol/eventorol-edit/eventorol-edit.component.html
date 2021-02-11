@@ -1,0 +1,64 @@
+<h2 mat-dialog-title>{{ constants.editar }} Rol de evento</h2>
+
+<div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+  <h5>{{ constants.informacionCampoObligatorio }}</h5>
+</div>
+
+<mat-dialog-content [formGroup]="form" *sigmaIsGranted="constants.permiso_administracion_eventorol_update">
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <div class="w-100">
+        <app-sigma-autocomplete [label]="'Autocomplete rol'" [labelparametro1]="'Rol'"
+          (selectItem)="setRoleventorol($event)" [path]="constants.path_administracion_eventorol_rolId"
+          [searchBy]="'nombre'" [required]="true"  [value]="eventorol.rol.nombre">
+        </app-sigma-autocomplete>
+        <input matInput type="text" placeholder="" formControlName="rolId" [(ngModel)]="eventorol.rol"
+          autocomplete="off" hidden>
+        <mat-error *ngIf="enviada && form.get('rolId').hasError('required')"> {{ constants.campoRequerido }}
+        </mat-error>
+      </div>
+    </div>
+    <div fxFlex>
+      <sigma-form-calendar formControlName="fechaDesde" [maxTarget]="'fechaHasta'" [(ngModel)]="eventorol.fechaDesde"
+        [type]="this.constants.datepicker.types.calendar" [objeto]="eventorol" [placeholder]="constants.fechaDesde" >
+      </sigma-form-calendar>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <sigma-form-calendar formControlName="fechaHasta"   [minTarget]="'fechaDesde'" [(ngModel)]="eventorol.fechaHasta"
+        [type]="this.constants.datepicker.types.calendar" [objeto]="eventorol" [placeholder]="constants.fechaHasta">
+      </sigma-form-calendar>
+    </div>
+    <div fxFlex>
+      <div fxFlex>
+        <sigma-form-select [path]="constants.path_administracion_eventorol_valorPermitidoId"
+          formControlName="valorPermitidoId" [(ngModel)]="eventorol.valorPermitido"
+          placeholder="{{ constants.valorPermitidoId }}">
+        </sigma-form-select>
+      </div>
+      <div fxFlex="20" fxLayoutAlign="end center">
+        <mat-checkbox formControlName="activo" [(ngModel)]="eventorol.activo">
+          {{ constants.activo }}
+        </mat-checkbox>
+      </div>
+        
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions fxLayoutAlign="end">
+  <button mat-button class="m-1" color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon>
+    {{ constants.cancelar }}
+  </button>
+  <button mat-raised-button class="m-1" color="primary" [disabled]="disableSubmit" (click)="onSubmit()"
+    *sigmaIsGranted="constants.permiso_administracion_eventorol_update">
+    <mat-icon class="m-1">save</mat-icon>
+    {{ constants.guardar }}
+  </button>
+</mat-dialog-actions>

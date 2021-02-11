@@ -1,0 +1,166 @@
+<div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+  <!-- Lista Item -->
+  <ng-container *ngIf="tipo === 'LISTA_ITEM'">
+      <div fxFlex>
+        <mat-form-field class="w-100">
+          <mat-label>Lista</mat-label>
+          <mat-select>
+            <mat-option *ngFor="let lista of listas" [value]="lista" (click)="chargeListaItem(lista)">
+              {{ lista.nombre }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div fxFlex="40" fxFlex.sm="100" fxFlex.xs="100">
+        <mat-form-field class="w-100">
+          <mat-label>Lista Item</mat-label>
+          <mat-select class="w-100">
+            <mat-option *ngFor="let listaItem of listasItem" [value]="listaItem"
+              (click)="setValor(listaItem)">
+              {{ listaItem.descripcion }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+  </ng-container>
+
+<!-- Lista de actividades -->
+<ng-container *ngIf="tipo === 'LISTA_ACTIVIDAD'">
+  <div fxFlex>
+    <mat-form-field class="w-100">
+      <mat-label>Actividades</mat-label>
+      <mat-select>
+        <mat-option *ngFor="let lista of listaActividad" [value]="lista" (click)="setValor(lista)">
+          {{ lista.descripcion }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</ng-container>
+
+<!-- Lista tipos de intervencion -->
+<ng-container *ngIf="tipo === 'LISTA_TIPO_INTERVENCION'">
+  <div fxFlex>
+    <mat-form-field class="w-100">
+      <mat-label>Tipo de Intervención</mat-label>
+      <mat-select>
+        <mat-option *ngFor="let lista of listaTipoIntervencion" [value]="lista" (click)="setValor(lista)">
+          {{ lista.descripcion }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</ng-container>
+
+<!-- Lista de barrios -->
+<ng-container *ngIf="tipo === 'LISTA_BARRIO'">
+  <div fxFlex>
+    <mat-form-field class="w-100">
+      <mat-label>Barrios</mat-label>
+      <mat-select>
+        <mat-option *ngFor="let lista of listaBarrio" [value]="lista" (click)="setValor(lista)">
+          {{ lista.nombre }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</ng-container>
+
+
+<!-- Lista de zonas -->
+<ng-container *ngIf="tipo === 'LISTA_ZONA'">
+  <div fxFlex>
+    <mat-form-field class="w-100">
+      <mat-label>Zonas</mat-label>
+      <mat-select>
+        <mat-option *ngFor="let lista of listaZona" [value]="lista" (click)="setValor(lista)">
+          {{ lista.nombre }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</ng-container>
+
+<!-- Lista de localidades -->
+<ng-container *ngIf="tipo === 'LISTA_LOCALIDAD'">
+  <div fxFlex>
+    <mat-form-field class="w-100">
+      <mat-label>Localidades</mat-label>
+      <mat-select>
+        <mat-option *ngFor="let lista of listaLocalidad" [value]="lista" (click)="setValor(lista)">
+          {{ lista.nombre }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</ng-container>
+
+<!-- Lista de upz´s -->
+<ng-container *ngIf="tipo === 'LISTA_UPZ'">
+  <div fxFlex>
+    <mat-form-field class="w-100">
+      <mat-label>upz´s</mat-label>
+      <mat-select>
+        <mat-option *ngFor="let lista of listaUpz" [value]="lista" (click)="setValor(lista)">
+          {{ lista.nombre }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</ng-container>
+
+<!-- Lista de Cuadrantes -->
+<ng-container *ngIf="tipo === 'LISTA_CUADRANTE'">
+  <div fxFlex>
+    <mat-form-field class="w-100">
+      <mat-label>Cuadrantes</mat-label>
+      <mat-select>
+        <mat-option *ngFor="let lista of listaCuadrante" [value]="lista" (click)="setValor(lista)">
+          {{ lista.nombre }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</ng-container>
+
+  <!-- Boolean -->
+  <ng-container *ngIf="tipo === 'BOOLEAN'">
+    <div fxFlex="50" fxFlex.sm="100" fxFlex.xs="100">
+      <mat-form-field class="w-100">
+        <mat-label>Operador Logico</mat-label>
+        <mat-select>
+          <mat-option [value]="'FALSE'" (click)="setValor('FALSE')"> NO</mat-option>
+          <mat-option [value]="'TRUE'" (click)="setValor('TRUE')">SI</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </ng-container>
+  <!-- Number -->
+  <ng-container *ngIf="tipo === 'NUMBER'">
+    <div fxFlex="50" fxFlex.sm="100" fxFlex.xs="100">
+      <mat-form-field class="w-100">
+        <input matInput placeholder="NUMBER" autocomplete="off" type="text" [numericInput]="true" pattern="[0-9]*"
+          (keyup)="setValor($event.target.value)" [(ngModel)]="valorNumber">
+      </mat-form-field>
+    </div>
+  </ng-container>
+  <!-- NVARCHAR2 -->
+  <ng-container *ngIf="tipo === 'VARCHAR2' || tipo === 'NVARCHAR2'">
+    <div fxFlex="50" fxFlex.sm="100" fxFlex.xs="100">
+      <mat-form-field class="w-100">
+        <input matInput placeholder="VARCHAR2" autocomplete="off" type="text" (keyup)="setValor($event.target.value)"
+          [(ngModel)]="valorString">
+      </mat-form-field>
+    </div>
+  </ng-container>
+  <!-- TIMESTAMP -->
+  <ng-container *ngIf="tipo === 'TIMESTAMP(6)'">
+    <div fxFlex="50" fxFlex.sm="100" fxFlex.xs="100">
+      <mat-form-field class="w-100">
+        <input matInput [matDatepicker]="picker" placeholder="Fecha" (dateChange)="setDate($event.value)">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+  </ng-container>
+</div>

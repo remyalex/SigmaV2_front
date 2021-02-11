@@ -1,0 +1,357 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="processing" *ngIf="newVisita">
+  <div>
+    <div fxLayout=" column" fxLayout.gt-sm="row wrap">
+      <div fxFlex="100" class="flex-p">
+        <!-- <mat-card> -->
+        <!-- <mat-card-content> -->
+        <mat-card-content></mat-card-content>
+
+        <mat-horizontal-stepper [linear]="isLinear" (selectionChange)="onStepChange($event)" #stepper>
+          <mat-step [stepControl]="mantenimientoFormGroup">
+            <ng-template matStepLabel>{{ constants.mantenimientos }}</ng-template>
+
+            <form [formGroup]="mantenimientoFormGroup">
+              <sigma-form-input [(ngModel)]="listaPksSelect" (ngModelChange)="cambioMantenimientos()"
+                formControlName="mantenimientos" [class]="'hidden'">
+              </sigma-form-input>
+            </form>
+
+            <form fxLayout="column">
+              <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxLayoutGap.lt-md="0" fxLayoutGap="1.2%"
+                fxLayoutAlign="start">
+                <div fxFlex="100">
+                  <mat-form-field class="w-100">
+                    <input matInput placeholder="PK" id="pk" [(ngModel)]="criteria.pk" name="pk" />
+                  </mat-form-field>
+                </div>
+
+                <div fxFlex="100">
+                  <sigma-form-calendar [placeholder]="constants.fechaAsignacion"
+                    [type]="constants.datepicker.types.calendar" [(ngModel)]="criteria.fechaAsignacion"
+                    [ngModelOptions]="{standalone: true}" (ngModelChange)="cambioFechaAsignacion()">
+                  </sigma-form-calendar>
+                </div>
+
+                <div fxFlex="100">
+                  <mat-form-field class="w-100">
+                    <mat-select [placeholder]="'' + constants.responsableDisenio"
+                      (selectionChange)="changeIngeniero($event)" [(value)]="criteria.ingenieroDisenioObject">
+                      <mat-option [value]="">
+                        {{ constants.seleccionar }}
+                      </mat-option>
+                      <mat-option *ngFor="let ingeniero of ingenieros" [value]="ingeniero">
+                        {{ ingeniero.nombres + ' ' + ingeniero.apellidos }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-icon *ngIf="loadingIngeniero" fxLayoutAlign="center end" matSuffix color="warn">
+                      <mat-spinner [diameter]="15"></mat-spinner>
+                    </mat-icon>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="0.8%" fxLayoutGap.lt-md="0"
+                fxLayoutAlign="start">
+                <div fxLayoutAlign="start">
+                  <button type="submit" mat-raised-button color="primary" class="m-1" (click)="search()">
+                    <mat-icon>search</mat-icon> Buscar
+                  </button>
+                  <button (click)="limpiar()" mat-raised-button color="warn" class="m-1">
+                    <mat-icon>clear</mat-icon> Limpiar
+                  </button>
+                </div>
+              </div>
+            </form>
+
+            <div class="mat-elevation-z8 mt-10">
+              <div *ngIf="(dataSource.loading$ | async)" fxLayout="column" fxLayoutAlign="center center">
+                <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+              </div>
+
+              <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row"
+                fxLayoutAlign="center center">
+                <mat-icon class="m-1">sms_failed</mat-icon>
+                <h4> {{ dataSource.errorMessage$ | async }}</h4>
+              </div>
+
+              <mat-table #table class="col-x" [dataSource]="dataSource" [hidden]="(dataSource.loading$ | async)" matSort
+                [style.display]="(dataSource.loading$ | async) ? 'none' : 'block'">
+                <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+
+                <ng-container matColumnDef="select">
+                  <mat-header-cell class="none" *matHeaderCellDef></mat-header-cell>
+                  <mat-cell class="none" *matCellDef="let mantenimiento"></mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="seleccion">
+                  <mat-header-cell *matHeaderCellDef>
+                    &nbsp;&nbsp;&nbsp;
+                    <mat-checkbox (change)="$event ? masterToggle($event) : null" [checked]="masiveChecked">
+                    </mat-checkbox>
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let mantenimiento">
+                    &nbsp;&nbsp;&nbsp;
+                    <mat-checkbox #listCheckboxes (click)="$event.stopPropagation()"
+                      (change)="$event ? toggleChecks(mantenimiento, $event) : null"
+                      [checked]="mantenimientoIsSelected (mantenimiento.id)">
+                    </mat-checkbox>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="pk">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.pk }} </mat-header-cell>
+                  <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.pk"
+                    (click)="localizarMantenimientoMapa(mantenimiento)" class="hover-element-pointer">
+                    {{ mantenimiento.pk }}
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="civ">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.civ }} </mat-header-cell>
+                  <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.civ">
+                    {{ mantenimiento.civ }}
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="origen">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.origen }} </mat-header-cell>
+                  <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.origen">
+                    {{ mantenimiento.origen !=null ? mantenimiento.origen.descripcion: '' }}
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="fecha">
+                  <mat-header-cell *matHeaderCellDef> {{ constants.fecha }} </mat-header-cell>
+                  <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.fecha">
+                    &nbsp;&nbsp;&nbsp;
+                    <mat-checkbox #listCheckboxes disabled="true" [(ngModel)]="mantenimiento.check">
+                    </mat-checkbox>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="ejeVial">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.direccion }} </mat-header-cell>
+                  <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.direccion">
+                    {{ mantenimiento.ejeVial && mantenimiento.desde ? mantenimiento.ejeVial + ' N° ' +  mantenimiento.desde  : ''}}
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="fechaVisitaDisenio">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaVisitaDisenio }}
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.fechaVisitaDisenio">
+                    {{ mantenimiento.fechaVisitaDisenio }}
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="diagnostico.encabezado.tipoIntervencionTotal.descripcion">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.tipoIntervencion }}
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.tipoIntervencion">
+                    {{ mantenimiento.diagnostico && mantenimiento.diagnostico.encabezado &&
+                       mantenimiento.diagnostico.encabezado.tipoIntervencionTotal && 
+                      mantenimiento.diagnostico.encabezado.tipoIntervencionTotal.descripcion ?
+                      mantenimiento.diagnostico.encabezado.tipoIntervencionTotal.descripcion : '' }}
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="localidad.nombre">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.localidad }} </mat-header-cell>
+                  <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.localidad">
+                    {{ mantenimiento.localidad !=null ? mantenimiento.localidad.nombre : '' }} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="zona">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.zona }} </mat-header-cell>
+                  <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.zona">
+                    {{ mantenimiento.zona != null ? mantenimiento.zona.nombre : '' }}
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="cuadrante">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.cuadrante }} </mat-header-cell>
+                  <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.cuadrante">
+                    {{ mantenimiento.cuadrante != null? mantenimiento.cuadrante.nombre: '' }} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="acciones">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.acciones }} </mat-header-cell>
+                  <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.acciones">
+
+                  </mat-cell>
+                </ng-container>
+
+                <mat-row *matRowDef="let row; columns: columns"></mat-row>
+              </mat-table>
+
+              <mat-paginator class="mb-10" #paginator [length]="dataSource.totalElements$ | async"
+                [pageSize]="criteria.size" [pageSizeOptions]="[5, 10, 20]">
+              </mat-paginator>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <div fxLayout="row">
+              <div fxFlex fxLayoutAlign="end center" class="pt-16">
+                <button mat-raised-button matStepperNext color="primary" [disabled]="listaPksSelect.length == 0">
+                  {{ constants.siguiente }} <mat-icon class="m-1">keyboard_arrow_right</mat-icon>
+                </button>
+              </div>
+            </div>
+          </mat-step>
+
+          <mat-step [stepControl]="trabajarFormGroup">
+            <ng-template matStepLabel>{{ constants.programar }}</ng-template>
+
+            <form [formGroup]="trabajarFormGroup">
+              <sigma-form-calendar [(ngModel)]="visitaPrediseno.fechaAsignacion" formControlName="fecha"
+                [type]="constants.datepicker.types.calendar" [placeholder]="constants.fechaVisita"
+                [objeto]="visitaPrediseno" [minTarget]="'fechaMinima'" [maxTarget]="'fechaMaxima'"
+                (ngModelChange)="cambioEquipo()">
+              </sigma-form-calendar>
+
+              <sigma-form-autocomplete [path]="constants.path_administracion_equipo_vehiculoAutocomplete"
+                [placeholder]="constants.vehiculo" formControlName="equipo" [(ngModel)]="visitaPrediseno.equipo"
+                (ngModelChange)="cambioEquipo()" [searchBy]="'query'" [moreInfo]="equipoInfo" [id]="'numeroInterno'">
+              </sigma-form-autocomplete>
+
+              <sigma-form-input [(ngModel)]="visitaPrediseno.calendariosEquipo" formControlName="equipoCalendarios"
+                [class]="'hidden'">
+              </sigma-form-input>
+
+              <div class="mat-elevation-z8">
+                <div *ngIf="(dataSourceCalendarioEquipo.loading$ | async)" fxLayout="column" fxLayoutAlign="center center">
+                  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+                </div>
+
+                <div *ngIf="dataSourceCalendarioEquipo.error$ | async" class="msj_no_results" fxLayout="row"
+                  fxLayoutAlign="center center">
+                  <mat-icon class="m-1">sms_failed</mat-icon>
+                  <h4> {{dataSourceCalendarioEquipo.errorMessage$ | async }}</h4>
+                </div>
+                
+                <mat-table #sortVehiculos="matSort"  [dataSource]="dataSourceCalendarioEquipo" matSort
+                  [hidden]="(dataSourceCalendarioEquipo.loading$ | async)"
+                  [style.display]="(dataSourceCalendarioEquipo.loading$ | async) ? 'none' : 'block'">
+
+                  <ng-container matColumnDef="select">
+                    <mat-header-cell *matHeaderCellDef>
+                      &nbsp;&nbsp;&nbsp;
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let equipoCalendario">
+                      &nbsp;&nbsp;&nbsp;
+                      <mat-checkbox #listCheckboxes (click)="$event.stopPropagation()"
+                        (change)="$event ? changeEquipoCalendarioSelect(equipoCalendario, $event) : null"
+                        [checked]="equipoCalendario.select" [disabled]="!equipoCalendario.disponible">
+                      </mat-checkbox>
+                    </mat-cell>
+                  </ng-container>
+
+                  <ng-container matColumnDef="fecha">
+                    <mat-header-cell *matHeaderCellDef> {{ constants.fecha }} </mat-header-cell>
+                    <mat-cell *matCellDef="let equipoCalendario" [attr.data-label]="constants.fecha">
+                      {{ utilitiesServices.convertDateToString(equipoCalendario.inicio, 'DD-MM-YYYY') }}
+                      {{ constants.hasta }}
+                      {{ utilitiesServices.convertDateToString(equipoCalendario.fin, 'DD-MM-YYYY') }}
+                    </mat-cell>
+                  </ng-container>
+
+                  <ng-container matColumnDef="dia">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constantsEquipoCalendario.dia }}
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let equipoCalendario" [attr.data-label]="constantsEquipoCalendario.dia">
+                      {{ utilitiesServices.getWeekDay(equipoCalendario.inicio) }} {{ constants.al | lowercase }}
+                      {{  utilitiesServices.getWeekDay(equipoCalendario.fin) }}
+                    </mat-cell>
+                  </ng-container>
+
+                  <ng-container matColumnDef="numeroMovil">
+                    <mat-header-cell *matHeaderCellDef > {{ constantsEquipoCalendario.numeroMovil }}
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let equipoCalendario"
+                      [attr.data-label]="constantsEquipoCalendario.numeroMovil">
+                      {{ visitaPrediseno.equipo ? visitaPrediseno.equipo.movil  : '' }}
+                    </mat-cell>
+                  </ng-container>
+
+                  <ng-container matColumnDef="inicio">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constantsEquipoCalendario.horaInicio }}
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let equipoCalendario"
+                      [attr.data-label]="constantsEquipoCalendario.horaInicio">
+                      {{ utilitiesServices.convertDateToString(equipoCalendario.inicio, 'HH:mm') }}
+                    </mat-cell>
+                  </ng-container>
+
+                  <ng-container matColumnDef="fin">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constantsEquipoCalendario.horaFin }}
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let equipoCalendario" [attr.data-label]="constantsEquipoCalendario.horaFin">
+                      {{ utilitiesServices.convertDateToString(equipoCalendario.fin, 'HH:mm') }}
+                    </mat-cell>
+                  </ng-container>
+
+                  <mat-header-row *matHeaderRowDef="columnsEquipo"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: columnsEquipo"></mat-row>
+                </mat-table>
+
+                <!-- <mat-paginator (page)="changePageEquipoCalendario($event)"
+                  [length]="dataSourceCalendarioEquipo.totalElements$ | async"
+                  [pageSize]="criterialEquipoCalendario.size" [pageSizeOptions]="[5, 10, 20]">
+                </mat-paginator> -->
+
+                <mat-paginator class="mb-10" #paginator [length]="dataSourceCalendarioEquipo.totalElements$ | async"
+                [pageSize]="criteria.size" [pageSizeOptions]="[5, 10, 20]">
+              </mat-paginator>
+
+              </div>
+
+              <mat-divider></mat-divider>
+
+              <div fxLayout="row" class="pt-16">
+                <div fxFlex fxLayoutAlign="start center">
+                  <button mat-raised-button matStepperPrevious color="primary">
+                    <mat-icon class="m-1">keyboard_arrow_left</mat-icon>{{ constants.anterior }}
+                  </button>
+                </div>
+
+                <div fxFlex fxLayoutAlign="end center">
+                  <button mat-button color="warn" class="m-1" (click)="onBack(stepper)">
+                    <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+                  </button>
+                  <button mat-raised-button color="primary" [disabled]="processing"
+                    (click)="save('', trabajarFormGroup)">
+                    <mat-icon class="m-1">save</mat-icon>{{ constants.guardar }}
+                  </button>
+                </div>
+              </div>
+            </form>
+          </mat-step>
+        </mat-horizontal-stepper>
+
+        <!-- </mat-card-content> -->
+        <!-- </mat-card> -->
+      </div>
+    </div>
+
+    <div>
+      <div *ngIf="showAsignacionIngeniero() && !(dataSource.loading$ | async)" fxLayout="row" fxLayout.lt-md="column"
+        fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+        <div fxFlex class="w-100 sigma-sum" fxLayoutAlign="end center">
+          Cantidad de PK's asignados al ingeniero de diseño: <b> {{totalRegistros}} </b>
+        </div>
+      </div>
+    </div>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+      <div fxFlex class="w-100 sigma-sum" fxLayoutAlign="end center">
+        <b> {{ listaPksSelect.length }} </b> &nbsp; registro(s) seleccionado(s) para ser enviado(s)
+      </div>
+    </div>
+
+  </div>
+</div>

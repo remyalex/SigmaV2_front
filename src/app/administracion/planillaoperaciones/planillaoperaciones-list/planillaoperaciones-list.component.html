@@ -1,0 +1,130 @@
+<div>
+  <mat-card-header fxLayoutAlign="center">
+    <mat-card-subtitle>
+      <h2>Parametrizar Planilla de Operación</h2>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content class="container">
+    <div fxFlex="100">
+      <form (ngSubmit)="search()">
+        <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px" fxLayoutGap.lt-lg="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <mat-select placeholder="Seleccione {{constants.tipoTarjeta}}" [(value)]="this.selectedTarjeta"
+                (selectionChange)="putTipoPlanillaToSearch($event.value)" required>
+                <mat-option *ngFor="let tarjeta of listaItemsTipoPlanilla" [value]="tarjeta">
+                  {{ tarjeta.descripcion }}
+                </mat-option>
+              </mat-select>
+              <input matInput placeholder="{{ constants.tipoTarjeta }}" id="tipoPlanilla"
+                [(ngModel)]="criteria.tipoPlanilla" name="tipoPlanilla" type="text" hidden />
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <mat-select placeholder="Seleccione {{constants.itemName}}" [(value)]="this.selectedValue"
+                (selectionChange)="putItemToSearch($event.value)" required>
+                <mat-option *ngFor="let option of listaItemsPlanillaoperaciones" [value]="option">
+                  {{ option.valor }}
+                </mat-option>
+              </mat-select>
+              <input matInput placeholder="{{ constants.itemName }}" id="item" [(ngModel)]="criteria.item" name="item"
+                type="text" hidden />
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.actividadName }}" id="nombre" [(ngModel)]="criteria.actividad"
+                name="nombre" type="text" />
+            </mat-form-field>
+          </div>
+        </div>
+        <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px" fxLayoutGap.lt-lg="0">
+          <div fxFlex="33">
+            <div class="w-100">
+              <sigma-form-select [path]="constants.path_administracion_unidades_medida"
+                placeholder="{{ constants.unidadMedida }}" [(ngModel)]="criteria.unidad" id="unidad" name="unidad" [listBy]="'valor'" (ngModelChange)="getSelectUnidad($event)">
+              </sigma-form-select>
+            </div>
+          </div>
+
+          <div fxFlex>
+            <button type="submit" mat-raised-button color="primary" class="m-1" (click)="search()">
+              <mat-icon>search</mat-icon> {{ constants.buscar }}
+            </button>
+            <button (click)="clear()" mat-raised-button color="warn" class="m-1">
+              <mat-icon>clear</mat-icon> {{ constants.limpiar }}
+            </button>
+          </div>
+        </div>  
+      </form>
+    </div>
+  </mat-card-content>
+</div>
+
+<div class="mat-elevation-z8">
+  <div *ngIf="loader" fxLayout="column" fxLayoutAlign="center center">
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+
+  <div *ngIf="noInfoToShow" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+    <mat-icon class="m-1">sms_failed</mat-icon>
+    <h4>{{ constants.noResultados }}</h4>
+  </div>
+
+  <mat-table #table [dataSource]="listaItems" [hidden]="noInfoToShow && !loader" matSort>
+
+    <ng-container matColumnDef="tipoPlanilla">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.tipoTarjeta }} </mat-header-cell>
+      <mat-cell *matCellDef="let item" [attr.data-label]="constants.tipoTarjeta">
+        {{item.tipoPlanilla.nombre}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="item">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.itemName }} </mat-header-cell>
+      <mat-cell *matCellDef="let item" [attr.data-label]="constants.itemName">
+        {{item.item.valor}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actividad">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.actividadName }} </mat-header-cell>
+      <mat-cell *matCellDef="let actividad" [attr.data-label]="constants.actividadName">
+        {{actividad.actividad}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="unidad">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.unidadMedida }} </mat-header-cell>
+      <mat-cell *matCellDef="let item" [attr.data-label]="constants.unidadMedida">
+        {{item.unidad != null ? item.unidad.valor : ''}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="activo">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.activoName }} </mat-header-cell>
+      <mat-cell *matCellDef="let activo" [attr.data-label]="constants.activoName">
+        <span class="dev-color-red" [hidden]="activo.activo">{{ constants.no }}</span>
+        <span class="dev-color-green" [hidden]="!activo.activo">{{ constants.si }}</span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="operaciones">
+      <mat-header-cell *matHeaderCellDef> {{ constants.operaciones }} </mat-header-cell>
+      <mat-cell *matCellDef="let operacion" [attr.data-label]="constants.operaciones">
+        <button mat-raised-button color="primary" (click)="edit(operacion)" class="m-1"
+          *sigmaIsGranted="constants.permiso_administracion_planillaoperaciones_update">
+          <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+        </button>
+        <button mat-raised-button color="warn" (click)="delete(operacion)" class="m-1"
+          *sigmaIsGranted="constants.permiso_administracion_planillaoperaciones_delete">
+          <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [length]="lengthList" [pageSize]="criteria.size" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>

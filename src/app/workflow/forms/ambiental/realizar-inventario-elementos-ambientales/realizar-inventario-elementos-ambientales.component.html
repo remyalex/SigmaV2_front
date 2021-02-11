@@ -1,0 +1,497 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="processing">
+
+  <div [hidden]="currentAction !== 'list'">
+    <div fxLayout="row" fxLayout.lt-md="column">
+      <div fxFlex="100" class="flex-p">
+
+        <div>
+          <mat-tab-group [selectedIndex]="tabSeleccionado.value" (selectedIndexChange)="seleccionarGrid($event)">
+            <mat-tab *ngIf="condicion" label="Inventario ambiental">
+              <sigma-grid-mantenimientos #grid [data]="data" [columns]="columns"
+                [filters]="filters" [condicion]="condicion" [singleActions]="acciones"
+                (executeOnSingle)="executeSingleAction($event)" [defaultFilters]="defaulFilters" > 
+              </sigma-grid-mantenimientos>
+            </mat-tab>
+            <mat-tab *ngFor="let transicion of transicionesMasivas" label="{{transicion.nombre}}">
+              <sigma-grid-mantenimientos #grid [data]="data" [transicion]="transicion" [columns]="columns"
+                [filters]="filters" [singleActions]="acciones" (executeOnSingle)="executeSingleAction($event)"
+                (executeOnMasiveTransition)="executeMasiveTransition($event)" [defaultFilters]="defaulFilters">
+              </sigma-grid-mantenimientos>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="currentAction === 'registrarInventarioAmb'">
+    <!-- Table PK -->
+    <div class="mat-elevation-z8 mt-10 mb-10">
+      <div *ngIf="loader" fxLayout="column" fxLayoutAlign="center center">
+        <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+      </div>
+      
+      <mat-table #table [dataSource]="dataSource" [hidden]="!noInfoToShow || !loader" matSort>
+        <ng-container matColumnDef="pk">
+          <mat-header-cell *matHeaderCellDef>
+            {{ constants.pk }}</mat-header-cell>
+          <mat-cell *matCellDef="let inventario" [attr.data-label]="'pk'">
+            {{ inventario.pk }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaRegistroInventario">
+          <mat-header-cell *matHeaderCellDef>
+            {{ constants.fechaRegistroInventario }}
+          </mat-header-cell>
+          <mat-cell *matCellDef="let inventario" [attr.data-label]="'fechaRegistroInventario'">
+            {{ inventario.fechaRegistroInventario }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="localidad">
+          <mat-header-cell *matHeaderCellDef>
+            {{ constants.localidad }}
+          </mat-header-cell>
+          <mat-cell *matCellDef="let inventario" [attr.data-label]="'localidad'">
+            {{ inventario.localidad?.descripcion }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="upla">
+          <mat-header-cell *matHeaderCellDef> {{ constants.upla }} </mat-header-cell>
+          <mat-cell *matCellDef="let inventario" [attr.data-label]="'upla'">
+            {{ inventario.upla?.descripcion }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="barrio">
+          <mat-header-cell *matHeaderCellDef> {{ constants.barrio }} </mat-header-cell>
+          <mat-cell *matCellDef="let inventario" [attr.data-label]="'barrio'">
+            {{ inventario.barrio?.descripcion }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="civ">
+          <mat-header-cell *matHeaderCellDef> {{ constants.civ }} </mat-header-cell>
+          <mat-cell *matCellDef="let inventario" [attr.data-label]="'civ'">
+            {{ inventario.civ }}
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="columnsPk"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: columnsPk"></mat-row>
+      </mat-table>
+    </div>
+    <!-- Fin Table PK -->
+ 
+    <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+    <!-- Table ELEMENTO -->
+    <div *ngIf="elementosTable" class="pt-16">
+      
+      <h3>{{ elementoTitle }}</h3>
+      
+      <div class="mat-elevation-z8 mt-10 mb-10">
+        <div *ngIf="loader" fxLayout="column" fxLayoutAlign="center center">
+          <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+        </div>
+        <div *ngIf="noInfoToShow" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+          <mat-icon class="m-1">sms_failed</mat-icon>
+          <h4>{{ constants.noResultados }}</h4>
+        </div>
+        <mat-table #tableEl [dataSource]="dataSourceElemento" [hidden]="!noInfoToShow || !loader" matSort>
+
+          <ng-container matColumnDef="codigoArbol">
+            <mat-header-cell *matHeaderCellDef>
+              {{ constants.codigoArbol }}</mat-header-cell>
+            <mat-cell *matCellDef="let elemento" [attr.data-label]="'codigoArbol'">
+              {{ elemento.Codigo_Arbol }}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="nombreEspecie">
+            <mat-header-cell *matHeaderCellDef>
+              {{ constants.nombreEspecie }}</mat-header-cell>
+            <mat-cell *matCellDef="let elemento" [attr.data-label]="'nombreEspecie'">
+              {{ elemento.Nombre_Esp }}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="idEspecie">
+            <mat-header-cell *matHeaderCellDef>
+              {{ constants.idEspecie }}</mat-header-cell>
+            <mat-cell *matCellDef="let elemento" [attr.data-label]="'idEspecie'">
+              {{ elemento.Con_Especie_ID }}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="objetoId">
+            <mat-header-cell *matHeaderCellDef>
+              {{ constants.objetoId }}</mat-header-cell>
+            <mat-cell *matCellDef="let elemento" [attr.data-label]="'objetoId'">
+              {{ elemento.COD_SUMIDERO }}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="estadoRedSumideroDominio">
+            <mat-header-cell *matHeaderCellDef>
+              {{ constants.estadoRedSumideroDominio }}</mat-header-cell>
+            <mat-cell *matCellDef="let elemento" [attr.data-label]="'estadoRedSumideroDominio'">
+              {{ elemento.DOMESTADOENRED }}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="objetoIdPluv">
+            <mat-header-cell *matHeaderCellDef>
+              {{ constants.objetoId }}</mat-header-cell>
+            <mat-cell *matCellDef="let elemento" [attr.data-label]="'objetoIdPluv'">
+              {{ elemento.COD_SUMIDERO }}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="estadoRedSumideroDominioPluv">
+            <mat-header-cell *matHeaderCellDef>
+              {{ constants.estadoRedSumideroDominio }}</mat-header-cell>
+            <mat-cell *matCellDef="let elemento" [attr.data-label]="'estadoRedSumideroDominioPluv'">
+              {{ elemento.DOMESTADOENRED }}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="objetoIdPlazas">
+            <mat-header-cell *matHeaderCellDef>
+              {{ constants.objetoId }}</mat-header-cell>
+            <mat-cell *matCellDef="let elemento" [attr.data-label]="'objetoIdPlazas'">
+              {{ elemento.PK_ID_PLAZA }}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="nombre">
+            <mat-header-cell *matHeaderCellDef>
+              {{ constants.nombre }}</mat-header-cell>
+            <mat-cell *matCellDef="let elemento" [attr.data-label]="'nombre'">
+              {{ elemento.NOMBRE }}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="objetoIdPom">
+            <mat-header-cell *matHeaderCellDef>
+              {{ constants.objetoId }}</mat-header-cell>
+            <mat-cell *matCellDef="let elemento" [attr.data-label]="'objetoId'">
+              {{ elemento.PK_ID_POMPEYANO }}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="civ">
+            <mat-header-cell *matHeaderCellDef>
+              {{ constants.civ }}</mat-header-cell>
+            <mat-cell *matCellDef="let elemento" [attr.data-label]="'civ'">
+              {{ elemento.CIV }}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="objetoIdEP">
+            <mat-header-cell *matHeaderCellDef>
+              {{ constants.objetoId }}</mat-header-cell>
+            <mat-cell *matCellDef="let elemento" [attr.data-label]="'objetoIdEP'">
+              {{ elemento.PK_ID_CALZADA }}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="descripcion">
+            <mat-header-cell *matHeaderCellDef>
+              {{ constants.descripcion }}</mat-header-cell>
+            <mat-cell *matCellDef="let elemento" [attr.data-label]="'descripcion'">
+              {{ elemento.DESCRIPCION_ELEMENTO }}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="acciones">
+            <mat-header-cell *matHeaderCellDef>
+              {{ constants.acciones }}
+            </mat-header-cell>
+            <mat-cell *matCellDef="let elemento; let i = index" [attr.data-label]="constants.acciones">
+              <button mat-raised-button color="warn" (click)="deleteElement(i)" class="m-1">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="columnsElemento"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: columnsElemento"></mat-row>
+        </mat-table>
+        <mat-paginator #paginatorEl [length]="lengthList" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+    </div>
+    <!-- Fin Table ELEMENTO -->
+
+    <!-- TABLES ELEMENTOS VIEW -->
+    <div *ngIf="elementosTableView" class="pt-16">
+      <div class="mb-20">      
+        <h3>{{ elementoTitleArboleos }}</h3>         
+        <div class="mat-elevation-z8 mt-10">
+          <div *ngIf="loader" fxLayout="column" fxLayoutAlign="center center">
+            <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+          </div>   
+          <mat-table #table [dataSource]="arboleosView" [hidden]="!noInfoToShow || !loader" matSort>
+
+            <ng-container matColumnDef="codigoArbol">
+              <mat-header-cell *matHeaderCellDef>
+                {{ constants.codigoArbol }}</mat-header-cell>
+              <mat-cell *matCellDef="let elemento" [attr.data-label]="'codigoArbol'">
+                {{ elemento.Codigo_Arbol }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="nombreEspecie">
+              <mat-header-cell *matHeaderCellDef>
+                {{ constants.nombreEspecie }}</mat-header-cell>
+              <mat-cell *matCellDef="let elemento" [attr.data-label]="'nombreEspecie'">
+                {{ elemento.Nombre_Esp }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="idEspecie">
+              <mat-header-cell *matHeaderCellDef>
+                {{ constants.idEspecie }}</mat-header-cell>
+              <mat-cell *matCellDef="let elemento" [attr.data-label]="'idEspecie'">
+                {{ elemento.Con_Especie_ID }}
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="columnsArboleos"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: columnsArboleos"></mat-row>
+          </mat-table>
+        </div>
+      </div>
+
+      <div class="mb-20">       
+        <h3>{{ elementoTitleSumiderosAlcantarillado }}</h3>    
+        <div class="mat-elevation-z8 mt-10">
+          <div *ngIf="loader" fxLayout="column" fxLayoutAlign="center center">
+            <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+          </div>
+        
+          <mat-table #table [dataSource]="sumiderosView" [hidden]="!noInfoToShow || !loader" matSort>
+  
+            <ng-container matColumnDef="objetoId">
+              <mat-header-cell *matHeaderCellDef>
+                {{ constants.objetoId }}</mat-header-cell>
+              <mat-cell *matCellDef="let elemento" [attr.data-label]="'objetoId'">
+                {{ elemento.COD_SUMIDERO }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="estadoRedSumideroDominio">
+              <mat-header-cell *matHeaderCellDef>
+                {{ constants.estadoRedSumideroDominio }}</mat-header-cell>
+              <mat-cell *matCellDef="let elemento" [attr.data-label]="'estadoRedSumideroDominio'">
+                {{ elemento.DOMESTADOENRED }}
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="columnsSumiderosAlcantarillado"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: columnsSumiderosAlcantarillado"></mat-row>
+          </mat-table>
+        </div>
+      </div>
+
+      <div class="mb-20">
+        <h3>{{ elementoTitleSumiderosPluvial }}</h3>
+        <div class="mat-elevation-z8 mt-10">
+          <div *ngIf="loader" fxLayout="column" fxLayoutAlign="center center">
+            <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+          </div>
+        
+          <mat-table #table [dataSource]="sumiderosPluvialView" [hidden]="!noInfoToShow || !loader" matSort>
+  
+            <ng-container matColumnDef="objetoIdPluv">
+              <mat-header-cell *matHeaderCellDef>
+                {{ constants.objetoId }}</mat-header-cell>
+              <mat-cell *matCellDef="let elemento" [attr.data-label]="'objetoIdPluv'">
+                {{ elemento.COD_SUMIDERO }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="estadoRedSumideroDominioPluv">
+              <mat-header-cell *matHeaderCellDef>
+                {{ constants.estadoRedSumideroDominio }}</mat-header-cell>
+              <mat-cell *matCellDef="let elemento" [attr.data-label]="'estadoRedSumideroDominioPluv'">
+                {{ elemento.DOMESTADOENRED }}
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="columnsSumiderosPluvial"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: columnsSumiderosPluvial"></mat-row>
+          </mat-table>
+        </div>
+      </div>
+
+      <div class="mb-20">
+        <h3>{{ elementoTitleEPPompeyano }}</h3>
+        <div class="mat-elevation-z8 mt-10">
+          <div *ngIf="loader" fxLayout="column" fxLayoutAlign="center center">
+            <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+          </div>
+        
+          <mat-table #table [dataSource]="pompeyanoView" [hidden]="!noInfoToShow || !loader" matSort>
+  
+            <ng-container matColumnDef="objetoIdPom">
+              <mat-header-cell *matHeaderCellDef>
+                {{ constants.objetoId }}</mat-header-cell>
+              <mat-cell *matCellDef="let elemento" [attr.data-label]="'objetoIdPom'">
+                {{ elemento.PK_ID_POMPEYANO }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="civ">
+              <mat-header-cell *matHeaderCellDef>
+                {{ constants.civ }}</mat-header-cell>
+              <mat-cell *matCellDef="let elemento" [attr.data-label]="'civ'">
+                {{ elemento.CIV }}
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="columnsPompeyano"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: columnsPompeyano"></mat-row>
+          </mat-table>
+        </div>
+      </div>
+
+      <div class="mb-20">
+        <h3>{{ elementoTitleEPPlaza }}</h3>
+        <div class="mat-elevation-z8 mt-10">
+          <div *ngIf="loader" fxLayout="column" fxLayoutAlign="center center">
+            <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+          </div>
+        
+          <mat-table #table [dataSource]="plazasView" [hidden]="!noInfoToShow || !loader" matSort>
+  
+            <ng-container matColumnDef="objetoIdPlazas">
+              <mat-header-cell *matHeaderCellDef>
+                {{ constants.objetoId }}</mat-header-cell>
+              <mat-cell *matCellDef="let elemento" [attr.data-label]="'objetoIdPlazas'">
+                {{ elemento.PK_ID_PLAZA }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="nombre">
+              <mat-header-cell *matHeaderCellDef>
+                {{ constants.nombre }}</mat-header-cell>
+              <mat-cell *matCellDef="let elemento" [attr.data-label]="'nombre'">
+                {{ elemento.NOMBRE }}
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="columnsPlazas"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: columnsPlazas"></mat-row>
+          </mat-table>
+        </div>
+      </div>
+
+      <div class="mb-20">
+        <h3>{{ elementoTitleEP_IDU }}</h3>
+        <div class="mat-elevation-z8 mt-10">
+          <div *ngIf="loader" fxLayout="column" fxLayoutAlign="center center">
+            <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+          </div>
+        
+          <mat-table #table [dataSource]="ePublicosView" [hidden]="!noInfoToShow || !loader" matSort>
+  
+            <ng-container matColumnDef="objetoIdEP">
+              <mat-header-cell *matHeaderCellDef>
+                {{ constants.objetoId }}</mat-header-cell>
+              <mat-cell *matCellDef="let elemento" [attr.data-label]="'objetoIdEP'">
+                {{ elemento.PK_ID_CALZADA }}
+              </mat-cell>
+            </ng-container>
+  
+            <ng-container matColumnDef="descripcion">
+              <mat-header-cell *matHeaderCellDef>
+                {{ constants.tipo }}</mat-header-cell>
+              <mat-cell *matCellDef="let elemento" [attr.data-label]="'descripcion'">
+                {{ elemento.DESCRIPCION_ELEMENTO }}
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="columnsEP"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: columnsEP"></mat-row>
+          </mat-table>
+        </div>
+      </div>
+    </div>
+    <!-- FIN TABLES ELEMENTOS VIEW -->
+    
+    <!-- Form inventario elemento -->
+    <div *ngIf="elementosTable" fxLayout="column">
+      <div class="mt-10 mb-10">
+        <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+          <h5>{{ constants.informacionCampoObligatorio }}</h5>
+        </div>
+
+        <mat-card-content [formGroup]="form" class="mt-10">
+          <div fxLayout fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+            <div fxFlex>
+              <mat-form-field class="w-100">
+                  <textarea matInput rows="5" formControlName="observaciones" [(ngModel)]="observaciones"
+                    placeholder="{{ constants.observaciones }}" required></textarea>
+                  <mat-error *ngIf="form.get('observaciones').hasError('required')">
+                    {{ constants.campoRequerido }} </mat-error>
+                  <mat-error *ngIf="form.get('observaciones').hasError('maxlength')">
+                    {{ constants.longitud_maxima }}
+                    2000
+                  </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-card-content>
+      </div>
+    </div>
+    <!-- Fin Form inventario elemento -->
+
+    <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+    <div *ngIf="resumen">
+      <sigma-mantenimiento-records [mantId]="mantenimiento.id"></sigma-mantenimiento-records>
+      <sigma-seleccion-transicion [(data)]="data" [transiciones]="transicionesIndividuales"
+        (executeTransition)="executeTransition()"></sigma-seleccion-transicion>
+    </div>
+
+    <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+    <div fxLayout="row" fxLayoutAlign="end" class="pt-16">
+      <button type="button" (click)="onExit()" [disabled]="disableExit"
+        mat-button color="warn" class="m-1">
+        <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+      </button>
+      <button type="button" (click)="onBack()" [disabled]="disableBack"
+       mat-raised-button color="primary" class="m-1">
+        <mat-icon class="m-1">arrow_backward</mat-icon> {{ constants.anterior }}
+      </button>
+      <button type="button" *ngIf="buttonActive" [disabled]="observaciones === undefined || observaciones === null || observaciones.length === 0" 
+        class="m-1" mat-raised-button color="primary"
+        (click)="onSubmit()">
+        <mat-icon class="m-1">arrow_forward</mat-icon> {{ constants.siguiente }}
+      </button>
+      <button type="button" *ngIf="!buttonActive" [disabled]="enviadaAll" class="m-1" mat-raised-button color="primary"
+        (click)="saveAll()">
+        <mat-icon class="m-1">save</mat-icon> {{ constants.guardarTodo }}
+      </button>
+    </div>
+
+  </div>
+
+  <div *ngIf="currentAction === 'consultarInventarioAmb'">
+    <sigma-consultar-inventario [mantenimiento]="mantenimiento" (back)="back($event)"></sigma-consultar-inventario>
+    <div *ngIf="nextTransition">
+      <sigma-seleccion-transicion [(data)]="data" [transiciones]="transicionesIndividuales"
+        (executeTransition)="executeTransition()"></sigma-seleccion-transicion>
+    </div>
+  </div>
+  
+</div>

@@ -1,0 +1,2961 @@
+<mat-card-content class="p-16 m-0">
+  <form>
+    <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+      
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.id">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="{{constants.id}}" id="cu-08-filtros-input-id" [(ngModel)]="criteria.id"
+            name="cu-08-filtros-input-id" [numericInput]="true" />
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.pk">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="{{constants.pk}}" id="cu-08-filtros-input-pk" [(ngModel)]="criteria.pk"
+            name="cu-08-filtros-input-pk" [numericInput]="true" />
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.civ">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="{{constants.civ}}" id="cu-08-filtros-input-civ" [(ngModel)]="criteria.civ"
+            name="cu-08-filtros-input-civ" />
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.radicadoSolicitudReserva">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="{{constants.radicadoSolicitudReserva}}" id="radicadoSolicitudReserva"
+            [(ngModel)]="criteria.radicadoSolicitudReserva" name="radicadoSolicitudReserva" />
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.radicadoRespuestaReserva">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="{{constants.radicadoRespuestaReserva}}" id="radicadoRespuestaReserva"
+            [(ngModel)]="criteria.radicadoRespuestaReserva" name="radicadoRespuestaReserva" />
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.solicitudRadicadoEntrada">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="{{constants.solicitudRadicadoEntrada}}" id="cu-08-filtros-input-radicadoEntrada"
+            [(ngModel)]="criteria.solicitudRadicadoEntrada" name="cu-08-filtros-input-radicadoEntrada"
+            [numericInput]="true" />
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.origen">
+        <sigma-form-select id="cu-08-filtros-select-origen"
+          [path]="'/api/administracion/lista/MEJORAMIENTO_TIPO_SOLICITUD/items'" [exclude]="excludeOrigin"
+          [(ngModel)]="criteria.origen" name="origen" placeholder="{{constants.origen}}" [listBy]="'descripcion'">
+        </sigma-form-select>
+      </div>
+    
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.responsable">
+        <sigma-form-autocomplete id="cu-08-filtros-autocomplete-responsable" [(ngModel)]="criteria.responsable"
+          [path]="constants.path_administracion_usuario_autocomplete_nombres" [searchBy]="'nombres'"
+          [moreInfo]="{apellidos: 'Apellidos', identificacion: 'Identificación'}"
+          [placeholder]="'' + constants.responsable" [ngModelOptions]="{standalone: true}">
+        </sigma-form-autocomplete>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.responsableVisitaTecnica">
+        <sigma-form-autocomplete [(ngModel)]="criteria.responsableVisitaTecnica"
+          [path]="constants.path_administracion_usuario_autocomplete" [searchBy]="'usuario'"
+          [moreInfo]="{apellidos: 'Apellidos', identificacion: 'Identificación'}"
+          [placeholder]="'' + constants.responsableVisitaTecnica" [ngModelOptions]="{standalone: true}">
+        </sigma-form-autocomplete>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.responsableRevision">
+        <sigma-form-autocomplete [(ngModel)]="criteria.responsableRevision"
+          [path]="constants.path_administracion_usuario_autocomplete" [searchBy]="'usuario'"
+          [moreInfo]="{apellidos: 'Apellidos', identificacion: 'Identificación'}"
+          [placeholder]="'' + constants.responsableRevision" [ngModelOptions]="{standalone: true}">
+        </sigma-form-autocomplete>
+      </div>
+    
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.zona">
+        <mat-form-field class="w-100">
+          <mat-select [placeholder]="'Zona'" (selectionChange)="cambioZona($event.value)" [(ngModel)]="criteria.zona"
+            [ngModelOptions]="{standalone: true}" name="zona">
+            <mat-option>Seleccionar</mat-option>
+            <mat-option *ngFor="let zona of zonas" [value]="zona">
+              {{zona.nombre}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.cuadrante">
+        <mat-form-field class="w-100">
+          <mat-select [placeholder]="'Cuadrante'" [(ngModel)]="criteria.cuadrante" [ngModelOptions]="{standalone: true}"
+            name="cuadrante">
+            <mat-option>Seleccionar</mat-option>
+            <mat-option *ngFor="let cuadrante of cuadrantesAll" [value]="cuadrante">
+              {{cuadrante.nombre}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.localidad">
+        <mat-form-field class="w-100">
+          <mat-select [placeholder]="'Localidad'" (selectionChange)="cambioLocalidad($event.value)"
+            [(ngModel)]="criteria.localidad" [ngModelOptions]="{standalone: true}" name="localidad">
+            <mat-option>Seleccionar</mat-option>
+            <mat-option *ngFor="let localidad of localidades" [value]="localidad">
+              {{localidad.nombre}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.upla">
+        <mat-form-field class="w-100">
+          <mat-select [placeholder]="'UPZ'" [(ngModel)]="criteria.upla" [ngModelOptions]="{standalone: true}"
+            name="upla">
+            <mat-option>Seleccionar</mat-option>
+            <mat-option *ngFor="let upla of uplas" [value]="upla">
+              {{upla.nombre}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.barrio">
+        <mat-form-field class="w-100">
+          <mat-select [placeholder]="'Barrio'" [(ngModel)]="criteria.barrio" [ngModelOptions]="{standalone: true}"
+            name="barrio">
+            <mat-option>Seleccionar</mat-option>
+            <mat-option *ngFor="let barrio of barrios" [value]="barrio">
+              {{barrio.nombre}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.tieneRadicadoSalida">
+        <mat-form-field class="w-100">
+          <mat-select [(ngModel)]="criteria.tieneRadicadoSalida" placeholder="{{constants.tieneRadicadoSalida}}"
+            [ngModelOptions]="{standalone: true}">
+            <mat-option value="true">{{constants.si}}</mat-option>
+            <mat-option value=false>{{constants.no}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.solicitudRadicadoSalida">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="{{constants.solicitudRadicadoSalida}}" id="radicadoSalida"
+            [(ngModel)]="criteria.solicitudRadicadoSalida" name="radicadoSalida" [numericInput]="true" />
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.estadoPk">
+        <sigma-form-select id="cu-08-filtros-select-estadoPk" [path]="'/api/administracion/lista/ESTADO_PK/items'"
+          [(ngModel)]="criteria.estadoPk" name="cu-08-filtros-select-estadoPk" [exclude]="excludeEstadoPk"
+          placeholder="{{constants.estadoPk}}" [listBy]="'descripcion'">
+        </sigma-form-select>
+      </div>
+ 
+      
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.tipoMalla">
+          <sigma-form-select [path]="'/api/administracion/lista/MEJORAMIENTO_TIPO_MALLA/items'"
+            [(ngModel)]="criteria.tipoMalla" name="tipoMalla" [placeholder]="'' + constants.tipoMalla"
+            [listBy]="'descripcion'">
+          </sigma-form-select>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.posibleDanioRedes">
+        <mat-form-field class="w-100">
+          <mat-select [(ngModel)]="criteria.posibleDanioRedes" [placeholder]="'' + constants.posibleDanioRedes"
+            [ngModelOptions]="{standalone: true}">
+            <mat-option value="true">{{constants.si}}</mat-option>
+            <mat-option value=false>{{constants.no}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.tipoSeccionVial">
+          <sigma-form-select [path]="'/api/administracion/lista/MEJORAMIENTO_SECCION_VIAL/items'"
+            [(ngModel)]="criteria.tipoSeccionVial" name="tipoSeccionVial" [placeholder]="'' + constants.tipoSeccionVial"
+            [listBy]="'descripcion'">
+          </sigma-form-select>
+      </div>
+    
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.actividadActual">
+        <sigma-form-select [path]="'' + constants.path_administracion_actividades "
+          [(ngModel)]="actividadActualFromFilter" name="actividadActual" (ngModelChange)="changeActividadActualId()"
+          [placeholder]="'' + constants.actividadActual" [listBy]="'nombre'">
+        </sigma-form-select>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.estadoMantenimiento">
+        <sigma-form-select [path]="'/api/administracion/lista/ESTADO_MANTENIMIENTO/items'"
+          [(ngModel)]="criteria.estadoMantenimiento" name="estadoMantenimiento"
+          placeholder="{{constants.estadoMantenimiento}}" [listBy]="'descripcion'">
+        </sigma-form-select>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.enSeguimiento">
+        <mat-form-field class="w-100">
+          <mat-select [(ngModel)]="criteria.enSeguimiento" placeholder="{{constants.enSeguimiento}}"
+            [ngModelOptions]="{standalone: true}">
+            <mat-option value="true">{{constants.si}}</mat-option>
+            <mat-option value=false>{{constants.no}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.tipoIntervencion">
+        <sigma-form-select [path]="'/api/administracion/tipoIntervencion/listByReferenciaIntervencion/647373/0'"
+          [(ngModel)]="criteria.tipoIntervencion" name="tipoIntervencion" placeholder="{{constants.tipoIntervencion}}"
+          [listBy]="'descripcion'">
+        </sigma-form-select>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.actividadAgrupada">
+          <sigma-form-select [path]="'/api/administracion/lista/getItemsFiltroActividadAgrupada'"
+            [(ngModel)]="criteria.actividadAgrupada" name="tipoIntervenciones"
+            [placeholder]="'' + constants.tipoIntervencion" [listBy]="'valor'">
+          </sigma-form-select>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.directorDeObra">
+        <sigma-form-autocomplete [(ngModel)]="criteria.directorDeObra"
+          [path]="constants.path_administracion_usuario_autocomplete" [searchBy]="'usuario'"
+          [moreInfo]="{apellidos: 'Apellidos', identificacion: 'Identificación'}"
+          [placeholder]="'' + constants.directorDeObra" [ngModelOptions]="{standalone: true}">
+        </sigma-form-autocomplete>
+      </div>
+
+      <div fxFlex.lg="0 0 36" fxFlex.gt-lg="0 0 48" *ngIf="filtersToShow.estrategia">
+        <sigma-form-select [path]="'/api/administracion/lista/TAB_MANTENIMIENTO_VIAL_ID_TIPO_ESTRATEGIA/items'"
+          [(ngModel)]="criteria.estrategia" name="estrategia" placeholder="{{constants.estrategia}}"
+          [listBy]="'descripcion'">
+        </sigma-form-select>
+      </div>
+
+      <!-- <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.directorDeObraXZona">
+        <app-sigma-autocomplete [label]="'' + constants.directorDeObra" (selectItem)="setDirectorObraXZona($event)"
+          [path]="constants.path_administracion_usuario_director_obra_autocomplete" [searchBy]="'nombres'"
+          [rectificadorCriteria]="getCriteriaDirectorObraZona()"  [parametroAdicional1]="'apellidos'"
+          [parametroAdicional2]="'identificacion'" [labelparametro1]="'Nombres'" [labelparametro2]="'Apellidos'" 
+          [labelparametro3]="'Identificación'">
+        </app-sigma-autocomplete>
+      </div> -->
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.prioritarios">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="{{constants.prioritarios}}" id="prioritarios" [(ngModel)]="criteria.prioritarios"
+            name="prioritarios" [numericInput]="true" />
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.tipoRadicadoRespuestaReserva">
+        <sigma-form-select [path]="'/api/administracion/lista/TIPO_RADICADO/items'"
+          [(ngModel)]="criteria.tipoRadicadoRespuestaReserva" name="tipoRadicadoRespuestaReserva"
+          placeholder="{{constants.tipoRadicadoRespuestaReserva}}" [listBy]="'descripcion'">
+        </sigma-form-select>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.ingenieroDisenio">
+        <sigma-form-autocomplete [(ngModel)]="criteria.ingenieroDisenio"
+          [path]="constants.path_administracion_persona_ingeniero_disenio_autocomplete" [searchBy]="'nombres'"
+          [moreInfo]="{nombres: 'Nombres', identificacion: 'Identificación'}"
+          [placeholder]="'' + constants.ingenieroDisenio" [ngModelOptions]="{standalone: true}">
+        </sigma-form-autocomplete>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.listaIngenierosDisenio">
+        <sigma-form-select
+          [path]="'/api/administracion/persona/personaByRol?rol=Ingeniero de diseño'"
+          [(ngModel)]="criteria.ingenieroDisenio" name="ingenieroDisenio" placeholder="{{constants.listaIngenierosDisenio}}"
+          [listBy]="'nombresYapellidos'">
+        </sigma-form-select>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.numeroRadicadoSmvl">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="{{constants.numeroRadicadoSmvl}}" id="numeroRadicadoSmvl"
+            [(ngModel)]="criteria.numeroRadicadoSmvl" name="numeroRadicadoSmvl" [numericInput]="true" />
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.listaChequeoSmvl">
+        <sigma-form-select
+          [path]="'/api/administracion/lista/LISTA_CHEQUEO_DEFINICION_SOLICITUD_ACTUALIZACION_DIAGNOSTICO/items'"
+          [(ngModel)]="criteria.listaChequeoSmvl" name="listaChequeoSmvl" placeholder="{{constants.listaChequeoSmvl}}"
+          [listBy]="'descripcion'">
+        </sigma-form-select>
+      </div>
+    
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.numeroRadicadoGasa">
+        <mat-form-field>
+          <input matInput placeholder="{{constants.numeroRadicadoGasa}}" id="numeroRadicadoGasa"
+            [(ngModel)]="criteria.numeroRadicadoGasa" name="numeroRadicadoGasa" [numericInput]="true" />
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.listaChequeoGasa">
+        <sigma-form-select
+          [path]="'/api/administracion/lista/LISTA_CHEQUEO_DEFINICION_SOLICITUD_ACTUALIZACION_DIAGNOSTICO/items'"
+          [(ngModel)]="criteria.listaChequeoGasa" name="listaChequeoGasa" placeholder="{{constants.listaChequeoGasa}}"
+          [listBy]="'descripcion'">
+        </sigma-form-select>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.radicadoIntervencion">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="{{constants.radicadoIntervencion}}" id="radicadoIntervencion"
+            [(ngModel)]="criteria.radicadoIntervencion" name="radicadoIntervencion" [numericInput]="true" />
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.radicadoInterExclusivo">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="{{constants.radicadoInterExclusivo}}" id="radicadoInterExclusivo"
+            [(ngModel)]="criteria.radicadoInterExclusivo" name="radicadoInterExclusivo" [numericInput]="true" />
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.tipoActividad">
+        <sigma-form-select [path]="'/api/administracion/lista/getItemsFiltroTipoActividad'"
+          [(ngModel)]="criteria.tipoActividad" name="tipoActividad" placeholder="{{constants.tipoActividad}}"
+          [listBy]="'descripcion'">
+        </sigma-form-select>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.estadoProgramacionVisita">
+          <sigma-form-select [path]="'/api/administracion/lista/ESTADO_VISITA/items'"
+            [(ngModel)]="criteria.estadoProgramacionVisita" name="estadoProgramacionVisita"
+            [placeholder]="'' + constants.estadoProgramacionVisita" [listBy]="'descripcion'">
+          </sigma-form-select>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.estadoProgramacionDiaria">
+          <sigma-form-select [path]="'/api/administracion/lista/PROG_DIARIA_TRABAJO_ESTADO/items'"
+            [(ngModel)]="criteria.estadoProgramacionDiaria" name="estadoProgramacionDiaria"
+            [placeholder]="'' + constants.estadoProgramacionDiaria" [listBy]="'descripcion'">
+          </sigma-form-select>
+      </div>
+    
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.jornada">
+          <sigma-form-select [path]="'/api/administracion/lista/ADMINISTRACION_DISPONIBILIDAD_TURNO/items'"
+            [(ngModel)]="criteria.jornada" name="estadoProgramacionVisita" [placeholder]="'' + constants.jornada"
+            [listBy]="'descripcion'">
+          </sigma-form-select>
+      </div>
+      
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.jornadaProgDiaria">
+          <sigma-form-select [path]="'/api/administracion/lista/ADMINISTRACION_DISPONIBILIDAD_TURNO/items'"
+            [(ngModel)]="criteria.jornadaProgDiaria" name="jornadaProgDiaria" [placeholder]="'' + constants.jornada"
+            [listBy]="'descripcion'">
+          </sigma-form-select>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.estadoObra">
+          <sigma-form-select [path]="'/api/administracion/lista/UMV_CUADRILLA_INT_ESTADO_OBRA/items'"
+            [(ngModel)]="criteria.estadoObra" name="estadoObra" [placeholder]="'' + constants.estadoObra"
+            [listBy]="'descripcion'">
+          </sigma-form-select>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.estadoRegistroDiarioCuadrilla">
+          <sigma-form-select [path]="'/api/administracion/lista/UMV_CUADRILLA_INT_REGISTRO_DIARIO_CUADRILLA/items'"
+            [(ngModel)]="criteria.estadoRegistroDiarioCuadrilla" name="estadoRegistroDiarioCuadrilla"
+            [placeholder]="'' + constants.estadoRegistroDiarioCuadrilla" [listBy]="'descripcion'">
+          </sigma-form-select>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.estadoProgramacionPk">
+          <sigma-form-select [path]="'/api/administracion/lista/ESTADO_PROGRAMACION_PK/items'"
+            [(ngModel)]="criteria.estadoProgramacionPk" name="estadoProgramacionPk"
+            [placeholder]="'' + constants.estadoProgramacionPk" [listBy]="'descripcion'">
+          </sigma-form-select>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.tieneResidenteSocial">
+        <mat-form-field class="w-100">
+          <mat-select [(ngModel)]="criteria.tieneResidenteSocial" placeholder="{{constants.tieneResidenteSocial}}"
+            [ngModelOptions]="{standalone: true}">
+            <mat-option value="true">{{constants.si}}</mat-option>
+            <mat-option value=false>{{constants.no}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.estadoInspeccionIntervencion">
+          <sigma-form-select [path]="'/api/administracion/lista/UMV_INSPECCION_AMB_ESTADO/items'"
+            [(ngModel)]="criteria.estadoInspeccionIntervencion" name="estadoInspeccionIntervencion"
+            [placeholder]="'' + constants.estadoInspeccionIntervencion" [listBy]="'descripcion'">
+          </sigma-form-select>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.residenteSocial">
+          <sigma-form-select [path]="'/api/usuario/usuariosPorNombreRol/RESIDENTE SOCIAL'"
+            [(ngModel)]="criteria.residenteSocial" name="residenteSocial" [placeholder]="'' + constants.residenteSocial"
+            [listBy]="'nombresYapellidos'">
+          </sigma-form-select>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.tieneResidenteAmbiental">
+        <mat-form-field class="w-100">
+          <mat-select [(ngModel)]="criteria.tieneResidenteAmbiental" placeholder="{{constants.tieneResidenteAmbiental}}"
+            [ngModelOptions]="{standalone: true}">
+            <mat-option value="true">{{constants.si}}</mat-option>
+            <mat-option value=false>{{constants.no}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.residenteAmbiental">
+          <sigma-form-select [path]="'/api/usuario/usuariosPorNombreRol/RESIDENTE AMBIENTAL'"
+            [(ngModel)]="criteria.residenteAmbiental" name="residenteAmbiental"
+            [placeholder]="'' + constants.residenteAmbiental" [listBy]="'nombresYapellidos'">
+          </sigma-form-select>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.tieneResidenteSST">
+        <mat-form-field class="w-100">
+          <mat-select [(ngModel)]="criteria.tieneResidenteSST" placeholder="{{constants.tieneResidenteSST}}"
+            [ngModelOptions]="{standalone: true}">
+            <mat-option value="true">{{constants.si}}</mat-option>
+            <mat-option value=false>{{constants.no}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.residenteSST">
+          <sigma-form-select [path]="'/api/usuario/usuariosPorNombreRol/RESIDENTE SST'"
+            [(ngModel)]="criteria.residenteSST" name="residenteSST" [placeholder]="'' + constants.residenteSST"
+            [listBy]="'nombresYapellidos'">
+          </sigma-form-select>
+      </div>
+    
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.tieneSolicitudLaboratorio">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="{{constants.tieneSolicitudLaboratorio}}"
+            [(ngModel)]="criteria.tieneSolicitudLaboratorio" name="tieneSolicitudLaboratorio" [numericInput]="true" />
+        </mat-form-field>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.espesorDisenio">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="{{constants.espesorDisenio}}" [(ngModel)]="criteria.espesorDisenio"
+            name="espesorDisenio" [numericInput]="true" />
+        </mat-form-field>
+      </div>
+    
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.frecuencia">
+          <sigma-form-select [path]="'/api/administracion/lista/ESTADO_VISITA/items'" [(ngModel)]="criteria.frecuencia"
+            name="frecuencia" [placeholder]="'' + constants.frecuencia" [listBy]="'descripcion'">
+          </sigma-form-select>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.tipoMezcla">
+          <sigma-form-select [path]="'/api/administracion/lista/TIPO_MEZCLA/items'"
+            [(ngModel)]="criteria.tipoMezcla" name="tipoMezcla" [placeholder]="'' + constants.tipoMezcla"
+            [listBy]="'descripcion'">
+          </sigma-form-select>
+      </div>
+    
+    <!-- Filtros dobles -->
+
+      <div fxFlex.gt-sm="0 0 36" fxFlex.md="0 0 99" *ngIf="filtersToShow.avancePorcentajeAcumuladoObra">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex="50">
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{constants.avancePorcentajeAcumuladoObra}} Desde"
+                id="avancePorcentajeAcumuladoObraDesde" [(ngModel)]="criteria.avancePorcentajeAcumuladoObraDesde"
+                name="avancePorcentajeAcumuladoObraDesde" [numericInput]="true" />
+            </mat-form-field>
+          </div>
+
+          <div fxFlex="50">
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{constants.avancePorcentajeAcumuladoObra}} Hasta"
+                id="avancePorcentajeAcumuladoObraHasta" [(ngModel)]="criteria.avancePorcentajeAcumuladoObraHasta"
+                name="avancePorcentajeAcumuladoObraHasta" [numericInput]="true" />
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 36" fxFlex.md="0 0 99" *ngIf="filtersToShow.indicePriorizacion">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex="50" >
+            <mat-form-field class="w-100" >
+              <input matInput placeholder="Índice de Priorización Desde" id="indicePriorizacionDesde"
+                [(ngModel)]="criteria.indicePriorizacionDesde" name="indicePriorizacionDesde" [numericInput]="true" />
+            </mat-form-field>
+          </div>
+          <div fxFlex="50" >
+            <mat-form-field class="w-100">
+              <input matInput placeholder="Índice de Priorización Hasta" id="indicePriorizacionHasta"
+                [(ngModel)]="criteria.indicePriorizacionHasta" name="indicePriorizacionHasta" [numericInput]="true" />
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 36" fxFlex.md="0 0 99" *ngIf="filtersToShow.fechaDespacho">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex="50">
+            <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaDespachoDesde" [type]="'calendar'"
+              [placeholder]="constants.fechaDespacho + ' Desde'" [maxTarget]="'fechaDespachoHasta'"
+              [formatToModel]="constants.formatoDDMMYYYY" [ngModelOptions]="{standalone: true}">
+            </sigma-form-calendar>
+          </div>
+          <div fxFlex="50">
+            <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaDespachoHasta" [type]="'calendar'"
+              [placeholder]="constants.fechaDespacho + ' Hasta'" [minTarget]="'fechaDespachoDesde'"
+              [formatToModel]="constants.formatoDDMMYYYY" [ngModelOptions]="{standalone: true}">
+            </sigma-form-calendar>
+          </div>
+        </div>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 36" fxFlex.md="0 0 99" *ngIf="filtersToShow.fechaSolicitud">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex="50">
+            <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaSolicitudDesde" [type]="'calendar'"
+              [placeholder]="constants.fechaSolicitud + ' Desde '" [maxTarget]="'fechaSolicitudHasta'"
+              [formatToModel]="constants.formatoDDMMYYYY" [ngModelOptions]="{standalone: true}">
+            </sigma-form-calendar>
+          </div>
+          <div fxFlex="50">
+            <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaSolicitudHasta" [type]="'calendar'"
+              [placeholder]="constants.fechaSolicitud + ' Hasta'" [minTarget]="'fechaSolicitudDesde'"
+              [formatToModel]="constants.formatoDDMMYYYY" [ngModelOptions]="{standalone: true}">
+            </sigma-form-calendar>
+          </div>
+        </div>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 36" fxFlex.md="0 0 99" *ngIf="filtersToShow.fechaVisitaTecnica">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex="50" >
+            <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaVisitaTecnicaDesde" [type]="'calendar'"
+              [placeholder]="'Fecha Visita Técnica Desde'" [maxTarget]="'fechaVisitaTecnicaHasta'"
+              [formatToModel]="constants.formatoDDMMYYYY" [ngModelOptions]="{standalone: true}">
+            </sigma-form-calendar>
+          </div>
+          <div fxFlex="50">
+            <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaVisitaTecnicaHasta" [type]="'calendar'"
+              [placeholder]="'Fecha Visita Técnica Hasta'" [minTarget]="'fechaVisitaTecnicaDesde'"
+              [formatToModel]="constants.formatoDDMMYYYY" [ngModelOptions]="{standalone: true}">
+            </sigma-form-calendar>
+          </div>
+        </div>
+      </div>
+
+      <div class="mr-20" fxFlex.gt-sm="0 0 36" fxFlex.md="0 0 99" *ngIf="filtersToShow.fechaAsignacion">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex="50">
+            <sigma-form-calendar id="cu-08-filtros-date-fechaAsignacionHasta" [objeto]="criteria"
+              [(ngModel)]="criteria.fechaAsignacionDesde" [type]="'calendar'" [placeholder]="'Fecha Asignación Desde'"
+              [maxTarget]="'fechaAsignacionHasta'" [formatToModel]="constants.formatoDDMMYYYY"
+              [ngModelOptions]="{standalone: true}">
+            </sigma-form-calendar>
+          </div>
+
+          <div fxFlex="50">
+            <sigma-form-calendar id="cu-08-filtros-date-fechaAsignacionDesde" [objeto]="criteria"
+              [(ngModel)]="criteria.fechaAsignacionHasta" [type]="'calendar'" [placeholder]="'Fecha Asignación Hasta'"
+              [minTarget]="'fechaAsignacionDesde'" [formatToModel]="constants.formatoDDMMYYYY"
+              [ngModelOptions]="{standalone: true}">
+            </sigma-form-calendar>
+          </div>
+        </div>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 36" fxFlex.md="0 0 99" *ngIf="filtersToShow.fechaVencimiento">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex="50">
+            <sigma-form-calendar id="cu-08-filtros-date-fechaVencimientoHasta" [objeto]="criteria"
+              [(ngModel)]="criteria.fechaVencimientoDesde" [type]="'calendar'" [placeholder]="'Fecha Vencimiento Desde'"
+              [maxTarget]="'fechaVencimientoHasta'" [formatToModel]="constants.formatoDDMMYYYY"
+              [ngModelOptions]="{standalone: true}">
+            </sigma-form-calendar>
+          </div>
+
+          <div fxFlex="50">
+            <sigma-form-calendar id="cu-08-filtros-date-fechaVencimientoDesde" [objeto]="criteria"
+              [(ngModel)]="criteria.fechaVencimientoHasta" [type]="'calendar'" [placeholder]="'Fecha Vencimiento Hasta'"
+              [minTarget]="'fechaVencimientoDesde'" [formatToModel]="constants.formatoDDMMYYYY"
+              [ngModelOptions]="{standalone: true}">
+            </sigma-form-calendar>
+          </div>
+        </div>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 36" fxFlex.md="0 0 99" *ngIf="filtersToShow.fechaSeguimiento">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex="50">
+            <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaSeguimientoDesde" [type]="'calendar'"
+              [placeholder]="'Fecha Seguimiento Desde'" [maxTarget]="'fechaSeguimientoHasta'"
+              [formatToModel]="constants.formatoDDMMYYYY" [ngModelOptions]="{standalone: true}">
+            </sigma-form-calendar>
+          </div>
+          <div fxFlex="50">
+            <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaSeguimientoHasta" [type]="'calendar'"
+              [placeholder]="'Fecha Seguimiento Hasta'" [minTarget]="'fechaSeguimientoDesde'"
+              [formatToModel]="constants.formatoDDMMYYYY" [ngModelOptions]="{standalone: true}">
+            </sigma-form-calendar>
+          </div>
+        </div>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 36" fxFlex.md="0 0 99" *ngIf="filtersToShow.fechaProgramacionVisita">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex="50">
+            <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaProgramacionVisitaDesde"
+              [type]="'calendar'" [placeholder]="'Fecha Programación Visita Desde'"
+              [startAt]='criteria.fechaProgramacionVisitaDesde' [maxTarget]="'fechaProgramacionVisitaHasta'"
+              [formatToModel]="constants.formatoDDMMYYYY" [ngModelOptions]="{standalone: true}">
+            </sigma-form-calendar>
+          </div>
+          <div fxFlex="50">
+            <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaProgramacionVisitaHasta"
+              [type]="'calendar'" [placeholder]="'Fecha Programación Visita Hasta'"
+              [startAt]='criteria.fechaProgramacionVisitaHasta' [minTarget]="'fechaProgramacionVisitaDesde'"
+              [formatToModel]="constants.formatoDDMMYYYY" [ngModelOptions]="{standalone: true}">
+            </sigma-form-calendar>
+          </div>
+        </div>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 36" fxFlex.md="0 0 99" *ngIf="filtersToShow.fechaAsignacionIngenieroDisenio" >
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex="50">
+            <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaAsignacionIngenieroDisenioDesde"
+              [type]="'calendar'" [placeholder]="'Fecha Asignación Desde'"
+              [maxTarget]="'fechaAsignacionIngenieroDisenioHasta'" [formatToModel]="constants.formatoDDMMYYYY"
+              [ngModelOptions]="{standalone: true}">
+            </sigma-form-calendar>
+          </div>
+          <div fxFlex="50">
+            <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaAsignacionIngenieroDisenioHasta"
+              [type]="'calendar'" [placeholder]="'Fecha Asignación Hasta'"
+              [minTarget]="'fechaAsignacionIngenieroDisenioDesde'" [formatToModel]="constants.formatoDDMMYYYY"
+              [ngModelOptions]="{standalone: true}">
+            </sigma-form-calendar>
+          </div>
+        </div>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 36" fxFlex.md="0 0 99" *ngIf="filtersToShow.fechaSolicitudSmvl">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex="50">
+            <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaSolicitudSmvlDesde" [type]="'calendar'"
+              [placeholder]="'Fecha Solicitud SMVL Desde'" [maxTarget]="'fechaSolicitudSmvlHasta'"
+              [formatToModel]="constants.formatoDDMMYYYY" [ngModelOptions]="{standalone: true}">
+            </sigma-form-calendar>
+          </div>
+          <div fxFlex="50">
+            <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaSolicitudSmvlHasta" [type]="'calendar'"
+              [placeholder]="'Fecha Solicitud SMVL Hasta'" [minTarget]="'fechaSolicitudSmvlDesde'"
+              [formatToModel]="constants.formatoDDMMYYYY" [ngModelOptions]="{standalone: true}">
+            </sigma-form-calendar>
+          </div>
+        </div>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 36" fxFlex.md="0 0 99" *ngIf="filtersToShow.fechaSolicitudGasa">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex="50">
+            <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaSolicitudGasaDesde" [type]="'calendar'"
+              [placeholder]="'Fecha Solicitud GASA Desde'" [maxTarget]="'fechaSolicitudGasaHasta'"
+              [formatToModel]="constants.formatoDDMMYYYY" [ngModelOptions]="{standalone: true}">
+            </sigma-form-calendar>
+          </div>
+          <div fxFlex="50">
+            <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaSolicitudGasaHasta" [type]="'calendar'"
+              [placeholder]="'Fecha Solicitud GASA Hasta'" [minTarget]="'fechaSolicitudGasaDesde'"
+              [formatToModel]="constants.formatoDDMMYYYY" [ngModelOptions]="{standalone: true}">
+            </sigma-form-calendar>
+          </div>
+        </div>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 36" fxFlex.md="0 0 99" *ngIf="filtersToShow.fechaProgramacionDiaria">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex="50">
+            <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaProgramacionDiariaDesde"
+              [type]="'calendar'" [placeholder]="'Fecha Programacion Diaria Desde'"
+              [formatToModel]="constants.formatoDDMMYYYY" [maxTarget]="'fechaProgramacionDiariaHasta'"
+              [ngModelOptions]="{standalone: true}">
+            </sigma-form-calendar>
+          </div>
+          <div fxFlex="50">
+            <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaProgramacionDiariaHasta"
+              [type]="'calendar'" [placeholder]="'Fecha Programacion Diaria Hasta'"
+              [formatToModel]="constants.formatoDDMMYYYY" [minTarget]="'fechaProgramacionDiariaDesde'"
+              [ngModelOptions]="{standalone: true}">
+            </sigma-form-calendar>
+          </div>
+        </div>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 36" fxFlex.md="0 0 99" *ngIf="filtersToShow.fechaInforme">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex="50">
+            <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaInformeDesde" [type]="'calendar'"
+              [placeholder]="'Fecha Informe Desde'" [maxTarget]="'fechaInformeHasta'"
+              [formatToModel]="constants.formatoDDMMYYYY" [ngModelOptions]="{standalone: true}">
+            </sigma-form-calendar>
+          </div>
+          <div fxFlex="50">
+            <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaInformeHasta" [type]="'calendar'"
+              [placeholder]="'Fecha Informe Hasta'" [minTarget]="'fechaInformeDesde'"
+              [formatToModel]="constants.formatoDDMMYYYY" [ngModelOptions]="{standalone: true}">
+            </sigma-form-calendar>
+          </div>
+        </div>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 36" fxFlex.md="0 0 99" *ngIf="filtersToShow.fechaProgramacionIntervencion">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex="50">
+            <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaProgramacionIntervencionDesde"
+              [type]="'calendar'" [placeholder]="'Fecha programación Intervención Desde'"
+              [maxTarget]="'fechaIntervencionHasta'" [formatToModel]="constants.formatoDDMMYYYY"
+              [ngModelOptions]="{standalone: true}">
+            </sigma-form-calendar>
+          </div>
+          <div fxFlex="50">
+            <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaProgramacionIntervencionHasta"
+              [type]="'calendar'" [placeholder]="'Fecha programación intervención hasta'"
+              [minTarget]="'fechaProgramacionIntervencionDesde'" [formatToModel]="constants.formatoDDMMYYYY"
+              [ngModelOptions]="{standalone: true}">
+            </sigma-form-calendar>
+          </div>
+        </div>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 36" fxFlex.md="0 0 99" *ngIf="filtersToShow.fechasIntervencion">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex="50">
+            <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaIntervencionDesde" [type]="'calendar'"
+              [placeholder]="'Fecha Programación Intervención Desde'" [maxTarget]="'fechaIntervencionHasta'"
+              [formatToModel]="constants.formatoDDMMYYYY" [ngModelOptions]="{standalone: true}">
+            </sigma-form-calendar>
+          </div>
+          <div fxFlex="50">
+            <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaIntervencionHasta" [type]="'calendar'"
+              [placeholder]="'Fecha Programación Intervención Hasta'" [minTarget]="'fechaIntervencionDesde'"
+              [formatToModel]="constants.formatoDDMMYYYY" [ngModelOptions]="{standalone: true}">
+            </sigma-form-calendar>
+          </div>
+        </div>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 36" fxFlex.md="0 0 99" *ngIf="filtersToShow.fechaInstalacion">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex="50">
+            <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaInstalacionDesde" [type]="'calendar'"
+              [placeholder]="'Fecha Instalación Desde'" [maxTarget]="'fechaInstalacionHasta'"
+              [formatToModel]="constants.formatoDDMMYYYY" [ngModelOptions]="{standalone: true}">
+            </sigma-form-calendar>
+          </div>
+          <div fxFlex="50">
+            <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaInstalacionHasta" [type]="'calendar'"
+              [placeholder]="'Fecha Instalación Hasta'" [minTarget]="'fechaInstalacionDesde'"
+              [formatToModel]="constants.formatoDDMMYYYY" [ngModelOptions]="{standalone: true}">
+            </sigma-form-calendar>
+          </div>
+        </div>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.fechaRegistroEnsayo">
+        <div fxFlex>
+          <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaSolicitudEnsayo" [type]="'calendar'"
+            [placeholder]="constants.fechaSolicitudEnsayo" [ngModelOptions]="{standalone: true}">
+          </sigma-form-calendar>
+        </div>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 36" fxFlex.md="0 0 99" *ngIf="filtersToShow.tipoEnsayo">
+        <div fxFlex>
+          <sigma-form-select [path]="'/api/administracion/lista/PRODUCCION_TIPO_ENSAYO/items'" [(ngModel)]="criteria.tipoEnsayo"
+             name="tipoEnsayo" [placeholder]="'' + constants.tipoEnsayo" [listBy]="'descripcion'">
+          </sigma-form-select>        
+        </div>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48" *ngIf="filtersToShow.fechaRegistroEnsayo">
+        <div fxFlex>
+          <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaRegistroEnsayo"
+            [type]="'calendar'" [placeholder]="constants.fechaRegistroEnsayo" [ngModelOptions]="{standalone: true}">
+          </sigma-form-calendar>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Botones de los Filtros-->
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+      <div fxFlex >
+        <button id="cu-08-filtros-boton-buscar" *ngIf="filters.length > 0" type="submit" mat-raised-button color="primary" 
+          class="m-1" (click)="search()">
+          <mat-icon>search</mat-icon> Buscar
+        </button>
+        <button id="cu-08-filtros-boton-limpiar" *ngIf="filters.length > 0" (click)="clear()" mat-raised-button color="warn"
+          class="m-1">
+          <mat-icon>clear</mat-icon> Limpiar
+        </button>
+        <button id="cu-08-filtros-boton-exportar" *ngIf="showExport" layout="row"
+          [disabled]="dataSource.totalElements$.source['_value'] <= 0" mat-raised-button color="primary" class="m-1"
+          (click)="export()">
+          <mat-icon>get_app</mat-icon>
+          Exportar
+          <mat-icon *ngIf="cargandoExcel">
+            <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+          </mat-icon>
+        </button>
+        <button *ngIf="showImport" fxFlex.sm="50" fxFlex.xs="50" mat-raised-button color="primary" class="m-1"
+          (click)="importar()">
+          <mat-icon>cloud_upload</mat-icon>
+          Importar
+        </button>
+      </div>
+    </div>
+    <!-- Filtro listado de PKs-->
+    <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+      <div [hidden]="tipoGrid == 'Invisible'">
+        <mat-form-field class="mt-10">
+          <mat-label>Listado de PKs</mat-label>
+          <mat-select [(value)]="tipoGrid">
+            <mat-option value="Seleccionados">Seleccionados</mat-option>
+            <mat-option value="Todos">Todos</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+  <!-- grid normal (paginado) -->
+  <div [hidden]="!(tipoGrid === 'Todos' || tipoGrid === 'Invisible')" class="mat-elevation-z8 mt-10">
+    <div *ngIf="(dataSource.loading$ | async)" fxLayout="column" fxLayoutAlign="center center">
+      <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+    </div>
+
+    <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+      <mat-icon class="m-1">sms_failed</mat-icon>
+      <h4> {{dataSource.errorMessage$ | async}}</h4>
+    </div>
+
+    <div [hidden]="dataSource.loading$ | async">
+      <mat-table #table [dataSource]="dataSource" class="col-x" matSort>
+        <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+
+        <ng-container matColumnDef="posicion">
+          <mat-header-cell *matHeaderCellDef > {{constants.posicion}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.posicion">
+            {{ mantenimiento.posicion }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="id">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.id}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" (click)="localizarMantenimientoMapa(mantenimiento)"
+            [attr.data-label]="constants.id">
+            {{ mantenimiento.id }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="pk">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.pk}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" (click)="localizarMantenimientoMapa(mantenimiento)"
+            [attr.data-label]="constants.pk" class="hover-element-pointer">
+            {{ mantenimiento.pk }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="civ">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.civ}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.civ">
+            {{ mantenimiento.civ }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="solicitudRadicadoEntrada">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.solicitudRadicadoEntrada}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.solicitudRadicadoEntrada">
+            {{ mantenimiento.solicitudRadicadoEntrada }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="solicitudFechaVinculacion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.solicitudFechaVinculacion}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.solicitudFechaVinculacion">
+            {{ mantenimiento.solicitudFechaVinculacion }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="solicitudRadicadoSalida">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.solicitudRadicadoSalida}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.solicitudRadicadoSalida">
+            {{ mantenimiento.solicitudRadicadoSalida }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="origen">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.origen}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.origen">
+            {{ mantenimiento.origen ? mantenimiento.origen.descripcion : '' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="estadoPk">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.estadoPk}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.estadoPk">
+            {{ mantenimiento.estadoPk ? mantenimiento.estadoPk.descripcion : '' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaAsignacion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.fechaAsignacion}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.fechaAsignacion">
+            {{mantenimiento.fechaAsignacion}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaVencimiento">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.fechaVencimiento}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.fechaVencimiento">
+            {{mantenimiento.fechaVencimiento}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="kmCarrilImpacto">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.kmCarrilImpacto}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.kmCarrilImpacto">
+            {{ mantenimiento.kmCarrilImpacto ? (mantenimiento.kmCarrilImpacto | number : '.2-3') : '' }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="ancho">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.ancho}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.ancho">
+            {{ mantenimiento.ancho ? (mantenimiento.ancho | number : '.2-2') : ''}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="area">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.area}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.area">
+            {{ mantenimiento.area }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="longitud">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.longitud}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.longitud">
+            {{ mantenimiento.longitud }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="indicePriorizacion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.indicePriorizacion}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.indicePriorizacion">
+            {{ mantenimiento.indicePriorizacion ? mantenimiento.indicePriorizacion : '' }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="responsable">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.responsable}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.responsable">
+            <div *ngIf="reponsableForViewGrid">
+              {{ reponsableForViewGrid.nombres + ' ' + reponsableForViewGrid.apellidos }}
+            </div>
+            <div *ngIf="reponsableForViewGrid === undefined" >
+              {{ 
+                mantenimiento.responsable !== null ? 
+                mantenimiento.responsable.nombres + ' ' + mantenimiento.responsable.apellidos 
+                : '' 
+              }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="ejecutadoPor">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.responsable}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.responsable">
+            {{ 
+              mantenimiento.actividadMantenimientos !== null &&
+              mantenimiento.actividadMantenimientos.length > 0 &&
+              mantenimiento.actividadMantenimientos[0].ejecutadoPor !== null? 
+              mantenimiento.actividadMantenimientos[0].ejecutadoPor.nombresYapellidos :
+              '' 
+            }}
+          </mat-cell>
+        </ng-container>
+
+
+        <ng-container matColumnDef="radicadoSolicitudReserva">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.radicadoSolicitudReserva}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.radicadoSolicitudReserva">
+            {{mantenimiento.radicadoSolicitudReserva}} </mat-cell>
+        </ng-container>
+        
+        <ng-container matColumnDef="radicadoRespuestaReserva">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.radicadoRespuestaReserva}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.radicadoRespuestaReserva">
+            {{ mantenimiento.radicadoRespuestaReserva}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tipoMalla">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.tipoMalla}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.tipoMalla">
+            {{ mantenimiento.tipoMalla ? mantenimiento.tipoMalla.descripcion : ''}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tipoUsoVia">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.tipoUsoVia}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.tipoUsoVia">
+            {{ mantenimiento.tipoUsoVia ? mantenimiento.tipoUsoVia.descripcion : ''}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaVisitaTecnica">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.fechaVisitaTecnica}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.fechaVisitaTecnica">
+            {{ mantenimiento.fechaVisitaTecnica }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="radicadoIntervencion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.radicadoIntervencion}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.radicadoIntervencion">
+            {{ mantenimiento.radicadoIntervencion }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="radicadoInterExclusivo">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.radicadoIntervencion}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.radicadoIntervencion">
+            {{ mantenimiento.radicadoIntervencion }} </mat-cell>
+        </ng-container>
+
+        
+        <ng-container matColumnDef="localidad">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.localidad}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.localidad">
+            {{ mantenimiento.localidad ? mantenimiento.localidad.nombre : '' }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="zona">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.zona}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.zona">
+            {{ mantenimiento.zona ? mantenimiento.zona.nombre : '' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="barrio">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.barrio}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.barrio">
+            {{ mantenimiento.barrio ? mantenimiento.barrio.nombre : '' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="estadoMantenimiento">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.estadoMantenimiento}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.estadoMantenimiento">
+            {{ mantenimiento.estadoMantenimiento ? mantenimiento.estadoMantenimiento.descripcion : '' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tipoSeccionVial">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.tipoSeccionVial}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.tipoSeccionVial">
+            {{ mantenimiento.tipoSeccionVial ? mantenimiento.tipoSeccionVial.descripcion : '' }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="cuadrante">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.cuadrante}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.cuadrante">
+            {{ mantenimiento.cuadrante ? mantenimiento.cuadrante.nombre : '' }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="cantidadApiques">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.cantidadApiques}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.cantidadApiques">
+            <div
+              *ngIf="mantenimiento.predisenio && mantenimiento.predisenio.apiques && mantenimiento.predisenio.apiques.length > 0 ">
+              {{mantenimiento.predisenio.apiques.length}}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actividadSolicitudApique">
+          <mat-header-cell *matHeaderCellDef> {{constants.actividadSolicitudApique}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.actividadSolicitudApique">
+            <div
+              *ngIf="mantenimiento.predisenio && mantenimiento.predisenio.apiques && mantenimiento.predisenio.apiques.length > 0 ">
+              {{mantenimiento.predisenio.apiques[0].actividad ? mantenimiento.predisenio.apiques[0].actividad.descripcion : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="aforos">
+          <mat-header-cell *matHeaderCellDef> {{constants.aforos}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.aforos">
+            <div
+              *ngIf="mantenimiento.predisenio && mantenimiento.predisenio.apiques && mantenimiento.predisenio.apiques.length > 0 ">
+              <span class="dev-color-red"
+                [hidden]="mantenimiento.predisenio.apiques[0].aforos == true">{{ constants.no }}</span>
+              <span class="dev-color-green"
+                [hidden]="mantenimiento.predisenio.apiques[0].aforos == false">{{ constants.si }}</span>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="prioritarios">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.prioritarios}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.prioritarios">
+            <div
+              *ngIf="mantenimiento.predisenio && mantenimiento.predisenio.apiques && mantenimiento.predisenio.apiques.length > 0 ">
+              {{mantenimiento.predisenio.apiques[0].prioritarios}}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="solicitud">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.solicitud }} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.solicitud">
+            <div
+              *ngIf="mantenimiento.predisenio && mantenimiento.predisenio.apiques && mantenimiento.predisenio.apiques.length > 0 ">
+              {{mantenimiento.predisenio.apiques[0].solicitud ? mantenimiento.predisenio.apiques[0].solicitud.descripcion : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+        
+        <ng-container matColumnDef="solicitudAforo">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.solicitud }} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.solicitud">
+            <div
+              *ngIf="mantenimiento.predisenio && mantenimiento.predisenio.aforos && mantenimiento.predisenio.aforos.length > 0 ">
+              {{mantenimiento.predisenio.aforos[0].solicitud ? mantenimiento.predisenio.aforos[0].solicitud.descripcion : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tipoActividad">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.tipoActividad}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.tipoActividad">
+            {{mantenimiento.tipoActividad ? mantenimiento.tipoActividad.descripcion : ''}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="upla">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.upla}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.upla">
+            {{ mantenimiento.upla ? mantenimiento.upla.nombre : '' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actividadActual">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.actividadActual}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.actividadActual">
+            {{ mantenimiento.actividadActual ? mantenimiento.actividadActual.descripcion : '' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actividad">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.actividad}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.actividad">
+            {{ mantenimiento.actividad }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaVisitaDisenio">
+          <mat-header-cell *matHeaderCellDef> Fecha Visita Diseño </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" data-label="Fecha Visita Diseño"> 
+            {{ mantenimiento.disenio ? mantenimiento.disenio.fechaCreacionDisenio : ''}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="requiereApique">
+          <mat-header-cell *matHeaderCellDef> {{constants.requiereApique}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.requiereApique">
+            <div
+              *ngIf="mantenimiento.predisenio !== null && mantenimiento.predisenio !== undefined && mantenimiento.predisenio.requiereApique !== null">
+
+              <div [ngSwitch]="mantenimiento.predisenio.requiereApique">
+                <div *ngSwitchCase="0">
+                  <span class="dev-color-red">{{ constants.no }}</span>
+                  </div>
+                <div *ngSwitchCase="1">
+                  <span class="dev-color-green">{{ constants.si }}</span>
+                </div>
+                <div *ngSwitchCase="2">
+                  <span >{{ constants.aledano }}</span>
+                </div>
+              </div>
+                
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="requiereAforo">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.requiereAforo}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.requiereAforo">
+            <div
+              *ngIf="mantenimiento.predisenio !== null && mantenimiento.predisenio !== undefined && mantenimiento.predisenio.requiereAforo !== null">
+
+              <div [ngSwitch]="mantenimiento.predisenio.requiereAforo">
+                <div *ngSwitchCase="0">
+                  <span class="dev-color-red">{{ constants.no }}</span>
+                  </div>
+                <div *ngSwitchCase="1">
+                  <span class="dev-color-green">{{ constants.si }}</span>
+                </div>
+                <div *ngSwitchCase="2">
+                  <span >{{ constants.aledano }}</span>
+                </div>
+              </div>
+
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tipoIntervencion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.tipoIntervencion}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.tipoIntervencion">
+            {{mantenimiento.diagnostico ? mantenimiento.diagnostico.encabezado.tipoIntervencionTotal ?
+              mantenimiento.diagnostico.encabezado.tipoIntervencionTotal && mantenimiento.tipoSuperficie ?
+              mantenimiento.tipoSuperficie.descripcion + ' - ' + mantenimiento.diagnostico.encabezado.tipoIntervencionTotal.descripcion : '' :
+              '' :
+            '' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tipoIntervencionPriorizacion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.tipoIntervencionPriorizacion}}
+          </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.tipoIntervencionPriorizacion">
+            {{  mantenimiento.diagnostico != null ? mantenimiento.diagnostico.priorizacion != null ?
+                mantenimiento.diagnostico.priorizacion.tipoIntervencion != null ?
+                mantenimiento.diagnostico.priorizacion.tipoIntervencion.descripcion : '' :
+              '' :
+            ''}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="direccion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.direccion}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.direccion">
+            {{ mantenimiento.ejeVial && mantenimiento.desde && mantenimiento.hasta ? mantenimiento.ejeVial + ' N° ' +  mantenimiento.desde + ' - ' + mantenimiento.hasta : ''}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tipoSuperficie">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.tipoSuperficie}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.tipoSuperficie">
+            {{ mantenimiento.tipoSuperficie ? mantenimiento.tipoSuperficie.descripcion : '' }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="ejeVial">
+          <mat-header-cell *matHeaderCellDef> {{constants.ejeVial}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.ejeVial">
+            {{ mantenimiento.ejeVial}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaProgramacionVisita">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.fechaProgramacionVisita}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.fechaProgramacionVisita">
+            <div *ngIf="mantenimiento.visitas && mantenimiento.visitas.length > 0">
+              {{mantenimiento.visitas[0].fecha ? utilitiesService.convertDateToString(mantenimiento.visitas[0].fecha, 'DD/MM/YYYY') : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="numeroMovilVisitaTecnica">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.numeroMovilVisitaTecnica}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.numeroMovilVisitaTecnica">
+            <div *ngIf="mantenimiento.visitas && mantenimiento.visitas.length > 0">
+              {{ mantenimiento.visitas[0].equipo.movil }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="desde">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.desde}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.desde">
+            {{mantenimiento.desde}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="hasta">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.hasta}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.hasta">
+            {{mantenimiento.hasta}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="responsableVisitaTecnica">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.responsableVisitaTecnica}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.responsableVisitaTecnica">
+            <div *ngIf="mantenimiento.visitas && mantenimiento.visitas.length > 0">
+              {{mantenimiento.visitas[0].responsable.nombres + ' ' + mantenimiento.visitas[0].responsable.apellidos}}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="observacionDireccionApique">
+          <mat-header-cell *matHeaderCellDef> {{constants.observacionDireccionApique}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.observacionDireccionApique">
+            <div
+              *ngIf="mantenimiento.predisenio && mantenimiento.predisenio.apiques && mantenimiento.predisenio.apiques.length > 0 ">
+              {{mantenimiento.predisenio.apiques[0].observacion}}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="directorDeObra">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.directorDeObra}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.directorDeObra">
+            {{ (mantenimiento.directorObra != null)  ? (mantenimiento.directorObra.nombres +' ' + mantenimiento.directorObra.apellidos) :' '}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="numeroCarriles">
+          <mat-header-cell *matHeaderCellDef> {{constants.numeroCarriles}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.numeroCarriles"> </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="intervencionAgrupada">
+          <mat-header-cell *matHeaderCellDef> {{constants.intervencionAgrupada}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.intervencionAgrupada"> </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="intervencionDetallada">
+          <mat-header-cell *matHeaderCellDef> {{constants.intervencionDetallada}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.intervencionDetallada"> </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="priorizacionFinal">
+          <mat-header-cell *matHeaderCellDef> Priorizacion Final </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" data-label="Priorizacion Final"> </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaInicioVisita">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.fechaInicioVisita}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.fechaInicioVisita">
+            {{mantenimiento.fechaInicioVisita ? utilitiesService.convertDateToString(mantenimiento.fechaInicioVisita, 'DD/MM/YYYY') : '' }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaFinVisita">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.fechaFinVisita}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.fechaFinVisita">
+            {{ mantenimiento.fechaFinVisita ? utilitiesService.convertDateToString(mantenimiento.fechaFinVisita, 'DD/MM/YYYY') : '' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="estadoProgramacion">
+          <mat-header-cell *matHeaderCellDef> Estado Programación </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" data-label="Estado Programación"> </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="nomenclatura">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.nomenclatura }} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.nomenclatura">
+            <div
+              *ngIf="mantenimiento.predisenio && mantenimiento.predisenio.apiques && mantenimiento.predisenio.apiques.length > 0 ">
+              {{mantenimiento.predisenio.apiques[0].nomenclatura}}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="estrategia">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Estrategia </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" data-label="Estrategia">
+            {{ mantenimiento.estrategia ? mantenimiento.estrategia.descripcion : '' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="estrategiaIntervencion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Estrategia Intervención </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" data-label="Estrategia Intervención">
+            {{ mantenimiento.estrategia ? mantenimiento.estrategia.descripcion : '' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="observacionActividadActual">
+          <mat-header-cell *matHeaderCellDef> {{constants.observacionActividadActual}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.observacionActividadActual">
+            {{mantenimiento.ultimaObservacionMantenimientoActividad}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="observacionApiqueUltimaSolicitudApique">
+          <mat-header-cell *matHeaderCellDef> {{ constants.observacionApiqueUltimaSolicitudApique }} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento"
+            [attr.data-label]="constants.observacionApiqueUltimaSolicitudApique"> </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="rutasTransporte">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.rutasTransporte}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.rutasTransporte">
+            <span class="dev-color-red" [hidden]="mantenimiento.rutasTransporte">{{ constants.no }}</span>
+            <span class="dev-color-green" [hidden]="!mantenimiento.rutasTransporte">{{ constants.si }}</span>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="levantamientoTopografico">
+          <mat-header-cell *matHeaderCellDef> {{constants.levantamientoTopografico}}</mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.levantamientoTopografico">
+            <div *ngIf="mantenimiento.disenio">
+              <span class="dev-color-red"
+                *ngIf="mantenimiento.disenio.leventamientoTopografico == null">{{ constants.no }}</span>
+              <span class="dev-color-green"
+                *ngIf="mantenimiento.disenio.leventamientoTopografico">{{ constants.si }}</span>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="modulacionLosas">
+          <mat-header-cell *matHeaderCellDef> {{constants.modulacionLosas}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.modulacionLosas">
+            <div *ngIf="mantenimiento.disenio">
+              <span class="dev-color-red"
+                *ngIf="mantenimiento.disenio.modulacionLosas == null">{{ constants.no }}</span>
+              <span class="dev-color-green" *ngIf="mantenimiento.disenio.modulacionLosas">{{ constants.si }}</span>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="otrosDocumentos">
+          <mat-header-cell *matHeaderCellDef> {{constants.otrosDocumentos}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.otrosDocumentos">
+            <div *ngIf="mantenimiento.disenio && mantenimiento.disenio.otrosDocumentos">
+              <span class="dev-color-red"
+                *ngIf="mantenimiento.disenio.otrosDocumentos == null || mantenimiento.disenio.otrosDocumentos.length == 0">{{ constants.no }}</span>
+              <span class="dev-color-green" *ngIf="mantenimiento.disenio.otrosDocumentos.length > 0 ">{{ constants.si }}</span>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fichaEvaluacionEstructural">
+          <mat-header-cell *matHeaderCellDef> {{constants.fichaEvaluacionEstructural}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.fichaEvaluacionEstructural">
+            <div *ngIf="mantenimiento.disenio">
+              <span class="dev-color-red"
+                *ngIf="mantenimiento.disenio.fichaEstructural == null">{{ constants.no }}</span>
+              <span class="dev-color-green" *ngIf="mantenimiento.disenio.fichaEstructural">{{ constants.si }}</span>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="informacionDeDisenio">
+          <mat-header-cell *matHeaderCellDef> {{constants.informacionDeDisenio}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.informacionDeDisenio">
+            <div *ngIf="mantenimiento.disenio">
+              <span class="dev-color-red"
+                *ngIf="mantenimiento.disenio.informacionDiseino == null">{{ constants.no }}</span>
+              <span class="dev-color-green" *ngIf="mantenimiento.disenio.informacionDiseino">{{ constants.si }}</span>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="consultaRedes">
+          <mat-header-cell *matHeaderCellDef> {{constants.consultaRedes}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.consultaRedes">
+            <div *ngIf="mantenimiento.disenio && mantenimiento.disenio.consultaRedes">
+              <span class="dev-color-red" *ngIf="mantenimiento.disenio.consultaRedes == 0">{{ constants.no }}</span>
+              <span class="dev-color-green" *ngIf="mantenimiento.disenio.consultaRedes.length > 0">{{ constants.si }}</span>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="posibleDanioRedes">
+          <mat-header-cell *matHeaderCellDef> {{constants.posibleDanioRedes}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.posibleDanioRedes">
+            <span class="dev-color-red" [hidden]="mantenimiento.posibleDanioRedes">{{ constants.no }}</span>
+            <span class="dev-color-green" [hidden]="!mantenimiento.posibleDanioRedes">{{ constants.si }}</span>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tipoRadicadoRespuestaReserva">
+          <mat-header-cell *matHeaderCellDef> {{constants.tipoRadicadoRespuestaReserva}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.tipoRadicadoRespuestaReserva">
+            {{ mantenimiento.tipoRadicadoRespuestaReserva ? mantenimiento.tipoRadicadoRespuestaReserva.descripcion : '' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaAsignacionIngenieroDisenio">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.fechaAsignacionIngenieroDisenio}}
+          </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.fechaAsignacionIngenieroDisenio">
+            {{ mantenimiento.fechaAsignacionIngenieroDisenio }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="ingenieroDisenio">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.ingenieroDisenio}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.ingenieroDisenio">
+            {{mantenimiento.ingenieroDisenio ? mantenimiento.ingenieroDisenio.nombres + ' ' + mantenimiento.ingenieroDisenio.apellidos : ''}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="nombreResidenteSocial">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.nombreResidenteSocial}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.nombreResidenteSocial">
+            <div *ngIf="mantenimiento.intervenciones && mantenimiento.intervenciones.length > 0">
+              {{mantenimiento.intervenciones[0].residenteSocial ? 
+                    mantenimiento.intervenciones[0].residenteSocial.nombres + ' ' + mantenimiento.intervenciones[0].residenteSocial.apellidos : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="jornadaProgramacionPeriodica">
+          <mat-header-cell *matHeaderCellDef> {{constants.jornadaProgramacionPeriodica}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.jornadaProgramacionPeriodica">
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaSolicitudSmvl">
+          <mat-header-cell *matHeaderCellDef> {{constants.fechaSolicitudSmvl}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.fechaSolicitudSmvl">
+            <div *ngIf="mantenimiento.solicitudesSmvlGasa && mantenimiento.solicitudesSmvlGasa.length > 0">
+              {{mantenimiento.solicitudesSmvlGasa[0].fechaSolicitudSmvl ? 
+                    mantenimiento.solicitudesSmvlGasa[0].fechaSolicitudSmvl : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="numeroRadicadoSmvl">
+          <mat-header-cell *matHeaderCellDef> {{constants.numeroRadicadoSmvl}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.numeroRadicadoSmvl">
+            <div *ngIf="mantenimiento.solicitudesSmvlGasa && mantenimiento.solicitudesSmvlGasa.length > 0">
+              {{mantenimiento.solicitudesSmvlGasa[0].numeroRadicadoSmvl ? 
+                    mantenimiento.solicitudesSmvlGasa[0].numeroRadicadoSmvl : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="observacionesSmvl">
+          <mat-header-cell *matHeaderCellDef> {{constants.observacionesSmvl}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.observacionesSmvl"> </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="listaChequeoSmvl">
+          <mat-header-cell *matHeaderCellDef> {{constants.listaChequeoSmvl}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.listaChequeoSmvl"> </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="listaChequeoGasa">
+          <mat-header-cell *matHeaderCellDef> {{constants.listaChequeoGasa}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.listaChequeoGasa"> </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaSolicitudGasa">
+          <mat-header-cell *matHeaderCellDef> {{constants.fechaSolicitudGasa}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.fechaSolicitudGasa"> </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="numeroRadicadoGasa">
+          <mat-header-cell *matHeaderCellDef> {{constants.numeroRadicadoGasa}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.numeroRadicadoGasa"> </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="observacionesGasa">
+          <mat-header-cell *matHeaderCellDef> {{constants.observacionesGasa}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.observacionesGasa"> </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tieneRadicadoSalida">
+          <mat-header-cell *matHeaderCellDef> {{constants.tieneRadicadoSalida}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.tieneRadicadoSalida">
+            <!-- <span class="dev-color-red" [hidden]="mantenimiento.tieneRadicadoSalida">{{ constants.no }}</span>
+            <span class="dev-color-green" [hidden]="!mantenimiento.tieneRadicadoSalida">{{ constants.si }}</span> -->
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="estadoProgramacionVisita">
+          <mat-header-cell *matHeaderCellDef> {{constants.estadoProgramacionVisita}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.estadoProgramacionVisita">
+            <div *ngIf="mantenimiento.visitas && mantenimiento.visitas.length > 0">
+              {{mantenimiento.visitas[0].estadoVisita ? mantenimiento.visitas[0].estadoVisita.descripcion : ''}}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="estadoProgramacionDiaria">
+          <mat-header-cell *matHeaderCellDef> {{constants.estadoProgramacionDiaria}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.estadoProgramacionDiaria">
+            <div *ngIf="mantenimiento.intervenciones && mantenimiento.intervenciones.length > 0">
+              {{mantenimiento.intervenciones[0].programacionesDiarias.length > 0 && mantenimiento.intervenciones[0].programacionesDiarias[0].estado
+                ? mantenimiento.intervenciones[0].programacionesDiarias[0].estado.descripcion : ''}}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaProgramacionDiaria">
+          <mat-header-cell *matHeaderCellDef> {{constants.fechaProgramacionDiaria}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.fechaProgramacionDiaria">
+            <div *ngIf="mantenimiento.intervenciones && mantenimiento.intervenciones.length > 0">
+              {{mantenimiento.intervenciones[0].programacionesDiarias.length > 0 ? mantenimiento.intervenciones[0].programacionesDiarias[0].fechaProgramacion : ''}}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="jornada">
+          <mat-header-cell *matHeaderCellDef> {{constants.jornada}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.jornada">
+            <div *ngIf="mantenimiento.intervenciones && mantenimiento.intervenciones.length > 0">
+              {{mantenimiento.intervenciones[0].programacionesDiarias.length > 0 ? mantenimiento.intervenciones[0].programacionesDiarias[0].jornada.descripcion : ''}}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaInforme">
+          <mat-header-cell *matHeaderCellDef> {{constants.fechaInforme}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.fechaInforme">
+            <div *ngIf="mantenimiento.intervenciones && mantenimiento.intervenciones.length > 0">
+              {{mantenimiento.intervenciones[0].programacionesDiarias.length > 0 ? mantenimiento.intervenciones[0].programacionesDiarias[0].fechaCreacion : ''}}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="estadoObra">
+          <mat-header-cell *matHeaderCellDef> {{constants.estadoObra}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.estadoObra">
+            <div *ngIf="mantenimiento.estadoObra">
+              {{mantenimiento.estadoObra.descripcion}}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="estadoRegistroDiarioCuadrilla">
+          <mat-header-cell *matHeaderCellDef> {{constants.estadoRegistroDiarioCuadrilla}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.estadoRegistroDiarioCuadrilla">
+            <div *ngIf="mantenimiento.intervenciones && mantenimiento.intervenciones.length > 0">
+              {{mantenimiento.intervenciones[0].cuadrillas.length > 0 ? mantenimiento.intervenciones[0].cuadrillas[0].avance.length > 0 ? mantenimiento.intervenciones[0].cuadrillas[0].avance[0].estadoRegistroDiario ? mantenimiento.intervenciones[0].cuadrillas[0].avance[0].estadoRegistroDiario.descripcion : '': '' : ''}}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="avancePorcentajeAcumuladoObra">
+          <mat-header-cell *matHeaderCellDef> {{constants.avancePorcentajeAcumuladoObra}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.avancePorcentajeAcumuladoObra">
+            <div *ngIf="mantenimiento.intervenciones && mantenimiento.intervenciones.length > 0">
+              {{mantenimiento.intervenciones[mantenimiento.intervenciones.length -1].cuadrillas.length > 0 ? mantenimiento.intervenciones[mantenimiento.intervenciones.length -1].cuadrillas[mantenimiento.intervenciones[mantenimiento.intervenciones.length -1].cuadrillas.length -1].avance.length > 0 ? 
+                mantenimiento.intervenciones[mantenimiento.intervenciones.length -1].cuadrillas[mantenimiento.intervenciones[mantenimiento.intervenciones.length -1].cuadrillas.length -1].avance[mantenimiento.intervenciones[mantenimiento.intervenciones.length -1].cuadrillas[mantenimiento.intervenciones[mantenimiento.intervenciones.length -1].cuadrillas.length -1].avance.length -1].porcentajeAcumulado : '' : ''}}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="kmCarrilLineal">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.kmCarrilLineal}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.kmCarrilLineal">
+            {{ mantenimiento.kmCarrilLineal !== 0 ? (mantenimiento.kmCarrilLineal | number : '.2-3') : 0 }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="kmCarrilObra">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.kmCarrilObra}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.kmCarrilObra">
+            {{ mantenimiento.kmCarrilObra !== 0 ? (mantenimiento.kmCarrilObra | number : '.2-3') : 0 }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="vigencia">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.vigencia}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.vigencia">
+            {{ mantenimiento.vigencia != null ? mantenimiento.vigencia.descripcion: ''}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="periodicidad">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.periodicidad}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.periodicidad">
+            {{ mantenimiento.periodicidad != null ? mantenimiento.periodicidad.descripcion: ''}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="periodo">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.periodo}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.periodo">
+            {{ mantenimiento.periodo != null ? mantenimiento.periodo.descripcion: ''}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="duracionPlaneada">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.duracionPlaneada}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.duracionPlaneada">
+            {{mantenimiento.duracionPlaneada}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="estadoProgramacionPk">
+          <mat-header-cell *matHeaderCellDef> {{constants.estadoProgramacionPk}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.estadoProgramacionPk">
+            {{mantenimiento.estadoProgramacionPk? mantenimiento.estadoProgramacionPk.descripcion: ''}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="estadoActividad">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.estadoActividad}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.estadoActividad">
+            {{ mantenimiento.estadoMantenimiento ? mantenimiento.estadoMantenimiento.descripcion : '' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="turnoResidenteSocial">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.turnoResidenteSocial}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.turnoResidenteSocial">
+            <div *ngIf="mantenimiento.intervenciones && mantenimiento.intervenciones.length > 0">
+              {{mantenimiento.intervenciones[0].turnoResidenteSocial ? 
+                mantenimiento.intervenciones[0].turnoResidenteSocial.descripcion : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="turnoResidenteAmbiental">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.turnoResidenteAmbiental}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.turnoResidenteAmbiental">
+            <div *ngIf="mantenimiento.intervenciones && mantenimiento.intervenciones.length > 0">
+              {{mantenimiento.intervenciones[0].turnoResidenteAmbiental ? 
+                mantenimiento.intervenciones[0].turnoResidenteAmbiental.descripcion : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="nombreResidenteAmbiental">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.nombreResidenteAmbiental}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.nombreResidenteAmbiental">
+            <div *ngIf="mantenimiento.intervenciones && mantenimiento.intervenciones.length > 0">
+              {{mantenimiento.intervenciones[0].residenteAmbiental ? 
+                    mantenimiento.intervenciones[0].residenteAmbiental.nombres + ' ' + mantenimiento.intervenciones[0].residenteAmbiental.apellidos : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="turnoResidenteSST">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.turnoResidenteSST}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.turnoResidenteSST">
+            <div *ngIf="mantenimiento.intervenciones && mantenimiento.intervenciones.length > 0">
+              {{mantenimiento.intervenciones[0].turnoResidenteSST ? 
+                mantenimiento.intervenciones[0].turnoResidenteSST.descripcion : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="nombreResidenteSST">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.nombreResidenteSST}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.nombreResidenteSST">
+            <div *ngIf="mantenimiento.intervenciones && mantenimiento.intervenciones.length > 0">
+              {{mantenimiento.intervenciones[0].residenteSST ? 
+                    mantenimiento.intervenciones[0].residenteSST.nombres + ' ' + mantenimiento.intervenciones[0].residenteSST.apellidos : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <!---->
+        <ng-container matColumnDef="requiereActualizacionDiagnostico">
+          <mat-header-cell *matHeaderCellDef> {{constants.requiereActualizacionDiagnostico}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.requiereActualizacionDiagnostico">
+            <div *ngIf="mantenimiento.intervenciones && mantenimiento.intervenciones.length > 0">
+              {{mantenimiento.intervenciones ? mantenimiento.intervenciones[0].requiereActualizacionDiag === true ?  'Si' : 'No' : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="numeroActaIntervencion">
+          <mat-header-cell *matHeaderCellDef> {{constants.numeroActaIntervencion}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.numeroActaIntervencion">
+            <div *ngIf="mantenimiento.intervenciones && mantenimiento.intervenciones.length > 0">
+              {{mantenimiento.intervenciones ? mantenimiento.intervenciones[0].nroActa : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tieneSolicitudLaboratorio">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.tieneSolicitudLaboratorio}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.tieneSolicitudLaboratorio">
+            {{ mantenimiento.tieneSolicitudLaboratorio }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="frecuencia">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.frecuencia}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.frecuencia">
+
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tipoMaterial">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.tipoMaterial}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.tipoMaterial">
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tipoMezcla">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.tipoMezcla}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.tipoMezcla">
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="espesorDisenio">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.espesorDisenio}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.espesorDisenio">
+
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tipoResultado">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.tipoResultado}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.tipoResultado">
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="responsableObra">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.responsableObra}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.responsableObra">
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="telResponsableObra">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.telResponsableObra}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.telResponsableObra">
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaProgramacionIntervencion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Programación de intervención </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.fechaProgramacionIntervencion">
+            <!--
+              {{ mantenimiento.fechaProgramacionIntervencion }}
+            <div
+              *ngIf="mantenimiento.intervenciones && mantenimiento.intervenciones.length > 0 && mantenimiento.intervenciones[0].programacionesIntervenciones.length > 0">
+              {{ mantenimiento.intervenciones ? mantenimiento.intervenciones[0].programacionesIntervenciones[0].fechaProgramacion : '' }}
+            </div>
+          -->
+          <div
+              *ngIf="mantenimiento.intervenciones && mantenimiento.intervenciones.length > 0 && mantenimiento.intervenciones[0].programacionesDiarias.length > 0">
+              {{ mantenimiento.intervenciones ? mantenimiento.intervenciones[0].programacionesDiarias[0].fechaProgramacion : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="turnoEjecucionIntervencion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.turnoEjecucionIntervencion}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.turnoEjecucionIntervencion">
+            <div
+              *ngIf="mantenimiento.intervenciones && mantenimiento.intervenciones.length > 0 && mantenimiento.intervenciones[0].programacionesDiarias.length > 0 && mantenimiento.intervenciones[0].programacionesDiarias[0].jornada">
+              {{ mantenimiento.intervenciones ? mantenimiento.intervenciones[0].programacionesDiarias[0].jornada.descripcion : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="estadoInspeccionIntervencion">
+          <mat-header-cell *matHeaderCellDef> Estado inspección intervencion</mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.estadoInspeccionIntervencion">
+            <div
+              *ngIf="mantenimiento.intervenciones && mantenimiento.intervenciones.length > 0 && mantenimiento.intervenciones[0].elementosInpecciones.length > 0 && mantenimiento.intervenciones[0].elementosInpecciones[0].estado">
+              {{ mantenimiento.intervenciones ? mantenimiento.intervenciones[0].elementosInpecciones[0].estado.descripcion : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actividadAgrupada">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.actividadAgrupada}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.actividadAgrupada">
+            {{ mantenimiento.actividadAgrupada }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="descripcionActividadAgrupada">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.actividadAgrupada}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.actividadAgrupada">
+            {{ mantenimiento.descripcionActividadAgrupada }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="selectEstrategia">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.estrategia}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.estrategia">
+            <sigma-form-select class="table-select" [path]="'/api/administracion/lista/TAB_MANTENIMIENTO_VIAL_ID_TIPO_ESTRATEGIA/items'"
+            [(ngModel)]="mantenimiento.estrategia" name="selectEstrategia"
+            [listBy]="'descripcion'">
+          </sigma-form-select>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="select">
+          <mat-header-cell *matHeaderCellDef>
+            <mat-checkbox *ngIf="showCheckMasive && ((dataSource.totalElements$ | async)>0? true : false) "
+              (change)="$event ? masterToggle($event) : null" [checked]="masiveChecked">
+            </mat-checkbox>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento">
+            <mat-checkbox #listCheckboxes (click)="$event.stopPropagation()"
+              (change)="$event ? toggleChecks(mantenimiento, $event) : null"
+              [checked]="mantenimientoIsSelected(mantenimiento)">
+            </mat-checkbox>
+          </mat-cell>
+        </ng-container>
+
+
+        <ng-container matColumnDef="acciones">
+          <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" data-label="Acciones">
+            <div *ngFor="let accion of singleActions">
+              <button mat-raised-button [color]="accion.color"
+                (click)="executeSingleAction(accion.nombre, mantenimiento)" [title]="accion.label" class="m-1">
+                <mat-icon *ngIf="accion.icono != ''">{{accion.icono}}</mat-icon>
+              </button>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <mat-row *matRowDef="let row; columns: columns"></mat-row>
+      </mat-table>
+      <mat-paginator #paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size"
+        [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+    </div>
+
+  </div>
+  <!-- grid PKS Seleccionados -->
+  <div [hidden]="!(tipoGrid === 'Seleccionados')" class="mat-elevation-z8 mt-10">
+
+    <div *ngIf="procesandoElementosSeleccionados" fxLayout="column" fxLayoutAlign="center center">
+      <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+    </div>
+
+    <div *ngIf="!procesandoElementosSeleccionados && dataSourcePksSeleccionados.data== null" class="msj_no_results"
+      fxLayout="row" fxLayoutAlign="center center">
+      <mat-icon class="m-1">sms_failed</mat-icon>
+      <h4> No se han seleccionado Mantenimientos</h4>
+    </div>
+
+
+    <div [hidden]="procesandoElementosSeleccionados || dataSourcePksSeleccionados.data == null">
+      <mat-table #sortPksSeleccionados="matSort" [dataSource]="dataSourcePksSeleccionados" class="col-x" matSort>
+        <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+
+        <ng-container matColumnDef="posicion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.posicion}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.posicion">
+            {{ mantenimiento.posicion }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="id">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.id}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" (click)="localizarMantenimientoMapa(mantenimiento)"
+            [attr.data-label]="constants.id">
+            {{ mantenimiento.id }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="pk">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.pk}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" (click)="localizarMantenimientoMapa(mantenimiento)"
+            [attr.data-label]="constants.pk" class="hover-element-pointer">
+            {{ mantenimiento.pk }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="civ">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.civ}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.civ">
+            {{ mantenimiento.civ }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="solicitudRadicadoEntrada">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.solicitudRadicadoEntrada}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.solicitudRadicadoEntrada">
+            {{ mantenimiento.solicitudRadicadoEntrada }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="solicitudFechaVinculacion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.solicitudFechaVinculacion}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.solicitudFechaVinculacion">
+            {{ mantenimiento.solicitudFechaVinculacion }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="solicitudRadicadoSalida">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.solicitudRadicadoSalida}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.solicitudRadicadoSalida">
+            {{ mantenimiento.solicitudRadicadoSalida }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="origen">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.origen}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.origen">
+            {{ mantenimiento.origen ? mantenimiento.origen.descripcion : '' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="estadoPk">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.estadoPk}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.estadoPk">
+            {{ mantenimiento.estadoPk ? mantenimiento.estadoPk.descripcion : '' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaAsignacion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.fechaAsignacion}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.fechaAsignacion">
+            {{mantenimiento.fechaAsignacion}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaVencimiento">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.fechaVencimiento}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.fechaVencimiento">
+            {{mantenimiento.fechaVencimiento}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="kmCarrilImpacto">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.kmCarrilImpacto}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.kmCarrilImpacto">
+            {{ mantenimiento.kmCarrilImpacto ? (mantenimiento.kmCarrilImpacto | number : '.2-3') : '' }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="ancho">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.ancho}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.ancho">
+            {{ mantenimiento.ancho ? (mantenimiento.ancho | number : '.2-2') : ''}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="area">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.area}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.area">
+            {{ mantenimiento.area }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="longitud">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.longitud}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.longitud">
+            {{ mantenimiento.longitud }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="indicePriorizacion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.indicePriorizacion}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.indicePriorizacion">
+            {{ mantenimiento.indicePriorizacion ? mantenimiento.indicePriorizacion : '' }}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="responsable">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.responsable}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.responsable">
+            {{ 
+              mantenimiento.responsable !== null ? mantenimiento.responsable.nombres + ' ' + mantenimiento.responsable.apellidos : '' 
+            }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="ejecutadoPor">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.responsable}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.responsable">
+            {{ 
+              mantenimiento.actividadMantenimientos !== null &&
+              mantenimiento.actividadMantenimientos.length > 0 &&
+              mantenimiento.actividadMantenimientos[0].ejecutadoPor !== null? 
+              mantenimiento.actividadMantenimientos[0].ejecutadoPor.nombresYapellidos :
+              '' 
+            }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="radicadoSolicitudReserva">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.radicadoSolicitudReserva}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.radicadoSolicitudReserva">
+            {{mantenimiento.radicadoSolicitudReserva}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="radicadoRespuestaReserva">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.radicadoRespuestaReserva}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.radicadoRespuestaReserva">
+            {{ mantenimiento.radicadoRespuestaReserva}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tipoMalla">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.tipoMalla}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.tipoMalla">
+            {{ mantenimiento.tipoMalla ? mantenimiento.tipoMalla.descripcion : ''}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tipoUsoVia">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.tipoUsoVia}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.tipoUsoVia">
+            {{ mantenimiento.tipoUsoVia ? mantenimiento.tipoUsoVia.descripcion : ''}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaVisitaTecnica">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.fechaVisitaTecnica}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.fechaVisitaTecnica">
+            {{ mantenimiento.fechaVisitaTecnica }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="radicadoIntervencion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.radicadoIntervencion}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.radicadoIntervencion">
+            {{ mantenimiento.radicadoIntervencion }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="radicadoInterExclusivo">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.radicadoIntervencion}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.radicadoIntervencion">
+            {{ mantenimiento.radicadoIntervencion }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="localidad">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.localidad}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.localidad">
+            {{ mantenimiento.localidad ? mantenimiento.localidad.nombre : '' }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="zona">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.zona}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.zona">
+            {{ mantenimiento.zona ? mantenimiento.zona.nombre : '' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="barrio">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.barrio}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.barrio">
+            {{ mantenimiento.barrio ? mantenimiento.barrio.nombre : '' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="estadoMantenimiento">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.estadoMantenimiento}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.estadoMantenimiento">
+            {{ mantenimiento.estadoMantenimiento ? mantenimiento.estadoMantenimiento.descripcion : '' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tipoSeccionVial">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.tipoSeccionVial}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.tipoSeccionVial">
+            {{ mantenimiento.tipoSeccionVial ? mantenimiento.tipoSeccionVial.descripcion : '' }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="cuadrante">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.cuadrante}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.cuadrante">
+            {{ mantenimiento.cuadrante ? mantenimiento.cuadrante.descripcion : '' }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="cantidadApiques">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.cantidadApiques}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.cantidadApiques">
+            <div
+              *ngIf="mantenimiento.predisenio && mantenimiento.predisenio.solicitudesApique && mantenimiento.predisenio.solicitudesApique.length > 0 ">
+              {{mantenimiento.predisenio.solicitudesApique[0].cantidadApiques}}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actividadSolicitudApique">
+          <mat-header-cell *matHeaderCellDef> {{constants.actividadSolicitudApique}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.actividadSolicitudApique">
+            <div
+              *ngIf="mantenimiento.predisenio && mantenimiento.predisenio.solicitudesApique && mantenimiento.predisenio.solicitudesApique.length > 0 ">
+              {{mantenimiento.predisenio.solicitudesApique[0].actividad ? mantenimiento.predisenio.solicitudesApique[0].actividad.descripcion : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="aforos">
+          <mat-header-cell *matHeaderCellDef> {{constants.aforos}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.aforos">
+            <div
+              *ngIf="mantenimiento.predisenio && mantenimiento.predisenio.solicitudesApique && mantenimiento.predisenio.solicitudesApique.length > 0 ">
+              <span class="dev-color-red"
+                [hidden]="mantenimiento.predisenio.solicitudesApique[0].aforos == true">{{ constants.no }}</span>
+              <span class="dev-color-green"
+                [hidden]="mantenimiento.predisenio.solicitudesApique[0].aforos == false">{{ constants.si }}</span>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="prioritarios">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.prioritarios}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.prioritarios">
+            <div
+              *ngIf="mantenimiento.predisenio && mantenimiento.predisenio.solicitudesApique && mantenimiento.predisenio.solicitudesApique.length > 0 ">
+              {{mantenimiento.predisenio.solicitudesApique[0].prioritarios}}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="solicitud">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.solicitud }} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.solicitud">
+            <div
+              *ngIf="mantenimiento.predisenio && mantenimiento.predisenio.solicitudesApique && mantenimiento.predisenio.solicitudesApique.length > 0 ">
+              {{mantenimiento.predisenio.solicitudesApique[0].solicitud ? mantenimiento.predisenio.solicitudesApique[0].solicitud.descripcion : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+        
+        <ng-container matColumnDef="solicitudAforo">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.solicitud }} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.solicitud">
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tipoActividad">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.tipoActividad}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.tipoActividad">
+            {{mantenimiento.tipoActividad ? mantenimiento.tipoActividad.descripcion : ''}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="upla">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.upla}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.upla">
+            {{ mantenimiento.upla ? mantenimiento.upla.descripcion : '' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actividadActual">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.actividadActual}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.actividadActual">
+            {{ mantenimiento.actividadActual ? mantenimiento.actividadActual.descripcion : '' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actividad">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.actividad}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.actividad">
+            {{ mantenimiento.actividad }} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaVisitaDisenio">
+          <mat-header-cell *matHeaderCellDef> Fecha Visita Diseño </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" data-label="Fecha Visita Diseño"> 
+            {{ mantenimiento.disenio ? mantenimiento.disenio.fechaCreacionDisenio : ''}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="requiereApique">
+          <mat-header-cell *matHeaderCellDef> {{constants.requiereApique}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.requiereApique">
+            <div
+              *ngIf="mantenimiento.predisenio !== null && mantenimiento.predisenio !== undefined && mantenimiento.predisenio.requiereApique !== null">
+              <div [ngSwitch]="mantenimiento.predisenio.requiereApique">
+                <div *ngSwitchCase="0">
+                  <span class="dev-color-red">{{ constants.no }}</span>
+                  </div>
+                <div *ngSwitchCase="1">
+                  <span class="dev-color-green">{{ constants.si }}</span>
+                </div>
+                <div *ngSwitchCase="2">
+                  <span >{{ constants.aledano }}</span>
+                </div>
+              </div>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="requiereAforo">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.requiereAforo}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.requiereAforo">
+            <div
+              *ngIf="mantenimiento.predisenio !== null && mantenimiento.predisenio !== undefined && mantenimiento.predisenio.requiereAforo !== null">
+
+              <div [ngSwitch]="mantenimiento.predisenio.requiereAforo">
+                <div *ngSwitchCase="0">
+                  <span class="dev-color-red">{{ constants.no }}</span>
+                  </div>
+                <div *ngSwitchCase="1">
+                  <span class="dev-color-green">{{ constants.si }}</span>
+                </div>
+                <div *ngSwitchCase="2">
+                  <span >{{ constants.aledano }}</span>
+                </div>
+              </div>
+
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tipoIntervencion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.tipoIntervencion}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.tipoIntervencion">
+            {{ mantenimiento.actividad !== null? mantenimiento.actividad: ''}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tipoIntervencionPriorizacion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.tipoIntervencionPriorizacion}}
+          </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.tipoIntervencionPriorizacion">
+            {{  mantenimiento.diagnostico != null ? mantenimiento.diagnostico.priorizacion != null ?
+                mantenimiento.diagnostico.priorizacion.tipoIntervencion != null ?
+                mantenimiento.diagnostico.priorizacion.tipoIntervencion.descripcion : '' :
+              '' :
+            ''}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="direccion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.direccion}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.direccion">
+            {{ mantenimiento.ejeVial && mantenimiento.desde && mantenimiento.hasta ? mantenimiento.ejeVial + ' N° ' +  mantenimiento.desde + ' - ' + mantenimiento.hasta : ''}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tipoSuperficie">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.tipoSuperficie}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.tipoSuperficie">
+            {{mantenimiento.tipoSuperficie ? mantenimiento.tipoSuperficie.descripcion : ''}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="ejeVial">
+          <mat-header-cell *matHeaderCellDef> {{constants.ejeVial}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.ejeVial">
+            {{ mantenimiento.ejeVial }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaProgramacionVisita">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.fechaProgramacionVisita}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.fechaProgramacionVisita">
+            <div *ngIf="mantenimiento.visitas && mantenimiento.visitas.length > 0">
+              {{mantenimiento.visitas[0].fecha ? utilitiesService.convertDateToString(mantenimiento.visitas[0].fecha, 'DD/MM/YYYY') : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="numeroMovilVisitaTecnica">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.numeroMovilVisitaTecnica}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.numeroMovilVisitaTecnica">
+            <div *ngIf="mantenimiento.visitas && mantenimiento.visitas.length > 0">
+              {{ mantenimiento.visitas[0].equipo.movil }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="desde">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.desde}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.desde">
+            {{mantenimiento.desde}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="hasta">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.hasta}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.hasta">
+            {{mantenimiento.hasta}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="responsableVisitaTecnica">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.responsableVisitaTecnica}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.responsableVisitaTecnica">
+            <div *ngIf="mantenimiento.visitas && mantenimiento.visitas.length > 0">
+              {{mantenimiento.visitas[0].responsable.nombres + ' ' + mantenimiento.visitas[0].responsable.apellidos}}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="observacionDireccionApique">
+          <mat-header-cell *matHeaderCellDef> {{constants.observacionDireccionApique}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.observacionDireccionApique">
+            <div
+              *ngIf="mantenimiento.predisenio && mantenimiento.predisenio.solicitudesApique && mantenimiento.predisenio.solicitudesApique.length > 0 ">
+              {{mantenimiento.predisenio.solicitudesApique[0].observacion}}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="directorDeObra">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.directorDeObra}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.directorDeObra">
+            {{ (mantenimiento.directorObra != null)  ? (mantenimiento.directorObra.nombres +' ' + mantenimiento.directorObra.apellidos) :' '}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="numeroCarriles">
+          <mat-header-cell *matHeaderCellDef> {{constants.numeroCarriles}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.numeroCarriles"> </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="intervencionAgrupada">
+          <mat-header-cell *matHeaderCellDef> {{constants.intervencionAgrupada}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.intervencionAgrupada"> </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="intervencionDetallada">
+          <mat-header-cell *matHeaderCellDef> {{constants.intervencionDetallada}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.intervencionDetallada"> </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="priorizacionFinal">
+          <mat-header-cell *matHeaderCellDef> Priorizacion Final </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" data-label="Priorizacion Final"> </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaInicioVisita">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.fechaInicioVisita}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.fechaInicioVisita">
+            {{mantenimiento.fechaInicioVisita}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaFinVisita">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.fechaFinVisita}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.fechaFinVisita">
+            {{mantenimiento.fechaFinVisita}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="estadoProgramacion">
+          <mat-header-cell *matHeaderCellDef> Estado Programación </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" data-label="Estado Programación"> </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="nomenclatura">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.nomenclatura }} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.nomenclatura">
+            <div
+              *ngIf="mantenimiento.predisenio && mantenimiento.predisenio.solicitudesApique && mantenimiento.predisenio.solicitudesApique.length > 0 ">
+              {{mantenimiento.predisenio.solicitudesApique[0].nomenclatura}}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="estrategia">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Estrategia </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" data-label="Estrategia">
+            {{ mantenimiento.estrategia ? mantenimiento.estrategia.descripcion : '' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="estrategiaIntervencion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Estrategia Intervención </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" data-label="Estrategia Intervención">
+            {{ mantenimiento.estrategia ? mantenimiento.estrategia.descripcion : '' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="observacionActividadActual">
+          <mat-header-cell *matHeaderCellDef> {{constants.observacionActividadActual}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.observacionActividadActual">
+            {{mantenimiento.ultimaObservacionMantenimientoActividad}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="observacionApiqueUltimaSolicitudApique">
+          <mat-header-cell *matHeaderCellDef> {{ constants.observacionApiqueUltimaSolicitudApique }} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento"
+            [attr.data-label]="constants.observacionApiqueUltimaSolicitudApique"> </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="rutasTransporte">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.rutasTransporte}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.rutasTransporte">
+            <span class="dev-color-red" [hidden]="mantenimiento.rutasTransporte">{{ constants.no }}</span>
+            <span class="dev-color-green" [hidden]="!mantenimiento.rutasTransporte">{{ constants.si }}</span>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="levantamientoTopografico">
+          <mat-header-cell *matHeaderCellDef> {{constants.levantamientoTopografico}}</mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.levantamientoTopografico">
+            <div *ngIf="mantenimiento.visitasPrediseno && mantenimiento.visitasPrediseno.length > 0">
+              <span class="dev-color-red"
+                [hidden]="mantenimiento.visitasPrediseno[0].levantamientoTopografico == true">{{ constants.no }}</span>
+              <span class="dev-color-green"
+                [hidden]="mantenimiento.visitasPrediseno[0].levantamientoTopografico == false">{{ constants.si }}</span>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="modulacionLosas">
+          <mat-header-cell *matHeaderCellDef> {{constants.modulacionLosas}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.modulacionLosas">
+            <div *ngIf="mantenimiento.disenio">
+              <span class="dev-color-red"
+                *ngIf="mantenimiento.disenio.modulacionLosas == null">{{ constants.no }}</span>
+              <span class="dev-color-green" *ngIf="mantenimiento.disenio.modulacionLosas">{{ constants.si }}</span>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="otrosDocumentos">
+          <mat-header-cell *matHeaderCellDef> {{constants.otrosDocumentos}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.otrosDocumentos">
+            <div *ngIf="mantenimiento.disenio">
+              <span class="dev-color-red"
+                *ngIf="mantenimiento.disenio.otrosDocumentos == null">{{ constants.no }}</span>
+              <span class="dev-color-green" *ngIf="mantenimiento.disenio.otrosDocumentos">{{ constants.si }}</span>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fichaEvaluacionEstructural">
+          <mat-header-cell *matHeaderCellDef> {{constants.fichaEvaluacionEstructural}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.fichaEvaluacionEstructural">
+            <div *ngIf="mantenimiento.visitasPrediseno && mantenimiento.visitasPrediseno.length > 0">
+              <span class="dev-color-red"
+                [hidden]="mantenimiento.visitasPrediseno[0].fichaEvaluacion == true">{{ constants.no }}</span>
+              <span class="dev-color-green"
+                [hidden]="!mantenimiento.visitasPrediseno[0].fichaEvaluacion == false">{{ constants.si }}</span>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="informacionDeDisenio">
+          <mat-header-cell *matHeaderCellDef> {{constants.informacionDeDisenio}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.informacionDeDisenio">
+            <div *ngIf="mantenimiento.visitasPrediseno && mantenimiento.visitasPrediseno.length > 0">
+              <span class="dev-color-red"
+                [hidden]="mantenimiento.visitasPrediseno[0].informacionDiseno == true">{{ constants.no }}</span>
+              <span class="dev-color-green"
+                [hidden]="mantenimiento.visitasPrediseno[0].informacionDiseno == false">{{ constants.si }}</span>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="consultaRedes">
+          <mat-header-cell *matHeaderCellDef> {{constants.consultaRedes}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.consultaRedes">
+            <div *ngIf="mantenimiento.visitasPrediseno && mantenimiento.visitasPrediseno.length > 0">
+              <span class="dev-color-red"
+                [hidden]="mantenimiento.visitasPrediseno[0].consultaRedes == true">{{ constants.no }}</span>
+              <span class="dev-color-green"
+                [hidden]="!mantenimiento.visitasPrediseno[0].consultaRedes == false">{{ constants.si }}</span>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="posibleDanioRedes">
+          <mat-header-cell *matHeaderCellDef> {{constants.posibleDanioRedes}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.posibleDanioRedes">
+            <span class="dev-color-red" [hidden]="mantenimiento.posibleDanioRedes">{{ constants.no }}</span>
+            <span class="dev-color-green" [hidden]="!mantenimiento.posibleDanioRedes">{{ constants.si }}</span>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tipoRadicadoRespuestaReserva">
+          <mat-header-cell *matHeaderCellDef> {{constants.tipoRadicadoRespuestaReserva}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.tipoRadicadoRespuestaReserva">
+            {{ mantenimiento.tipoRadicadoRespuestaReserva ? mantenimiento.tipoRadicadoRespuestaReserva.descripcion : '' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaAsignacionIngenieroDisenio">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.fechaAsignacionIngenieroDisenio}}
+          </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.fechaAsignacionIngenieroDisenio">
+            {{ mantenimiento.fechaAsignacionIngenieroDisenio }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="ingenieroDisenio">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.ingenieroDisenio}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.ingenieroDisenio">
+            {{mantenimiento.ingenieroDisenio ? mantenimiento.ingenieroDisenio.nombres + ' ' + mantenimiento.ingenieroDisenio.apellidos : ''}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="nombreResidenteSocial">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.nombreResidenteSocial}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.nombreResidenteSocial">
+            <div *ngIf="mantenimiento.intervenciones && mantenimiento.intervenciones.length > 0">
+              {{mantenimiento.intervenciones[0].residenteSocial ? 
+                    mantenimiento.intervenciones[0].residenteSocial.nombres + ' ' + mantenimiento.intervenciones[0].residenteSocial.apellidos : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="jornadaProgramacionPeriodica">
+          <mat-header-cell *matHeaderCellDef> {{constants.jornadaProgramacionPeriodica}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.jornadaProgramacionPeriodica">
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaSolicitudSmvl">
+          <mat-header-cell *matHeaderCellDef> {{constants.fechaSolicitudSmvl}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.fechaSolicitudSmvl">
+            <div *ngIf="mantenimiento.solicitudesSmvlGasa && mantenimiento.solicitudesSmvlGasa.length > 0">
+              {{mantenimiento.solicitudesSmvlGasa[0].fechaSolicitudSmvl ? 
+                    mantenimiento.solicitudesSmvlGasa[0].fechaSolicitudSmvl : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="numeroRadicadoSmvl">
+          <mat-header-cell *matHeaderCellDef> {{constants.numeroRadicadoSmvl}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.numeroRadicadoSmvl">
+            <div *ngIf="mantenimiento.solicitudesSmvlGasa && mantenimiento.solicitudesSmvlGasa.length > 0">
+              {{mantenimiento.solicitudesSmvlGasa[0].numeroRadicadoSmvl ? 
+                    mantenimiento.solicitudesSmvlGasa[0].numeroRadicadoSmvl : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="observacionesSmvl">
+          <mat-header-cell *matHeaderCellDef> {{constants.observacionesSmvl}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.observacionesSmvl"> </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="listaChequeoSmvl">
+          <mat-header-cell *matHeaderCellDef> {{constants.listaChequeoSmvl}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.listaChequeoSmvl"> </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="listaChequeoGasa">
+          <mat-header-cell *matHeaderCellDef> {{constants.listaChequeoGasa}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.listaChequeoGasa"> </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaSolicitudGasa">
+          <mat-header-cell *matHeaderCellDef> {{constants.fechaSolicitudGasa}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.fechaSolicitudGasa"> </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="numeroRadicadoGasa">
+          <mat-header-cell *matHeaderCellDef> {{constants.numeroRadicadoGasa}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.numeroRadicadoGasa"> </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="observacionesGasa">
+          <mat-header-cell *matHeaderCellDef> {{constants.observacionesGasa}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.observacionesGasa"> </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tieneRadicadoSalida">
+          <mat-header-cell *matHeaderCellDef> {{constants.tieneRadicadoSalida}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.tieneRadicadoSalida">
+            <!-- <span class="dev-color-red" [hidden]="mantenimiento.tieneRadicadoSalida">{{ constants.no }}</span>
+            <span class="dev-color-green" [hidden]="!mantenimiento.tieneRadicadoSalida">{{ constants.si }}</span> -->
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="estadoProgramacionVisita">
+          <mat-header-cell *matHeaderCellDef> {{constants.estadoProgramacionVisita}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.estadoProgramacionVisita">
+            <div *ngIf="mantenimiento.visitas && mantenimiento.visitas.length > 0">
+              {{mantenimiento.visitas[0].estadoVisita ? mantenimiento.visitas[0].estadoVisita.descripcion : ''}}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+
+        <ng-container matColumnDef="estadoProgramacionDiaria">
+          <mat-header-cell *matHeaderCellDef> {{constants.estadoProgramacionDiaria}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.estadoProgramacionDiaria">
+            <div *ngIf="mantenimiento.intervenciones && mantenimiento.intervenciones.length > 0">
+              {{mantenimiento.intervenciones[0].programacionesDiarias.length > 0 && mantenimiento.intervenciones[0].programacionesDiarias[0].estado
+                ? mantenimiento.intervenciones[0].programacionesDiarias[0].estado.descripcion : ''}}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaProgramacionDiaria">
+          <mat-header-cell *matHeaderCellDef> {{constants.fechaProgramacionDiaria}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.fechaProgramacionDiaria"> </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="jornada">
+          <mat-header-cell *matHeaderCellDef> {{constants.jornada}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.jornada"> </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaInforme">
+          <mat-header-cell *matHeaderCellDef> {{constants.fechaInforme}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.fechaInforme"> </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="estadoObra">
+          <mat-header-cell *matHeaderCellDef> {{constants.estadoObra}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.estadoObra"> </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="estadoRegistroDiarioCuadrilla">
+          <mat-header-cell *matHeaderCellDef> {{constants.estadoRegistroDiarioCuadrilla}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.estadoRegistroDiarioCuadrilla">
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="avancePorcentajeAcumuladoObra">
+          <mat-header-cell *matHeaderCellDef> {{constants.avancePorcentajeAcumuladoObra}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.avancePorcentajeAcumuladoObra">
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="kmCarrilLineal">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.kmCarrilLineal}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.kmCarrilLineal">
+            {{ mantenimiento.kmCarrilLineal !== 0 ? (mantenimiento.kmCarrilLineal | number : '.2-3') : 0 }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="kmCarrilObra">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.kmCarrilObra}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.kmCarrilObra">
+            {{ mantenimiento.kmCarrilObra !== 0 ? (mantenimiento.kmCarrilObra | number : '.2-3') : 0 }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="vigencia">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.vigencia}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.vigencia">
+            {{ mantenimiento.vigencia != null ? mantenimiento.vigencia.descripcion: ''}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="periodicidad">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.periodicidad}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.periodicidad">
+            {{ mantenimiento.periodicidad != null ? mantenimiento.periodicidad.descripcion: ''}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="periodo">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.periodo}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.periodo">
+            {{ mantenimiento.periodo != null ? mantenimiento.periodo.descripcion: ''}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="duracionPlaneada">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.duracionPlaneada}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.duracionPlaneada"> 
+            {{mantenimiento.duracionPlaneada}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="estadoProgramacionPk">
+          <mat-header-cell *matHeaderCellDef> {{constants.estadoProgramacionPk}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.estadoProgramacionPk">
+            {{mantenimiento.estadoProgramacionPk? mantenimiento.estadoProgramacionPk.descripcion: ''}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="estadoActividad">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.estadoActividad}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.estadoActividad">
+            {{ mantenimiento.estadoMantenimiento ? mantenimiento.estadoMantenimiento.descripcion : '' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="turnoResidenteSocial">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.turnoResidenteSocial}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.turnoResidenteSocial">
+            <div *ngIf="mantenimiento.intervenciones && mantenimiento.intervenciones.length > 0">
+              {{mantenimiento.intervenciones[0].turnoResidenteSocial ? 
+                mantenimiento.intervenciones[0].turnoResidenteSocial.descripcion : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="turnoResidenteAmbiental">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.turnoResidenteAmbiental}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.turnoResidenteAmbiental">
+            <div *ngIf="mantenimiento.intervenciones && mantenimiento.intervenciones.length > 0">
+              {{mantenimiento.intervenciones[0].turnoResidenteAmbiental ? 
+                mantenimiento.intervenciones[0].turnoResidenteAmbiental.descripcion : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="nombreResidenteAmbiental">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.nombreResidenteAmbiental}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.nombreResidenteAmbiental">
+            <div *ngIf="mantenimiento.intervenciones && mantenimiento.intervenciones.length > 0">
+              {{mantenimiento.intervenciones[0].residenteAmbiental ? 
+                    mantenimiento.intervenciones[0].residenteAmbiental.nombres + ' ' + mantenimiento.intervenciones[0].residenteAmbiental.apellidos : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="turnoResidenteSST">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.turnoResidenteSST}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.turnoResidenteSST">
+            <div *ngIf="mantenimiento.intervenciones && mantenimiento.intervenciones.length > 0">
+              {{mantenimiento.intervenciones[0].turnoResidenteSST ? 
+                mantenimiento.intervenciones[0].turnoResidenteSST.descripcion : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="nombreResidenteSST">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.nombreResidenteSST}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.nombreResidenteSST">
+            <div *ngIf="mantenimiento.intervenciones && mantenimiento.intervenciones.length > 0">
+              {{mantenimiento.intervenciones[0].residenteSST ? 
+                    mantenimiento.intervenciones[0].residenteSST.nombres + ' ' + mantenimiento.intervenciones[0].residenteSST.apellidos : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="requiereActualizacionDiagnostico">
+          <mat-header-cell *matHeaderCellDef> {{constants.requiereActualizacionDiagnostico}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.requiereActualizacionDiagnostico">
+            <div *ngIf="mantenimiento.intervenciones && mantenimiento.intervenciones.length > 0">
+              {{mantenimiento.intervenciones ? mantenimiento.intervenciones[0].requiereActualizacionDiag === true ?  'Si' : 'No' : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="numeroActaIntervencion">
+          <mat-header-cell *matHeaderCellDef> {{constants.numeroActaIntervencion}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.numeroActaIntervencion">
+            <div *ngIf="mantenimiento.intervenciones && mantenimiento.intervenciones.length > 0">
+              {{mantenimiento.intervenciones ? mantenimiento.intervenciones[0].nroActa : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tieneSolicitudLaboratorio">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.tieneSolicitudLaboratorio}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.tieneSolicitudLaboratorio">
+            {{ mantenimiento.tieneSolicitudLaboratorio }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="frecuencia">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.frecuencia}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.frecuencia">
+
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tipoMaterial">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.tipoMaterial}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.tipoMaterial">
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tipoMezcla">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.tipoMezcla}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.tipoMezcla">
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="espesorDisenio">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.espesorDisenio}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.espesorDisenio">
+
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tipoResultado">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.tipoResultado}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.tipoResultado">
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="responsableObra">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.responsableObra}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.responsableObra">
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="telResponsableObra">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.telResponsableObra}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.telResponsableObra">
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaProgramacionIntervencion">
+          <mat-header-cell *matHeaderCellDef> Fecha Programación de intervención </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.fechaProgramacionIntervencion">
+            <div
+              *ngIf="mantenimiento.intervenciones && mantenimiento.intervenciones.length > 0 && mantenimiento.intervenciones[0].programacionesDiarias.length > 0">
+              {{ mantenimiento.intervenciones ? mantenimiento.intervenciones[0].programacionesDiarias[0].fechaProgramacion : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="turnoEjecucionIntervencion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.turnoEjecucionIntervencion}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.turnoEjecucionIntervencion">
+            <div
+              *ngIf="mantenimiento.intervenciones && mantenimiento.intervenciones.length > 0 && mantenimiento.intervenciones[0].programacionesDiarias.length > 0 && mantenimiento.intervenciones[0].programacionesDiarias[0].jornada">
+              {{ mantenimiento.intervenciones ? mantenimiento.intervenciones[0].programacionesDiarias[0].jornada.descripcion : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="estadoInspeccionIntervencion">
+          <mat-header-cell *matHeaderCellDef> Estado inspección intervencion</mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.estadoInspeccionIntervencion">
+            <div
+              *ngIf="mantenimiento.intervenciones && mantenimiento.intervenciones.length > 0 && mantenimiento.intervenciones[0].elementosInpecciones.length > 0 && mantenimiento.intervenciones[0].elementosInpecciones[0].estado">
+              {{ mantenimiento.intervenciones ? mantenimiento.intervenciones[0].elementosInpecciones[0].estado.descripcion : '' }}
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actividadAgrupada">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.actividadAgrupada}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.actividadAgrupada">
+            {{ mantenimiento.actividadAgrupada }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="descripcionActividadAgrupada">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.actividadAgrupada}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.actividadAgrupada">
+            {{ mantenimiento.descripcionActividadAgrupada }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="selectEstrategia">
+          <mat-header-cell *matHeaderCellDef> {{constants.estrategia}} </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.estrategia">
+            <sigma-form-select style="width: 120px;" [path]="'/api/administracion/lista/TAB_MANTENIMIENTO_VIAL_ID_TIPO_ESTRATEGIA/items'"
+            [(ngModel)]="mantenimiento.estrategia" name="selectEstrategia"
+            [listBy]="'descripcion'">
+          </sigma-form-select>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="select">
+          <mat-header-cell *matHeaderCellDef>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento">
+            <mat-checkbox #listCheckboxesPksSeleccionados (click)="$event.stopPropagation()"
+              (change)="$event ? toggleChecksGridSeleccionados(mantenimiento, $event) : null"
+              [checked]="mantenimientoIsSelected (mantenimiento)">
+            </mat-checkbox>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+          <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+          <mat-cell *matCellDef="let mantenimiento" data-label="Acciones">
+            <div *ngFor="let accion of singleActions">
+              <button mat-raised-button [color]="accion.color"
+                (click)="executeSingleAction(accion.nombre, mantenimiento)" [title]="accion.label" class="m-1">
+                <mat-icon *ngIf="accion.icono != ''">{{accion.icono}}</mat-icon>
+              </button>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <mat-row *matRowDef="let row; columns: columns"></mat-row>
+      </mat-table>
+      <mat-paginator #paginatorPksSeleccionados [length]="this.getCantidadElementosSeleccionados()"
+        [pageSize]="criteria.sizeSeleccionados" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+    </div>
+
+  </div>
+
+  <!---->
+
+  <div *ngIf="getMantenimientosSelected().length > 0 && masiveActions">
+    <mat-card class="p-0 c-mod mt-20 mb-10">
+      <mat-card-header fxLayoutAlign="center">
+        <mat-card-subtitle>
+          <h3>Acciones Masivas</h3>
+        </mat-card-subtitle>
+      </mat-card-header>
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="0.8%" fxLayoutGap.lt-md="0" fxLayoutAlign="start">
+        <div *ngFor="let accionMasiva of masiveActions" class="p-tab">
+          <div fxFlex>
+            <button mat-raised-button color="{{ accionMasiva.color }}" class="m-1"
+              (click)="executeMasiveAction(accionMasiva.nombre)" [disabled]="_mantenimientosSeleccionados.length < 1">
+              <mat-icon *ngIf="accionMasiva.icono != ''">{{accionMasiva.icono}}</mat-icon>
+              {{accionMasiva.label }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+
+  <div
+    *ngIf="getMantenimientosSelected().length > 0 && transicion && (dataSource.loading$  | async) == false && transicionesMasivas.length > 0 && showTransitionComponent">
+    <sigma-seleccion-transicion [transiciones]="transiciones" [(data)]="data" [defaultUser]="defaultUserToTransition"
+      (executeTransition)="executeMasiveTransition($event)">
+    </sigma-seleccion-transicion>
+
+    <sigma-sumatorias [listaPksSelect]="getMantenimientosSelected()" [showCountItems]="showCountItems"
+      [showActividadAgrupada]="showActividadAgrupada" [showKmCarril]="showKmCarril" [showKmLineal]="showKmLineal"
+      [showKmObra]="showKmObra" [showTotalDiasDuracionPlaneada]="showTotalDiasDuracionPlaneada"
+      [showTotalNoCuadrilla]="showTotalNoCuadrilla">
+    </sigma-sumatorias>
+  </div>
+
+</mat-card-content>

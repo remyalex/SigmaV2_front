@@ -1,0 +1,89 @@
+<h2 mat-dialog-title>{{ constants.editar }} Widget</h2>
+
+<div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+  <h5>{{ constants.informacionCampoObligatorio }}</h5>
+</div>
+
+<mat-dialog-content [formGroup]="form" 
+*sigmaIsGranted="constants.permiso_administracion_widget_update">
+  <input type="hidden" formControlName="id" [(ngModel)]="widget.id">
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+        <mat-form-field class="w-100">
+          <input matInput placeholder="{{ constants.titulo }}" formControlName="titulo" 
+          [(ngModel)]="widget.titulo" autocomplete="off" type="text" 
+          required pattern="^(?!\s*$).+">
+          <mat-error *ngIf="form.get('titulo').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+          <mat-error *ngIf="form.get('titulo').hasError('pattern')"> {{ constants.campoNoVacio }} </mat-error>
+        </mat-form-field>
+    </div>
+
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="{{ constants.descripcion }}" formControlName="descripcion" 
+        [(ngModel)]="widget.descripcion" autocomplete="off" type="text" 
+        required pattern="^(?!\s*$).+">
+        <mat-error *ngIf="form.get('descripcion').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+        <mat-error *ngIf="form.get('descripcion').hasError('pattern')"> {{ constants.campoNoVacio }} </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+
+      <div fxFlex>
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.url }}" formControlName="url" 
+            [(ngModel)]="widget.url" autocomplete="off" type="text" 
+            required pattern="^(?!\s*$).+">
+            <mat-error *ngIf="form.get('url').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+            <mat-error *ngIf="form.get('url').hasError('pattern')"> {{ constants.campoNoVacio }} </mat-error>
+          </mat-form-field>
+      </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+
+    <div fxFlex>
+        <mat-form-field class="w-100">
+          <input matInput placeholder="{{ constants.urlVerMas }}" formControlName="urlVerMas" 
+          [(ngModel)]="widget.urlVerMas" autocomplete="off" type="text" 
+          pattern="^(?!\s*$).+">
+          <mat-error *ngIf="form.get('urlVerMas').hasError('pattern')"> {{ constants.campoNoVacio }} </mat-error>
+        </mat-form-field>
+    </div>
+</div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+        <div class="w-100">
+          <sigma-form-select formControlName="permiso" [(ngModel)]="widget.permiso"
+            [path]="constants.path_administracion_widget_permisoId" [listBy]="'nombre'"
+            [placeholder]="constants.permisoId">
+          </sigma-form-select>
+        </div>
+      </div>
+    </div>
+
+    <div fxFlex class="py-1">
+          <mat-checkbox formControlName="activo"
+              [(ngModel)]="widget.activo" name="activo" id="activo">{{ constants.activo }}
+          </mat-checkbox>
+      </div>
+  </div>
+
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()" [disabled]='disableSubmit'>
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+  </button>
+  <button mat-raised-button [disabled]='disableSubmit' color="primary" (click)="onSubmit()" 
+  *sigmaIsGranted="constants.permiso_administracion_widget_update" >
+    <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+  </button>
+</mat-dialog-actions>

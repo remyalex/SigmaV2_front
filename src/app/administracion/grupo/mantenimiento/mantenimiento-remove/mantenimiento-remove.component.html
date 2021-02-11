@@ -1,0 +1,15 @@
+<h2 mat-dialog-title>{{ constants.eliminar }}</h2>
+
+<h3 mat-dialog-title>{{ constants.eliminarRegistro }}</h3>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end" fxLayout="row" fxLayout.lt-sm="column">
+  <button class="mb-10 w-100" fxFlex mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.no }}
+  </button>
+  <button class="mb-10 w-100" fxFlex mat-raised-button color="primary" (click)="save()" [disabled]="disabledSubmit"
+    *sigmaIsGranted="constants.permiso_administracion_mantenimiento_delete">
+    <mat-icon class="m-1">check_circle_outline</mat-icon> {{ constants.si }}
+  </button>
+</mat-dialog-actions>

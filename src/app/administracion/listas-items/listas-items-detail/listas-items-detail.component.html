@@ -1,0 +1,30 @@
+<h2 mat-dialog-title>Detalle Lista Item</h2>
+
+<mat-dialog-content [formGroup]="form">
+  <input type="hidden" formControlName="id" />
+  <input type="hidden" formControlName="listaId" />
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="Valor" formControlName="valor" readonly="readonly"/>        
+      </mat-form-field>
+    </div>
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <textarea matInput placeholder="Descripción" rows="1" formControlName="descripcion" readonly="readonly"></textarea>
+      </mat-form-field>
+    </div>
+    <div fxFlex="20">
+      <mat-checkbox formControlName="activo" disabled>Activo </mat-checkbox>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions fxLayout="row" fxLayoutAlign="end" class="flex-p">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon>Cerrar
+  </button>  
+</mat-dialog-actions>

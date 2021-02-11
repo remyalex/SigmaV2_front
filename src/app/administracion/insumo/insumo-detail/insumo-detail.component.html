@@ -1,0 +1,80 @@
+<h2 mat-dialog-title>{{ constants.detalle }} Insumo</h2>
+
+<mat-dialog-content>
+  <mat-list>
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.codigo }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ insumo.codigo }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.claseInsumoId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ insumo.claseInsumo.valor }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.unidadMedidaId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ insumo.unidadMedida.valor }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.nombre }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ insumo.nombre }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.descripcion }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ insumo.descripcion }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="mb-10">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.activo }}</b>:
+        </div>
+        <div class="p-tab" fxFlex="60">
+            <span class="dev-color-red" [hidden]="insumo.activo">No</span>
+            <span class="dev-color-green" [hidden]="!insumo.activo">Si</span>
+        </div>
+      </div>
+    </mat-list-item>
+       
+  </mat-list>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions fxLayoutAlign="end">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cerrar }}</button>
+</mat-dialog-actions>

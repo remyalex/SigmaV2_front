@@ -1,0 +1,181 @@
+<h2 mat-dialog-title>{{ constants.editar }} Condición</h2>
+
+<div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+  <h5>{{ constants.informacionCampoObligatorio }}</h5>
+</div>
+
+<mat-dialog-content class="mb-10" [formGroup]="form"
+  *sigmaIsGranted="constants.administracion_transicioncondiciones_create">
+  <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="{{ constants.nombre }}" formControlName="nombre" [(ngModel)]="condicion.nombre"
+          autocomplete="off" type="text" required pattern="^(?!\s*$).+">
+        <mat-error *ngIf="form.get('nombre').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+        <mat-error *ngIf="form.get('nombre').hasError('maxlength')"> {{ constants.longitud_maxima }} 255
+          caracteres. </mat-error>
+      </mat-form-field>
+    </div>
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <textarea matInput placeholder="{{ constants.descripcion }}" rows="1" [(ngModel)]="condicion.descripcion"
+          formControlName="descripcion" matTooltip="Descripción de la condicion" matTooltipPosition="above"
+          required></textarea>
+        <mat-error *ngIf="form.get('descripcion').hasError('required')"> {{ constants.campoRequerido }}.
+        </mat-error>
+        <mat-error *ngIf="form.get('descripcion').hasError('maxlength')"> {{ constants.longitud_maxima }} 255
+          caracteres. </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <mat-checkbox formControlName="activo" [(ngModel)]="condicion.activo">{{ constants.activo }}</mat-checkbox>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+    <div fxFlex="100">
+      <mat-card class="p-0 c-mod">
+        <mat-card-header fxLayoutAlign="center">
+          <mat-card-subtitle>
+            <h3>TERMINO</h3>
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content class="p-16 m-0">
+          <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px" fxLayoutGap.lt-lg="0">
+            <div fxflex>
+              <mat-form-field class="w-25">
+                <mat-label>{{constants.consecutivo}}</mat-label>
+                <mat-select formControlName="consecutivo">
+                  <mat-option *ngFor="let orden of consecutivos" [value]="orden" (click)="setConsecutivoTermino(orden)">
+                    {{ orden }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px" fxLayoutGap.lt-lg="0">
+            <div fxflex>
+              <mat-form-field class="w-100">
+                <mat-label>Operador Logico</mat-label>
+                <mat-select formControlName="operadorLogico">
+                  <mat-option *ngFor="let operadorLogico of operadoresLogicos" [value]="operadorLogico"
+                    (click)="setOperadorLogico(operadorLogico)">
+                    {{ operadorLogico }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div fxflex [hidden]="hideAtributo">
+              <mat-form-field class="w-100">
+                <mat-label>Atributo</mat-label>
+                <mat-select formControlName="atributo">
+                  <mat-option *ngFor="let atributo of listAtributos" [value]="atributo" (click)="setAtributo(atributo)">
+                    {{ atributo.nombre }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div fxflex [hidden]="hideOperador">
+              <mat-form-field class="w-100">
+                <mat-label>Operador</mat-label>
+                <mat-select formControlName="operador">
+                  <mat-option *ngFor="let operador of operadores" [value]="operador" (click)="setOperador(operador)">
+                    {{ operador }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div fxFlex>
+              <app-valor-input #valor (valor)="setValor($event)" [hidden]="hideValor"></app-valor-input>
+            </div>
+          </div>
+
+          <div fxLayout="row" fxLayoutAlign="end">
+            <button type="button" (click)="add()" mat-button color="primary" class="m-1" [disabled]="disabledAddButton">
+              <mat-icon class="m-1">add_circle</mat-icon> Agregar
+            </button>
+          </div>
+
+        </mat-card-content>
+      </mat-card>
+
+      <div class="mat-elevation-z8">
+        <mat-table #table [dataSource]="listaTerminos" [hidden]="noInfoToShow" class="mt-10" matSort>
+          <ng-container matColumnDef="activo">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.activo }} </mat-header-cell>
+            <mat-cell *matCellDef="let grupo" [attr.data-label]="constants.activo">
+              <span class="dev-color-red" [hidden]="grupo.activo">{{ constants.no }}</span>
+              <span class="dev-color-green" [hidden]="!grupo.activo">{{ constants.si }}</span>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="consecutivo">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.consecutivo }} </mat-header-cell>
+            <mat-cell *matCellDef="let termino" [attr.data-label]="constants.consecutivo">
+              {{termino.orden}}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="operadorLogico">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.operadorLogico }} </mat-header-cell>
+            <mat-cell *matCellDef="let termino" [attr.data-label]="constants.operadorLogico">
+              {{termino.operadorLogico}}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="atributo">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.atributo }} </mat-header-cell>
+            <mat-cell *matCellDef="let termino" [attr.data-label]="constants.atributo">
+              {{termino.atributo}}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="operador">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.operador }} </mat-header-cell>
+            <mat-cell *matCellDef="let termino" [attr.data-label]="constants.operador">
+              {{termino.operador}}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="descripcionValor">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.descripcionValor }} </mat-header-cell>
+            <mat-cell *matCellDef="let valor" [attr.data-label]="constants.descripcionValor">
+              {{valor.descripcionValor}}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="acciones">
+            <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+            <mat-cell *matCellDef="let grupo" [attr.data-label]="constants.acciones">
+              <button mat-raised-button color="warn" (click)="delete(grupo)" class="m-1"
+                *sigmaIsGranted="constants.administracion_transicioncondiciones_delete">
+                <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+              </button>
+            </mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+        </mat-table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions fxLayoutAlign="end">
+  <button type="button" (click)="onBack()" mat-button color="warn" class="m-1">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+  </button>
+  <button type="button" [disabled]="disableSubmit" class="m-1" mat-raised-button color="primary" (click)="onSubmit()"
+    *sigmaIsGranted="constants.administracion_transicioncondiciones_create">
+    <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+  </button>
+</mat-dialog-actions>

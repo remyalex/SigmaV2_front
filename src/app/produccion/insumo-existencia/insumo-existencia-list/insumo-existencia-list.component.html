@@ -1,0 +1,235 @@
+<div>
+  <div>
+    <mat-card-header fxLayoutAlign="center">
+      <mat-card-subtitle>
+        <h2>{{ constants.titulo }}</h2>
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+
+      <form (ngSubmit)="search()">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+
+          <div fxFlex>
+            <sigma-form-calendar name="fechaInicial" id="fechaInicial" [(ngModel)]="criteria.fechaInicial"
+              [objeto]="criteria" [maxTarget]="'fecha'" [placeholder]="constants.fechaInicial"
+              [type]="constants.datepicker.types.calendar">
+            </sigma-form-calendar>
+          </div>
+
+          <div fxFlex>
+            <sigma-form-calendar name="fechaFinal" id="fechaFinal" [(ngModel)]="criteria.fechaFinal" [objeto]="criteria"
+              [maxTarget]="'fecha'" [placeholder]="constants.fechaFinal" [type]="constants.datepicker.types.calendar">
+            </sigma-form-calendar>
+          </div>
+
+          <div fxFlex>
+            <sigma-form-select [path]="constants.path_produccion_insumo_existencia_insumoId"
+              [(ngModel)]="criteria.insumo" name="insumo" id="insumo" listBy="nombre"
+              (ngModelChange)="itemChange($event)" placeholder="{{ constants.insumo }}">
+            </sigma-form-select>
+          </div>
+
+          <div *ngIf="showFilterTipoMezcla" fxFlex>
+            <sigma-form-select [path]="constants.path_lista_tipo_mezcla" [(ngModel)]="criteria.tipoMezcla"
+              name="tipoMezcla" placeholder="{{constants.tipoMezcla}}" [listBy]="'descripcion'">
+            </sigma-form-select>
+          </div>
+
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+
+          <div fxFlex>
+            <sigma-form-select [path]="constants.path_produccion_insumo_existencia_contratoId"
+              [(ngModel)]="criteria.contrato" name="contrato" id="contrato" listBy="numeroContrato"
+              placeholder="{{ constants.contrato }}">
+            </sigma-form-select>
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.unidadMedida }}"
+                [value]="unidadMedida ? unidadMedida.descripcion : ''" name="unidadMedida" readonly>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <button type="submit" mat-raised-button color="primary" class="m-1" (click)="search()">
+              <mat-icon>search</mat-icon> {{ constants.buscar }}
+            </button>
+            <button (click)="clear()" mat-raised-button color="warn" class="m-1">
+              <mat-icon>clear</mat-icon> {{ constants.limpiar }}
+            </button>
+            <button [disabled]="dataSource.totalElements$.source['_value'] <= 0" layout="row" mat-raised-button
+              color="primary" class="m-1" (click)="exportAsXLSX()"
+              *sigmaIsGranted="constants.permiso_produccion_insumo_existencia_export">
+              <mat-icon>get_app</mat-icon>
+              {{ constants.exportar }}
+              <mat-icon *ngIf="cargandoExcel">
+                <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+              </mat-icon>
+            </button>
+          </div>
+
+        </div>
+      </form>
+
+    </mat-card-content>
+  </div>
+</div>
+
+
+<div class="mat-elevation-z8">
+  <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center">
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+  <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+    <mat-icon class="m-1">sms_failed</mat-icon>
+    <h4> {{dataSource.errorMessage$ | async}}</h4>
+  </div>
+
+  <mat-table #table class="col-x" [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort>
+
+    <ng-container matColumnDef="fechaInicial">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaInicial }} </mat-header-cell>
+      <mat-cell *matCellDef="let registro" [attr.data-label]="constants.fechaInicial"> {{ registro.fechaInicial }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="fechaFinal">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaFinal }} </mat-header-cell>
+      <mat-cell *matCellDef="let registro" [attr.data-label]="constants.fechaFinal">
+        {{ registro.fechaFinal  }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="inventarioInicial">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.inventarioInicial }} </mat-header-cell>
+      <mat-cell *matCellDef="let registro" [attr.data-label]="constants.inventarioInicial">
+        {{ registro.inventarioInicial }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="cantidadEntrada">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.cantidadEntrada }} </mat-header-cell>
+      <mat-cell *matCellDef="let registro" [attr.data-label]="constants.cantidadEntrada">
+        {{ registro.cantidadEntrada  }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="cantidadSalida">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.cantidadSalida }} </mat-header-cell>
+      <mat-cell *matCellDef="let registro" [attr.data-label]="constants.cantidadSalida">
+        {{ registro.cantidadSalida }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="inventarioFinal">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.inventarioFinal }} </mat-header-cell>
+      <mat-cell *matCellDef="let registro" [attr.data-label]="constants.inventarioFinal">
+        {{ registro.inventarioFinal }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="insumo">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.insumo }} </mat-header-cell>
+      <mat-cell *matCellDef="let registro" [attr.data-label]="constants.insumo">
+        {{ registro.insumo? registro.insumo.nombre : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="codigoInsumo">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.codigoInsumo }} </mat-header-cell>
+      <mat-cell *matCellDef="let registro" [attr.data-label]="constants.codigoInsumo">
+        {{ registro.insumo? registro.insumo.codigo : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="unidadMedida">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.unidadMedida }} </mat-header-cell>
+      <mat-cell *matCellDef="let registro" [attr.data-label]="constants.unidadMedida">
+        {{ registro.insumo ? registro.insumo.unidadMedida ? registro.insumo.unidadMedida.descripcion : '' : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="tipoMezcla">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.tipoMezcla }} </mat-header-cell>
+      <mat-cell *matCellDef="let registro" [attr.data-label]="constants.tipoMezcla">
+        {{ registro.tipoMezcla ? registro.tipoMezcla.descripcion : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="contrato">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.contrato }} </mat-header-cell>
+      <mat-cell *matCellDef="let registro" [attr.data-label]="constants.contrato">
+        {{ registro.contrato ? registro.contrato.numeroContrato : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="noSolicitud">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.noSolicitud }} </mat-header-cell>
+      <mat-cell *matCellDef="let registro; let i = index" [attr.data-label]="constants.noSolicitud">
+        {{ i + 1 }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="activo">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.activo }} </mat-header-cell>
+      <mat-cell *matCellDef="let registro" [attr.data-label]="constants.activo">
+        <span class="dev-color-red" [hidden]="registro.activo">{{ constants.no }}</span>
+        <span class="dev-color-green" [hidden]="!registro.activo">{{ constants.si }}</span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+      <mat-cell *matCellDef="let registro" [attr.data-label]="constants.acciones">
+        <button mat-raised-button color="primary" (click)="detail(registro)" class="m-1"
+          *sigmaIsGranted="constants.permiso_produccion_insumo_existencia_view">
+          <mat-icon matTooltip="Detalles" matTooltipPosition="above">open_in_new</mat-icon>
+        </button>
+        <button mat-raised-button color="primary" (click)="edit(registro)" class="m-1"
+          *sigmaIsGranted="constants.permiso_produccion_insumo_existencia_update">
+          <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+        </button>
+
+        <div *ngIf="!registro.noSecciones">
+          <button mat-raised-button color="warn" (click)="delete(registro)" class="m-1"
+            *sigmaIsGranted="constants.permiso_produccion_insumo_existencia_delete">
+            <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+          </button>
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size"
+    [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+</div>
+
+<br>
+
+<div *ngIf="dataSource.totalEntrada || dataSource.totalSalida || dataSource.inventarioFinal">
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+    <div fxFlex class="w-100 sigma-sum" fxLayoutAlign="end center">
+      Total Entrada: <b> {{ dataSource.totalEntrada | number : '.2-3' }}</b>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+    <div fxFlex class="w-100 sigma-sum" fxLayoutAlign="end center">
+      Total Salida: <b> {{ dataSource.totalSalida | number : '.2-3' }}</b>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+    <div fxFlex class="w-100 sigma-sum" fxLayoutAlign="end center">
+      Inventario Final: <b> {{ dataSource.inventarioFinal | number : '.2-3' }}</b>
+    </div>
+  </div>
+</div>

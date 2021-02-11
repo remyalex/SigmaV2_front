@@ -1,0 +1,52 @@
+<ng-container class="graficas-container">
+  <mat-sidenav-container class="sidenav-container-tablero-control">
+    <mat-sidenav #sidenav [mode]="'side'">
+
+      <div fxLayoutAlign="end">
+        <button mat-icon-button (click)="sidenav.toggle(); accionCerrarSideNav()">
+          <mat-icon matTooltip="Cerrar" matTooltipPosition="side">chevron_left</mat-icon>
+        </button>
+      </div>
+
+      <mat-tree [dataSource]="dataSource2" [treeControl]="treeControl" class="mat-tree">
+        <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+          <button mat-icon-button disabled></button>
+          <mat-checkbox (change)="changeChecked(node, $event)" [(ngModel)]="node.checked" >{{node.name}}</mat-checkbox>
+        </mat-tree-node>
+        <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
+          <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.name">
+            <mat-icon>
+              {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+            </mat-icon>
+          </button>
+          {{node.name}}
+        </mat-tree-node>
+      </mat-tree>
+    </mat-sidenav>
+
+    <mat-sidenav-content class="sidenav-container-tablero-control-panel-derecho">
+      <button mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon matTooltip="Lista de Gráficas" matTooltipPosition="above">chevron_right</mat-icon>
+      </button>
+      <button mat-icon-button (click)="verFiltros()">
+        <mat-icon matTooltip="Filtros" matTooltipPosition="above">filter_list</mat-icon>
+      </button>
+      <button mat-icon-button (click)="limpiarMapa()">
+        <mat-icon matTooltip="Limpiar Selección" matTooltipPosition="above">cancel</mat-icon>
+      </button>
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="4px"
+        class="sidenav-container-tablero-control-div-panel-derecho" *ngIf="criteriaChart && criteriaChart.anioVigencia">
+        <ng-container *ngFor="let graficaPadre of graficas_disponibles; let i = index">
+          <ng-container *ngIf="graficaPadre.children">
+            <div flex *ngFor="let grafica of graficaPadre.children;  let j = index">
+              <ng-container *ngIf="grafica.checked">
+                <sigma-chart-tablero-control-sig [idChart]="i + '-' + j" [title]="graficaPadre.name" [chartName]="grafica.name" [criteriaChart]="criteriaChart">
+                </sigma-chart-tablero-control-sig>
+              </ng-container>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</ng-container>

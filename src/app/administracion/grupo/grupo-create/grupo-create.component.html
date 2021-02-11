@@ -1,0 +1,51 @@
+<div fxLayout="column">
+  <div class="flex-p">
+    <mat-card class="p-0 mat-card">
+      <mat-card-header fxLayoutAlign="center">
+        <mat-card-subtitle>
+          <h2>{{ constants.crear }} Selección</h2>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+        <h5>{{ constants.informacionCampoObligatorio }}</h5>
+      </div>
+
+      <mat-card-content class="p-16 m-0" [formGroup]="form"
+        *sigmaIsGranted="constants.permiso_administracion_grupo_create">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <sigma-form-input formControlName="nombre" [(ngModel)]="newGroup.nombre" [placeholder]="constants.nombre">
+            </sigma-form-input>
+          </div>
+        
+          <div fxFlex>
+            <div class="w-100">
+              <sigma-form-select [path]="constants.path_administracion_grupo_origenLugarId"
+                placeholder="{{ constants.origenSeleccion }}" required="true" formControlName="origenLugarId"
+                [(ngModel)]="newGroup.origenSeleccion">
+              </sigma-form-select>
+            </div>
+          </div>
+        </div>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex="100">
+            <sigma-form-input formControlName="descripcion" [(ngModel)]="newGroup.descripcion" [placeholder]="constants.descripcion">
+            </sigma-form-input>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+      <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+        <button type="button" (click)="onBack()" mat-button color="warn" class="m-1">
+          <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+        </button>
+        <button type="button" [disabled]="disableSubmit" class="m-1" mat-raised-button color="primary"
+          (click)="onSubmit()" *sigmaIsGranted="constants.permiso_administracion_grupo_create">
+          <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</div>

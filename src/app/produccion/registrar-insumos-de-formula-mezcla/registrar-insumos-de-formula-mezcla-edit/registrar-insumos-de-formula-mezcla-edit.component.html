@@ -1,0 +1,130 @@
+<div>
+  <div>
+    <mat-card-header fxLayoutAlign="center">
+      <mat-card-subtitle>
+        <h2>{{ constants.tituloEditar }}</h2>
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content class="m-0" [formGroup]="formuarlioFormula">
+
+      <input type="hidden" formControlName="id" [(ngModel)]="formula.id">
+
+      <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+        <div fxFlex>
+          <sigma-form-select formControlName="tipoMezcla" [(ngModel)]="formula.tipoMezcla"
+            [path]="constants.path_formula_mezcla_tipo_mezcla" [placeholder]="constants.tipoMezcla"
+            [listBy]="'descripcion'">
+          </sigma-form-select>
+        </div>
+        <div fxFlex>
+          <sigma-form-select formControlName="especificacion" [(ngModel)]="formula.especificacion"
+            [path]="constants.path_formula_mezcla_especificacion" [placeholder]="constants.especificacion"
+            [listBy]="'descripcion'">
+          </sigma-form-select>
+        </div>
+      </div>
+
+      <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+        <div fxFlex>
+          <mat-form-field class="w-100">
+            <input matInput type="text" [numericInput]="false" [required]="true"
+              placeholder="{{constants.masaUnitaria}}" formControlName="masaUnitaria"
+              [(ngModel)]="formula.masaUnitaria" autocomplete="off">
+            <mat-error *ngIf="formuarlioFormula.get('masaUnitaria').hasError('required')">
+              {{ constants.campoRequerido }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex="70">
+          <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px">
+            <div fxFlex>
+              <sigma-form-input formControlName="fechaInicial" [ngModel]="formula.fechaInicial"
+                [placeholder]="constants.fechaInicial"></sigma-form-input>
+            </div>
+            <div fxFlex>
+              <sigma-form-input formControlName="fechaFinal" [ngModel]="formula.fechaFinal"
+                [placeholder]="constants.fechaFinal"></sigma-form-input>
+            </div>
+          </div>  
+        </div>
+      </div>
+    </mat-card-content>
+  </div>
+</div>
+
+<div fxLayoutAlign="end" class="mb-10">
+  <button id="cu-28-AddMateriaPrima-boton-adicionarMateriaPrima" [disabled]="disableSubmit" class="m-1"
+    mat-raised-button color="primary" (click)="addFormulaMateriaPrima()">
+    <mat-icon class="m-1">add</mat-icon>
+    Adicionar materia prima
+  </button>
+</div>
+
+<div class="mat-elevation-z8 mb-10">
+  <mat-table [dataSource]="listaMateriasPrimas">
+    <ng-container matColumnDef="consecutivo">
+      <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
+      <mat-cell *matCellDef="let materiaPrima" data-label="Id">
+        {{ materiaPrima != null ? 
+          materiaPrima.consecutivo  : ''
+        }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="materiaPrima">
+      <mat-header-cell *matHeaderCellDef> Materia prima </mat-header-cell>
+      <mat-cell *matCellDef="let materia" data-label="Materia prima">
+        {{materia.materiaPrima ? materia.materiaPrima.descripcion : '' }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="valor">
+      <mat-header-cell *matHeaderCellDef> Valor </mat-header-cell>
+      <mat-cell *matCellDef="let materia" data-label="Valor">
+        {{materia.valor}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="unidadMedida">
+      <mat-header-cell *matHeaderCellDef> Unidad </mat-header-cell>
+      <mat-cell *matCellDef="let materia" data-label="Unidad">
+        {{materia.unidadMedida ? materia.unidadMedida.descripcion : '' }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="masaUnitaria">
+      <mat-header-cell *matHeaderCellDef> Masa unitaria </mat-header-cell>
+      <mat-cell *matCellDef="let materia" data-label="Masa unitaria">
+        {{materia.masaUnitaria}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+      <mat-cell *matCellDef="let materiaPrima; let i = index;" data-label="Acciones">
+        <button id="cu-28-MateriaPrima-grilla-boton-editar" mat-raised-button color="primary"
+          (click)="editarFormulaMateriaPrima(i, materiaPrima)" class="m-1">
+          <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+        </button>
+        <button id="cu-28-MateriaPrima-grilla-boton-eliminar" mat-raised-button color="warn"
+          (click)="removeFormulaMateriaPrima(i)" class="m-1">
+          <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="columnasTablaMateriasPrimas"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columnasTablaMateriasPrimas;"></mat-row>
+  </mat-table>
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+</div>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<div fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="end" class="pt-16">
+  <button id="cu-28-editar-boton-cancelar" mat-button color="warn" class="m-1" (click)="onBack()">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+  </button>
+  <button id="cu-28-boton-guardar" class="m-1" [disabled]="disableSubmit" mat-raised-button color="primary"
+    (click)="save()">
+    <mat-icon class="m-1">save</mat-icon>
+    Guardar
+  </button>
+</div>

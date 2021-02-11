@@ -1,0 +1,79 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="processing">
+
+  <div [hidden]="currentAction !== 'list'">
+    <div fxLayout="column" fxLayout.gt-sm="row wrap">
+      <div fxFlex="100">
+        <div>
+          <div [hidden]="(mostrarVerificarProgramar || consultarVerificarProgramar)" >
+            <mat-tab-group *ngIf="condicion" [selectedIndex]="tabSeleccionado.value" (selectedIndexChange)="seleccionarGrid($event)">
+              <mat-tab label="Programar visita técnica de verificación">
+              <sigma-grid-mantenimientos #grid [data]="data" [columns]="columns" [condicion]="condicion" 
+                [filters]="filters" >
+              </sigma-grid-mantenimientos>
+              </mat-tab>
+            </mat-tab-group>
+
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" class="mt-10 mb-10 c-mod p-tab">
+              <div *ngIf="esLider" fxFlex fxLayoutAlign="center center">
+                <button mat-raised-button color="primary" class="m-1"
+                  (click)="mostrarProgramacionVisita('mostrarVerificarProgramar')">
+                  <mat-icon class="m-1">assignment_turned_in</mat-icon>{{ constants.verificarProgramar }}
+                </button>
+              </div>
+              <div fxFlex fxLayoutAlign="center center"
+                (click)="mostrarProgramacionVisita('consultarVerificarProgramar')">
+                <button mat-raised-button color="primary" class="m-1">
+                  <mat-icon class="m-1">find_in_page</mat-icon>{{ constants.consultarProgramar }}
+                </button>
+              </div>
+            </div>
+          </div>
+          <div fxLayout="column" *ngIf="mostrarVerificarProgramar && usuarioLogueado" >
+            <!-- Implementacion la verificación y programación  -->
+            <sigma-verificar-programacion class="w-100" [data]="data" [condicion]="condicion"
+              [usuarioLogueado]="usuarioLogueado" (cerrar)="cerrarComponentes($event)"
+              (setupEventForm)="setupEventForm($event)" [permiso]="constants.permiso_profesional_lider_programacion"
+              [isLinearDiagnostico]="false">
+            </sigma-verificar-programacion>
+
+            <div class="w-100" *ngIf="!editEnabled">
+              <mat-divider></mat-divider>
+              <div fxLayoutAlign="end" class="mt-10" (click)="closeMostrarProgramacionVisita()">
+                <button mat-button color="warn" class="m-1">
+                  <mat-icon class="m-1">close</mat-icon> {{ constants.cerrar }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div fxLayout="column" *ngIf="consultarVerificarProgramar" >
+            <div *ngIf="consultaProgramacion.liderProgramacion">
+              <!-- Implementacion del resumen de director de obra -->
+              <sigma-resumen-director-obra [data]="data"  class="w-100">
+              </sigma-resumen-director-obra>
+            </div>
+
+            <div *ngIf="consultaProgramacion.directorObra" class="w-100">
+             <sigma-grid-mantenimientos #view [data]="data" [columns]="columnsView" [filters]="[]"
+                [columnsToExport]="columnsToExportView" [condicion]="condicion">
+              </sigma-grid-mantenimientos>
+            </div>
+
+            <div class="w-100">
+              <mat-divider></mat-divider>
+              <div fxLayoutAlign="end" class="mt-10" (click)="closeMostrarProgramacionVisita()">
+                <button mat-button color="warn" class="m-1">
+                  <mat-icon class="m-1">close</mat-icon> {{ constants.cerrar }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

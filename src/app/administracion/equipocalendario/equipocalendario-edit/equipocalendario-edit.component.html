@@ -1,0 +1,89 @@
+<h2 mat-dialog-title>{{ constants.editar }}</h2>
+
+<mat-dialog-content [formGroup]="form" 
+*sigmaIsGranted="constants.permiso_administracion_equipocalendario_update">
+
+  <input type="hidden" formControlName="id" [(ngModel)]="equipocalendario.id">
+  <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+    <div class="item" fxFlex="50%">
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+        <mat-checkbox formControlName="activo"
+            [(ngModel)]="equipocalendario.activo" name="activo" id="activo">{{ constants.activo }}
+        </mat-checkbox>
+      </div>
+    </div>
+  </div>
+  
+  <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+    <div class="item" fxFlex="50%">
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+        <sigma-general-list value="{{ equipocalendario.disponibleId }}"
+          [path]="constants.path_administracion_equipocalendario_disponibleId" etiqueta="{{ constants.disponibleId }}" [listBy]="'valor'"
+          (optionIdSelected)="setDisponibleEquipocalendario($event)"
+          required="true">
+        </sigma-general-list>
+        <input matInput  type="text" placeholder="" formControlName="disponibleId" [(ngModel)]="equipocalendario.disponibleId" autocomplete="off" hidden>
+        <mat-error *ngIf="enviada && form.get('disponibleId').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+      </div>
+    </div>
+    <div class="item" fxFlex="50%">
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+        <sigma-general-list value="{{ equipocalendario.equipoDisponibilidadId }}"
+          [path]="constants.path_administracion_equipocalendario_equipoDisponibilidadId" etiqueta="{{ constants.equipoDisponibilidadId }}" [listBy]="'valor'"
+          (optionIdSelected)="setEquipoDisponibilidadEquipocalendario($event)"
+          required="true">
+        </sigma-general-list>
+        <input matInput  type="text" placeholder="" formControlName="equipoDisponibilidadId" [(ngModel)]="equipocalendario.equipoDisponibilidadId" autocomplete="off" hidden>
+        <mat-error *ngIf="enviada && form.get('equipoDisponibilidadId').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+      </div>
+    </div>
+  </div>
+  <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+    <div class="item" fxFlex="50%">
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+        <mat-form-field fxFlex="100%">
+          <input matInput formControlName="fechaFin" [(ngModel)]="equipocalendario.fechaFin" hidden>
+          <mat-error *ngIf="enviada && form.get('fechaFin').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+          <label class="dev-color-grey">{{ constants.fechaDesde }}</label>
+          <input class="hover-element-pointer" matInput readonly
+            [owlDateTimeTrigger]="fechaFinDate" [owlDateTime]="fechaFinDate" [formControl]="fechaFinControl"
+            (dateTimeChange)="changeDate('fechaFin', $event)">
+          <mat-icon matSuffix [owlDateTimeTrigger]="fechaFinDate" class="hover-element-pointer">calendar_today</mat-icon>
+          <owl-date-time [pickerType]="'calendar'" #fechaFinDate="owlDateTime"></owl-date-time>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="item" fxFlex="50%">
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+        <mat-form-field fxFlex="100%">
+          <input matInput formControlName="fechaInicio" [(ngModel)]="equipocalendario.fechaInicio" hidden>
+          <mat-error *ngIf="enviada && form.get('fechaInicio').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+          <label class="dev-color-grey">{{ constants.fechaDesde }}</label>
+          <input class="hover-element-pointer" matInput readonly
+            [owlDateTimeTrigger]="fechaInicioDate" [owlDateTime]="fechaInicioDate" [formControl]="fechaInicioControl"
+            (dateTimeChange)="changeDate('fechaInicio', $event)">
+          <mat-icon matSuffix [owlDateTimeTrigger]="fechaInicioDate" class="hover-element-pointer">calendar_today</mat-icon>
+          <owl-date-time [pickerType]="'calendar'" #fechaInicioDate="owlDateTime"></owl-date-time>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+<div fxLayout="row" fxLayoutAlign="center" class="flex-p">
+  <span>{{ constants.informacionCampoObligatorio }}</span>
+</div>
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions fxLayoutAlign="end">
+  <button mat-button class="m-1" color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon>
+    {{ constants.cancelar }}
+  </button>
+  <button mat-raised-button class="m-1" color="primary" [disabled]="disableSubmit" (click)="onSubmit()" 
+    *sigmaIsGranted="constants.permiso_administracion_equipocalendario_update">
+    <mat-icon class="m-1">save</mat-icon>
+    {{ constants.guardar }}
+  </button>
+</mat-dialog-actions>

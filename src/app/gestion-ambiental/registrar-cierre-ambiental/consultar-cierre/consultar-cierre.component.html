@@ -1,0 +1,73 @@
+<div *ngIf="currentAction === constants.currentAction.list">
+  <div>
+    <div>
+      <mat-card-content fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxLayoutWrap fxLayoutGap="0.5%"
+        fxLayoutAlign="right">
+
+        <div fxLayout="row" fxLayoutAlign="end" class="flex-p" class="w-100">
+          <button layout="row" mat-raised-button color="primary" class="m-1" (click)="exportAsXLSX()"
+            [disabled]="dataSource?.filteredData.length <= 0">
+            <mat-icon>get_app</mat-icon>
+            {{ constants.exportar }}
+          </button>
+        </div>
+      </mat-card-content>
+    </div>
+  </div>
+
+  <div class="mat-elevation-z8" *ngIf="currentAction === constants.currentAction.list">
+    <div *ngIf="cierreAmbientales.length <= 0" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+      <mat-icon class="m-1">sms_failed</mat-icon>
+      <h4> {{ constants.noResultados }}</h4>
+    </div>
+
+    <mat-table #table [dataSource]="dataSource" matSort>
+
+      <ng-container matColumnDef="posicion">
+        <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> No.
+        </mat-header-cell>
+        <mat-cell *matCellDef="let cierre; let i = index" [attr.data-label]="'No.'">
+          {{ i + 1 }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fechaCierre">
+        <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.fechaCierreAmbiental }}
+        </mat-header-cell>
+        <mat-cell *matCellDef="let cierre" [attr.data-label]="constants.fechaCierreAmbiental">
+          {{ cierre.fechaCierre }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="acciones">
+        <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+        <mat-cell *matCellDef="let cierre" [attr.data-label]="constants.acciones">
+          <button *sigmaIsGranted="constants.permiso_gestion_ambiental_registrar_cierre" mat-raised-button
+            color="primary" (click)="edit(cierre)" class="m-1">
+            <mat-icon matTooltip="Detalles" matTooltipPosition="above">edit</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+    </mat-table>
+    <mat-paginator #paginator [length]="dataSource?.filteredData.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]">
+    </mat-paginator>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="end" class="pt-16">
+    <mat-divider></mat-divider>
+    <div class="pt-16">
+      <button mat-button color="warn" class="m-1" (click)="close()">
+        <mat-icon class="m-1">close</mat-icon> {{ constants.cerrar }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="currentAction === constants.currentAction.registrarCierreAmbiental">
+  <sigma-registrar-cierre [mantenimiento]="mantenimiento" [data]="data"
+    [transicionesIndividuales]="transicionesIndividuales" [cierre]="cierreAmbiental"
+    (closeRegistro)="closeRegister($event)" (closeAll)="closeAll()">
+  </sigma-registrar-cierre>
+</div>

@@ -1,0 +1,457 @@
+/**  Objeto de momento usado para control de las horas */
+const moment = (_moment as any).default ? (_moment as any).default : _moment;
+
+----------------------------------------------------------------------------------------------------
+
+/**  Constante con los formatos soportados por el componente */
+export const MY_CUSTOM_FORMATS =
+
+----------------------------------------------------------------------------------------------------
+
+/**  Constantes que utiliza el componente */
+  constants = CONST_
+
+----------------------------------------------------------------------------------------------------
+
+/** Mensaje a presentar al usuario en caso de fallas */
+  mensaje = '';
+
+----------------------------------------------------------------------------------------------------
+  
+/** Objeto usado para enviar al servicio de CRUD*/
+  equipo: Equipo;
+
+----------------------------------------------------------------------------------------------------
+
+/** Objeto usado para notificar diferencias entre modelo y componentes */
+  private customerDiffer: KeyValueDiffer<string, any>;
+  
+----------------------------------------------------------------------------------------------------
+
+  /** Formulario contenedor del componente */
+  form: FormGroup;
+  
+----------------------------------------------------------------------------------------------------
+
+  /** Servicio para llamado a funcionalidades propias del SIGMA */
+  commonService: CommonService;
+
+----------------------------------------------------------------------------------------------------
+
+  /** Control de formulario al que se asocia el campo */
+  control: FormControl = new FormControl();
+
+----------------------------------------------------------------------------------------------------
+
+  /** Bandera de control para saber si el campo es requerido en el formulario o no */
+  required: boolean = false;
+
+----------------------------------------------------------------------------------------------------
+
+  /** Listado de errores personalizados que puede presentar el componente */
+  basicErrors = [
+  
+  
+  /** Cantidad máxima de caracteres permitida en el campo*/
+  @Input('maxlength') maxlength: number = 0;
+
+----------------------------------------------------------------------------------------------------
+
+  /** Cantidad mínima de caracteres permitida en el campo*/
+  @Input('minlength') minlength: number = 0;
+
+----------------------------------------------------------------------------------------------------
+
+  /** Bandera que indica si el campo se debe capturar en máyusculas */
+  @Input('upper') upper: boolean = false;
+
+----------------------------------------------------------------------------------------------------
+
+  /** Listado de errores personalizados permitidos por el componente */
+  @Input('errors') errors: [] = [];
+
+----------------------------------------------------------------------------------------------------
+  
+  /** Bandera que permite saber si el campo del formulario se pressentará solo de lectura */
+  @Input('readonly') readonly: boolean = false;
+  
+----------------------------------------------------------------------------------------------------
+
+  /**  Bandera para indicar si el componente se encuentra en procesamiento desde el cliente*/
+  enviada = false;
+
+----------------------------------------------------------------------------------------------------
+
+  /** Propiedad Placeholder asociado al campo del formulario */
+  @Input()
+  get placeholder() {
+    return this.input.placeholder;
+  }
+
+----------------------------------------------------------------------------------------------------
+  
+  /** Listado de errores personalizados permitidos por el componente */
+  @Input('errors') errors: [] = [];
+  
+----------------------------------------------------------------------------------------------------
+  
+  /** Propiedad value asociada al campo del formulario */
+  @Input()
+  get value() {
+    return this.input.value;
+  }
+----------------------------------------------------------------------------------------------------
+ 
+  /** Entrada de tipo de componente que define el campo en el formulario */
+  @ViewChild('input') input: MatInput;
+
+----------------------------------------------------------------------------------------------------
+
+  /** Definición del método que es llamado al momento de cambiar el dato del
+   * campo del formulario */
+  onChange = (_: any) => { };
+
+----------------------------------------------------------------------------------------------------
+
+  /** Definición del método que es llamado al momento de realizar acción sobre el
+   * campo del formulario */
+  onTouch = () => { };
+
+----------------------------------------------------------------------------------------------------
+
+  /** Entrada de tipo de componente que define el campo en el formulario */
+  @ViewChild('input') input: MatInput;
+
+----------------------------------------------------------------------------------------------------
+
+  /**  Bandera para indicar si el componente se encuentra en procesamiento por el servicio*/
+  disableSubmit = false;
+
+----------------------------------------------------------------------------------------------------
+
+  /** Clón del objeto que se va a modificar información */
+  clone: Equipo;
+  
+----------------------------------------------------------------------------------------------------
+  
+/** Cadena de texto con la hora de inicio de la programación */
+  horaInicioProgramacion: string;
+  
+----------------------------------------------------------------------------------------------------
+
+ /** Valor mínimo permitido para la fecha  */
+  private minDate: any = null;
+  
+----------------------------------------------------------------------------------------------------
+  
+ /** Valor máximo permitido para la fecha  */
+  private maxDate: any = null;
+  
+----------------------------------------------------------------------------------------------------
+  
+ /** Valor tipo Date mínimo permitido para la fecha  */
+  public fechaDesdeControl = new FormControl(moment(null));
+  
+____________________________________________________________________________________________________
+
+  /** Variable usada para notificación a otros componentes de cambios */
+  private equipoSubject = new BehaviorSubject<Equipo[]>([]);
+  
+____________________________________________________________________________________________________
+
+  /** Variable usada para notificación a otros componentes de cambios */
+  public totalelementsSubject = new BehaviorSubject<number>(0);
+  
+____________________________________________________________________________________________________
+
+  /** Variable usada para notificación a otros componentes de cambios */
+  private loadingSubject = new BehaviorSubject<boolean>(false);
+  
+____________________________________________________________________________________________________
+
+  /** Variable usada para notificación a otros componentes de cambios */
+  private errorSubject = new BehaviorSubject<boolean>(false);
+  
+____________________________________________________________________________________________________
+
+  /** Variable usada para notificación a otros componentes de cambios */
+  private errorMessageSubject = new BehaviorSubject<string>('');
+
+____________________________________________________________________________________________________
+
+  /** Observable usado para tener la totalización de los elementos devueltos */
+  public totalElements$ = this.totalelementsSubject.asObservable();
+  
+____________________________________________________________________________________________________
+
+  /**
+   * Observable usado para para notificar el estado
+   * de la respuesta desde el servidor
+   */
+  public loading$ = this.loadingSubject.asObservable();
+  
+____________________________________________________________________________________________________
+
+  /** Variable usada para notificación de errores */
+  public error$ = this.errorSubject.asObservable();
+  
+____________________________________________________________________________________________________
+
+  /** Variable usada para notificación mensaje de error */
+  public errorMessage$ = this.errorMessageSubject.asObservable();
+  
+____________________________________________________________________________________________________
+
+  /** Variable con url de peticion a realizar */
+  public petitionList = null;
+  
+____________________________________________________________________________________________________
+
+  /** Variable con datos obtenidos de la petición al servidor */
+  public equipoData: any;
+  
+____________________________________________________________________________________________________
+
+  /** Variable usada como bandera para indicar si se está generando el excel */
+  cargandoExcel = false;
+  
+____________________________________________________________________________________________________
+
+  /**  Criterios de busqueda por los cuales filtrara la grilla del componente */
+  criteria = 
+  
+____________________________________________________________________________________________________
+  
+  /**  Criterios de busqueda por los cuales filtrara la grilla del componente para la exportación */
+  criteriaExport = 
+  
+____________________________________________________________________________________________________
+
+  /**  Columnas de la grilla que se van a exportar */
+  dataExport = 
+____________________________________________________________________________________________________
+  
+  /**  Fuente de conjunto de datos para manejo de grilla del componente */
+  dataSource:
+
+____________________________________________________________________________________________________
+
+  /** 
+  * Método encargado de construir la sección de
+  * filtros de cadena de petición que se realizará al servidor 
+  */
+  public getUrlParameters ():
+  
+____________________________________________________________________________________________________
+
+  /** Constantes con valores de URL´s relacionadas con el componente */
+  export const PATHS
+  
+____________________________________________________________________________________________________
+
+  /**
+  * Hommologación de las constantes de permisos usados por el componente 
+  * con los asignados en la base de datos
+  */
+  export const PERMISOS =
+____________________________________________________________________________________________________
+
+  /**
+  * Declaración de constantes de etiquetas propias usadas en el componente
+  */
+  export const CONST_
+  
+____________________________________________________________________________________________________
+
+  /** Definición de las columnas presentadas en la grilla */
+  columns = []
+____________________________________________________________________________________________________
+  
+  /** Columnas de los datos que se exportarán a presionar el botón exportar del componente*/
+  dataExport:
+____________________________________________________________________________________________________
+
+  /** Elemento usado para gestionar la paginación de la grilla */
+  @ViewChild(MatPaginator)
+  paginator: MatPaginator;
+  
+____________________________________________________________________________________________________
+
+  /** Elemento usado para gestionar el ordenamiento de la grilla */
+  @ViewChild(MatSort)
+  sort: MatSort;
+
+____________________________________________________________________________________________________
+
+  /** Constante usada para identificar el encabezado de la peticion http como JSon */
+  const httpOptions = {
+  
+____________________________________________________________________________________________________
+
+
+  /** Variable usada para contruir path url a invocar del servicio según el método de petición requerido */
+  private resourceUrl: string;
+    
+____________________________________________________________________________________________________
+ 
+  /** Variable usada para agrupar los elementos del formulario */
+  form: FormGroup;
+	
+___________________________________________________________________________________________________
+ 
+ /** Bandera que permite identificar si el formulario se encuentra siendo procesado */
+  loading = false;
+___________________________________________________________________________________________________
+
+  /** Objeto usado para notificar diferencias entre modelo y componentes */
+  clone =
+____________________________________________________________________________________________________
+
+  /** Bandera usada para ocultar el botón guardar */
+  disabled = false;
+____________________________________________________________________________________________________
+
+  /** Bandera usada para saber si el componente se encuentra deshabilitado */
+  @Input('disabled') disabled = false;
+
+____________________________________________________________________________________________________
+  
+  /**  Nombres de columnas que presentará la grilla de mantenimiento usada en el componente */
+  headers = [{}]
+
+____________________________________________________________________________________________________
+
+  /** tabla en la que se procesará la información */
+  @ViewChild('TABLE') table: CdkTable<any>;
+______________________________________________________________________________________________________
+
+  /** Bandera para indicar si el componente se encuentra en procesamiento por el servicio  */
+  loader = true;
+
+______________________________________________________________________________________________________
+  /** objeto que se usa para determinar el tamaño de la grilla del componente */
+  lengthList: Number;
+
+______________________________________________________________________________________________________
+
+  /** Variable que se encarga de Mostrar o no la informacion en el componente  */
+  noInfoToShow = false;
+______________________________________________________________________________________________________
+
+  /**
+   * Bandera usada para mantener habilitado o desabilitado el botón
+   * submit del formulario
+   **/
+  disabledBtn_Login = false;
+___________________________________________________________________________________________________
+  
+    /**
+	   * Bandera usada para mantener habilitado o desabilitado el botón
+	   * submit del formulario
+	   **/
+	  disableSubmit = false;
+____________________________________________________________________________________________________
+
+/**  Variable que se encarga de habilitar la opcion de exportar */
+  exportOption = true;
+_____________________________________________________________________________________________________
+
+/** objeto que recibe data enviada al componente */
+  procesoData;
+_____________________________________________________________________________________________________
+___________________________________________________________________________________________________
+  
+  /**
+   * Variable usada para identificar la acción a la
+   * cual se dirigirá el click del botón atras del formualario
+   * actual
+   **/
+  @Output() back = new EventEmitter();
+___________________________________________________________________________________________________
+  
+  /**
+   * Variable usada para recibir en la invocación del componente
+   * la actividad del mantenimiento
+   **/
+  @Input() data: WorkflowMantenimientoActividadModel;
+___________________________________________________________________________________________________
+
+  /**
+  * Mantenimiento para el cual se realizará el procesamiento
+  * de la información */
+  @Input() mantenimiento: WorkflowMantenimientoModel;
+___________________________________________________________________________________________________
+
+
+  /**
+  * Variable usada para procesar la actividad actual del mantenimiento
+  */
+  mantenimientoActividad: 
+
+  /**
+  * Mantenmiento actualizado que devuelve el componente una
+  * vez procesada la información
+  */
+  @Output() mantenimientoSalida = new EventEmitter();
+
+___________________________________________________________________________________________________
+
+  /**
+   * Variable bandera con la cual se identifica si el componente
+   * se encuentra realizando algun procesamiento de información
+   */
+  processing = false;
+
+___________________________________________________________________________________________________
+
+  /** Variable de consttructor del formulario presentado al usuario */
+  formBuilder: FormBuilder;
+___________________________________________________________________________________________________
+  
+  /** Objeto del mantenimiento que se procesará en el componente */
+  mantenimiento: WorkflowMantenimientoModel = new WorkflowMantenimientoModel();
+___________________________________________________________________________________________________
+    
+  /** Acccion actual que se encuentra ejecutando en el componente */
+  currentAction =
+___________________________________________________________________________________________________
+      
+  /** Variable de condicion por la cual se realizará la busquedas de pks en la grilla */
+  condicion: WorkflowCondicionModel;
+
+___________________________________________________________________________________________________
+
+  /** Variable usada para notificar al componente de grilla sobre los
+   * filtros que se usaarán de forma predeterminada en este componente */
+  defaultFilters: KeyValuePair[] = [];
+  
+___________________________________________________________________________________________________
+
+  /** Variable usada para enviar a la grilla el listado
+   * de acciones a ejecutar para el mantenimiento en este componente */
+  acciones: GridAccion[] = [
+___________________________________________________________________________________________________
+
+
+  /** Variable usada para almacenar los filtros precargados que se
+   * ejecutaran en la grilla al inicializar el componente de sigma grilla */
+  preloadFilters:
+___________________________________________________________________________________________________
+  
+  /** Bandera que permite identificar si el acordeón
+  * se presenta de forma secuencial al usuario */
+   isLinear = true;
+   
+___________________________________________________________________________________________________
+   
+  /** Ordenamiento que de forma predeterminada realiza el
+   * sistema de los registros de la grilla */
+  defaultSortGrid: DefaultSortGrid = {
+
+___________________________________________________________________________________________________
+  
+  /** Variable encargada de encapsular las propiedades del objeto de tipo modelo */
+  newGroup: GrupoModel;
+___________________________________________________________________________________________________
+
+  

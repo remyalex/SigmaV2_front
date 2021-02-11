@@ -1,0 +1,37 @@
+<mat-form-field class="example-full-width">
+    <input type="text" [placeholder]="label" aria-label="Number" [required]="required" matInput [value]="value ? value : ''"
+        [matAutocomplete]="auto" (keyup)="searchTerm$.next($event.target.value)">
+    <mat-autocomplete (optionSelected)="selected($event)" autoActiveFirstOption #auto="matAutocomplete">
+        <div *ngIf="!noResultados">
+            <mat-option *ngFor="let option of options" [value]="option[searchBy]">
+                <span>
+                    {{ labelparametro1 }}: {{ option[searchBy] }}{{ option[ParametroAdicional1] ? ', ' : '' }}
+                </span>
+                <span *ngIf="option[ParametroAdicional1]">
+                    {{ labelparametro2 }}:
+                    {{ option[ParametroAdicional1] }}{{ option[ParametroAdicional2] ? ', ' : '' }}
+                </span>
+                <span *ngIf="option[ParametroAdicional2]">
+                    {{ labelparametro3 }}: {{ option[ParametroAdicional2] }}
+                </span>
+                <hr>
+            </mat-option>
+        </div>
+        <div  *ngIf="noResultados">
+            <mat-option [value]="''">
+                <span>
+                    {{ notFound.valor }}
+                </span>
+            </mat-option>
+        </div>
+    </mat-autocomplete>
+</mat-form-field>
+
+<!-- 
+  <app-sigma-autocomplete 
+    [label]="'Menús'" 
+    (selectItem)="itemSeleccionado($event)" 
+    [path]="'/api/administracion/menu'" 
+    [searchBy]="'titulo'">
+  </app-sigma-autocomplete>
+-->

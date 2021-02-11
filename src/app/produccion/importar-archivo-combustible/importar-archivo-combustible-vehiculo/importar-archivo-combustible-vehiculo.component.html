@@ -1,0 +1,37 @@
+<div fxLayout="column" *ngIf="!processing">
+  <div>
+    <div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+      <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+    </div>
+
+      <mat-card-header fxLayoutAlign="center">
+        <mat-card-subtitle>
+          <h2>Cargue Archivo Consumo de Combustible Veh&iacute;culos Automotores</h2>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+        <h5>{{ constants.informacionCampoObligatorio }}</h5>
+      </div>
+
+      <mat-card-content class="p-16 m-0" [formGroup]="form">
+
+        <div class="container" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <sigma-form-upload-file formControlName="archivoId" [(ngModel)]="archivoId" [showFile]="false"
+              [placeholder]="'Archivo formato Excel (XLSX)'" [maxUpload]="1" (ngModelChange)="activarProceso($event)">
+              <!--[accept]="'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'"-->
+            </sigma-form-upload-file>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-divider></mat-divider>
+
+      <div fxLayout="row" fxLayoutAlign="end" class="pt-16">
+        <button mat-raised-button color="primary" (click)="import()" [disabled]="disableSubmit">
+          <mat-icon class="m-1">save</mat-icon>Procesar Archivo
+        </button>
+      </div>
+  </div>
+</div>

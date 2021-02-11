@@ -1,0 +1,173 @@
+<h2 mat-dialog-title>{{ constants.detalle }} {{ constants.titulo2 }}</h2>
+
+<mat-dialog-content *sigmaIsGranted="constants.permiso_produccion_registrar_vale_planta_view">
+  <mat-list>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.numeroVale }}</b>:
+        </div>
+        <div fxFlex="60">
+          <span> {{ registro.numeroVale }} </span>
+        </div>  
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item"> 
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.fecha }}</b>:
+        </div>
+        <div fxFlex="60">
+          <span>
+            {{ registro.valesIngreso &&
+               registro.valesIngreso.length > 0 && registro.valesIngreso[0].fechaRegistro ? 
+               registro.valesIngreso[0].fechaRegistro : ''
+            }}
+          </span>
+        </div>  
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.horaEntrada }}</b>:
+        </div>
+        <div fxFlex="60">
+          <span>  {{ registro.valesIngreso && registro.valesIngreso.length > 0 && registro.valesIngreso[0].horaEntrada? formatHora(registro.valesIngreso[0].horaEntrada) : '' }} </span>
+        </div>  
+      </div>
+    </mat-list-item>
+    
+      <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.horaSalida }}</b>:
+        </div>
+        <div fxFlex="60">
+          <span>  {{ registro.valesIngreso && registro.valesIngreso.length > 0  && registro.valesIngreso[0].horaSalida? formatHora(registro.valesIngreso[0].horaSalida) : '' }} </span>
+        </div>  
+      </div>
+    </mat-list-item>
+    
+    <div class="mt-10 mb-10">
+      <h3>Información Vehículo Conductor</h3>
+    </div>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.placaVehiculo }}</b>:
+        </div>
+        <div fxFlex="60">
+          <span>  {{ registro.valesIngreso && registro.valesIngreso.length > 0  && registro.valesIngreso[0].equipo? registro.valesIngreso[0].equipo.placa : '' }} </span>
+        </div>  
+      </div>
+    </mat-list-item>
+
+    <div class="mt-10 mb-10">
+      <h3>Cantidad</h3>
+    </div> 
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.pesoBruto }}</b>:
+        </div>
+        <div fxFlex="60">
+          <span>  {{ registro.valesIngreso && registro.valesIngreso.length > 0  && registro.valesIngreso[0].pesoBruto? registro.valesIngreso[0].pesoBruto : '' }} </span>
+        </div>  
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.pesoTara }}</b>:
+        </div>
+        <div fxFlex="60">
+          <span>  {{ registro.valesIngreso && registro.valesIngreso.length > 0  && registro.valesIngreso[0].pesoTara? registro.valesIngreso[0].pesoTara : '' }} </span>
+        </div>  
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.pesoNeto }}</b>:
+        </div>
+        <div fxFlex="60">
+          <span>  {{ registro.valesIngreso && registro.valesIngreso.length > 0  && registro.valesIngreso[0].pesoNeto? registro.valesIngreso[0].pesoNeto : '' }} </span>
+        </div>  
+      </div>
+    </mat-list-item>
+    
+    <div class="mt-10 mb-10">
+      <h3>Tipo de material</h3>
+    </div>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.tipoMaterial }}</b>:
+        </div>
+        <div fxFlex="60">
+          <span>  {{ registro.valesIngreso && registro.valesIngreso.length > 0  && registro.valesIngreso[0].tipoMaterial? registro.valesIngreso[0].tipoMaterial.descripcion : '' }} </span>
+        </div>  
+      </div>
+      <!--<div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+         <div fxFlex>
+          <b>{{ constants.activo }}</b>:
+        </div>
+        <div class="p-tab" fxFlex="60">
+          <span class="dev-color-red" [hidden]="registro.activo">{{ constants.no }}</span>
+          <span class="dev-color-green" [hidden]="!registro.activo">{{ constants.si }}</span>
+        </div>   
+      </div>-->
+    </mat-list-item>
+     
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.nombreRecibe }}</b>:
+        </div>
+        <div fxFlex="60">
+          <span>  {{ registro.valesIngreso && registro.valesIngreso.length > 0  && registro.valesIngreso[0].recibe? registro.valesIngreso[0].recibe.nombresYapellidos : '' }} </span>
+        </div>  
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.proveedor }}</b>:
+        </div>
+        <div fxFlex="60">
+          <span>  {{ registro.valesIngreso && registro.valesIngreso.length > 0  && registro.valesIngreso[0].proveedor? registro.valesIngreso[0].proveedor.nombresYapellidos : '' }} </span>
+        </div>  
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="mb-10">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.jefeBascula }}</b>:
+        </div>
+        <div fxFlex="60">
+          <span>  {{ registro.valesIngreso && registro.jefeBascula? registro.jefeBascula.nombresYapellidos : '' }} </span>
+        </div>  
+      </div>
+    </mat-list-item>
+    
+  </mat-list>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()">
+      <mat-icon class="m-1">close</mat-icon> {{ constants.cerrar }}
+  </button>
+</mat-dialog-actions>

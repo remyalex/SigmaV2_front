@@ -1,0 +1,30 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="processing">
+  <div [hidden]="currentAction != 'list'">
+    <div fxLayout="row" fxLayout.lt-md="column">
+      <div fxFlex="100" class="flex-p">
+        <mat-tab-group [selectedIndex]="tabSeleccionado.value"
+               (selectedIndexChange)="seleccionarGrid($event)">
+          <mat-tab *ngFor="let transicion of transicionesMasivas" label="{{transicion.nombre}}">
+            <sigma-grid-mantenimientos #grid [data]="data"  [transicion]="transicion" [columns]="columns" [filters]="filters"
+              (executeOnMasiveTransition)="executeMasiveTransition($event)" [showCheckMasive]="true" [singleActions]="acciones"
+              (executeOnSingle)="ejecutar($event)" [defaultFilters]="defaulFilters"  >
+            </sigma-grid-mantenimientos>
+          </mat-tab>         
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="currentAction === 'aprobar'">
+    <sigma-aprobar-actas-aprove (irAtras)="accionIrAtras()"></sigma-aprobar-actas-aprove>
+  </div>
+
+  <div *ngIf="currentAction === 'consultar'">
+    <sigma-aprobar-actas-list (irAtras)="accionIrAtras()"></sigma-aprobar-actas-list>
+  </div>
+</div>
+

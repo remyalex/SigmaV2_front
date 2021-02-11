@@ -1,0 +1,137 @@
+<h2 mat-dialog-title>{{ constants.detalle }} Disponibilidad lugares</h2>
+
+<mat-dialog-content *sigmaIsGranted="constants.permiso_administracion_lugardisponibilidad_view">
+  <mat-list>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.tipo }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ lugardisponibilidad.lugar ? lugardisponibilidad.lugar.tipoLugar ? lugardisponibilidad.lugar.tipoLugar.valor : '' : ''  }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.origen }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ lugardisponibilidad.lugar ? lugardisponibilidad.lugar.origenLugar ? lugardisponibilidad.lugar.origenLugar.valor : '' : ''  }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.nombre }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ lugardisponibilidad.lugar ? lugardisponibilidad.lugar.nombre : ''  }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.descripcion }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ lugardisponibilidad.lugar ? lugardisponibilidad.lugar.descripcion : ''  }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.direccion }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ lugardisponibilidad.lugar ? lugardisponibilidad.lugar.direccion : ''  }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.fechaDesde }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ lugardisponibilidad.fechaDesde }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.fechaHasta }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ lugardisponibilidad.fechaHasta }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.intervalo }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ lugardisponibilidad.intervalo }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.turnoId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ lugardisponibilidad.turno ? lugardisponibilidad.turno.descripcion : '' }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="mb-10">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.activo }}</b>:
+        </div>
+        <div class="p-tab" fxFlex="60">
+          <span class="dev-color-red" [hidden]="lugardisponibilidad.activo">{{ constants.no }}</span>
+          <span class="dev-color-green" [hidden]="!lugardisponibilidad.activo">{{ constants.si }}</span>
+        </div>
+      </div>
+    </mat-list-item>
+
+  </mat-list>
+
+  <button type="button" [disabled]="!this.calendariocompletado" (click)="mostrar = !mostrar" mat-raised-button
+    color="primary" class="m-1">{{ mostrar ? 'Ocultar' : 'Disponibilidad' }}
+    <mat-icon *ngIf="this.cargandoDisponibilidad">
+      <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+    </mat-icon>
+  </button>
+
+  <sigma-schedule (viewDateChange)="getEventMonthChanged($event)" *ngIf="mostrar" [listaCalendario]="events" ></sigma-schedule>
+
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions fxLayoutAlign="end">
+  <button mat-button class="m-1" color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon>
+    {{ constants.cerrar }}
+  </button>
+</mat-dialog-actions>

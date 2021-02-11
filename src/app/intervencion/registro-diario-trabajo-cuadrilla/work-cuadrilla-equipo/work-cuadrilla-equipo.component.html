@@ -1,0 +1,100 @@
+<div fxLayoutAlign="end">
+  <button tton mat-raised-button [disabled]="!componentVisible"
+    *sigmaIsGranted="constants.registro_diario_cuadrilla_maquinaria_nuevo" color="primary" class="m-1 mb-10"
+    (click)="add()">
+    <mat-icon class="m-1">note_add</mat-icon> Crear nuevo
+  </button>
+</div>
+<div class="mat-elevation-z8">
+  <mat-table #table [dataSource]="dataCuadrillaMaterial" matSort>
+
+    <ng-container matColumnDef="movil">
+      <mat-header-cell *matHeaderCellDef> {{ constants.movil }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.movil">
+        {{ equipo.movil.movil }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="unidad">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.unidad }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]=" constants.unidad">
+        {{ equipo.unidad.descripcion }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="horometroInicial">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.horometroInicial }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.horometroInicial">
+        {{ equipo.horometroInicial }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="horometroFinal">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.horometroFinal }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.horometroFinal">
+        {{ equipo.horometroFinal }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="horasTrabajadas">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.horasTrabajadas }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.horasTrabajadas">
+        {{ equipo.horasTrabajadas }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="standBy">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.standBy }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.standBy">
+        {{equipo.standBy}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="numeroViaje">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.numeroViaje }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.numeroViaje">
+        {{equipo.numeroViaje}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="nombreDocumento">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.nombreDocumento }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.nombreDocumento">
+        <div *ngIf="equipo?.equipoArchivos?.length > 0">
+          <sigma-show-file id="{{ equipo.equipoArchivos[0].archivo?.id }}"></sigma-show-file>
+        </div>
+      </mat-cell>
+    </ng-container>
+
+
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo ; let i = index;" [attr.data-label]="constants.acciones">
+        <button mat-raised-button [disabled]="!componentVisible"
+          *sigmaIsGranted="constants.registro_diario_cuadrilla_maquinaria_editar" color="primary"
+          (click)="edit(equipo, i)" class="m-1">
+          <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+        </button>
+        <button mat-raised-button [disabled]="!componentVisible"
+          *sigmaIsGranted="constants.registro_diario_cuadrilla_maquinaria_delete" color="warn"
+          (click)="delete(equipo, i)" class="m-1">
+          <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [length]="lengthList" [pageSize]="criteria.size" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>
+
+<div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+  <button type="button" [disabled]="!componentVisible"
+    *sigmaIsGranted="constants.registro_diario_cuadrilla_maquinaria_save_seccion" class="m-1" mat-raised-button
+    color="primary" (click)="onSubmit()">
+    <mat-icon class="m-1">save</mat-icon> {{ constants.guardarSeccion }}
+  </button>
+</div>
+<div [formGroup]="seventhFormGroup">
+  <input type="hidden" formControlName="successForm" [(ngModel)]="successInput">
+</div>

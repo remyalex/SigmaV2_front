@@ -1,0 +1,77 @@
+<h2 mat-dialog-title>Adicionar unidad muestreo</h2>
+
+<mat-dialog-content>
+<div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+  <h5>{{ constants.informacionCampoObligatorio }}</h5>
+</div>
+
+  <form [formGroup]="form">
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+      <div fxFlex>
+        <sigma-form-number [numericInput]="true" formControlName="anchoPK" [(ngModel)]="anchoPkDecimales"
+        [placeholder]="constants.anchoPK">
+        </sigma-form-number>
+      </div>
+      <div fxFlex>
+          <sigma-form-number [numericInput]="true" formControlName="longitudPk" [(ngModel)]="longitudPkDecimales"
+          [placeholder]="constants.longitudPK">
+          </sigma-form-number>
+        </div>
+      <div fxFlex>
+          <sigma-form-number [numericInput]="true" formControlName="areaPK" [(ngModel)]="areaPKDecimales"
+          [placeholder]="constants.areaPK">
+        </sigma-form-number>
+      </div>
+    </div>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+        <input type="hidden" formControlName="consecutivo" [(ngModel)]="unidadMuestreo.consecutivo" />
+        <div fxFlex>
+          <sigma-form-number [numericInput]="true" formControlName="abscisaInicial" [(ngModel)]="unidadMuestreo.abscisaInicial"
+            (ngModelChange)="calcularAreaMuestreo()" [placeholder]="constants.abscisaInicial" >
+          </sigma-form-number>
+        </div>
+        <div fxFlex>
+          <sigma-form-number formControlName="abscisaFinal" [(ngModel)]="unidadMuestreo.abscisaFinal"
+            (ngModelChange)="calcularAreaMuestreo()" [placeholder]="constants.abscisaFinal"
+            [numericInput]="true" [errors]="[{name: 'errorNumberMinMayor', message: 'La abscisa final debe ser mayor a la abscisa inicial'}]">
+          </sigma-form-number>
+        </div>
+      </div>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+      <div fxFlex>
+        <sigma-form-number [numericInput]="true" formControlName="anchoMuestreo" [(ngModel)]="unidadMuestreo.ancho"
+          [placeholder]="constants.ancho" (ngModelChange)="calcularAreaMuestreo()" >
+        </sigma-form-number>
+      </div>
+      <div fxFlex *ngIf="visibilidadNumeroLosas">
+        <sigma-form-number [numericInput]="true" formControlName="numeroLosas" [(ngModel)]="unidadMuestreo.numeroLosas"
+          [errors]="[{name: 'max', message: 'El número de losas no debe ser mayor a 28'}]"
+          [placeholder]="constants.numeroLosas" (ngModelChange)="calcularAreaMuestreo()">
+        </sigma-form-number>
+      </div>
+      <div fxFlex>
+        <sigma-form-number [numericInput]="true" readonly formControlName="areaMuestreo" [(ngModel)]="unidadMuestreo.area"
+          [placeholder]="constants.area"
+          [errors]="[
+            {name: 'max', message: 'La suma de áreas de las muestras no puede superar el área del PK'},
+            {name: 'maxValue', message: 'El área de la muestra no puede superar ' + maximo + ' m2' }
+          ]">
+        </sigma-form-number>
+      </div>
+
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> Cancelar
+  </button>
+  <button appPrevenirMultiplesClicks (clearClick)="save()" mat-raised-button color="primary">
+    <mat-icon class="m-1">save</mat-icon> Guardar
+  </button>
+</mat-dialog-actions>

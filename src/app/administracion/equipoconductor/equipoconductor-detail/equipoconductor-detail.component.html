@@ -1,0 +1,77 @@
+<h2 mat-dialog-title>{{ constants.detalle }} {{ constants.titulo }}</h2>
+
+<mat-dialog-content *sigmaIsGranted="constants.permiso_administracion_equipoconductor_view">
+  <mat-list>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.numeroVehiculo }}</b>:
+        </div>
+        <div fxFlex="60">
+            {{ equipoConductor.equipo != null? equipoConductor.equipo.numeroInterno : '' }}
+        </div>
+      </div>  
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.movil }}</b>:
+        </div>
+        <div fxFlex="60">
+            {{ equipoConductor.equipo != null? equipoConductor.equipo.movil : '' }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+        <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+          <div fxFlex>
+            <b>{{ constants.placa }}</b>:
+          </div>
+          <div fxFlex="60">
+              {{ equipoConductor.equipo != null? equipoConductor.equipo.placa : '' }}
+          </div>
+        </div>
+      </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.conductor }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipoConductor.conductor.nombres != null ? equipoConductor.conductor.nombres + ' ' + equipoConductor.conductor.apellidos :''  }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.celular }}</b>:
+        </div>
+        <div fxFlex="60">
+            {{ equipoConductor.celular  }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.tipoVehiculoContratado }}</b>:
+        </div>
+        <div fxFlex="60">
+            {{ equipoConductor.tipoVehiculoContratado != null ? equipoConductor.tipoVehiculoContratado.descripcion:''  }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+<mat-dialog-actions fxLayoutAlign="end">
+  <button mat-button class="m-1" color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon>
+    {{ constants.cerrar }}
+  </button>
+</mat-dialog-actions>

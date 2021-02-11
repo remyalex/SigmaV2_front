@@ -1,0 +1,538 @@
+<div>
+  <div *ngIf="loading" fxLayout="column" fxLayoutAlign="center center">
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" *ngIf="mostrarButtonsBackCancelar">
+    <div fxLayoutAlign="start" fxFlex>
+      <button mat-stroked-button color="primary" class="m-1 mb-10" (click)="onBack()">
+        <mat-icon>arrow_back_ios</mat-icon>
+        {{ constants.IrAtras }}
+      </button>
+    </div>
+  </div>
+
+  <mat-vertical-stepper [linear]="isLinear" #stepper 
+  (animationDone)="setFocus()"  (selectionChange)="onStepChange($event)">
+    
+    <mat-step [stepControl]="formularioEncabezado">
+      <ng-template matStepLabel>Encabezado</ng-template>
+      <input matInput id="EncabezadoMat" readonly>
+      <mat-card-content class="m-0" [formGroup]="formularioEncabezado">
+
+        <input type="hidden" formControlName="id" [(ngModel)]="mantenimiento.diagnostico.encabezado.id">
+
+        <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <sigma-form-input formControlName="pk" [(ngModel)]="mantenimiento.pk" [placeholder]="constants.pk">
+            </sigma-form-input>
+          </div>
+          <div fxFlex>
+            <sigma-form-input formControlName="localidadNombre" [ngModel]="mantenimiento.localidad?.nombre"
+              [placeholder]="constants.localidadNombre">
+            </sigma-form-input>
+          </div>
+          <div fxFlex>
+            <sigma-form-input formControlName="barrioNombre" 
+              [ngModel]="mantenimiento.barrio?.nombre"
+              [placeholder]="constants.barrioNombre">
+            </sigma-form-input>
+          </div>
+          <div fxFlex>
+            <sigma-form-input formControlName="civ" [(ngModel)]="mantenimiento.civ" [placeholder]="constants.civ">
+            </sigma-form-input>
+          </div>
+          <div fxFlex>
+            <div class="w-100">
+              <sigma-form-input formControlName="origen"
+                [ngModel]="mantenimiento.origen == null ? '' : mantenimiento.origen.descripcion"
+                [placeholder]="constants.origen">
+              </sigma-form-input>
+            </div>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+
+          <div fxFlex>
+            <sigma-form-input formControlName="nomZona" [ngModel]="mantenimiento.zona?.nombre"
+              [placeholder]="constants.zona">
+            </sigma-form-input>
+          </div>
+          <div fxFlex>
+            <sigma-form-input formControlName="ejeVial" [(ngModel)]="mantenimiento.ejeVial"
+              [placeholder]="constants.eje_vial">
+            </sigma-form-input>
+          </div>
+          <div fxFlex>
+            <sigma-form-input formControlName="desde" [(ngModel)]="mantenimiento.desde" [placeholder]="constants.desde">
+            </sigma-form-input>
+          </div>
+          <div fxFlex>
+            <sigma-form-input formControlName="hasta" [(ngModel)]="mantenimiento.hasta" [placeholder]="constants.hasta">
+            </sigma-form-input>
+          </div>
+          <div fxFlex>
+            <sigma-form-input formControlName="uplaNombre" [ngModel]="mantenimiento.upla?.nombre"
+              [placeholder]="constants.uplaNombre"></sigma-form-input>
+          </div>
+        </div>
+ 
+        <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <sigma-form-input formControlName="calzadaAncho" [(ngModel)]="anchoPkDecimales"
+              [placeholder]="constants.ancho">
+            </sigma-form-input>
+          </div>
+          <div fxFlex>
+            <sigma-form-input formControlName="calzadaArea" [(ngModel)]="areaPKDecimales"
+              [placeholder]="constants.area">
+            </sigma-form-input>
+          </div>
+          <div fxFlex *ngIf="mantenimiento.tipoSuperficie.descripcion == 'RÍGIDO' || mantenimiento.tipoSuperficie.descripcion == 'FLEXIBLE'">
+            <sigma-form-input formControlName="calificacionPci"
+              [(ngModel)]="mantenimiento.diagnostico.encabezado.calificacionPci"
+              [placeholder]="constants.calificacionPci">
+            </sigma-form-input>
+          </div>
+          <div fxFlex>
+            <sigma-form-input formControlName="indicePriorizacion" [(ngModel)]="mantenimiento.indicePriorizacion"
+              [placeholder]="constants.indicePriorizacion">
+            </sigma-form-input>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <div class="w-100">
+              <sigma-form-select [disabled]="true"  formControlName="programa" [(ngModel)]="mantenimiento.programa"
+                [path]="constants.path_workflow_diagnostico_encabezado_programa" [placeholder]="constants.programa"
+                [listBy]="'descripcion'">
+              </sigma-form-select>
+
+            </div>
+          </div>
+          <div fxFlex>
+            <div class="w-100">
+              <sigma-form-select [disabled]="true"  formControlName="seccionVial" [(ngModel)]="mantenimiento.tipoSeccionVial"
+                [path]="constants.path_workflow_diagnostico_encabezado_seccion_vial"
+                [placeholder]="constants.seccionVial" [listBy]="'descripcion'">
+              </sigma-form-select>
+            </div>
+          </div>
+          <div fxFlex="50%">
+            <div fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <sigma-form-input formControlName="solicitante" [ngModel]="mantenimiento.solicitudRemitente"
+                [placeholder]="constants.solicitante"></sigma-form-input>
+            </div>
+          </div>
+          <div fxFlex>
+            <sigma-form-input formControlName="solicitudFecha" [ngModel]="mantenimiento.solicitudFecha"
+              [placeholder]="constants.solicitudFecha"></sigma-form-input>
+          </div>
+
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <mat-select placeholder="{{ constants.tieneRutasTransporte }}" formControlName="tieneRutasTransporte"
+                [(ngModel)]="mantenimiento.rutasTransporte" autocomplete="off" (value)="mantenimiento.rutasTransporte ">
+                <mat-option value> Seleccione </mat-option>
+                <mat-option [(value)]="valueTrue"> Si </mat-option>
+                <mat-option [(value)]="valueFalse"> No </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div fxFlex>
+            <div class="w-100">
+              <sigma-form-select formControlName="tipoIntervencionTotal"
+              [(ngModel)]="mantenimiento.diagnostico.encabezado.tipoIntervencionTotal"
+              [path]="constants.path_workflow_diagnostico_encabezado_reisar_tipo_intervencion"
+              [placeholder]="constants.tipoIntervencionTotal" [listBy]="'descripcion'">
+            </sigma-form-select>
+            </div>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <div class="w-100">
+              <sigma-form-select [disabled]="true"  formControlName="tipoMalla" [(ngModel)]="mantenimiento.tipoMalla"
+                [path]="constants.path_workflow_diagnostico_encabezado_tipo_malla" [placeholder]="constants.tipoMalla"
+                [listBy]="'descripcion'">
+              </sigma-form-select>
+            </div>
+          </div>
+          <div fxFlex>
+            <div class="w-100">
+              <sigma-form-select [disabled]="true"  formControlName="tipoSuperficie" [(ngModel)]="mantenimiento.tipoSuperficie"
+                [path]="constants.path_workflow_diagnostico_encabezado_tipo_superficie"
+                [placeholder]="constants.tipoSuperficie" [listBy]="'descripcion'">
+              </sigma-form-select>
+            </div>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <div class="w-100">
+              <sigma-form-select [disabled]="true"  formControlName="transitabilidad" [(ngModel)]="mantenimiento.transitabilidad"
+                [path]="constants.path_workflow_diagnostico_encabezado_transitabilidad"
+                [placeholder]="constants.transitabilidad" [listBy]="'descripcion'">
+              </sigma-form-select>
+            </div>
+          </div>
+          <div fxFlex>
+            <div class="w-100">
+              <sigma-form-select [disabled]="true"  formControlName="usoVia" [(ngModel)]="mantenimiento.tipoUsoVia"
+                [path]="constants.path_workflow_diagnostico_encabezado_uso_via" [placeholder]="constants.usoVia"
+                [listBy]="'descripcion'">
+              </sigma-form-select>
+            </div>
+          </div>
+          <div fxFlex>
+            <div class="w-100">
+              <sigma-form-input formControlName="fechaVisitaTecnica" [ngModel]="mantenimiento.fechaVisitaTecnica"
+                [placeholder]="constants.fechaVisitaTecnica"></sigma-form-input>
+            </div>
+          </div>
+          <div fxFlex></div>
+        </div>
+
+        <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+        <div fxLayoutAlign="end" class="flex-p">
+          <button type="button" mat-raised-button color="primary" class="m-1" (click)="exportarPDF()">
+            <mat-icon>get_app</mat-icon> Exportar
+            <mat-icon *ngIf="downLoadFile">
+              <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+            </mat-icon>
+            </button>
+        </div>
+
+      </mat-card-content>
+    </mat-step>
+
+    <mat-step *ngIf="visibilidadMuestreo" [stepControl]="formularioMuestreos">
+      <ng-template matStepLabel>Unidades de muestreo</ng-template>
+      <input matInput id="MuestreosMat" readonly>
+      <mat-card-content class="m-0" [formGroup]="formularioMuestreos">
+
+        <div class="mat-elevation-z8">
+          <mat-table [dataSource]="muestreosDatasource">
+            <ng-container matColumnDef="id">
+              <mat-header-cell *matHeaderCellDef> Unidad muestreo </mat-header-cell>
+              <mat-cell *matCellDef="let unidadMuestreo" data-label="Unidad muestreo">
+                {{unidadMuestreo != null ? 
+                  '' + unidadMuestreo.consecutivo + ' (' + unidadMuestreo?.abscisaInicial + 'm - ' + unidadMuestreo?.abscisaFinal + 'm)' : 
+                ''}}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="abscisaInicial">
+              <mat-header-cell *matHeaderCellDef> Abscisa inicial </mat-header-cell>
+              <mat-cell *matCellDef="let unidadMuestreo" data-label="Abscisa inicial">
+                {{unidadMuestreo.abscisaInicial}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="abscisaFinal">
+              <mat-header-cell *matHeaderCellDef> Abscisa final </mat-header-cell>
+              <mat-cell *matCellDef="let unidadMuestreo" data-label="Abscisa final">
+                {{unidadMuestreo.abscisaFinal}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="ancho">
+              <mat-header-cell *matHeaderCellDef> Ancho </mat-header-cell>
+              <mat-cell *matCellDef="let unidadMuestreo" data-label="Ancho">
+                {{unidadMuestreo.ancho}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="numeroLosas">
+              <mat-header-cell *matHeaderCellDef> Número losas </mat-header-cell>
+              <mat-cell *matCellDef="let unidadMuestreo" data-label="Ancho"> 
+                {{unidadMuestreo.numeroLosas}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="area">
+              <mat-header-cell *matHeaderCellDef> Área </mat-header-cell>
+              <mat-cell *matCellDef="let unidadMuestreo" data-label="Área">
+                {{unidadMuestreo.area}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="pci" >
+              <mat-header-cell *matHeaderCellDef> Pci </mat-header-cell>
+              <mat-cell *matCellDef="let unidadMuestreo" data-label="Área"> 
+                {{unidadMuestreo.pci}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="acciones">
+              <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+              <mat-cell *matCellDef="let unidadMuestreo; let i = index;" data-label="Acciones">
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="columnasTablaMuestreos"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: columnasTablaMuestreos;"></mat-row>
+          </mat-table>
+        </div>
+
+      </mat-card-content>
+    </mat-step>
+
+    <mat-step *ngIf="visibilidadFallas" [stepControl]="formularioFallas">
+      <ng-template matStepLabel>Fallas</ng-template>
+      <input matInput id="FallasMat" readonly>
+      <mat-card-content class="m-0" [formGroup]="formularioFallas">
+
+        <input type="hidden" formControlName="cantidadFallas" [(ngModel)]="mantenimiento.diagnostico.fallas.length" />
+
+        <div class="mat-elevation-z8">
+          <mat-table [dataSource]="fallasDatasource">
+
+            <ng-container matColumnDef="unidadMuestreoFalla" *ngIf="visibilidadMuestreo">
+              <mat-header-cell *matHeaderCellDef> Unidad nuestreo </mat-header-cell>
+              <mat-cell *matCellDef="let falla" data-label="Unidad muestreo">
+                {{
+                    falla.unidadMuestreo != null ?  '' + falla.unidadMuestreo.consecutivo + ' (' + falla.unidadMuestreo?.abscisaInicial + 'm - ' + falla.unidadMuestreo?.abscisaFinal + 'm)' :  '' 
+                  }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="tipoFalla">
+              <mat-header-cell *matHeaderCellDef> Tipo falla </mat-header-cell>
+              <mat-cell *matCellDef="let falla" data-label="Tipo falla">
+                {{falla.tipoFalla.descripcion}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="severidadFalla">
+              <mat-header-cell *matHeaderCellDef> Severidad </mat-header-cell>
+              <mat-cell *matCellDef="let falla" data-label="Severidad">
+                {{falla.severidad.descripcion}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="tipoIntervencion">
+              <mat-header-cell *matHeaderCellDef> Tipo intervención </mat-header-cell>
+              <mat-cell *matCellDef="let falla" data-label="Tipo intervención">
+                {{falla.tipoIntervencion?.descripcion}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="longitudFalla">
+              <mat-header-cell *matHeaderCellDef> Longitud (m) </mat-header-cell>
+              <mat-cell *matCellDef="let falla" data-label="longitudFalla">
+                  {{
+                    mantenimiento.tipoSuperficie.descripcion == 'RÍGIDO' ? falla.longitudLosa : falla.longitud
+                  }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="anchoFalla">
+              <mat-header-cell *matHeaderCellDef> Ancho (m) </mat-header-cell>
+              <mat-cell *matCellDef="let falla" data-label="anchoFalla">
+                  {{
+                    mantenimiento.tipoSuperficie.descripcion == 'RÍGIDO' ? falla.anchoLosa : falla.ancho
+                  }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="areaFalla">
+              <mat-header-cell *matHeaderCellDef> Área (m2) </mat-header-cell>
+              <mat-cell *matCellDef="let falla" data-label="areaFalla">
+                {{falla.area}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="acciones">
+              <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+              <mat-cell *matCellDef="let falla; let i = index;" data-label="Acciones">
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="columnasTablaFallas"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: columnasTablaFallas;"></mat-row>
+          </mat-table>
+        </div>
+      </mat-card-content>
+    </mat-step>
+
+    <mat-step [stepControl]="formularioOtrosFactores">
+      <ng-template matStepLabel>Otros factores</ng-template>
+      <input matInput id="OtrosFactoresMat" readonly>
+      <mat-card-content class="m-0" [formGroup]="formularioOtrosFactores">
+
+        <input type="hidden" formControlName="cantidadFactores"
+          [ngModel]="mantenimiento.diagnostico.factores != null? mantenimiento.diagnostico.factores.length: 0" />
+
+        <div class="mat-elevation-z8">
+          <div *ngIf="mantenimiento.diagnostico.factores.length===0" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+            <mat-icon class="m-1">sms_failed</mat-icon>
+            <h4> {{constants.noResultados}}</h4>
+          </div>
+          <mat-table [dataSource]="factoresDatasource">
+            <ng-container matColumnDef="tipoFactor">
+              <mat-header-cell *matHeaderCellDef> Factor </mat-header-cell>
+              <mat-cell *matCellDef="let factor" data-label="Factor">
+                {{factor.tipoFactor.descripcion}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="acciones">
+              <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+              <mat-cell *matCellDef="let factor; let i = index;" data-label="Acciones">
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="columnasTablaFactores"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: columnasTablaFactores;"></mat-row>
+          </mat-table>
+        </div>
+
+      </mat-card-content>
+    </mat-step>
+
+    <mat-step [stepControl]="formularioFotos">
+      <ng-template matStepLabel>Fotos</ng-template>
+      <input matInput id="FotosMat" readonly>
+      <form [formGroup]="formularioFotos">
+        <mat-form-field class="w-100">
+          <input matInput type="text" formControlName="fotos" [(ngModel)]="mantenimiento.diagnostico.fotos"
+            class="hidden" />
+          <mat-error *ngIf="formularioFotos.get('fotos').hasError('maxElements')">
+            {{ constants.maxFiles }} {{ formularioFotos.get('fotos')?.getError('maxElements').max }}
+            {{ constants.total | lowercase }}
+            ({{ formularioFotos.get('fotos')?.getError('maxElements').actual }})
+          </mat-error>
+          <mat-error *ngIf="formularioFotos.get('fotos').hasError('minElements')">
+            {{ constants.minFiles }} {{ formularioFotos.get('fotos')?.getError('minElements').min }}
+            {{ constants.total | lowercase }}
+            ({{ formularioFotos.get('fotos')?.getError('minElements').actual }})
+          </mat-error>
+        </mat-form-field>
+      </form>
+
+      <mat-card-content class="m-0" [formGroup]="formularioFotos">
+        <div fxLayout="column" fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+
+          <div class="mat-elevation-z8">
+            <mat-table [dataSource]="fotosDatasource">
+              <ng-container matColumnDef="consecutivoFoto">
+                <mat-header-cell *matHeaderCellDef> Nombre</mat-header-cell>
+                <mat-cell *matCellDef="let i = index;" data-label="Nombre">
+                  Foto {{ i + 1 }}
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="nombreFoto">
+                <mat-header-cell *matHeaderCellDef> Archivo</mat-header-cell>
+                <mat-cell *matCellDef="let foto" data-label="Archivo">
+                  {{ foto.archivo.ruta.substring(foto.archivo.ruta.lastIndexOf('\\') + 1) }}
+                </mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="fotos">
+                <mat-header-cell *matHeaderCellDef> Imagen </mat-header-cell>
+                <mat-cell *matCellDef="let foto" data-label="Imagen">
+                  <sigma-show-file *ngIf="foto.archivo" [showFile]="true" [id]="foto.archivo.id"></sigma-show-file>
+                </mat-cell>
+              </ng-container>
+
+              <mat-header-row *matHeaderRowDef="columnasTablaFotos"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: columnasTablaFotos;"></mat-row>
+            </mat-table>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-step>
+
+    <mat-step [stepControl]="formularioPriorizacion">
+      <ng-template matStepLabel>Modelo de priorización</ng-template>
+      <input matInput id="PriorizacionMat" readonly>
+      <mat-card-content class="m-0">
+        <form [formGroup]="formularioPriorizacion">
+          <input type="hidden" formControlName="PriorizacionId" [(ngModel)]="mantenimiento.diagnostico.priorizacion.id" />
+
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <div fxFlex>
+              <div class="w-100">
+                <sigma-form-select [disabled]="true"  formControlName="aporteCumplimiento"
+                  [(ngModel)]="mantenimiento.diagnostico.priorizacion.aporteCumplimiento"
+                  [path]="constants.path_workflow_diagnostico_priorizacion_aporte_cumplimiento"
+                  [placeholder]="constants.aporte_cumplimiento" [listBy]="'descripcion'">
+                </sigma-form-select>
+              </div>
+            </div>
+            <div fxFlex>
+              <div class="w-100">
+                <sigma-form-select [disabled]="true"  formControlName="coordinacionInterinstitucional"
+                  [(ngModel)]="mantenimiento.diagnostico.priorizacion.coordinacionInterinstitucional"
+                  [path]="constants.path_workflow_diagnostico_priorizacion_coordinacion_interinstitucional"
+                  [placeholder]="constants.coordinacion_interinstucional" [listBy]="'descripcion'">
+                </sigma-form-select>
+              </div>
+            </div>
+          </div>
+
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <div fxFlex>
+              <div class="w-100">
+                <sigma-form-select [disabled]="true"  formControlName="tipoIntervencion"
+                  [(ngModel)]="mantenimiento.diagnostico.priorizacion.tipoIntervencion"
+                  [path]="constants.path_workflow_diagnostico_priorizacion_tipo_intervencion"
+                  [placeholder]="constants.detalle_tipo_intervencion" [listBy]="'descripcion'">
+                </sigma-form-select>
+              </div>
+            </div>
+            <div fxFlex>
+              <div class="w-100">
+                <sigma-form-select [disabled]="true"  formControlName="impactoSocial"
+                  [(ngModel)]="mantenimiento.diagnostico.priorizacion.impactoSocial"
+                  [path]="constants.path_workflow_diagnostico_priorizacion_impacto_social"
+                  [placeholder]="constants.impacto_social" [listBy]="'descripcion'">
+                </sigma-form-select>
+              </div>
+            </div>
+          </div>
+
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <div fxFlex>
+              <mat-form-field class="w-100">
+                <textarea matInput formControlName="observaciones" rows="5"
+                  [(ngModel)]="mantenimiento.diagnostico.priorizacion.observaciones"
+                  [placeholder]="constants.observaciones">
+                </textarea>
+              </mat-form-field>
+            </div>
+          </div>
+        </form>
+        <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+        <div fxLayoutAlign="end" class="flex-p">
+          <button type="button" mat-raised-button color="primary" class="m-1" (click)="exportarPDF()">
+            <mat-icon>get_app</mat-icon> Exportar
+            <mat-icon *ngIf="downLoadFile">
+              <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+            </mat-icon>
+            </button>
+        </div>
+      </mat-card-content>
+    </mat-step>
+
+    <mat-step [stepControl]="formularioActividades">
+      <ng-template matStepLabel>Detalle de gestión del mantenimiento vial</ng-template>
+      <div>
+        <sigma-mantenimiento-records [mantId]="mantenimiento.id"></sigma-mantenimiento-records>
+      </div>
+    </mat-step>
+  </mat-vertical-stepper>
+
+  <div fxLayoutAlign="end" class="mt-10" *ngIf="mostrarButtonsBackCancelar">
+    <mat-divider></mat-divider>
+    <div class="mt-10">
+      <button mat-button color="warn" class="m-1" (click)="onBack()">
+        <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && !mantenimiento.diagnostico">
+    {{ constants.mantenimientoSinDiagnostico }}
+  </div>
+</div>

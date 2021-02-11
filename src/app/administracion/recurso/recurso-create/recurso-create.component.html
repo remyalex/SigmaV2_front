@@ -1,0 +1,109 @@
+<div fxLayout="column">
+  <div class="flex-p">
+    <mat-card class="p-0 mat-card">
+      <mat-card-header fxLayoutAlign="center">
+        <mat-card-subtitle><h2>{{ constants.crear }}</h2></mat-card-subtitle>
+      </mat-card-header>
+
+      <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+        <h5>{{ constants.informacionCampoObligatorio }}</h5>
+      </div>
+
+      <mat-card-content class="p-16 m-0" [hidden]="submitted" [formGroup]="form" 
+      *sigmaIsGranted="constants.permiso_administracion_recurso_create">
+        
+        <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+          <div class="item" fxFlex="50%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <sigma-general-list
+                [path]="constants.path_administracion_recurso_equipoId" etiqueta="{{ constants.equipoId }}" [listBy]="'valor'"
+                (optionIdSelected)="setEquipoEquipodisponibilidad($event)"
+                required="true">
+              </sigma-general-list>
+              <input matInput  type="text" placeholder="" formControlName="equipoId" [(ngModel)]="recurso.equipoId" autocomplete="off" hidden>
+              <mat-error *ngIf="enviada && form.get('equipoId').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+            </div>
+          </div>
+          <div class="item" fxFlex="50%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input  [matDatepicker]="datePickerFechaDesde" matInput placeholder="{{ constants.fechaDesde }}"  formControlName="fechaDesde" [(ngModel)]="recurso.fechaDesde"  autocomplete="off" required>
+                <mat-datepicker-toggle [for]="datePickerFechaDesde"></mat-datepicker-toggle>
+                <mat-datepicker #datePickerFechaDesde></mat-datepicker>
+                <mat-error *ngIf="enviada && form.get('fechaDesde').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+          <div class="item" fxFlex="50%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input  [matDatepicker]="datePickerFechaHasta" matInput placeholder="{{ constants.fechaHasta }}"  formControlName="fechaHasta" [(ngModel)]="recurso.fechaHasta"  autocomplete="off" required>
+                <mat-datepicker-toggle [for]="datePickerFechaHasta"></mat-datepicker-toggle>
+                <mat-datepicker #datePickerFechaHasta></mat-datepicker>
+                <mat-error *ngIf="enviada && form.get('fechaHasta').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="item" fxFlex="50%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.intervalo }}" formControlName="intervalo" 
+                [(ngModel)]="recurso.intervalo" autocomplete="off" type="text" 
+                required pattern="^(?!\s*$).+">
+                <mat-error *ngIf="form.get('intervalo').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+                <mat-error *ngIf="form.get('intervalo').hasError('pattern')"> {{ constants.campoNoVacio }} </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+          <div class="item" fxFlex="50%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <sigma-general-list
+                [path]="constants.path_administracion_recurso_tipoAsignacionId" etiqueta="{{ constants.tipoAsignacionId }}" [listBy]="'valor'"
+                (optionIdSelected)="setTipoAsignacionEquipodisponibilidad($event)"
+                required="true">
+              </sigma-general-list>
+              <input matInput  type="text" placeholder="" formControlName="tipoAsignacionId" [(ngModel)]="recurso.tipoAsignacionId" autocomplete="off" hidden>
+              <mat-error *ngIf="enviada && form.get('tipoAsignacionId').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+            </div>
+          </div>
+          <div class="item" fxFlex="50%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <sigma-general-list
+                [path]="constants.path_administracion_recurso_tipoDisponibilidadId" etiqueta="{{ constants.tipoDisponibilidadId }}" [listBy]="'valor'"
+                (optionIdSelected)="setTipoDisponibilidadEquipodisponibilidad($event)"
+                required="true">
+              </sigma-general-list>
+              <input matInput  type="text" placeholder="" formControlName="tipoDisponibilidadId" [(ngModel)]="recurso.tipoDisponibilidadId" autocomplete="off" hidden>
+              <mat-error *ngIf="enviada && form.get('tipoDisponibilidadId').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+            </div>
+          </div>
+        </div>
+        <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+          <div class="item" fxFlex="50%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <sigma-general-list
+                [path]="constants.path_administracion_recurso_turnoId" etiqueta="{{ constants.turnoId }}" [listBy]="'valor'"
+                (optionIdSelected)="setTurnoEquipodisponibilidad($event)"
+                required="true">
+              </sigma-general-list>
+              <input matInput  type="text" placeholder="" formControlName="turnoId" [(ngModel)]="recurso.turnoId" autocomplete="off" hidden>
+              <mat-error *ngIf="enviada && form.get('turnoId').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+      <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+        <button type="button" (click)="onBack()" mat-raised-button class="m-1">{{ constants.cancelar }}</button>
+        <button type="button" [disabled]="disableSubmit" class="m-1" mat-raised-button color="primary" (click)="onSubmit()"
+        *sigmaIsGranted="constants.permiso_administracion_recurso_create">{{ constants.guardar }}</button>
+      </div>
+    </mat-card>
+  </div>
+</div>

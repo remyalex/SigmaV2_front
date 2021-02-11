@@ -1,0 +1,141 @@
+<div *ngIf="currentAction === constants.currentAction.list">
+  
+  <div class="mt-10 mb-10" fxLayout="row" fxLayoutAlign="end">
+    <button mat-raised-button color="primary" (click)="exportAsXLSX()"
+      [disabled]="dataSource?.filteredData.length <= 0">
+      <mat-icon>get_app</mat-icon>
+      {{ constants.exportar }}
+    </button>
+  </div>  
+
+  <div class="mat-elevation-z8 mb-20" *ngIf="currentAction === constants.currentAction.list">
+    <div *ngIf="banosPortatiles.length <= 0" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+      <mat-icon class="m-1">sms_failed</mat-icon>
+      <h4> {{ constants.noResultados }}</h4>
+    </div>
+
+    <mat-table #table [dataSource]="dataSource" matSort>
+
+      <ng-container matColumnDef="posicion">
+        <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> No.
+        </mat-header-cell>
+        <mat-cell *matCellDef="let banoPortatiles; let i = index" [attr.data-label]="'No.'">
+          {{ i + 1 }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="pk">
+        <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.pk }}
+        </mat-header-cell>
+        <mat-cell *matCellDef="let banoPortatiles" [attr.data-label]="constants.pk">
+          {{ mantenimiento.pk }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="civ">
+        <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.civ }}
+        </mat-header-cell>
+        <mat-cell *matCellDef="let banoPortatiles" [attr.data-label]="constants.civ">
+          {{ mantenimiento.civ }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fechaNecesidadLLegada">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaNecesidadLLegada }} </mat-header-cell>
+        <mat-cell *matCellDef="let banoPortatiles" [attr.data-label]="constants.fechaNecesidadLLegada">
+          {{banoPortatiles.fechaLlegada}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="horaNecesidadLLegada">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.horaNecesidadLLegada }} </mat-header-cell>
+        <mat-cell *matCellDef="let banoPortatiles" [attr.data-label]="constants.horaNecesidadLLegada">
+          {{ utilitiesServices.convertDateToString(utilitiesServices.clearHora(banoPortatiles.horaLlegada), 'HH:mm') }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fechaNecesidadRetiro">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaNecesidadRetiro }} </mat-header-cell>
+        <mat-cell *matCellDef="let banoPortatiles" [attr.data-label]="constants.fechaNecesidadRetiro">
+          {{banoPortatiles.fechaRetiro}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="horaNecesidadRetiro">
+        <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.horaNecesidadRetiro }}
+        </mat-header-cell>
+        <mat-cell *matCellDef="let banoPortatiles" [attr.data-label]="constants.horaNecesidadRetiro">
+          {{ utilitiesServices.convertDateToString(utilitiesServices.clearHora(banoPortatiles.horaRetiro), 'HH:mm') }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="direccion">
+        <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.direccion }}
+        </mat-header-cell>
+        <mat-cell *matCellDef="let banoPortatiles" [attr.data-label]="constants.direccion">
+          {{ banoPortatiles.direccion }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="localidad">
+        <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.localidad }}
+        </mat-header-cell>
+        <mat-cell *matCellDef="let banoPortatiles" [attr.data-label]="constants.localidad">
+          {{ mantenimiento.localidad ? mantenimiento.localidad.nombre : '' }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="upla">
+        <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.upla }}
+        </mat-header-cell>
+        <mat-cell *matCellDef="let banoPortatiles" [attr.data-label]="constants.upla">
+          {{ mantenimiento.upla ? mantenimiento.upla.nombre : '' }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="barrio">
+        <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.barrio }}
+        </mat-header-cell>
+        <mat-cell *matCellDef="let banoPortatiles" [attr.data-label]="constants.barrio">
+          {{ mantenimiento.barrio ? mantenimiento.barrio.nombre : '' }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="tipoIntervencion">
+        <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.tipoIntervencion }}
+        </mat-header-cell>
+        <mat-cell *matCellDef="let banoPortatiles" [attr.data-label]="constants.tipoIntervencion">
+          {{ mantenimiento.diagnostico.encabezado.tipoIntervencionTotal ? mantenimiento.diagnostico.encabezado.tipoIntervencionTotal.descripcion : '' }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="acciones">
+        <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+        <mat-cell *matCellDef="let banoPortatiles" [attr.data-label]="constants.acciones">
+          <button mat-raised-button color="primary" (click)="edit(banoPortatiles)" class="m-1">
+            <mat-icon matTooltip="Detalles" matTooltipPosition="above">edit</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+    </mat-table>
+    <mat-paginator #paginator [length]="dataSource?.filteredData.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]">
+    </mat-paginator>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div fxLayout="row" fxLayoutAlign="end" class="pt-16">
+    <button mat-button color="warn" class="m-1" (click)="close()">
+      <mat-icon class="m-1">close</mat-icon> {{ constants.cerrar }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="currentAction === constants.currentAction.programarBanosPortatiles">
+  <sigma-registrar-banios [mantenimiento]="mantenimiento" [data]="data"
+    [transicionesIndividuales]="transicionesIndividuales" [banoPortatiles]="banoPortatiles"
+    (closeRegistro)="closeRegister($event)" (closeAll)="closeAll()">
+  </sigma-registrar-banios>
+</div>

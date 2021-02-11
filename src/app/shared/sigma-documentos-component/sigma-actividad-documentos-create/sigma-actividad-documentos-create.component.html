@@ -1,0 +1,48 @@
+<div fxLayout="column">
+  <div class="flex-p">
+    <mat-card class="p-0 mat-card">
+      <mat-card-header fxLayoutAlign="center">
+        <mat-card-subtitle>
+          <h2>{{ constants.crear }} </h2>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+        <h5>Todos los campos con * son obligatorios</h5>
+      </div>
+
+      <mat-card-content class="p-16 m-0" [formGroup]="formDocumentos">
+        <div class="container" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div class="item" fxFlex="50%">
+            <sigma-form-select placeholder="{{constants.tipoDocumento}}" formControlName="tipoDocumento"
+              [(ngModel)]="documento.tipoDocumento"
+              [path]="constants.path_administracion_documento_tipoDocumento" [listBy]="'descripcion'">
+            </sigma-form-select>
+          </div>
+
+          <div class="w-100">
+            <sigma-file-upload model="archivoId" required="true" (dataFile)="setDataDoc('archivo', $event)"
+              (loadFile)="validateUploadFile($event)" [responseType]="constants.objeto"></sigma-file-upload>
+            <input matInput type="text" placeholder="" formControlName="archivoId" [(ngModel)]="documento.archivo"
+              autocomplete="off" hidden>
+            <mat-error *ngIf="requerido && enviada && formDocumentos.get('archivoId').hasError('required')"> El archivo es
+              requerido </mat-error>
+            <mat-error *ngIf="!requerido && enviada && formDocumentos.get('archivoId').hasError('required')"> El archivo excede el
+              tamaño permitido </mat-error>
+          </div>
+        </div>
+      </mat-card-content>
+      <mat-card-content>
+        <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+        <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+          <button mat-button color="warn" class="m-1" (click)="close()">
+            <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+          </button>
+          <button mat-raised-button color="primary" class="m-1" [disabled]="disableSubmit" (click)="onSubmit()">
+            <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

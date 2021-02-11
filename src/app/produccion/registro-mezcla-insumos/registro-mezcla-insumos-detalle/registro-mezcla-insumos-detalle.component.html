@@ -1,0 +1,178 @@
+<div fxLayout="column" fxLayout.gt-sm="row wrap">
+    <div fxFlex="100" class="flex-p">
+        <mat-card>
+            <mat-card-content>
+                <div fxLayout="row" class="mb-10" fxLayoutAlign="space-between center">
+                    <div>
+                        <button mat-stroked-button class="m-1" color="primary" (click)="onBack()">
+                            <mat-icon>arrow_back_ios</mat-icon>
+                            {{ constants.IrAtras }}
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <mat-card-header fxLayoutAlign="center" class="mb-10">
+                            <mat-card-subtitle>
+                                <h2>{{ constants.detalleVales }}</h2>
+                            </mat-card-subtitle>
+                        </mat-card-header>
+
+                        <mat-card-content>
+                            <div>
+                                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="0.8%" fxLayoutGap.lt-md="0" fxLayoutAlign="start">
+                                    <div fxFlex>
+                                        <mat-form-field class="w-100">
+                                            <input matInput placeholder="Material" name="material" [(ngModel)]="material" type="text" [disabled]="true">
+                        
+                                        </mat-form-field>
+                                    </div>                   
+                                    <div fxFlex>
+                                        <mat-form-field class="w-100">
+                                            <input matInput placeholder="PK" name="pknumber" [(ngModel)]="pknumber" type="text" [disabled]="true">
+                        
+                                        </mat-form-field>
+                                    </div>
+                                    <div fxFlex>
+                                        <mat-form-field class="w-100">
+                                            <input matInput placeholder="CIV" name="civnumber" [(ngModel)]="civnumber" type="text" [disabled]="true">
+                        
+                                        </mat-form-field>
+                                    </div>
+                                    <div fxFlex>
+                                        <mat-form-field class="w-100">
+                                            <input matInput placeholder="Localidad" name="localidad" [(ngModel)]="localidad" type="text" [disabled]="true">
+                        
+                                        </mat-form-field>
+                                    </div>
+                                    <div fxFlex>
+                                        <mat-form-field class="w-100">
+                                            <input matInput placeholder="Barrio" name="barrio" [(ngModel)]="barrio" type="text" [disabled]="true">
+                        
+                                        </mat-form-field>
+                                    </div>                      
+                                </div>
+                        
+                                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="0.8%" fxLayoutGap.lt-md="0" fxLayoutAlign="start">
+                                    <div fxFlex="50%">
+                                        <button layout="row" *sigmaIsGranted="constants.permiso_produccion_registrar_mezcla_insumos_export" mat-raised-button
+                                        color="primary" class="m-1" (click)="exportAsXLSX()"  [disabled]="dataSource.totalElements$.source['_value'] <= 0">
+                                        <mat-icon>get_app</mat-icon>
+                                        {{ constants.exportar }}
+                                        <mat-icon *ngIf="cargandoExcel">
+                                          <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+                                        </mat-icon>
+                                      </button>
+                                    </div>
+                                </div>
+                        
+                            </div>
+                        </mat-card-content>
+                        <div class="mat-elevation-z8">
+                            <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center">
+                                <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+                            </div>
+                            <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+                                <mat-icon class="m-1">sms_failed</mat-icon>
+                                <h4> {{ dataSource.errorMessage$ | async }}</h4>
+                            </div>
+                            <mat-table class="col-x" #table [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort>
+                    
+                                <ng-container matColumnDef="numeroVale">
+                                    <mat-header-cell *matHeaderCellDef > Número Vale </mat-header-cell>
+                                    <mat-cell *matCellDef="let item" data-label="Número Vale">
+                                        {{item.numeroVale}}
+                                    </mat-cell>
+                                </ng-container>
+                    
+                                <ng-container matColumnDef="planta">
+                                    <mat-header-cell *matHeaderCellDef > Planta </mat-header-cell>
+                                    <mat-cell *matCellDef="let item" data-label="Planta">
+                                        {{item.planta}}
+                                    </mat-cell>
+                                </ng-container>
+                    
+                                <ng-container matColumnDef="temperatura">
+                                    <mat-header-cell *matHeaderCellDef > Temperatura </mat-header-cell>
+                                    <mat-cell *matCellDef="let item" data-label="Temperatura">
+                                        {{item.temperatura}}
+                                    </mat-cell>
+                                </ng-container>
+                    
+                                <ng-container matColumnDef="asentamiento">
+                                    <mat-header-cell *matHeaderCellDef > Asentamiento </mat-header-cell>
+                                    <mat-cell *matCellDef="let item" data-label="Asentamiento">
+                                        {{item.asentamiento}}
+                                    </mat-cell>
+                                </ng-container>
+                    
+                                <ng-container matColumnDef="movil">
+                                    <mat-header-cell *matHeaderCellDef > Número Móvil </mat-header-cell>
+                                    <mat-cell *matCellDef="let item" data-label="Número Móvil">
+                                        {{item.movil}}
+                                    </mat-cell>
+                                </ng-container>
+                    
+                                <ng-container matColumnDef="horaEntrada">
+                                    <mat-header-cell *matHeaderCellDef > Hora Entrada </mat-header-cell>
+                                    <mat-cell *matCellDef="let item" data-label="Hora Entrada ">
+                                        {{item.horaEntrada}}
+                                    </mat-cell>
+                                </ng-container>
+                    
+                                <ng-container matColumnDef="horaLlegada">
+                                    <mat-header-cell *matHeaderCellDef > Hora Llegada </mat-header-cell>
+                                    <mat-cell *matCellDef="let item" data-label="Hora Llegada">
+                                        {{item.horaLlegada}}
+                                    </mat-cell>
+                                </ng-container>
+                    
+                                <ng-container matColumnDef="horaSalida">
+                                    <mat-header-cell *matHeaderCellDef > Hora Salida </mat-header-cell>
+                                    <mat-cell *matCellDef="let item" data-label="Hora Salida">
+                                        {{item.horaSalida}}
+                                    </mat-cell>
+                                </ng-container>
+                    
+                                <ng-container matColumnDef="cantidad">
+                                    <mat-header-cell *matHeaderCellDef > Cantidad </mat-header-cell>
+                                    <mat-cell *matCellDef="let item" data-label="Cantidad">
+                                        {{item.cantidad}}
+                                    </mat-cell>
+                                </ng-container>
+                    
+                                <ng-container matColumnDef="conductor">
+                                    <mat-header-cell *matHeaderCellDef > Conductor </mat-header-cell>
+                                    <mat-cell *matCellDef="let item" data-label="Conductor">
+                                        {{item.conductor}}
+                                    </mat-cell>
+                                </ng-container>
+                    
+                                <ng-container matColumnDef="operacion">
+                                    <mat-header-cell *matHeaderCellDef> Operación </mat-header-cell>
+                                    <mat-cell *matCellDef="let item" [attr.data-label]="constants.acciones">
+                                      <button mat-raised-button color="primary" (click)="edit(item)" class="m-1"
+                                        *sigmaIsGranted="constants.permiso_produccion_registrar_mezcla_insumos_update">
+                                        <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+                                      </button>
+                                      <button mat-raised-button color="warn" (click)="delete(item)" class="m-1"
+                                        *sigmaIsGranted="constants.permiso_produccion_registrar_mezcla_insumos_delete">
+                                        <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+                                      </button>
+                                    </mat-cell>
+                                  </ng-container>
+                    
+                                <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+                                <mat-row *matRowDef="let row; columns: columns"></mat-row>
+                    
+                            </mat-table>
+                            <mat-paginator #paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+                        </div>
+                    </div>
+                </div>
+
+            </mat-card-content>
+
+        </mat-card>
+    </div>
+</div>

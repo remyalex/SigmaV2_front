@@ -1,0 +1,71 @@
+<div fxLayout="column">
+  <div class="flex-p">
+    <mat-card class="p-0 mat-card">
+      <mat-card-header fxLayoutAlign="center">
+        <mat-card-subtitle>
+          <h2>{{ constants.crear }} Tipo de cargue</h2>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+        <h5>{{ constants.informacionCampoObligatorio }}</h5>
+      </div>
+
+      <mat-card-content class="p-16 m-0"  [formGroup]="form"
+        *sigmaIsGranted="constants.permiso_administracion_tipocargue_create">
+  
+        <input type="hidden" formControlName="activo" [(ngModel)]="tipocargue.activo" value = true>
+  
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+
+          <div fxFlex>
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.nombre }}" formControlName="nombre"
+                  [(ngModel)]="tipocargue.nombre" autocomplete="off" type="text" required pattern="^(?!\s*$).+">
+                <mat-error *ngIf="form.get('nombre').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+                <mat-error *ngIf="form.get('nombre').hasError('pattern')"> {{ constants.campoNoVacio }} </mat-error>
+                <mat-error *ngIf="form.get('nombre').hasError('maxlength')">Campo debe tener una longitud máxima de 100 caracteres.</mat-error>
+              </mat-form-field>
+          </div>
+
+          <div fxFlex>
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.descripcion }}" formControlName="descripcion"
+                  [(ngModel)]="tipocargue.descripcion" autocomplete="off" type="text" required pattern="^(?!\s*$).+">
+                <mat-error *ngIf="form.get('descripcion').hasError('required')"> {{ constants.campoRequerido }}
+                </mat-error>
+                <mat-error *ngIf="form.get('descripcion').hasError('pattern')"> {{ constants.campoNoVacio }}
+                </mat-error>
+                <mat-error *ngIf="form.get('descripcion').hasError('maxlength')">Campo debe tener una longitud máxima de 300 caracteres.</mat-error>
+              </mat-form-field>
+          </div>
+
+          <div fxFlex>
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.programaSql }}" formControlName="programaSql"
+                  [(ngModel)]="tipocargue.programaSql" autocomplete="off" type="text" pattern="^(?!\s*$).+">
+                <mat-error *ngIf="form.get('programaSql').hasError('required')"> {{ constants.campoRequerido }}
+                </mat-error>
+                <mat-error *ngIf="form.get('programaSql').hasError('pattern')"> {{ constants.campoNoVacio }}
+                </mat-error>
+                <mat-error *ngIf="form.get('programaSql').hasError('maxlength')">Campo debe tener una longitud máxima de 30 caracteres.</mat-error>
+              </mat-form-field>
+          </div>
+
+        </div>
+      </mat-card-content>
+
+      <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+      <div fxLayout="row" fxLayout.lt-sm="column" fxLayoutAlign="end" class="flex-p">
+        <button fxFlex.lt-sm="100" class="m-1" type="button" (click)="onBack()" mat-button color="warn">
+          <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+        </button>
+        <button fxFlex.lt-sm="100" class="m-1" type="button" mat-raised-button color="primary" (click)="onSubmit()" [disabled]="disabledBtn_Login"
+          *sigmaIsGranted="constants.permiso_administracion_tipocargue_create">
+            <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</div>

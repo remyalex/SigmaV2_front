@@ -1,0 +1,127 @@
+/*
+:root {
+    --mapa-oculto: 1;
+}
+*/
+
+canvas.tablero-control-chart {
+    -webkit-transform: scale(1,1);
+    -o-transform: scale(1,1);
+    -moz-transform: scale(1,1);
+    -ms-transform: scale(1,1);
+    transform: scale(1,1)!important;
+}
+/*
+.card {
+    margin: 0px;
+    padding: 0px;
+}
+*/
+h3 {
+    color: white;
+}
+
+@media (max-width: 3000px) {
+    .chart-container {
+        //width: calc(500px * var(--mapa-oculto));
+        
+    }   
+}
+
+@media (max-width: 2800px) {
+    .chart-container {
+        //width: calc(900px * var(--mapa-oculto));
+    }    
+}
+
+@media (max-width: 2500px) {
+    .chart-container {
+       // width: calc(500px * var(--mapa-oculto));
+    }    
+}
+
+@media (max-width: 2200px) {
+    .chart-container {
+        max-width: 1000px;
+        //width: calc(550px * var(--mapa-oculto));
+    }    
+}
+
+@media (max-width: 1800px) {
+    .chart-container {
+        max-width: 630px;
+       // width: calc(600px * var(--mapa-oculto));
+    }    
+    canvas.tablero-control-chart{
+        width: 600px!important;
+        height: 300px!important;
+    }
+}
+
+@media (max-width: 1600px) {
+    .chart-container {
+       // width: calc(450px * var(--mapa-oculto));
+    }    
+}
+
+@media (max-width: 1368px) {
+    .chart-container {
+      // width: calc(500px * var(--mapa-oculto));
+    }   
+}
+
+@media (max-width: 1285px) {
+    .chart-container {
+       // width: calc(500px * var(--mapa-oculto));
+    }   
+}
+
+@media (max-width: 1000px) {
+    .chart-container {
+        max-width: 900px;
+    }   
+    canvas.tablero-control-chart{
+        width: 850px!important;
+        height: 425px!important;
+    }
+}
+@media (max-width: 900px) {
+    .chart-container {
+        max-width: 870px;
+        //width: calc(500px * var(--mapa-oculto));
+    }
+    canvas.tablero-control-chart{
+        width: 815px!important;
+        height: 425px!important;
+    }
+}
+@media (max-width: 800px) {
+    .chart-container {
+        max-width: 745px;
+       // width: calc(500px * var(--mapa-oculto));
+    }
+    canvas.tablero-control-chart{
+        width: 615px!important;
+        height: 365px!important;
+    }
+}
+@media (max-width: 600px) {
+    .chart-container {
+        max-width: 545px;
+       // width: calc(500px * var(--mapa-oculto));
+    }
+    canvas.tablero-control-chart{
+        width: 515px!important;
+        height: 265px!important;
+    }
+}
+@media (max-width: 500px) {
+    .chart-container {
+        max-width: 445px;
+       // width: calc(500px * var(--mapa-oculto));
+    }
+    canvas.tablero-control-chart{
+        width: 415px!important;
+        height: 215px!important;
+    }
+}

@@ -1,0 +1,180 @@
+<h2 mat-dialog-title>{{ constants.registrarVale }}</h2>
+
+<div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+    <h5>{{ constants.informacionCampoObligatorio }}</h5>
+</div>
+
+<mat-dialog-content [formGroup]="form">
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+      <div fxFlex>
+          <mat-form-field class="w-100">
+              <input matInput placeholder="No Vale" formControlName="numeroVale" [(ngModel)]="registroVale.numeroVale" type="text" required type="text" [numericInput]="true"
+              pattern="[0-9]*">
+              <mat-error *ngIf="form.get('numeroVale').hasError('required')"> {{ constants.campoRequerido }}
+              </mat-error>
+            <mat-error *ngIf="form.get('numeroVale').hasError('maxlength')"> {{ constants.longitud_maxima }} 10
+              caracteres. </mat-error>
+          </mat-form-field>
+      </div>
+      <div fxFlex>
+        <div class="w-100">
+            <sigma-form-select [path]="constants.path_produccion_tipo_vale" formControlName="tipoVale" [(ngModel)]="registroVale.tipoVale" placeholder="Tipo Vale" required>
+            </sigma-form-select>
+        </div>
+    </div>
+      <div fxFlex>
+          <div class="w-100">
+              <sigma-form-select [path]="constants.path_produccion_planta" formControlName="planta" [(ngModel)]="registroVale.planta" placeholder="Planta" required>
+              </sigma-form-select>
+          </div>
+      </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+      <div fxFlex>
+        <mat-form-field class="w-100">
+            <input matInput placeholder="Temperatura" formControlName="temperatura" [(ngModel)]="registroVale.temperatura" required type="text" [numericInput]="true"
+            pattern="[0-9]*">
+            <mat-error *ngIf="form.get('temperatura').hasError('required')"> {{ constants.campoRequerido }}
+            </mat-error>
+          <mat-error *ngIf="form.get('temperatura').hasError('maxlength')"> {{ constants.longitud_maxima }} 10
+            caracteres. </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex>
+        <mat-form-field class="w-100">
+          <input matInput type="text" [numericInput]="false" [required]="true" placeholder="Asentamiento"
+            formControlName="asentamiento" [(ngModel)]="registroVale.asentamiento" autocomplete="off">
+          <mat-error *ngIf="form.get('asentamiento').hasError('pattern')">
+            Solo se permiten números con hasta 2 dígitos decimales.
+          </mat-error>
+          <mat-error *ngIf="form.get('asentamiento').hasError('max')">
+            El valor máximo permitido es 2.
+          </mat-error>
+          <mat-error *ngIf="form.get('asentamiento').hasError('min')">
+            El valor mínimo permitido es 0.
+          </mat-error>
+          <mat-error *ngIf="form.get('asentamiento').hasError('required')">
+            {{ constants.campoRequerido }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxFlex>
+          <mat-form-field class="w-100">
+              <input matInput placeholder="No Movil / # Interno" formControlName="numeroMovil" [(ngModel)]="registroVale.numeroMovil" required pattern="^(?!\s*$).+">
+              <mat-error *ngIf="form.get('numeroMovil').hasError('required')"> {{ constants.campoRequerido }}
+              </mat-error>
+            <mat-error *ngIf="form.get('numeroMovil').hasError('maxlength')"> {{ constants.longitud_maxima }} 30
+              caracteres. </mat-error>
+          
+          </mat-form-field>
+      </div> 
+
+      <div fxFlex>
+        <mat-form-field class="w-100">
+          <input matInput type="text" [numericInput]="false" [required]="true" placeholder="Cantidad"
+            formControlName="cantidad" [(ngModel)]="registroVale.cantidad" autocomplete="off">
+          <mat-error *ngIf="form.get('cantidad').hasError('pattern')">
+            Solo se permiten números con hasta 2 dígitos decimales.
+          </mat-error>
+          <mat-error *ngIf="form.get('cantidad').hasError('max')">
+            El valor máximo permitido es 2.
+          </mat-error>
+          <mat-error *ngIf="form.get('cantidad').hasError('min')">
+            El valor mínimo permitido es 0.
+          </mat-error>
+          <mat-error *ngIf="form.get('cantidad').hasError('required')">
+            {{ constants.campoRequerido }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+    <div class="item" fxFlex>
+      <sigma-form-calendar formControlName="horaEntrada" [(ngModel)]="registroVale.horaEntrada"
+        [placeholder]="constants.horaEntrada" [type]="constants.datepicker.types.timer" required>
+      </sigma-form-calendar>
+    </div>
+
+    <div class="item" fxFlex>
+      <sigma-form-calendar formControlName="horaLlegada" [(ngModel)]="registroVale.horaLlegada"
+        [placeholder]="constants.horaLlegada" [type]="constants.datepicker.types.timer" required>
+      </sigma-form-calendar>
+    </div>
+
+    <div class="item" fxFlex>
+      <sigma-form-calendar formControlName="horaSalida" [(ngModel)]="registroVale.horaSalida"
+        [placeholder]="constants.horaSalida" [type]="constants.datepicker.types.timer" required>
+      </sigma-form-calendar>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+      <div fxFlex>
+        <div class="w-100">
+            <sigma-form-select [path]="constants.path_produccion_conductor" formControlName="conductor" [(ngModel)]="registroVale.conductor" placeholder="Nombre Conductor" [listBy]="'nombresYapellidos'" required>
+            </sigma-form-select>
+        </div>
+    </div>
+
+      <div fxFlex>
+          <div class="w-100">
+              <sigma-form-select [path]="constants.path_produccion_formula" formControlName="formula" [(ngModel)]="registroVale.formula" placeholder="Formula" required>
+              </sigma-form-select>
+          </div>
+      </div>
+
+      <div fxFlex>
+        <div class="w-100">
+            <sigma-form-select [path]="constants.path_produccion_jefe_bascula" formControlName="jefeBascula" [(ngModel)]="registroVale.jefeBascula" placeholder="Jefe Bascula" required>
+            </sigma-form-select>
+        </div>
+    </div>
+  </div>
+
+  <h3 class="mt-10 mb-10">{{ constants.listaPks }}</h3>
+
+  <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <!-- Column 
+    <ng-container matColumnDef="numeroVale">
+      <th mat-header-cell *matHeaderCellDef> No Vale </th>
+      <td mat-cell *matCellDef="let element"> {{element.numeroVale}} </td>
+    </ng-container>-->
+
+    <!-- Column -->
+    <ng-container matColumnDef="pk">
+      <mat-header-cell *matHeaderCellDef> PK </mat-header-cell>
+      <mat-cell *matCellDef="let element" data-label="PK"> {{element.pk}} </mat-cell>
+    </ng-container>
+
+    <!-- Column -->
+    <ng-container matColumnDef="cantidad">
+      <mat-header-cell *matHeaderCellDef> Cantidad </mat-header-cell>
+      <mat-cell *matCellDef="let element" data-label="Cantidad"> {{element.cantidad}} </mat-cell>
+    </ng-container>
+
+    <!-- Column 
+    <ng-container matColumnDef="acciones">
+      <th mat-header-cell *matHeaderCellDef> Acciones </th>
+      <td mat-cell *matCellDef="let element">  </td>
+    </ng-container>-->
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+</mat-dialog-content>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-actions align="end">
+    <button mat-button color="warn" (click)="close()">
+        <mat-icon class="m-1">close</mat-icon>{{ constants.cancelar }}
+    </button>
+    <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="disableSubmit" *sigmaIsGranted="constants.permiso_produccion_registrar_mezcla_insumos_update">
+        <mat-icon class="m-1">save</mat-icon>{{ constants.guardar }}
+    </button>
+</mat-dialog-actions>

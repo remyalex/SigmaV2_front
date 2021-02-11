@@ -1,0 +1,298 @@
+<div *ngIf="action === 'list'">
+
+  <div fxLayout="row" fxLayoutAlign="end">
+    <button mat-raised-button color="primary" *sigmaIsGranted="constants.registro_diario_cuadrilla_resumen_crear"
+      class="m-1 mb-10" (click)="create();">
+      <mat-icon class="m-1">note_add</mat-icon> {{ constants.crearNuevo }}
+    </button>
+  </div>
+
+  <div class="mat-elevation-z8 mb-10">
+    <div *ngIf="loader" fxLayout="column" fxLayoutAlign="center center">
+      <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+    </div>
+
+    <div *ngIf="noInfoToShow" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+      <mat-icon class="m-1">sms_failed</mat-icon>
+      <h4> {{ constants.noResultados}}</h4>
+    </div>
+
+    <mat-table #table [dataSource]="dataSource" [hidden]="noInfoToShow" matSort>
+
+      <ng-container matColumnDef="posicion">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.posicion }} </mat-header-cell>
+        <mat-cell *matCellDef="let cuadrilla ; let i = index" [attr.data-label]="constants.posicion">
+          {{ i + 1 }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="pk">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.pk }} </mat-header-cell>
+        <mat-cell *matCellDef="let cuadrilla" [attr.data-label]="constants.pk">
+          {{cuadrilla.mantenimiento.pk}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fechaCreacionInforme">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaCreacionInforme }} </mat-header-cell>
+        <mat-cell *matCellDef="let cuadrilla" [attr.data-label]="constants.fechaCreacionInforme">
+          {{cuadrilla.avance[0] ? cuadrilla.avance[0].fechaCreacionInforme: ''}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="jornada">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.jornada }} </mat-header-cell>
+        <mat-cell *matCellDef="let cuadrilla" [attr.data-label]="constants.jornada">
+          {{cuadrilla.avance[0] ? cuadrilla.avance[0].jornada ? cuadrilla.avance[0].jornada.descripcion : '' : ''}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="directorObra">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.directorObra }} </mat-header-cell>
+        <mat-cell *matCellDef="let cuadrilla" [attr.data-label]="constants.directorObra">
+
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="porcentajeAcumuladoObra">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.porcentajeAcumuladoObra }} </mat-header-cell>
+        <mat-cell *matCellDef="let cuadrilla" [attr.data-label]="constants.porcentajeAcumuladoObra">
+          {{cuadrilla?.avance[0] ? cuadrilla.avance[0].porcentajeAcumulado : ''}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="areaTotal">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.areaTotal }}
+        </mat-header-cell>
+        <mat-cell *matCellDef="let cuadrilla" [attr.data-label]="constants.areaTotal">
+          {{ cuadrilla.areaTotal }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="longitudTotal">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.longitudTotal }} </mat-header-cell>
+        <mat-cell *matCellDef="let cuadrilla" [attr.data-label]="constants.longitudTotal">
+          {{cuadrilla.longitudTotal}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="activo">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.activo }} </mat-header-cell>
+        <mat-cell *matCellDef="let cuadrilla" [attr.data-label]="constants.activo">
+          <span class="dev-color-red" [hidden]="cuadrilla.activo">{{ constants.no }}</span>
+          <span class="dev-color-green" [hidden]="!cuadrilla.activo">{{ constants.si }}</span>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="acciones">
+        <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+        <mat-cell *matCellDef="let cuadrilla" [attr.data-label]="constants.acciones">
+          <div fxLayout.lt-md="row" fxLayout.lt-xl="column">
+            <div fxFlex>
+              <button mat-raised-button color="primary"
+                *sigmaIsGranted="constants.registro_diario_cuadrilla_resumen_aprobar" (click)="detail(cuadrilla)"
+                class="m-1">
+                <mat-icon matTooltip="Aprobar" matTooltipPosition="above">check_circle_outline</mat-icon>
+              </button>
+              <button mat-raised-button color="primary"
+                *sigmaIsGranted="constants.registro_diario_cuadrilla_resumen_editar" (click)="edit(cuadrilla)"
+                class="m-1">
+                <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+              </button>
+            </div>
+          </div>
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+    </mat-table>
+    <mat-paginator #paginator [length]="lengthList" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
+    </mat-paginator>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div fxLayout="row" fxLayoutAlign="end" class="pt-16">
+    <button type="button" (click)="onBackList()" mat-button color="warn">
+      <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="action === 'save'">
+  <mat-vertical-stepper [linear]="!isLinear" #stepper>
+    <mat-step [stepControl]="firstFormGroup">
+      <form [formGroup]="firstFormGroup">
+        <ng-template matStepLabel>Información General</ng-template>
+        <sigma-work-cuadrilla-general [mantenimiento]="mantenimiento" [cuadrillaGeneral]="cuadrillaGeneral"
+          [firstFormGroup]="firstFormGroup" [componentVisible]="componentVisible"
+          (saveSeccionCuadrilla)="saveSeccionCuadrilla($event)">
+        </sigma-work-cuadrilla-general>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="secondFormGroup">
+      <form [formGroup]="secondFormGroup">
+        <ng-template matStepLabel>Información Avance Obra</ng-template>
+        <sigma-work-cuadrilla-obra [mantenimiento]="mantenimiento" [cuadrillaGeneral]="cuadrillaGeneral"
+          [secondFormGroup]="secondFormGroup" [componentVisible]="componentVisible"
+          [acumuladoPorcentaje]="acumuladoPorcentaje" (saveSeccionCuadrilla)="saveSeccionCuadrilla($event)" #obra>
+        </sigma-work-cuadrilla-obra>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="thirdFormGroup">
+      <form [formGroup]="thirdFormGroup">
+        <ng-template matStepLabel>Información del Personal - Mano de obra</ng-template>
+        <sigma-work-cuadrilla-personal [mantenimiento]="mantenimiento" [cuadrillaGeneral]="cuadrillaGeneral"
+          [thirdFormGroup]="thirdFormGroup" [componentVisible]="componentVisible"
+          (saveSeccionCuadrilla)="saveSeccionCuadrilla($event)" (nextToStepper)="nextToStepper($event)" #personal>
+        </sigma-work-cuadrilla-personal>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="fourthFormGroup">
+      <form [formGroup]="fourthFormGroup">
+        <ng-template matStepLabel>Información Tipo de Material Mezclas y Concreto</ng-template>
+        <sigma-work-cuadrilla-material [mantenimiento]="mantenimiento" [cuadrillaGeneral]="cuadrillaGeneral"
+          [fourthFormGroup]="fourthFormGroup" [componentVisible]="componentVisible"
+          (saveSeccionCuadrilla)="saveSeccionCuadrilla($event)" (nextToStepper)="nextToStepper($event)" #material>
+        </sigma-work-cuadrilla-material>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="fifthFormGroup">
+      <form [formGroup]="fifthFormGroup">
+        <ng-template matStepLabel>Información Tipo de Material Petreos Rap</ng-template>
+        <sigma-work-cuadrilla-petreos-rap [mantenimiento]="mantenimiento" [cuadrillaGeneral]="cuadrillaGeneral" [volumenesPorMaterial]="volumenesPorMaterial"
+          [fifthFormGroup]="fifthFormGroup" [componentVisible]="componentVisible"
+          (saveSeccionCuadrilla)="saveSeccionCuadrilla($event)" (nextToStepper)="nextToStepper($event)" #petreos>
+        </sigma-work-cuadrilla-petreos-rap>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="sixthFormGroup">
+      <form [formGroup]="sixthFormGroup">
+        <ng-template matStepLabel>Información Tipo de Material Emulsion</ng-template>
+        <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+          <input type="hidden" formControlName="successForm">
+          <button type="button" [disabled]="!componentVisible" class="m-1" mat-raised-button color="primary"
+            (click)="nextStepper()">
+            <mat-icon class="m-1">save</mat-icon> {{ constants.guardarSeccion }}
+          </button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="seventhFormGroup">
+      <form [formGroup]="seventhFormGroup">
+        <ng-template matStepLabel>Información Maquinaria</ng-template>
+        <sigma-work-cuadrilla-equipo [mantenimiento]="mantenimiento" [cuadrillaGeneral]="cuadrillaGeneral"
+          [seventhFormGroup]="seventhFormGroup" [componentVisible]="componentVisible"
+          (saveSeccionCuadrilla)="saveSeccionCuadrilla($event)" (nextToStepper)="nextToStepper($event)" #equipos>
+        </sigma-work-cuadrilla-equipo>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="eighthFormGroup">
+      <form [formGroup]="eighthFormGroup">
+        <ng-template matStepLabel>Información Ferreteria</ng-template>
+        <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+          <input type="hidden" formControlName="successForm">
+          <button type="button" [disabled]="!componentVisible" class="m-1" mat-raised-button color="primary"
+            (click)="nextStepper()">
+            <mat-icon class="m-1">save</mat-icon> {{ constants.guardarSeccion }}
+          </button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="ninthFormGroup">
+      <form [formGroup]="ninthFormGroup">
+        <ng-template matStepLabel>Información Señalizacion</ng-template>
+        <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+          <input type="hidden" formControlName="successForm">
+          <button type="button" [disabled]="!componentVisible" class="m-1" mat-raised-button color="primary"
+            (click)="nextStepper()">
+            <mat-icon class="m-1">save</mat-icon> {{ constants.guardarSeccion }}
+          </button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="tenthFormGroup">
+      <form [formGroup]="tenthFormGroup">
+        <ng-template matStepLabel>Reportes Parcheos</ng-template>
+        <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+          <input type="hidden" formControlName="successForm">
+          <button type="button" [disabled]="!componentVisible" class="m-1" mat-raised-button color="primary"
+            (click)="nextStepper()">
+            <mat-icon class="m-1">save</mat-icon> {{ constants.guardarSeccion }}
+          </button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="eleventhFormGroup">
+      <form [formGroup]="eleventhFormGroup">
+        <ng-template matStepLabel>Información de Actividades y Cantidades </ng-template>
+        <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+          <input type="hidden" formControlName="successForm">
+          <button type="button" [disabled]="!componentVisible" class="m-1" mat-raised-button color="primary"
+            (click)="nextStepper()">
+            <mat-icon class="m-1">save</mat-icon> {{ constants.guardarSeccion }}
+          </button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="twelfthFormGroup">
+      <form [formGroup]="twelfthFormGroup">
+        <ng-template matStepLabel>Retiro de Materiales y Escombros </ng-template>
+        <sigma-work-cuadrilla-retiro [mantenimiento]="mantenimiento" [cuadrillaGeneral]="cuadrillaGeneral"
+          [twelfthFormGroup]="twelfthFormGroup" [componentVisible]="componentVisible"
+          (saveSeccionCuadrilla)="saveSeccionCuadrilla($event)" (nextToStepper)="nextToStepper($event)" #retiros>
+        </sigma-work-cuadrilla-retiro>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="thirteenthFormGroup">
+      <form [formGroup]="thirteenthFormGroup">
+        <ng-template matStepLabel>Control de Calidad </ng-template>
+        <sigma-work-cuadrilla-calidad [mantenimiento]="mantenimiento" [cuadrillaGeneral]="cuadrillaGeneral"
+          [thirteenthFormGroup]="thirteenthFormGroup" [componentVisible]="componentVisible"
+          (saveSeccionCuadrilla)="saveSeccionCuadrilla($event)" (nextToStepper)="nextToStepper($event)" #calidad>
+        </sigma-work-cuadrilla-calidad>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="fourteenthFormGroup">
+      <form [formGroup]="fourteenthFormGroup">
+        <ng-template matStepLabel>Observaciones Generales de Ejecución de la Obra</ng-template>
+        <sigma-work-cuadrilla-observaciones [mantenimiento]="mantenimiento" [cuadrillaGeneral]="cuadrillaGeneral"
+          [fourteenthFormGroup]="fourteenthFormGroup" [componentVisible]="componentVisible"
+          (saveSeccionCuadrilla)="saveSeccionCuadrilla($event)" (nextToStepper)="nextToStepper($event)" #observaciones>
+        </sigma-work-cuadrilla-observaciones>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="fiveteenthFormGroup">
+      <form [formGroup]="fiveteenthFormGroup">
+        <ng-template matStepLabel>Información Topografia</ng-template>
+        <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+          <input type="hidden" formControlName="successForm">
+          <button type="button" [disabled]="!componentVisible" class="m-1" mat-raised-button color="primary"
+            (click)="nextStepper()">
+            <mat-icon class="m-1">save</mat-icon> {{ constants.guardarSeccion }}
+          </button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="sixteenthFormGroup">
+      <form [formGroup]="sixteenthFormGroup">
+        <ng-template matStepLabel>Aprobación</ng-template>
+        <sigma-work-cuadrilla-aprobacion [mantenimiento]="mantenimiento" [cuadrillaGeneral]="cuadrillaGeneral"
+          [sixteenthFormGroup]="sixteenthFormGroup" [componentVisible]="componentVisible"
+          (saveSeccionCuadrilla)="saveSeccionCuadrilla($event)" (nextToStepper)="nextToStepper($event)">
+        </sigma-work-cuadrilla-aprobacion>
+      </form>
+    </mat-step>
+  </mat-vertical-stepper>
+
+  <mat-divider></mat-divider>
+
+  <div fxLayout="row" fxLayoutAlign="end" class="flex-p mt-10">
+    <button type="button" (click)="onBack()" mat-button color="warn" class="m-1">
+      <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+    </button>
+    <button type="button" [disabled]="enviadaAll" class="m-1" mat-raised-button color="primary" (click)="saveAll()">
+      <mat-icon class="m-1">save</mat-icon> {{ constants.guardarTodo }}
+    </button>
+  </div>
+</div>

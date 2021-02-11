@@ -1,0 +1,129 @@
+<h2 mat-dialog-title>{{ constants.programacionPersonal }}</h2>
+
+<mat-dialog-content>
+  <div [formGroup]="form">
+    <div class="mb-10" *sigmaIsGranted="constants.permiso_produccion_programar_personal_planta_update">
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+        <div fxFlex>
+          <sigma-form-calendar formControlName="fechaTurno" [(ngModel)]="fechaTurno" [placeholder]="constants.fecha"
+          (ngModelChange)="onChangeFechaTurno($event)" [type]="constants.datepicker.types.calendar" required>
+          </sigma-form-calendar>
+        </div>
+        <div fxFlex>
+          <div class="w-100">
+            <sigma-form-select [path]="constants.path_produccion_turno" formControlName="turnoPersona"
+              [(ngModel)]="turnoPersona" placeholder="{{ constants.turno }}" required min="minDate">
+            </sigma-form-select>
+          </div>
+        </div>
+      </div>
+
+      <div  fxLayout="row" fxLayoutAlign="start" *ngIf="disableByFechaTurno">
+        <button mat-button color="warn">
+          <mat-icon class="m-1">warning</mat-icon>{{ constants.error_fecha_min }}
+        </button>
+      </div>
+
+    </div>
+
+
+    <mat-card-content class="flex-p m-0 mat-elevation-z8 mb-20">
+      <div *ngIf="dataSource1.loading$ | async" fxLayout="column" fxLayoutAlign="center center">
+        <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+      </div>
+
+      <div *ngIf="dataSource1.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+        <mat-icon class="m-1">sms_failed</mat-icon>
+        <h4> {{dataSource1.errorMessage$ | async}}</h4>
+      </div>
+      <mat-table #table [dataSource]="dataSource1" [hidden]="dataSource1.loading$" matSort>
+
+        <ng-container matColumnDef="id">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.no }} </mat-header-cell>
+          <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.no">
+            {{equipo.id}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="persona.cargo.descripcion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.cargo }} </mat-header-cell>
+          <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.descripcion">
+            {{equipo.persona.cargo.descripcion}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="persona.nombres">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.nombre }} </mat-header-cell>
+          <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.nombre">
+            {{equipo.persona.nombresYapellidos}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="tipoDisponibilidad.valor">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.disponibilidad }} </mat-header-cell>
+          <mat-cell *matCellDef="let equipo; let i = index" formArrayName="tipoDisponibilidad" [attr.data-label]="constants.disponibilidad">
+            <div [formGroupName]="i">
+              <sigma-form-select style="width: 120px;" [path]="constants.path_produccion_planta_disponibilidad"
+              [(ngModel)]="equipo.disponibilidad" formControlName="tipoDisp"
+              placeholder="{{ constants.seleccionar }}" [listBy]="'descripcion'">
+            </sigma-form-select>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="programar">
+          <mat-header-cell *matHeaderCellDef>{{ constants.programar }} </mat-header-cell>
+          <mat-cell *matCellDef="let equipo; let k = index">
+            <div fxLayout="row" fxLayoutAlign="center center" fxFlex="60">
+              <mat-checkbox #listCheckboxes name="activo-{{k}}" id="activo-{{k}}" (click)="$event.stopPropagation()"
+                (change)="$event ? toggleChecks(equipo, $event, k) : null" [checked]="equipo.programar">
+              </mat-checkbox>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="observacion">
+          <mat-header-cell *matHeaderCellDef> {{ constants.observacion }} </mat-header-cell>
+          <mat-cell *matCellDef="let equipo; let p = index" [attr.data-label]="constants.observacion">
+            <div fxFlex>
+              <mat-form-field style="width: 120px;">
+                <textarea matInput type="text" maxlength="150" placeholder="{{ constants.observacion }}"
+                  [(ngModel)]="equipo.observaciones" name="observacion-{{p}}" autocomplete="off" rows="2">
+            </textarea>
+              </mat-form-field>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: columns; let i = index"></mat-row>
+      </mat-table>
+
+      <mat-paginator #paginator [length]="dataSource1.totalElements$ | async" [pageSize]="personal.size"
+        [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+    </mat-card-content>
+
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <mat-dialog-actions align="end">
+    <button mat-button color="warn" (click)="close()">
+      <mat-icon class="m-1">close</mat-icon>{{ constants.cancelar }}
+    </button>
+    <button mat-raised-button color="primary" [disabled]="disableByFechaTurno || fechaSistema === null"
+      (click)="onSubmit(dataSource1.equipoData.content)"
+      *sigmaIsGranted="constants.permiso_produccion_programar_personal_planta_update">
+      <mat-icon class="m-1">save</mat-icon>{{ constants.guardar }}
+    </button>
+  </mat-dialog-actions>
+
+  <br/>
+
+  <div *ngIf="showTransition">
+    <sigma-seleccion-transicion [(data)]="data" [transiciones]="transicionesIndividuales"
+      (executeTransition)="executeTransition()"></sigma-seleccion-transicion>
+  </div>
+
+</mat-dialog-content>

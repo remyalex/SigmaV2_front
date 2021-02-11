@@ -1,0 +1,119 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+<div [hidden]="processing">
+
+  <div [hidden]="currentAction !== 'list'">
+    <div fxLayout=" column" fxLayout.gt-sm="row wrap">
+      <div fxFlex="100" class="flex-p">
+        <mat-tab-group [selectedIndex]="tabSeleccionado.value" (selectedIndexChange)="aseleccionarGrid($event)"
+            *ngIf="condicionSolicitarApiques">
+          <mat-tab label="Solicitar apiques">
+            <sigma-grid-mantenimientos #grid [data]="data" [columns]="columns"
+              [defaultSortGrid]="defaultSortGrid" [filters]="filters" [condicion]="condicionSolicitarApiques"
+              [singleActions]="acciones" (executeOnSingle)="ejecutar($event)" [showKmCarril]="false"
+              [showKmLineal]="false" [showActividadAgrupada]="false">
+            </sigma-grid-mantenimientos>
+          </mat-tab>
+
+          <mat-tab label="Solicitar aforos">
+            <sigma-grid-mantenimientos #grid *ngIf="condicionSolicitarAforos" [data]="data" [columns]="columns"
+              [defaultSortGrid]="defaultSortGrid" [filters]="filters" [masiveActions]="accionesSolicitarAforos"
+              [singleActions]="accionesAforo" (executeOnSingle)="ejecutar($event)" (executeOnMasiveAction)="ejecutar($event)"
+              [condicion]="condicionSolicitarAforos" [showKmCarril]="false" [showKmLineal]="false"
+              [showActividadAgrupada]="false" [showCheckMasive]="true">
+            </sigma-grid-mantenimientos>
+          </mat-tab>
+
+          <mat-tab *ngFor="let transicion of transicionesMasivas" label="{{transicion.nombre}}">
+            <sigma-grid-mantenimientos #grid [data]="data" [transicion]="transicion" [columns]="columnsTrasiciones"
+              [defaultFilters]="defaultFilters" [defaultSortGrid]="defaultSortGrid" [filters]="filters"
+              [condicion]="transicion.condicion" (executeOnMasiveTransition)="executeMasiveTransition($event)"
+              [singleActions]="accionesEnviarADisenio" (executeOnSingle)="ejecutar($event)" [showKmCarril]="false"
+              [showKmLineal]="false" [showActividadAgrupada]="false">
+            </sigma-grid-mantenimientos>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+
+  <!-- Seccion Asignación Prioridad -->
+  <div *ngIf="currentAction == 'asignarPrioridad'">
+
+    <div class="p-16 m-0">
+      <div class="mt-10">
+        <h3>Asignar Prioridad</h3>
+      </div>
+
+      <div [formGroup]="formularioAsignarPrioridad">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex.lg="50" fxFlex.md="50" fxFlex="100">
+            <sigma-form-number formControlName="prioridad" [(ngModel)]="prioridad"
+              (keypress)="validateNumber($event, prioridad )"
+              [errors]="[{name: 'max', message: 'El campo debe tener una longitud de 10 caracteres.'}]"
+              [placeholder]="constants.prioridad"></sigma-form-number>
+          </div>
+          <div fxFlex.lg="50" fxFlex.md="50" fxFlex="100">
+            <sigma-form-select formControlName="solicitud" [(ngModel)]="solicitud"
+              [path]="constants.path_lista_items_solicitud_apiques_aforos" [placeholder]="constants.solicitud"
+              [listBy]="'descripcion'">
+            </sigma-form-select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div fxLayout="row" fxLayoutAlign="end">
+      <mat-divider></mat-divider>
+      <div class="pt-16">
+        <button mat-button class="m-1" color="warn" (click)="onBack()">
+          <mat-icon class="m-1">close</mat-icon>
+          {{ constants.cancelar }}
+        </button>
+        <button mat-button mat-raised-button color="primary"
+          [disabled]="!this.formularioAsignarPrioridad.valid || processing" (click)="savePrioridad()">
+          <mat-icon class="m-1">save</mat-icon>
+          Guardar
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <div *ngIf="currentAction == 'asignarSolicitudAforo'">
+    <div class="p-16 m-0">
+      <div class="mt-10">
+        <h3>Asignar Solicitud</h3>
+      </div>
+
+      <div [formGroup]="formularioAsignarPrioridadAforo">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex.lg="50" fxFlex.md="50" fxFlex="100">
+            <sigma-form-select formControlName="solicitud" [(ngModel)]="solicitud"
+              [path]="constants.path_lista_items_solicitud_apiques_aforos" [placeholder]="constants.solicitud"
+              [listBy]="'descripcion'">
+            </sigma-form-select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="end">
+      <mat-divider></mat-divider>
+      <div class="pt-16">
+        <button mat-button class="m-1" color="warn" (click)="onBack()">
+          <mat-icon class="m-1">close</mat-icon>
+          {{ constants.cancelar }}
+        </button>
+        <button mat-button mat-raised-button color="primary"
+          [disabled]="!this.formularioAsignarPrioridadAforo.valid || processing" (click)="savePrioridadAforo()">
+          <mat-icon class="m-1">save</mat-icon>
+          Guardar
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

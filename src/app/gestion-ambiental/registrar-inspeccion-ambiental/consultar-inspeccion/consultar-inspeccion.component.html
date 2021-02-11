@@ -1,0 +1,103 @@
+<div *sigmaIsGranted="constants.ambiental_inspeccion_list">
+  <div class="p-16">
+    <div *ngIf="loader" fxLayout="column" fxLayoutAlign="center center">
+      <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="start" class="flex-p">
+      <button mat-stroked-button color="primary" (click)="onBack()">
+        <mat-icon class="m-1">arrow_back</mat-icon>
+        Ir Atrás
+      </button>
+    </div>
+
+    <div *ngIf="noInfoToShow" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+      <mat-icon class="m-1">sms_failed</mat-icon>
+      <h4>{{ constants.noResultados }}</h4>
+    </div>
+    <div class="mat-elevation-z8">
+      <mat-table #table class="col-x" [dataSource]="dataSource" [hidden]="!noInfoToShow || !loader" matSort>
+        <ng-container matColumnDef="numeral">
+          <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
+          <mat-cell *matCellDef="let inspeccion; let i = index" [attr.data-label]="'No'">
+            {{ i + 1 }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaApertura">
+          <mat-header-cell *matHeaderCellDef>
+            Fecha apertura</mat-header-cell>
+          <mat-cell *matCellDef="let inspeccion" [attr.data-label]="'fechaApertura'">
+            {{ inspeccion.fecha }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaCierre">
+          <mat-header-cell *matHeaderCellDef>
+            Fecha cierre
+          </mat-header-cell>
+          <mat-cell *matCellDef="let inspeccion" [attr.data-label]="'fechaCierre'">
+            {{ inspeccion.fecha }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="accionesAdelantadas">
+          <mat-header-cell *matHeaderCellDef>
+            Acciones adelantadas
+          </mat-header-cell>
+          <mat-cell *matCellDef="let inspeccion" [attr.data-label]="'accionesAdelantadas'">
+            {{ inspeccion.detalleInspeccion[0]?.accion }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="situacion">
+          <mat-header-cell *matHeaderCellDef> Situación </mat-header-cell>
+          <mat-cell *matCellDef="let inspeccion" [attr.data-label]="'situacion'">
+            {{ inspeccion.situacion?.descripcion }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="elemento">
+          <mat-header-cell *matHeaderCellDef> Elemento </mat-header-cell>
+          <mat-cell *matCellDef="let inspeccion" [attr.data-label]="'elemento'">
+            {{ inspeccion.elemento?.descripcion }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="observaciones">
+          <mat-header-cell *matHeaderCellDef> Observaciones </mat-header-cell>
+          <mat-cell *matCellDef="let inspeccion" [attr.data-label]="'observaciones'">
+            {{ inspeccion.detalleInspeccion[0]?.observacionElemento }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="estado">
+          <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+          <mat-cell *matCellDef="let inspeccion" [attr.data-label]="'estado'">
+            {{ inspeccion.estado?.descripcion }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+          <mat-header-cell *matHeaderCellDef>
+            {{ constants.acciones }}
+          </mat-header-cell>
+          <mat-cell *matCellDef="let inspeccion; let i = index" [attr.data-label]="constants.acciones">
+            <button *sigmaIsGranted="constants.ambiental_inspeccion_list_search" mat-raised-button color="primary"
+              (click)="viewForm(inspeccion)" class="m-1" matTooltip="Ver registro">
+              <mat-icon>remove_red_eye</mat-icon>
+            </button>
+            <button type="button" class="m-1" mat-raised-button color="primary" 
+            (click)="exportAsXLSX(inspeccion)" matTooltip="Exportar">
+              <mat-icon>get_app</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: columns"></mat-row>
+      </mat-table>
+      <mat-paginator #paginator [length]="lengthList" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]">
+      </mat-paginator>
+    </div>
+  </div>  
+</div>

@@ -1,0 +1,15 @@
+<div fxLayout="column" fxLayout.gt-sm="row wrap">
+  <div fxFlex="100" class="flex-p">
+    <mat-card>
+      <mat-card-content>
+        <div fxLayoutAlign="end">
+          <button mat-raised-button color="primary" class="m-1 mb-10" (click)="create();"
+            *sigmaIsGranted="constants.permiso_administracion_upla_create">
+            <mat-icon class="m-1">note_add</mat-icon>{{ constants.crearNuevo }}
+          </button>
+        </div>
+        <app-upla-list *sigmaIsGranted="constants.permiso_administracion_upla_list"></app-upla-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,10 @@
+<mat-form-field class="w-100">
+  <mat-select placeholder={{etiqueta}} (selectionChange) = "select($event.value)" [(value)]="value" [required]="required">
+    <mat-option *ngFor="let option of options" value="{{ option.id }}">
+      {{option.valor}}
+    </mat-option>
+    <mat-option *ngFor="let option of optionsList" [value]="option.id">
+        {{option.nombre}}
+      </mat-option>
+  </mat-select>
+</mat-form-field>

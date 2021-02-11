@@ -1,0 +1,45 @@
+<div class="table-responsive mat-elevation-z8">
+  <mat-table #table [dataSource]="dataSource">
+
+    <!-- Position Column -->
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef> id </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="actividad">
+      <mat-header-cell *matHeaderCellDef> actividad </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.actividad}} </mat-cell>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="fechaAsignacion">
+      <mat-header-cell *matHeaderCellDef> Fecha Asignacion </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.fechaAsignacion}} </mat-cell>
+    </ng-container>
+
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="fechaVencimiento">
+      <mat-header-cell *matHeaderCellDef> Fecha Vencimiento </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.fechaVencimiento}} </mat-cell>
+    </ng-container>
+
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="fechaInicio">
+      <mat-header-cell *matHeaderCellDef> Fecha Inicio </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.fechaInicio}} </mat-cell>
+    </ng-container>
+
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="fechaFin">
+      <mat-header-cell *matHeaderCellDef> Fecha Fin </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.fechaFin}} </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+  </mat-table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+</div>

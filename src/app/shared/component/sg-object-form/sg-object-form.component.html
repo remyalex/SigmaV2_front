@@ -1,0 +1,109 @@
+<form [formGroup]="formGroup">
+    <ng-container *ngFor="let row of layout">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0" class="w-100">
+            <ng-container *ngFor="let fieldIndex of row">
+                <ng-container *ngIf="isVisible(def.fields[fieldIndex])">
+                    <ng-container [ngSwitch]="def.fields[fieldIndex].type">
+                        <div fxFlex *ngSwitchCase="'select'">
+                            <ng-container *ngIf="def.fields[fieldIndex].options?.path">
+                                <sigma-form-select class="w-100" [formControlName]="def.fields[fieldIndex].name"
+                                    [(ngModel)]="bindings[def.fields[fieldIndex].name]"
+                                    [placeholder]="def.fields[fieldIndex].label"
+                                    [path]="def.fields[fieldIndex].options.path"
+                                    [multiple]="def.fields[fieldIndex].options?.multiple"
+                                    [opcionTodos]="def.fields[fieldIndex].options?.opcionTodos"
+                                    [listBy]="def.fields[fieldIndex].options?.listBy"
+                                    [disabled]="isDisabled(def.fields[fieldIndex])">
+                                </sigma-form-select>
+                            </ng-container>
+                            <ng-container *ngIf="def.fields[fieldIndex].options?.currentOptions">
+                                <sigma-form-select class="w-100" [formControlName]="def.fields[fieldIndex].name"
+                                    [(ngModel)]="bindings[def.fields[fieldIndex].name]"
+                                    [placeholder]="def.fields[fieldIndex].label"
+                                    [multiple]="def.fields[fieldIndex].options?.multiple"
+                                    [opcionTodos]="def.fields[fieldIndex].options?.opcionTodos"
+                                    [optionsList]="def.fields[fieldIndex].options?.currentOptions"
+                                    [listBy]="def.fields[fieldIndex].options?.listBy"
+                                    [disabled]="isDisabled(def.fields[fieldIndex])">
+                                </sigma-form-select>
+                            </ng-container>
+                        </div>
+                        <div fxFlex *ngSwitchCase="'calendar'">
+                            <ng-container *ngIf="isDisabled(def.fields[fieldIndex])">
+                                <sigma-form-input [formControlName]="def.fields[fieldIndex].name"
+                                    [(ngModel)]="bindings[def.fields[fieldIndex].name]"
+                                    [placeholder]="def.fields[fieldIndex].label" [readonly]="true">
+                                </sigma-form-input>
+                            </ng-container>
+                            <ng-container *ngIf="!isDisabled(def.fields[fieldIndex])">
+                                <sigma-form-calendar [formControlName]="def.fields[fieldIndex].name"
+                                    [(ngModel)]="bindings[def.fields[fieldIndex].name]"
+                                    [placeholder]="def.fields[fieldIndex].label" type="calendar"
+                                    [required]="isRequired(def.fields[fieldIndex])" [objeto]="minDates"
+                                    [minTarget]="def.fields[fieldIndex].name">
+                                </sigma-form-calendar>
+                            </ng-container>
+                        </div>
+                        <div fxFlex *ngSwitchCase="'timer'">
+                            <ng-container *ngIf="isDisabled(def.fields[fieldIndex])">
+                                <sigma-form-input [formControlName]="def.fields[fieldIndex].name"
+                                    [(ngModel)]="bindings[def.fields[fieldIndex].name]"
+                                    [placeholder]="def.fields[fieldIndex].label" [readonly]="true">
+                                </sigma-form-input>
+                            </ng-container>
+                            <ng-container *ngIf="!isDisabled(def.fields[fieldIndex])">
+                                <sigma-form-calendar [formControlName]="def.fields[fieldIndex].name"
+                                    [(ngModel)]="bindings[def.fields[fieldIndex].name]"
+                                    [placeholder]="def.fields[fieldIndex].label" type="timer"
+                                    [required]="isRequired(def.fields[fieldIndex])">
+                                </sigma-form-calendar>
+                            </ng-container>
+                        </div>
+                        <div fxFlex *ngSwitchCase="'autocomplete'">
+                            <sigma-form-autocomplete 
+                                [path]="def.fields[fieldIndex].options.path"   
+                                [placeholder]="def.fields[fieldIndex].label" 
+                                [searchBy]="def.fields[fieldIndex].options.searchBy"
+                                [moreInfo]="def.fields[fieldIndex].options.moreInfo"
+                                [formControlName]="def.fields[fieldIndex].name"
+                                [(ngModel)]="bindings[def.fields[fieldIndex].name]" >
+                            </sigma-form-autocomplete>
+                        </div>
+                        <div fxFlex *ngSwitchDefault>
+                            <sigma-form-input [formControlName]="def.fields[fieldIndex].name"
+                                [(ngModel)]="bindings[def.fields[fieldIndex].name]"
+                                [placeholder]="def.fields[fieldIndex].label"
+                                [otherOriginFieldMsj]="true"
+                                [pattern]="def.fields[fieldIndex].options.pattern"
+                                [readonly]="isDisabled(def.fields[fieldIndex])"
+                                [maxlength]="def.fields[fieldIndex].options.maxlength" 
+                                [min]="def.fields[fieldIndex].options.min" 
+                                >
+                            </sigma-form-input>
+                        </div>
+                    </ng-container>
+                </ng-container>
+            </ng-container>
+        </div>
+    </ng-container>
+    <div class="errores">
+        <span *ngFor="let error of errores">{{error}}. </span>
+    </div>
+</form>
+
+<div *ngIf="showSave || showCancel" fxLayout="row" fxLayout.lt-md="column">
+    <div fxLayoutAlign="end" fxFlex>
+        <ng-container *ngIf="showCancel">
+            <button mat-button color="warn" class="m-1 mb-10" (click)="onCancel()">
+                <mat-icon class="m-1">close</mat-icon>
+                {{ cancelButtonLabel || 'Cancelar' }}
+            </button>
+        </ng-container>
+        <ng-container *ngIf="showSave">
+            <button mat-raised-button color="primary" class="m-1 mb-10" (click)="onSave()" [disabled]="!isValid()">
+                <mat-icon class="m-1">save</mat-icon>
+                {{ saveButtonLabel || 'Guardar' }}
+            </button>
+        </ng-container>
+    </div>
+</div>

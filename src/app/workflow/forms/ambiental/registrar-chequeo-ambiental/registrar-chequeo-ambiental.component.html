@@ -1,0 +1,201 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="processing">
+
+  <div *ngIf="currentAction === 'list'">
+    <div fxLayout="row" fxLayout.lt-md="column">
+      <div fxFlex="100" class="flex-p">
+        <div>
+          <mat-tab-group [selectedIndex]="tabSeleccionado.value" (selectedIndexChange)="seleccionarGrid($event)">
+            <mat-tab *ngFor="let transicion of transicionesIndividuales" label="{{transicion.nombre}}">
+              <sigma-grid-mantenimientos #grid [data]="data" [transicion]="transicion" [columns]="columns"
+                [filters]="filters" [singleActions]="acciones" (executeOnSingle)="executeSingleAction($event)"
+                (executeOnMasiveTransition)="executeMasiveTransition($event)" [defaultFilters]="defaulFilters" >
+              </sigma-grid-mantenimientos>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Seccion Registrar Lista de Chequeo Ambiental   -->
+  <div *ngIf="currentAction == 'registrarChequeo'">
+    <mat-card-content class="p-16 m-0" [formGroup]="form">
+    
+      <h3>{{ constants.seleccioneListaAmbiental }}</h3>
+        
+      <div fxLayout="column">
+        <div fxFlex="100">
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+            <div fxFlex="50" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+              <div fxFlex="50">
+                <sigma-form-input formControlName="fecha" [ngModel]="data.mantenimiento.fechaInicioVisita"
+                  [placeholder]="constants.fecha">
+                </sigma-form-input>
+              </div>
+            </div>
+            <div fxFlex="50" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+              <div fxFlex="50">
+                <div>
+                  <sigma-form-select formControlName="tieneBanos"
+                    [(ngModel)]="listaChequeoAmbiental.tieneBanosSelect"
+                    [placeholder]="constants.chequeoAmbiental.banios" [opciones]="opciones" [listBy]="'name'"
+                    [id]="'value'"
+                    (ngModelChange)="changeTiene(listaChequeoAmbiental.tieneBanosSelect, 'tieneBanos', 'cantidadBanos')">
+                  </sigma-form-select>
+                </div>
+              </div>
+              <div fxFlex *ngIf="listaChequeoAmbiental.tieneBanos">
+                <div class="w-50">
+                  <sigma-form-number [placeholder]="constants.chequeoAmbiental.cantidadBanos"
+                    [(ngModel)]="listaChequeoAmbiental.cantidadBanos" formControlName="cantidadBanos">
+                  </sigma-form-number>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+            <div fxFlex="50" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+              <div fxFlex="50">
+                <div>
+                  <sigma-form-select formControlName="tieneProteccionSumideros"
+                    [(ngModel)]="listaChequeoAmbiental.tieneProteccionSumiderosSelect"
+                    [placeholder]="constants.chequeoAmbiental.proteccionSumideros" [opciones]="opciones"
+                    [listBy]="'name'" [id]="'value'"
+                    (ngModelChange)="changeTiene(listaChequeoAmbiental.tieneProteccionSumiderosSelect, 'tieneProteccionSumideros', 'cantidadProteccionSumideros')">
+                  </sigma-form-select>
+                </div>
+              </div>
+              <div fxFlex *ngIf="listaChequeoAmbiental.tieneProteccionSumideros">
+                <div>
+                  <sigma-form-number [placeholder]="'Cantidad de Sumideros'"
+                    formControlName="cantidadProteccionSumideros"
+                    [(ngModel)]="listaChequeoAmbiental.cantidadProteccionSumideros">
+                  </sigma-form-number>
+                </div>
+              </div>
+            </div>
+            <div fxFlex="50" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+              <div fxFlex="50">
+                <div>
+                  <sigma-form-select formControlName="tieneProteccionArboles"
+                    [(ngModel)]="listaChequeoAmbiental.tieneProteccionArbolesSelect"
+                    [placeholder]="constants.chequeoAmbiental.proteccionArboles" [opciones]="opciones"
+                    [listBy]="'name'" [id]="'value'"
+                    (ngModelChange)="changeTiene(listaChequeoAmbiental.tieneProteccionArbolesSelect, 'tieneProteccionArboles', 'cantidadProteccionArboles')">
+                  </sigma-form-select>
+                </div>
+              </div>
+              <div fxFlex *ngIf="listaChequeoAmbiental.tieneProteccionArboles">
+                <div>
+                  <sigma-form-number [placeholder]="constants.chequeoAmbiental.cantidadArboles"
+                    formControlName="cantidadProteccionArboles"
+                    [(ngModel)]="listaChequeoAmbiental.cantidadProteccionArboles">
+                  </sigma-form-number>
+                </div>
+              </div>
+            </div>
+          </div> 
+
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+            <div fxFlex="50" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+              <div fxFlex="50">
+                <div>
+                  <sigma-form-select formControlName="tieneCerramiento"
+                    [(ngModel)]="listaChequeoAmbiental.tieneCerramientoSelect"
+                    [placeholder]="constants.chequeoAmbiental.cerramiento" [opciones]="opciones" [listBy]="'name'"
+                    [id]="'value'"
+                    (ngModelChange)="changeTiene(listaChequeoAmbiental.tieneCerramientoSelect, 'tieneCerramiento', 'cantidadCerramiento')">
+                  </sigma-form-select>
+                </div>
+              </div>
+              <div fxFlex *ngIf="listaChequeoAmbiental.tieneCerramiento">
+                <div>
+                  <sigma-form-number [placeholder]="constants.chequeoAmbiental.cantidadCerramiento"
+                    formControlName="cantidadCerramiento" [(ngModel)]="listaChequeoAmbiental.cantidadCerramiento">
+                  </sigma-form-number>
+                </div>
+              </div>
+            </div>
+            <div fxFlex="50" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+              <div fxFlex="50">
+                <div>
+                  <sigma-form-select formControlName="tieneSenderos"
+                    [(ngModel)]="listaChequeoAmbiental.tieneSenderosSelect"
+                    [placeholder]="constants.chequeoAmbiental.senderos" [opciones]="opciones" [listBy]="'name'"
+                    [id]="'value'"
+                    (ngModelChange)="changeTiene(listaChequeoAmbiental.tieneSenderosSelect, 'tieneSenderos', 'cantidadSenderos')">
+                  </sigma-form-select>
+                </div>
+              </div>
+              <div fxFlex *ngIf="listaChequeoAmbiental.tieneSenderos">
+                <div>
+                  <sigma-form-number [placeholder]="'Cantidad de senderos'" formControlName="cantidadSenderos"
+                    [(ngModel)]="listaChequeoAmbiental.cantidadSenderos">
+                  </sigma-form-number>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+            <div fxFlex="50" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+              <div fxFlex="50">
+                <div>
+                  <sigma-form-select formControlName="tieneEspacioPublico"
+                    [(ngModel)]="listaChequeoAmbiental.tieneEspacioPublicoSelect"
+                    [placeholder]="constants.chequeoAmbiental.espacioPublico" [opciones]="opciones"
+                    [listBy]="'name'" [id]="'value'"
+                    (ngModelChange)="changeTiene(listaChequeoAmbiental.tieneEspacioPublicoSelect, 'tieneEspacioPublico', 'cantidadEspacioPublico')">
+                  </sigma-form-select>
+                </div>
+              </div>
+              <div fxFlex *ngIf="listaChequeoAmbiental.tieneEspacioPublico">
+                <div>
+                  <sigma-form-number [placeholder]="constants.chequeoAmbiental.espacioPublico"
+                    formControlName="cantidadEspacioPublico"
+                    [(ngModel)]="listaChequeoAmbiental.cantidadEspacioPublico">
+                  </sigma-form-number>
+                </div>
+              </div>
+            </div>
+            <div fxFlex="50" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+              <div fxFlex>
+                <div class="w-100 mt-13">
+                  <sigma-form-upload-file formControlName="archivoId" [(ngModel)]="listaChequeoAmbiental.archivo"
+                    [placeholder]="constants.chequeoSST.archivoFormato" [accept]="'application/pdf, application/zip, image/*'"
+                    [[maxUpload]="1">
+                  </sigma-form-upload-file>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div *ngIf="listaChequeoAmbiental.id > 0 && !disabledForm" class="w-100">
+        <sigma-mantenimiento-records [mantId]="mantenimiento.id"></sigma-mantenimiento-records>
+        <sigma-seleccion-transicion [(data)]="data" [transiciones]="transicionesIndividuales"
+          (executeTransition)="saveAll()">
+        </sigma-seleccion-transicion>
+      </div>
+    </mat-card-content>
+
+    <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+    <div fxLayout="row" fxLayoutAlign="end" class="mt-10">
+      <button mat-button color="warn" class="m-1" (click)="back()">
+        <mat-icon class="m-1">close</mat-icon>
+        {{ constants.cancelar }}
+      </button>
+      <button *ngIf="!disabledForm" [disabled]="processing" mat-raised-button color="primary" class="m-1" (click)="onSubmit()">
+        <mat-icon class="m-1">save</mat-icon>
+        {{ listaChequeoAmbiental.id > 0 ? constants.editar : constants.guardar }}
+      </button>
+    </div>
+  </div>
+</div>

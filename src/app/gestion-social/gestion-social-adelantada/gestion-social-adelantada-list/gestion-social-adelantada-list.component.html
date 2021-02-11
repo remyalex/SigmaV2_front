@@ -1,0 +1,86 @@
+<div fxLayout="column">
+    <div fxLayout="row" class="mt-10 mb-10">
+        <div class="liner_top" fxFlex>
+            <h3>Consulta de gestión social adelantada</h3>
+        </div>
+    </div>
+
+    <mat-card-content class="p-16">
+        <div class="mat-elevation-z8">
+            <div *ngIf="dataSourceSocial.loading$ | async" fxLayout="column" fxLayoutAlign="center center">
+                <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+            </div>
+            <div *ngIf="dataSourceSocial.error$ | async" class="msj_no_results" fxLayout="row"
+                fxLayoutAlign="center center">
+                <mat-icon class="m-1">sms_failed</mat-icon>
+                <h4> {{ dataSourceSocial.errorMessage$ | async }}</h4>
+            </div>
+            <mat-table #table [dataSource]="dataSourceSocial" [hidden]="dataSourceSocial.loading$" matSort>
+
+                <ng-container matColumnDef="checked">
+                    <mat-header-cell *matHeaderCellDef>
+                        <mat-checkbox (change)='selectAll($event)'></mat-checkbox>
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let encuesta">
+                        <mat-checkbox [(ngModel)]="encuesta.check"></mat-checkbox>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="cantidadActasVecindad">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Numeral ascendente </mat-header-cell>
+                    <mat-cell *matCellDef="let encuesta; let i = index;" data-label="Numeral ascendente">
+                        {{ i + 1 }}
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="fechaRegistro">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de registro de gestión social
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let encuesta" data-label="Fecha Registro">
+                        {{ encuesta.fechaRegistro }} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="accionesAdelantadas">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Acciones adelantadas
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let encuesta" data-label="Acciones adelantadas">
+                        {{ encuesta.accionesAdelantadas }} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="acciones">
+                    <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+                    <mat-cell *matCellDef="let acta" data-label="Acciones">
+                        <!-- <button *sigmaIsGranted="constants.encuesta_satisfaccion_update" mat-raised-button
+                            color="primary" (click)="attach(acta)" class="m-1">
+                            <mat-icon>cloud_upload</mat-icon>
+                        </button> -->
+                        <button *sigmaIsGranted="constants.encuesta_satisfaccion_update" mat-raised-button
+                            color="primary" (click)="edit(acta)" class="m-1">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <!-- <button *sigmaIsGranted="constants.encuesta_satisfaccion_export" [disabled]="disabledReport"
+                            mat-raised-button color="primary" (click)="exportarPDF(acta)" class="m-1">
+                            <mat-icon>cloud_download</mat-icon>
+                        </button> -->
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: columns"></mat-row>
+
+            </mat-table>
+            <mat-paginator #paginator [length]="dataSourceSocial.totalElements$ | async" [pageSize]="criteriaSocial.size"
+                [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+        </div>   
+    </mat-card-content>
+
+    <div fxLayout="row" fxLayoutAlign="end">
+        <mat-divider></mat-divider>
+        <div class="pt-16">
+            <button type="button" class="m-1" (click)="onBack()" mat-button color="warn">
+                <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+            </button>
+        </div>
+    </div>
+ 
+</div>

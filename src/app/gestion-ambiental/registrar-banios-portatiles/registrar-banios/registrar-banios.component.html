@@ -1,0 +1,107 @@
+<div>
+
+  <mat-card-content class="mt-10 mb-10" [formGroup]="form">
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+      <div fxFlex>
+        <sigma-form-calendar formControlName="fechaNecesidadLLegada" [(ngModel)]="banoPortatiles.fechaLlegada"
+          [type]="constants.datepicker.types.calendar" [placeholder]="constants.fechaNecesidadLLegada">
+        </sigma-form-calendar>
+      </div>
+
+      <div fxFlex>
+        <sigma-form-calendar formControlName="horaNecesidadLLegada" [(ngModel)]="banoPortatiles.horaLlegada"
+          [type]="constants.datepicker.types.timer" [placeholder]="constants.horaNecesidadLLegada"
+          [errors]="erroresHora">
+        </sigma-form-calendar>
+      </div>
+    </div>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+      <div fxFlex>
+        <sigma-form-calendar formControlName="fechaNecesidadRetiro" [(ngModel)]="banoPortatiles.fechaRetiro"
+          [type]="constants.datepicker.types.calendar" [placeholder]="constants.fechaNecesidadRetiro"
+          [objeto]="banoPortatiles" [minTarget]="'fechaMinima'">
+        </sigma-form-calendar>
+      </div>
+
+      <div fxFlex>
+        <sigma-form-calendar formControlName="horaNecesidadRetiro" [(ngModel)]="banoPortatiles.horaRetiro"
+          [type]="constants.datepicker.types.timer" [placeholder]="constants.horaNecesidadRetiro">
+        </sigma-form-calendar>
+      </div>
+    </div>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+      <div fxFlex>
+        <sigma-form-input formControlName="direccion" [(ngModel)]="banoPortatiles.direccion"
+          [placeholder]="constants.direccion">
+        </sigma-form-input>
+      </div>
+    </div>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+      <div fxFlex>
+        <sigma-form-input formControlName="localidad"
+          [ngModel]="mantenimiento.localidad ? mantenimiento.localidad.nombre : ''"
+          [placeholder]="constants.localidad">
+        </sigma-form-input>
+      </div>
+      <div fxFlex>
+        <sigma-form-input formControlName="upla" [ngModel]="mantenimiento.upla ? mantenimiento.upla.nombre : ''"
+          [placeholder]="constants.upla">
+        </sigma-form-input>
+      </div>
+    </div>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+      <div fxFlex>
+        <sigma-form-input formControlName="barrio"
+          [ngModel]="mantenimiento.barrio == null ? '' : mantenimiento.barrio.nombre"
+          [placeholder]="constants.barrio">
+        </sigma-form-input>
+      </div>
+      <div fxFlex>
+        <sigma-form-input formControlName="civ" [(ngModel)]="mantenimiento.civ" [placeholder]="constants.civ">
+        </sigma-form-input>
+      </div>
+    </div>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+      <div fxFlex>
+        <sigma-form-input formControlName="pk" [(ngModel)]="mantenimiento.pk" [placeholder]="constants.pk">
+        </sigma-form-input>
+      </div>
+      <div fxFlex>
+        <sigma-form-input formControlName="tipoIntervencion" [ngModel]="tipoIntervencion"
+          [placeholder]="constants.tipoIntervencion" [placeholder]="constants.tipoIntervencion">
+        </sigma-form-input>
+      </div>
+    </div>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+      <div fxFlex>
+        <sigma-form-upload-file formControlName="firma" [(ngModel)]="banoPortatiles.firma"
+          [placeholder]="constants.firma" [maxUpload]="1" [accept]="'image/*'">
+        </sigma-form-upload-file>
+      </div>
+    </div>
+  </mat-card-content>
+
+  <div *ngIf="banoPortatiles.id" class="w-100 mt-10 mb-10">
+    <sigma-mantenimiento-records [mantId]="mantenimiento.id"></sigma-mantenimiento-records>
+    <sigma-seleccion-transicion [(data)]="data" [transiciones]="transicionesIndividuales"
+      (executeTransition)="executeTransition()"></sigma-seleccion-transicion>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div class="pt-16" fxLayout="row" fxLayoutAlign="end" *ngIf="!disabledForm">
+    <button mat-button color="warn" class="m-1" (click)="close()">
+      <mat-icon class="m-1">close</mat-icon> {{ constants.cerrar }}
+    </button>
+    
+    <button type="button" class="m-1" [disabled]="disableSubmit" mat-raised-button color="primary" (click)="onSubmit()">
+      <mat-icon class="m-1">save</mat-icon> {{ banoPortatiles.id > 0 ? constants.editar : constants.guardar }}
+    </button>
+  </div> 
+</div>

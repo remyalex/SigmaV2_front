@@ -1,0 +1,34 @@
+<h2 mat-dialog-title>Crear Observaciones Generales de Ejecución de la Obra</h2>
+
+<mat-dialog-content [formGroup]="form">
+  <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+    <div fxFlex="100%">
+      <mat-form-field class="w-100">
+        <textarea matInput [(ngModel)]="CuadrillaObservacionGeneralModel.observaciones" rows="5"
+          placeholder="{{ constants.observaciones }}" formControlName="observaciones"></textarea>
+        <mat-error *ngIf="form.get('observaciones').hasError('maxlength')"> {{ constants.longitud_maxima }}
+          300
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <sigma-form-upload-file placeholder="{{ constants.archivo }}" [(ngModel)]="archivosSeccion"
+        [accept]="'application/pdf,image/jpeg'" (ngModelChange)="setArchivoSolicitud($event)"
+        formControlName="archivo" [multiple]="true" [sizeFile]="4" [maxUpload]="3"></sigma-form-upload-file>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button type="button" (click)="onBack()" mat-button color="warn" class="m-1">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+  </button>
+  <button type="button" [disabled]="enviada || enviando" class="m-1" mat-raised-button color="primary" (click)="onSubmit()">
+    <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+  </button>
+</mat-dialog-actions>

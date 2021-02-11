@@ -1,0 +1,43 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="processing">
+  <div *ngIf="currentAction === 'list'">
+
+    <div fxLayout="row" fxLayout.lt-md="column">
+      <div fxFlex="100" class="flex-p">
+        <mat-tab-group [selectedIndex]="tabSeleccionado.value" (selectedIndexChange)="seleccionarGrid($event)">
+          <mat-tab *ngFor="let transicion of transicionesMasivas" label="{{transicion.nombre}}">
+            <sigma-grid-mantenimientos #grid [data]="data" [transicion]="transicion"
+              [columns]="columns" [filters]="filters" [singleActions]="actions" (executeOnSingle)="ejecutar($event)"
+              (executeOnMasiveTransition)="executeMasiveTransitionE($event)" [showKmCarril]="false"
+              [showActividadAgrupada]="false" [showCheckMasive] ="true">
+            </sigma-grid-mantenimientos>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="currentAction=='work'">
+    <sigma-ver-diagnostico [mantenimiento]="mantenimiento" (back)="back($event)"></sigma-ver-diagnostico>
+
+    <sigma-seleccion-transicion
+      *ngIf="data.mantenimiento.actividadAgrupada === 'BE' && data.mantenimiento.origen.id !== 371"
+      [(data)]="data" [transiciones]="transicionesBuenEstado" (executeTransition)="executeTransition($event)">
+    </sigma-seleccion-transicion>
+    <sigma-seleccion-transicion
+      *ngIf="data.mantenimiento.origen.id === 371"
+      [(data)]="data" [transiciones]="transicionesOrigenPeticionario" (executeTransition)="executeTransition($event)">
+    </sigma-seleccion-transicion>
+    <sigma-seleccion-transicion
+      *ngIf="data.mantenimiento.actividadAgrupada !== 'BE' && data.mantenimiento.origen.id !== 371 && ( data.mantenimiento.origen.id === 373 || data.mantenimiento.origen.id === 374)"
+      [(data)]="data" [transiciones]="transicionesOrigenMisionalUOtros" (executeTransition)="executeTransition($event)">
+    </sigma-seleccion-transicion>
+    <sigma-seleccion-transicion *ngIf="data.mantenimiento.actividadAgrupada !== 'BE' && data.mantenimiento.origen.id === 372" [(data)]="data"
+      [transiciones]="transicionesOrigenSeguimiento" (executeTransition)="executeTransition($event)">
+    </sigma-seleccion-transicion>
+  </div>
+
+</div>

@@ -1,0 +1,19 @@
+<h2 mat-dialog-title>Programación visitas técnicas</h2>
+
+<mat-dialog-content>
+  <sigma-grid-mantenimientos class="w-100" #grid [data]="data" [columns]="columns" 
+  [filters]="[]"
+  [defaultFilters]="defaultFilters"
+  [columnsToExport]="columnsToExport"
+  [showExport]="true"
+  [confirmFormatToExport]="true">
+  </sigma-grid-mantenimientos>
+</mat-dialog-content>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+  </button>
+</mat-dialog-actions>

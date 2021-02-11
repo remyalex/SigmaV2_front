@@ -1,0 +1,116 @@
+<div>
+  <div>
+    <mat-card-header fxLayoutAlign="center">
+      <mat-card-subtitle>
+        <h2>Gestionar Selecciones</h2>
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content class="container">
+      <div fxFlex="100">
+        <form (ngSubmit)="search()" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.nombre }}" id="nombre" [(ngModel)]="criteria.nombre"
+                name="nombre" type="text" />
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <button type="submit" mat-raised-button color="primary" class="m-1" (click)="search()">
+              <mat-icon>search</mat-icon> {{ constants.buscar }}
+            </button>
+            <button (click)="clear()" mat-raised-button color="warn" class="m-1">
+              <mat-icon>clear</mat-icon> {{ constants.limpiar }}
+            </button>
+            <button layout="row" mat-raised-button color="primary"
+              [disabled]="dataSource.totalElements$.source['_value'] <= 0" layout="row" 
+              mat-raised-button color="primary" class="m-1"  (click)="exportAsXLSX()" 
+              *sigmaIsGranted="constants.permiso_administracion_grupo_export">
+              <mat-icon>get_app</mat-icon>
+              {{ constants.exportar }}
+              <mat-spinner *ngIf="cargandoExcel" color="accent" [diameter]="20"></mat-spinner>
+            </button>
+            <button fxFlex.sm="50" fxFlex.xs="50" mat-raised-button color="primary" class="m-1" (click)="importar()">
+              <mat-icon>cloud_upload</mat-icon>
+              Importar
+            </button>
+          </div>
+        </form>
+      </div>
+    </mat-card-content>
+  </div>
+</div>
+
+<div class="mat-elevation-z8">
+  <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center" >
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+  <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+    <mat-icon class="m-1">sms_failed</mat-icon>  <h4> {{dataSource.errorMessage$ | async}}</h4>
+  </div>
+
+  <mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$"  matSort>
+  
+    <ng-container matColumnDef="nombre">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.nombre }} </mat-header-cell>
+      <mat-cell *matCellDef="let grupo" [attr.data-label]="constants.nombre">
+        {{grupo.nombre}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="descripcion">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.descripcion }} </mat-header-cell>
+      <mat-cell *matCellDef="let grupo" [attr.data-label]="constants.descripcion">
+        {{grupo.descripcion}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="fecha">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fecha }} </mat-header-cell>
+      <mat-cell *matCellDef="let grupo" [attr.data-label]="constants.fecha">
+        {{grupo.fecha}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="calzadas">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.calzadas }} </mat-header-cell>
+      <mat-cell *matCellDef="let grupo" [attr.data-label]="constants.calzadas">
+        {{grupo.calzadas}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="kilometroCarril">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.kilometroCarril }} </mat-header-cell>
+      <mat-cell *matCellDef="let grupo" [attr.data-label]="constants.kilometroCarril">
+        {{grupo.kilometroCarril}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="activo">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.activo }} </mat-header-cell>
+      <mat-cell *matCellDef="let grupo" [attr.data-label]="constants.activo">
+        <span class="dev-color-red" [hidden]="grupo.activo">{{ constants.no }}</span>
+        <span class="dev-color-green" [hidden]="!grupo.activo">{{ constants.si }}</span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+      <mat-cell *matCellDef="let grupo" [attr.data-label]="constants.acciones">
+        <button mat-raised-button color="primary" (click)="edit(grupo)" class="m-1"
+          *sigmaIsGranted="constants.permiso_administracion_grupo_update">
+          <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+        </button>
+        <button mat-raised-button color="warn" (click)="delete(grupo)" class="m-1"
+          *sigmaIsGranted="constants.permiso_administracion_grupo_delete">
+          <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [length]= "dataSource.totalElements$ | async" [pageSize]="criteria.size" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+</div>

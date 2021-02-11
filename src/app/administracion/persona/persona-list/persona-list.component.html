@@ -1,0 +1,120 @@
+<div>
+  <div>
+    <mat-card-header fxLayoutAlign="center">
+      <mat-card-subtitle>
+        <h2>Personas</h2>
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.identificacion }}" id="identificacion"
+                [(ngModel)]="criteria.identificacion" name="identificacion" type="text" />
+            </mat-form-field>
+          </div>
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.nombres }}" id="nombres" [(ngModel)]="criteria.nombres"
+                name="nombres" type="text" />
+            </mat-form-field>
+          </div>
+          <div fxFlex>
+            <button type="submit" mat-raised-button color="primary" class="m-1" (click)="search()">
+              <mat-icon>search</mat-icon> {{ constants.buscar }}
+            </button>
+            <button (click)="clear()" mat-raised-button color="warn" class="m-1">
+              <mat-icon>clear</mat-icon> {{ constants.limpiar }}
+            </button>
+            <button layout="row" mat-raised-button color="primary" class="m-1" (click)="exportAsXLSX()"
+              *sigmaIsGranted="constants.permiso_administracion_persona_export"
+              [disabled]="dataSource.totalElements$.source['_value'] <= 0">
+              <mat-icon>get_app</mat-icon>
+              {{ constants.exportar }}
+              <mat-icon *ngIf="cargandoExcel">
+                <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+              </mat-icon>
+            </button>
+          </div>
+        </div>
+      </form>
+    </mat-card-content>
+
+  </div>
+</div>
+
+<div class="mat-elevation-z8">
+  <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center">
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+  <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+    <mat-icon class="m-1">sms_failed</mat-icon>
+    <h4> {{dataSource.errorMessage$ | async}}</h4>
+  </div>
+
+  <mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort>
+
+    <ng-container matColumnDef="estado">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.estado }} </mat-header-cell>
+      <mat-cell *matCellDef="let persona" [attr.data-label]="constants.estado">
+        {{persona.estado ? persona.estado.descripcion : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="identificacion">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.identificacion }} </mat-header-cell>
+      <mat-cell *matCellDef="let persona" [attr.data-label]="constants.identificacion">{{persona.identificacion}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="tipoIdentificacion">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.tipoIdentificacionId }} </mat-header-cell>
+      <mat-cell *matCellDef="let persona" [attr.data-label]="constants.tipoIdentificacionId">
+        {{persona.tipoIdentificacion ? persona.tipoIdentificacion.valor : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="nombres">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.nombres }} </mat-header-cell>
+      <mat-cell *matCellDef="let persona" [attr.data-label]="constants.nombres">{{ persona.nombres + ' ' + persona.apellidos }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="telefono">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.telefono }} </mat-header-cell>
+      <mat-cell *matCellDef="let persona" [attr.data-label]="constants.telefono">{{persona.telefono}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="correo">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.correo }} </mat-header-cell>
+      <mat-cell *matCellDef="let persona" [attr.data-label]="constants.correo">{{persona.correo}}
+      </mat-cell>
+    </ng-container>
+
+
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+      <mat-cell *matCellDef="let persona" [attr.data-label]="constants.acciones">
+        <button mat-raised-button color="primary" (click)="detail(persona)"
+          *sigmaIsGranted="constants.permiso_administracion_persona_view" class="m-1">
+          <mat-icon matTooltip="Detalles" matTooltipPosition="above">open_in_new</mat-icon>
+        </button>
+        <button mat-raised-button color="primary" (click)="edit(persona)"
+          *sigmaIsGranted="constants.permiso_administracion_persona_update" class="m-1">
+          <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+        </button>
+        <button mat-raised-button color="warn" (click)="delete(persona)"
+          *sigmaIsGranted="constants.permiso_administracion_persona_delete" class="m-1">
+          <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size"
+    [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+</div>

@@ -1,0 +1,63 @@
+<div fxLayout="column" fxLayout.gt-sm="row wrap">
+    <div fxFlex="100" class="flex-p">
+        <mat-card-header fxLayoutAlign="center">
+            <mat-card-subtitle>
+                <h2>Mi Gestión</h2>
+            </mat-card-subtitle>
+        </mat-card-header>   
+    </div>
+</div>
+
+<div class="mat-elevation-z8">
+  <div *ngIf="(dataSource.loading$ | async)" fxLayout="column" fxLayoutAlign="center center">
+      <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+
+  <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+      <mat-icon class="m-1">sms_failed</mat-icon>
+      <h4> {{dataSource.errorMessage$ | async}}</h4>
+  </div>
+
+  <mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort>
+      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+
+      <ng-container matColumnDef="pk">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.pk}} </mat-header-cell>>
+          <mat-cell *matCellDef="let dataSource" [attr.data-label]="constants.pk">
+               {{ dataSource.pk }}
+          </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="actividadActual">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.actividadActual}} </mat-header-cell>>
+          <mat-cell *matCellDef="let dataSource" [attr.data-label]="constants.actividadActual">
+              {{ dataSource.actividadActual == null ? '' : dataSource.actividadActual.descripcion }}
+          </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fecha">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.fecha}} </mat-header-cell>>
+          <mat-cell *matCellDef="let dataSource" [attr.data-label]="constants.fecha">
+              {{ dataSource.fechaAsignacion == null ? '' : dataSource.fechaAsignacion }}
+          </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="estadoPk">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.estadoPk}} </mat-header-cell>>
+          <mat-cell *matCellDef="let dataSource" [attr.data-label]="constants.estadoPk">
+              {{ dataSource.estadoPk == null ? '' : dataSource.estadoPk.descripcion }}
+          </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="acciones">
+          <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+          <mat-cell *matCellDef="let dataSource" [attr.data-label]="constants.acciones">
+              <button mat-raised-button color="primary" (click)="work(dataSource)" class="m-1">
+                  <mat-icon matTooltip="Detalle" matTooltipPosition="above">open_in_new</mat-icon>
+              </button>
+          </mat-cell>
+      </ng-container>
+
+      <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+  </mat-table>
+</div>   

@@ -1,0 +1,38 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="processing">
+
+  <div [hidden]="currentAction !== 'list'">
+    <mat-card-content>   
+      <mat-tab-group [selectedIndex]="tabSeleccionado.value" (selectedIndexChange)="seleccionarGrid($event)">
+        <mat-tab *ngFor="let transicion of transicionesMasivas" label="{{transicion.nombre}}">
+          <sigma-grid-mantenimientos #grid [data]="data" [transicion]="transicion"
+            [columns]="columns" [filters]="filters" [singleActions]="acciones" (executeOnSingle)="ejecutar($event)"
+            (executeOnMasiveTransition)="executeMasiveTransition($event)" [showExport]="false" [showCheckMasive]="true" >
+          </sigma-grid-mantenimientos>
+        </mat-tab>
+      </mat-tab-group> 
+    </mat-card-content>
+  </div>
+
+  <div *ngIf="currentAction === 'work'">
+    <sigma-predisenio-detail [(predisenio)]="predisenio" [mantenimiento]="mantenimiento" (back)="back($event)">
+    </sigma-predisenio-detail>
+    <sigma-seleccion-transicion [(data)]="data" [transiciones]="transicionesIndividuales"
+      (executeTransition)="executeTransition()"></sigma-seleccion-transicion>
+  </div>
+  
+  <div *ngIf="currentAction === 'detalleDiagnostico'">
+    <div fxLayout="row" fxLayout.lt-md="column">
+      <div fxLayoutAlign="start" fxFlex>
+        <button mat-stroked-button color="primary" class="m-1 mb-10" (click)="onBackList()">
+          <mat-icon>arrow_back_ios</mat-icon>
+          Atras</button>
+      </div>
+    </div>
+    <sigma-ver-diagnostico [mantenimiento]="mantenimiento" [mostrarButtonsBackCancelar]="false">
+    </sigma-ver-diagnostico>
+  </div>
+</div>

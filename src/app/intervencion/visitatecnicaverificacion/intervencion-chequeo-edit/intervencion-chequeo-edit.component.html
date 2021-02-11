@@ -1,0 +1,61 @@
+<h2 mat-dialog-title>Observaciones Y Fotografías de la Visita</h2>
+<div [formGroup]="form" class="mb-10">
+  <div fxLayout="row" fxLayout.lt-md="column" class="mb-10">
+    <div fxFlex="50">
+      <sigma-form-select
+        [path]="'/api/administracion/lista/LISTA_CHEQUEO_DEFINICION_SOLICITUD_ACTUALIZACION_DIAGNOSTICO/items'"
+        name="chequeo" placeholder="Lista Chequeo" [listBy]="'descripcion'" [(ngModel)]="chequeo.listaChequeo"
+        (ngModelChange)="onListaChequeoChange()"formControlName="chequeo">
+      </sigma-form-select>
+    </div>
+  </div>
+
+  <div div fxLayout="row" fxLayout.lt-md="column" class="mb-10">
+      <mat-form-field class="w-100">
+        <textarea matInput rows="5" formControlName="observaciones" placeholder="Observaciones (*)"
+          [(ngModel)]="chequeo.observaciones" ></textarea>
+        <mat-error *ngIf="form.get('observaciones').hasError('maxlength')"> {{ constants.longitud_maxima }} 600
+            caracteres. 
+        </mat-error>
+        <mat-error  *ngIf="form.get('observaciones').hasError('required')">
+            {{ constants.informacionCampoObligatorio}}
+        </mat-error>
+      </mat-form-field>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+    <button mat-raised-button color="primary" class="m-1" (click)="toggleWebcam()" [disabled] = "disabledControl">
+      <mat-icon class="m-1">camera_alt</mat-icon> {{ showWebcam ? 'Apagar cámara' : 'Encender cámara' }}
+    </button>
+  </div>
+
+  <div *ngIf="showWebcam" fxLayout="row" fxLayoutAlign="center" class="flex-p">
+      <sigma-form-webcam (pictureTaken)="handleImage($event)" [tomarFotoBtn] = "tomarFotoBtn && !disabledControl">
+      </sigma-form-webcam>
+  </div>
+  <!--
+  <div *ngIf="webcamImage " fxLayout="row" fxLayoutAlign="center" class="flex-p">
+    <img width="300" height="225" [src]="webcamImage.imageAsDataUrl" />
+  </div>
+-->
+
+  <div div fxLayout="row" fxLayout.lt-md="column" class="mb-10">
+    <div fxFlex>
+      <sigma-form-upload-file #sigmaFormUploadFile [minUpload]=minUploadFiles [maxUpload]=maxUploadFiles formControlName="archivos" [ngModel]="fotos" 
+        placeholder="Fotos" [accept]="'image/*'" [showFile]="true" [multiple]="true" (ngModelChange)="setArchivoFoto($event)" [disabled] = "disabledControl">
+      </sigma-form-upload-file>
+    </div>
+  </div>
+</div>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-actions fxLayoutAlign="end">
+  <button mat-button color="warn" class="m-1" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> Cancelar
+  </button>
+  <button mat-raised-button class="m-1" color="primary" (click)="save()" >
+    <mat-icon class="m-1">save</mat-icon>
+    Guardar 
+  </button>
+</mat-dialog-actions>

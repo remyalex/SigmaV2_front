@@ -1,0 +1,91 @@
+<h2 mat-dialog-title>{{ constants.detalle }}</h2>
+
+<mat-dialog-content *sigmaIsGranted="constants.permiso_administracion_mensaje_view">
+  <mat-list>
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.activo }}</b>:
+        </div>
+        <div class="p-tab" fxFlex="60">
+          <span class="dev-color-red" [hidden]="mensaje.activo">{{ constants.no }}</span>
+          <span class="dev-color-green" [hidden]="!mensaje.activo">{{ constants.si }}</span>
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.destinatarioId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ mensaje.destinatarioValor }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.fechaRegistro }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ mensaje.fechaRegistro }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.id }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ mensaje.id }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.leido }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ mensaje.leido }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.mensaje }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ mensaje.mensaje }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="mb-10">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.origen }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ mensaje.origen }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+  </mat-list>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">clear</mat-icon> {{ constants.cerrar }}</button>
+</mat-dialog-actions>

@@ -1,0 +1,68 @@
+<h2 mat-dialog-title>{{ constants.detalle }} Novedad</h2>
+
+<mat-dialog-content>
+  <mat-list>
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.tipoNovedadPersonaId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ personanovedad.tipoNovedadPersona ? personanovedad.tipoNovedadPersona.valor : '' }}
+        </div>
+      </div>
+    </mat-list-item>
+  
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.fechaDesde }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ personanovedad.fechaDesde }}
+        </div>
+      </div>
+    </mat-list-item>
+  
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.fechaHasta }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ personanovedad.fechaHasta }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.observaciones }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ personanovedad.observaciones }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="mb-10">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.activo }}</b>:
+        </div>
+        <div class="p-tab" fxFlex="60">
+          <span class="dev-color-red" [hidden]="personanovedad.activo">{{ constants.no }}</span>
+          <span class="dev-color-green" [hidden]="!personanovedad.activo">{{ constants.si }}</span>
+        </div>
+      </div>
+    </mat-list-item>
+  </mat-list>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cerrar }}</button>
+</mat-dialog-actions>

@@ -1,0 +1,170 @@
+<h2 mat-dialog-title>{{ constants.detalle }} Lugar</h2>
+
+<mat-dialog-content>
+  <mat-list>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.tipoLugarId }}:</b>
+        </div>
+        <div fxFlex="60">
+          {{ lugar.tipoLugar ? lugar.tipoLugar.valor :  '' }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.origenLugarId }}:</b>
+        </div>
+        <div fxFlex="60">
+          {{ lugar.origenLugar ? lugar.origenLugar.valor : '' }}
+        </div>
+      </div>  
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.estadoLugarId }}:</b>
+        </div>
+        <div fxFlex="60">
+          {{ lugar.estadoLugar ? lugar.origenLugar.valor : '' }}
+        </div>
+      </div>  
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.nombre }}:</b>
+        </div>
+        <div fxFlex="60">
+          {{ lugar.nombre }}
+        </div>
+      </div>  
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.descripcion }}:</b>
+        </div>
+        <div fxFlex="60">
+          {{ lugar.descripcion }}
+        </div>
+      </div>  
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.contactoNombre }}:</b>
+        </div>
+        <div fxFlex="60">
+          {{ lugar.contactoNombre }}
+        </div>
+      </div>  
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.contactoTelefono }}:</b>
+        </div>
+        <div fxFlex="60">
+          {{ lugar.contactoTelefono }}
+        </div>
+      </div>  
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.contactoCorreo }}:</b>
+        </div>
+        <div fxFlex="60">
+          {{ lugar.contactoCorreo }}
+        </div>
+      </div>  
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.direccion }}:</b>
+        </div>
+        <div fxFlex="60">
+          {{ lugar.direccion }}
+        </div>
+      </div>  
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.fechaDesde }}:</b>
+        </div>
+        <div fxFlex="60">
+          {{ lugar.fechaDesde }}
+        </div>
+      </div>  
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.fechaHasta }}:</b>
+        </div>
+        <div fxFlex="60">
+            {{ lugar.fechaHasta }}
+        </div>
+      </div>  
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.horaInicio }}:</b>
+        </div>
+        <div fxFlex="60">
+          {{ lugar.horaInicio | date: 'HH:mm' }}
+        </div>
+      </div>  
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.horaFin }}:</b>
+        </div>
+        <div fxFlex="60">
+          {{ lugar.horaFin | date: 'HH:mm' }}
+        </div>
+      </div>  
+    </mat-list-item>
+
+    <mat-list-item class="mb-10">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.activo }}:</b>
+        </div>
+        <div fxFlex="60" class="p-tab">
+          <span class="dev-color-red" [hidden]="lugar.activo">No</span>
+          <span class="dev-color-green" [hidden]="!lugar.activo">Si</span>
+        </div>
+      </div>  
+    </mat-list-item>
+
+  </mat-list>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cerrar }}
+  </button>
+</mat-dialog-actions>

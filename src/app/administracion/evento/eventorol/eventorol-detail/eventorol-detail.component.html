@@ -1,0 +1,69 @@
+<h2 mat-dialog-title>{{ constants.detalle }} Rol de evento</h2>
+
+<mat-dialog-content *sigmaIsGranted="constants.permiso_administracion_eventorol_view">
+  <mat-list>
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.rolId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ eventorol.rol.nombre }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.fechaDesde }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ eventorol.fechaDesde }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.fechaHasta }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ eventorol.fechaHasta }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.valorPermitidoId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ eventorol.valorPermitido?.valor }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="mb-10">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.activo }}</b>:
+        </div>
+        <div class="p-tab" fxFlex="60">
+          <span class="dev-color-red" [hidden]="eventorol.activo">{{ constants.no }}</span>
+          <span class="dev-color-green" [hidden]="!eventorol.activo">{{ constants.si }}</span>
+        </div>
+      </div>  
+    </mat-list-item>
+
+  </mat-list>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cerrar }}</button>
+</mat-dialog-actions>

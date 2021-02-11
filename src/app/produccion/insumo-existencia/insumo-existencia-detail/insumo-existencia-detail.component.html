@@ -1,0 +1,145 @@
+<h2 mat-dialog-title>{{ constants.detalle }} {{ constants.titulo }}</h2>
+
+<mat-dialog-content *sigmaIsGranted="constants.permiso_produccion_insumo_existencia_view">
+  <mat-list>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.fechaInicial }}</b>:
+        </div>
+        <div class="p-tab" fxFlex="60">
+          <span> {{ registro.fechaInicial }} </span>
+        </div>
+      </div>
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.fechaFinal }}</b>:
+        </div>
+        <div class="p-tab" fxFlex="60">
+          <span>
+            {{ registro.fechaFinal }}
+          </span>
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.insumo }}</b>:
+        </div>
+        <div class="p-tab" fxFlex="60">
+          <span> {{ 
+            registro.insumo.nombre ? registro.insumo.nombre : ''
+          }} </span>
+        </div>
+      </div>
+
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.codigoInsumo }}</b>:
+        </div>
+        <div class="p-tab" fxFlex="60">
+          <span> {{ 
+            registro.insumo && registro.insumo.codigo ? 
+            registro.insumo.codigo : ''
+          }} </span>
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.unidadMedida }}</b>:
+        </div>
+        <div class="p-tab" fxFlex="60">
+          <span> {{ 
+            registro.insumo && registro.insumo.unidadMedida ? 
+            registro.insumo.unidadMedida.descripcion : ''
+          }} </span>
+        </div>
+      </div>
+
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.contrato }}</b>:
+        </div>
+        <div class="p-tab" fxFlex="60">
+          <span> {{ 
+            registro.contrato && registro.contrato.numeroContrato ? 
+            registro.contrato.numeroContrato : '' 
+          }} </span>
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.inventarioInicial }}</b>:
+        </div>
+        <div class="p-tab" fxFlex="60">
+          <span> {{ registro.inventarioInicial }} </span>
+        </div>
+      </div>
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.inventarioFinal }}</b>:
+        </div>
+        <div class="p-tab" fxFlex="60">
+          <span> {{ registro.inventarioFinal }} </span>
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.cantidadEntrada }}</b>:
+        </div>
+        <div class="p-tab" fxFlex="60">
+          <span> {{ registro.cantidadEntrada }} </span>
+        </div>
+      </div>
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.cantidadSalida }}</b>:
+        </div>
+        <div class="p-tab" fxFlex="60">
+          <span> {{ registro.cantidadSalida }} </span>
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item *ngIf="this.siTipoMezcla">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column" >
+        <div fxFlex>
+          <b>{{ constants.tipoMezcla }}</b>:
+        </div>
+        <div class="p-tab" fxFlex="60">
+          <span> {{ registro.tipoMezcla ? registro.tipoMezcla.descripcion : '' }} </span>
+        </div>
+      </div>
+
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b></b>
+        </div>
+        <div class="p-tab" fxFlex="60">
+          <span> {{''}} </span>
+        </div>
+      </div>
+    </mat-list-item>
+
+  </mat-list>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" class="m-1" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cerrar }}
+  </button>
+</mat-dialog-actions>

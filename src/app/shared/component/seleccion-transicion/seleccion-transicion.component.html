@@ -1,0 +1,71 @@
+<div fxFlex="100" class="mt-10">
+  <mat-card class="p-0 c-mod mb-10">
+    <mat-card-header fxLayoutAlign="center">
+      <mat-card-subtitle>
+        <h3>Gestionar selección</h3>
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content class="p-16 m-0" [formGroup]="formularioTransicion">
+
+      <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+        <div fxFlex>
+          <mat-form-field class="w-100">
+            <mat-select class="w-100" placeholder="Transición a aplicar" [(value)]="transicion" [(ngModel)]="transicion"
+              (selectionChange)="changeTransition()" formControlName="transicion" [compareWith]="compareFnFixDefaultValue" >
+              <mat-option *ngFor="let option of transiciones" [value]="option">
+                {{ option.nombre }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="formularioTransicion.get('transicion').hasError('required')">
+              {{ 'constants.campoRequerido' }} </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex [hidden]="userHidden || transicion=== null">
+          <mat-form-field class="w-100">
+            <mat-select class="w-100" placeholder="Usuario a asignar" [(ngModel)]="asignado"
+              formControlName="responsable">
+              <mat-option *ngFor="let option of asignables" [value]="option">
+                {{ option.nombres }} {{option.apellidos}}
+              </mat-option>
+            </mat-select>
+            <mat-icon *ngIf="loading" fxLayoutAlign="center end" matSuffix color="warn">
+              <mat-spinner [diameter]="15"></mat-spinner>
+            </mat-icon>
+            <mat-error *ngIf="formularioTransicion.get('responsable').hasError('required')">
+              {{ constants.campoRequerido }} 
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div *ngIf="transicion != null?transicion.requiereObservacion:false" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px"
+        fxLayoutGap.lt-md="0">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <textarea matInput placeholder="Observación *" rows="5" [(ngModel)]="observaciones"
+              formControlName="observacion"></textarea>
+            <mat-error *ngIf="formularioTransicion.get('observacion').hasError('maxlength')">
+              {{ constants.longitud_maxima }} 300 caracteres. </mat-error>
+            <mat-error *ngIf="formularioTransicion.get('observacion').hasError('required')">
+              {{ constants.campoRequerido }} </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+            <mat-card-actions align="end">
+                <button mat-button *ngIf="mostrarButtonCancelar" color="warn" (click)="onBack()">
+                  <mat-icon class="m-1">close</mat-icon>
+                  {{ cancelButtonLabel || 'Cancelar' }}
+                </button>
+                <button mat-raised-button color="primary" (click)="save()"
+                  [disabled]="!isReadyForSubmit()">
+                  <mat-icon class="m-1">save</mat-icon> Enviar
+                </button>
+            </mat-card-actions>
+        </div>
+      </div>
+  
+    </mat-card-content>
+  </mat-card>
+</div>

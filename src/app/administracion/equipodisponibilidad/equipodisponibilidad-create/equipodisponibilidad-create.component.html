@@ -1,0 +1,111 @@
+<div fxLayout="column">
+  <div class="flex-p">
+    <mat-card class="p-0 mat-card">
+      <mat-card-header fxLayoutAlign="center">
+        <mat-card-subtitle>
+          <h2>{{ constants.crear }} Disponibilidad equipos</h2>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+        <h5>{{ constants.informacionCampoObligatorio }}</h5>
+      </div>
+
+      <mat-card-content class="p-16 m-0" [formGroup]="form"
+        *sigmaIsGranted="constants.permiso_administracion_equipodisponibilidad_create">
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+          <div fxFlex>
+            <div class="w-100">
+              <!-- <sigma-form-autocomplete [path]="constants.path_administracion_equipodisponibilidad_equipoId"
+                [placeholder]="constants.equipoId" formControlName="equipoId" [(ngModel)]="equipodisponibilidad.equipo"
+                [searchBy]="searchBy" (ngModelChange)="onChangeAutocompleteForm($event)">
+              </sigma-form-autocomplete> -->
+              <app-sigma-autocomplete [label]="constants.equipoId" (selectItem)="setEquipoEquipodisponibilidad($event)"
+                [path]="constants.path_administracion_equipodisponibilidad_equipoId" [searchBy]="'numeroInterno'"
+                [rectificadorCriteria]="'&activo=true&claseEquipoId=&movil=&placa=&placaInventario=&tipoEquipoId=&marcaEquipoId=&estadoEquipoId=&lugarEquipoId&origenEquipoId=&esMaquinariaProduccion=false'"
+                [parametroAdicional1]="'movil'" [parametroAdicional2]="'placa'" [labelparametro1]="'Número interno'"
+                [labelparametro2]="'Movil'" [labelparametro3]="'Placa'" required="true" value="" (ngModelChange)="onChangeAutocompleteForm($event)">
+              </app-sigma-autocomplete>
+              <input matInput type="text" placeholder="" formControlName="equipoId" [(ngModel)]="equipodisponibilidad.equipo.id"
+                autocomplete="off" hidden>
+              <mat-error *ngIf="enviada && form.get('equipoId').hasError('required')"> {{ constants.campoRequerido }}
+              </mat-error>
+            </div>
+          </div>
+
+          <div fxFlex>
+            <sigma-form-calendar 
+              formControlName="fechaDesde" 
+              [(ngModel)]="equipodisponibilidad.desde"
+              [type]="this.constants.datepicker.types.calendar" 
+              [placeholder]="constants.fechaDesde"
+              [objeto]="equipodisponibilidad"
+              [maxTarget]="'hasta'">
+            </sigma-form-calendar>
+          </div>
+
+          <div fxFlex>
+              <sigma-form-calendar 
+              formControlName="fechaHasta" 
+              [(ngModel)]="equipodisponibilidad.hasta"
+              [type]="this.constants.datepicker.types.calendar" 
+              [placeholder]="constants.fechaHasta"
+              [objeto]="equipodisponibilidad"
+              [minTarget]="'desde'">
+            </sigma-form-calendar>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+
+          <div fxFlex>
+              <sigma-form-calendar 
+              formControlName="intervalo" 
+              [(ngModel)]="equipodisponibilidad.intervalo"
+              [type]="this.constants.datepicker.types.timer" 
+              [placeholder]="constants.intervalo">
+            </sigma-form-calendar>
+          </div>
+
+          <div fxFlex>
+            <div class="w-100">
+              <sigma-form-select formControlName="turnoId" [(ngModel)]="equipodisponibilidad.turno"
+                [path]="constants.path_administracion_equipodisponibilidad_turnoId"
+                [placeholder]="constants.turnoId">
+              </sigma-form-select>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider> -->
+
+        <div fxLayout="row" fxLayoutAlign="start" class="flex-p">
+          <button type="button" [disabled]="!this.calendariocompletado" (click)="mostrar = !mostrar" mat-raised-button
+            color="primary" class="m-1">{{ mostrar ? 'Ocultar' : 'Disponibilidad' }}
+            <mat-icon *ngIf="this.cargandoDisponibilidad">
+              <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+            </mat-icon>
+          </button>
+        </div>
+
+        <sigma-schedule *ngIf="mostrar" [listaCalendario]="events"  (viewDateChange)="getEventMonthChanged($event)"></sigma-schedule>
+      </mat-card-content>
+
+      <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+      <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+        <button mat-button class="m-1" color="warn" (click)="onBack()" [disabled]="disableSubmit">
+          <mat-icon class="m-1">close</mat-icon>
+          {{ constants.cancelar }}
+        </button>
+        <button mat-raised-button class="m-1" color="primary" [disabled]="disableSubmit" (click)="onSubmit()"
+          *sigmaIsGranted="constants.permiso_administracion_equipodisponibilidad_create">
+          <mat-icon class="m-1">save</mat-icon>
+          {{ constants.guardar }}
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</div>

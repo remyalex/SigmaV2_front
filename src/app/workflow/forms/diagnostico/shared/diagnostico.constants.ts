@@ -1,0 +1,262 @@
+import { CONST_SHARED } from 'src/app/shared/constantes-shared';
+
+/** 
+*  Constantes con valores de URL´s relacionadas con el componente 
+*/
+export const PATHS = {
+  path_workflow_diagnostico_encabezado_seccion_vial:
+    '/api/administracion/lista/MEJORAMIENTO_SECCION_VIAL/items',
+  path_workflow_diagnostico_encabezado_solicitante:
+  '/api/administracion/persona',
+  path_workflow_diagnostico_origen:
+  '/api/administracion/lista/MEJORAMIENTO_TIPO_SOLICITUD/items',
+  path_workflow_diagnostico_encabezado_uso_via:
+    '/api/administracion/lista/MEJORAMIENTO_USO_VIAL/items',
+  path_workflow_diagnostico_encabezado_tipo_malla:
+    '/api/administracion/lista/MEJORAMIENTO_TIPO_MALLA/items',
+  path_workflow_diagnostico_encabezado_transitabilidad:
+    '/api/administracion/lista/MEJORAMIENTO_TRANSITABILIDAD/items',
+  path_workflow_diagnostico_encabezado_programa:
+    '/api/administracion/lista/TAB_MANTENIMIENTO_VIAL_ID_TIPO_PROGRAMA/items',
+  path_workflow_diagnostico_encabezado_tipo_superficie:
+    '/api/administracion/lista/MEJORAMIENTO_TIPO_SUPERFICIE/items',
+  path_workflow_diagnostico_encabezado_tipo_intervencion:
+  '/api/administracion/tipoIntervencion/listByReferenciaIntervencion/647373/{tipoSuperficie}',
+  path_workflow_diagnostico_encabezado_reisar_tipo_intervencion:
+  '/api/administracion/tipoIntervencion',
+  path_workflow_diagnostico_zonas:
+    '/api/administracion/lista/UMV_ZONAS/items',
+  path_workflow_diagnostico_factores_tipo_factor:
+    '/api/administracion/lista/MEJORAMIENTO_TIPO_FACTOR/items',
+  path_mejoramiento_diagnosticomodeloprioriza_aporteCumplimiento:
+    '/api/administracion/lista/MEJORAMIENTO_APORTE_CUMPLIMIENTO/items',
+  path_mejoramiento_diagnosticomodeloprioriza_coordinacionInterinst:
+    '/api/administracion/lista/MEJORAMIENTO_COORDINACION_INTERINST/items',
+  path_mejoramiento_diagnosticomodeloprioriza_determTipoIntervencion:
+    '/api/administracion/lista/MEJORAMIENTO_DETERM_TIPO_INTERVENCION/items',
+  path_mejoramiento_diagnosticomodeloprioriza_diagnosticoEncabezado:
+    '/api/administracion/lista/MEJORAMIENTO_DIAGNOSTICO_ENCABEZADO/items',
+  path_mejoramiento_diagnosticomodeloprioriza_impactoSocial:
+    '/api/administracion/lista/MEJORAMIENTO_IMPACTO_SOCIAL/items',
+  path_workflow_diagnostico_priorizacion_aporte_cumplimiento:
+    '/api/administracion/lista/MEJORAMIENTO_APORTE_CUMPLIMIENTO/items',
+  path_workflow_diagnostico_priorizacion_coordinacion_interinstitucional:
+    '/api/administracion/lista/TAB_MANTENIMIENTO_VIAL_ID_TIPO_COORDINACION_INTERINST/items',
+  path_workflow_diagnostico_priorizacion_tipo_intervencion:
+    '/api/administracion/lista/TAB_MANTENIMIENTO_VIAL_ID_TIPO_DETERMINACION_INTERV/items',
+  path_workflow_diagnostico_priorizacion_impacto_social:
+    '/api/administracion/lista/MEJORAMIENTO_IMPACTO_SOCIAL/items',
+
+  path_workflow_diagnostico_fallas_tipo_falla:
+    '/api/administracion/tipofalla/listByTipoSuperficie/{tipoSuperficieId}',
+  path_workflow_diagnostico_fallas_unidades_muestreo:
+    '/api/administracion/lista/TAB_FALLA_ID_TIPO_FALLA/{acronimotiposuperficie}/items',
+  path_workflow_diagnostico_fallas_severidad:
+    '/api/administracion/lista/MEJORAMIENTO_SEVERIDAD/items',
+  path_workflow_diagnostico_fallas_tipoIntervencion:
+    '/api/administracion/tipoIntervencion/listByReferenciaIntervencion/647374/{tipoSuperficieId}',
+  path_administracion_equipo_equipoAutocomplete: '/api/administracion/equipo/searchAutocompletar',
+  path_administracion_equipo_vehiculoAutocomplete: '/api/administracion/equipo/vehiculoAutocompletar',
+  path_administracion_usuario_usuarioAutocomplete: '/api/usuario/searchAutocomplete',
+  path_administracion_equipo_calendarios: 'api/administracion/equipocalendario/calendarios/search',
+  path_administracion_persona_visitaprogramada: '/api/administracion/persona/findAllPersonasVisitaProgramada',
+  path_administracion_personas_disponibles: '/api/administracion/persona/findAllPersonasDisponibles',
+  path_administracion_personas_disponibles_usu_interno: '/api/administracion/persona/findAllPersonasDisponiblesYusuarioInterno',
+  path_administracion_persona_cargalaboral: '/api/administracion/persona',
+  path_mejoramiento_lista_tipoSolicitud: '/api/administracion/lista/MEJORAMIENTO_TIPO_SOLICITUD/items',
+  path_intervencion_perosna_director_obra: '/api/administracion/persona/directorObra',
+  path_personas_con_usuarios_y_rol_ingeniero_disenio: '/api/administracion/persona/findAllPersonasIngenierosDisenio',
+  path_administracion_usuario_director_obra: '/api/usuario/usuariosPorNombreRol/DIRECTOR DE OBRA',
+  path_programar_otros_origen: '/api/administracion/lista/ORIGEN_PROGRAMACION_VISITA/items',
+  path_lista_items_solicitud_apiques_aforos: '/api/administracion/lista/SOLICITUD_APIQUES_AFOROS/items',
+};
+
+/**
+ * Hommologación de las constantes de permisos usados por el componente 
+ * con los asignados en la base de datos
+ */
+export const PERMISOS = {
+  permiso_workflow_diagnostico_create: 'WORKFLOW_DIAGNOSTICO_REGISTRAR_CREATE',
+  permiso_workflow_diagnostico_update: 'WORKFLOW_DIAGNOSTICO_REGISTRAR_UPDATE',
+  permiso_workflow_diagnostico_delete: 'WORKFLOW_DIAGNOSTICO_REGISTRAR_DELETE',
+  permiso_workflow_diagnostico_view: 'WORKFLOW_DIAGNOSTICO_REGISTRAR_VIEW',
+  permiso_workflow_diagnostico_list: 'WORKFLOW_DIAGNOSTICO_REGISTRAR_LIST',
+  permiso_workflow_diagnostico_export: 'WORKFLOW_DIAGNOSTICO_REGISTRAR_EXPORT',
+  permiso_director_obra: 'DIRECTOR_OBRA',
+  permiso_profesional_lider_programacion: 'PROFESIONAL_LIDER_PROGRAMACION'
+};
+
+/**
+ * Declaración de constantes de etiquetas propias usadas en el componente
+ */
+export const CONST_WORKFLOW_DIAGNOSTICO = {
+  activo: 'Activo',
+  atras: 'Atrás',
+  actaVisitaTecnica: 'Acta de visita técnica',
+  disenoApique: 'Diseño - Apique',
+  revisarDiseno: 'Revisar Diseño (Información de diseño)',
+  vistaConjunta:'Vista Conjunta',
+  apellidos: 'Apellidos',
+  asignar: 'Asignar',
+  seccionVial: 'Sección vial',
+  solicitante: 'Solicitante',
+  uso_via: 'Uso vía',
+  tipo_malla: 'Tipo malla',
+  transitabilidad: 'Transitabilidad',
+  programa: 'Programa',
+  formularioOrigenRevisarVisita: 'revisarDiagnostico',
+  programar: 'Programar',
+  tipo_superficie: 'Tipo superficie',
+  tipo_intervencion_total: 'Tipo intervención total',
+  eje_vial: 'Eje vial',
+  desde: 'Desde',
+  hasta: 'Hasta',
+  uplaNombre: 'UPZ',
+  prioritarios: 'Prioritarios',
+  localidadNombre: 'Nombre de la localidad',
+  barrioNombre: 'Nombre del barrio',
+  aporte_cumplimiento: 'Aporte al cumplimiento de metas',
+  coordinacion_interinstucional: 'Coordinación interinstitucional',
+  tipo_intervencion: 'Tipo intervención',
+  detalle_tipo_intervencion: 'Determinación del tipo de intervención',
+  impacto_social: 'Impacto Social',
+  tipo_factor: 'Tipo factor',
+  campoRequerido: 'Campo requerido',
+  campoNoValido: 'Campo no válido',
+  cuadrante: 'Cuadrante',
+  actividadAgrupada: 'Actividad agrupada',
+  ancho: 'Ancho (m)',
+  andOr: 'And / Or',
+  area: 'Area (m2)',
+  prioridad: 'Prioridad',
+  solicitud: 'Solicitud',
+  autocomplete: 'autocomplete',
+  barrio: 'Barrio',
+  busquedaAvanzada: 'Busqueda avanzada',
+  calendariosEquipo: 'Calendarios equipos',
+  calendariosPersona: 'Calendarios personas',
+  calificacionPci: 'Calificación Pci',
+  capa: 'Capa',
+  campo: 'Campo',
+  civ: 'CIV',
+  contiene: 'Contiene',
+  consultaAvanzada: 'Consulta avanzada',
+  date: 'date',
+  dateRange: 'dateRange',
+  diagnosticoId: 'Diagnóstico',
+  diferente: 'Diferente',
+  direccion: 'Dirección',
+  directorObra: 'Director de obra',
+  directorObraResidente: 'Director de obra y residente',
+  enseguimiento: 'En seguimiento',
+  estadoPk: 'Estado PK',
+  estadosPk: {
+    pendiente_programacion: 'PENDIENTE_PROGRAMACION_VISITA_TECNICA'
+  },
+  equipo: 'Equipo',
+  equipos: 'Equipos',
+  fecha: 'Fecha',
+  fechaDesde: 'Fecha desde',
+  fechaHasta: 'Fecha hasta',
+  fechaFin: 'Fecha fin',
+  fechaSolicitudProgramacion: 'Fecha solicitud programación',
+  fechaVisita: 'Fecha visita',
+  fechaDiagnostico: 'Fecha diagnóstico',
+  fechaVisitaTecnica: 'Fecha visita técnica',
+  fechaProgramacion: 'Fecha de programación',
+  fechaInicioVisita: 'Fecha inicio de la visita',
+  fechaFinVisita: 'Fecha fin de la visita',
+  fechaVisitaDisenio: 'Fecha visita de diseño',
+  finaliza: 'Finaliza',
+  fotos: 'Fotos',
+  igual: 'Igual',
+  inicia: 'Inicia',
+  indicePriorizacion: 'Índice Priorización',
+  list: 'list',
+  listLocal: 'listLocal',
+  localidad: 'Localidad',
+  mantenimientos: 'Mantenimientos',
+  mantenimiento:  'Mantenimiento',
+  mayor: 'Mayor',
+  mayorIgual: 'Mayor igual',
+  menor: 'Menor',
+  menorIgual: 'Menor igual',
+  notQuery: 'No se ha ingresado una consulta para buscar',
+  nombres: 'Nombres',
+  origen: 'Origen',
+  operador: 'Operador',
+  persona: 'Persona',
+  personas: 'Personas',
+  pk: 'Pk',
+  responsable: 'Responsable',
+  asignacion: 'Asignación',
+  segimiento: 'SEGIMIENTO',
+  solicitudFecha: 'Solicitud Fecha',
+  tipoSolicitud: 'Tipo solicitud',
+  text: 'text',
+  tieneRutasTransporte: 'Tiene Rutas Transporte',
+  tipoIntervencionTotal: 'Tipo Intervención Total',
+  tipoMalla: 'Tipo de malla vial',
+  tipoSuperficie: 'Tipo Superficie',
+  usoVia: 'Uso de la Vía',
+  vacio: 'Vacio',
+  valor: 'Valor',
+  valorUnico: 'Valor único',
+  vistaDiagnostico: 'Vista Diagnóstico',
+  vistaVerificacion: 'Vista Verificación',
+  query: 'Query',
+  zona: 'Zona',
+  aporteCumplimiento: 'Aporte Cumplimiento',
+  coordinacionInterinst: 'Coordinacion Interinst',
+  determTipoIntervencion: 'Determ Tipo Intervencion',
+  diagnosticoEncabezado: 'Diagnostico Encabezado',
+  impactoSocial: 'Impacto Social',
+  observaciones: 'Observaciones',
+  observacion: 'Observación',
+  usuario: 'Usuario',
+  unidadMuestreo: 'Unidad muestreo',
+  abscisaInicial: 'Abscisa inicial',
+  abscisaFinal: 'Abscisa Final',
+  vehiculo: 'Vehículo',
+  tipo_falla: 'Tipo falla',
+  severidad: 'Severidad',
+  longitud: 'Longitud (m)',
+  longitudLosa: 'Longitud losa (m)',
+  anchoLosa: 'Ancho losa (m)',
+  numeroLosas: 'Número de losas',
+  numeroVisitasProgramadasSinRealizar: 'Número de visitas programadas sin realizar',
+  numeroVisitasProgramadasVigentes: 'Número de visitas programadas vigentes',
+  tipoIntervencion: 'Tipo de intervención',
+  'radicadoEntrada': 'Radicado Entada',
+  'radicadoSalida': 'Radicado Salida',
+  fechaAsignacion: 'Fecha Asignación',
+  'vencimiento': 'Vencimiento',
+  verDetallePk: 'Ver detalle PK',
+  verActividad: 'Ver actividad',
+  'kmCarrilImpacto': 'KM Carril del PK',
+  'radicadoSolicitudReserva': 'Radicado Solicitud Reserva',
+  'radicadoRespuestaReserva': 'Radicado Respuesta de Reserva',
+  tipoActividad: 'Tipo de actividad',
+  mantenimientoSinDiagnostico: 'El mantenimiento no posee un diagnostico',
+  archivo: 'Archivo',
+  verificarProgramar: 'Verificar y programar visitas',
+  verProgramacion: 'Ver programación',
+  consultarProgramar: 'Consultar programación visitas',
+  anchoPK: 'Ancho del PK',
+  longitudPK: 'Longitud del PK',
+  areaPK: 'Área del PK',
+  mensajeAreaPK: 'el área de la falla no puede superar el área del Pk',
+  mensajeAreaUnidad: 'el área de la falla no puede superar el área de la unidad',
+  responsableDisenio: 'Responsable de diseño',
+  formatoDDMMYYYY: 'DD-MM-YYYY',
+
+  path_administracion_zonas: '/api/administracion/ubicaciones/zona',
+  path_administracion_localidades: '/api/administracion/ubicaciones/localidad',
+  path_administracion_barrios: '/api/administracion/ubicaciones/barrio',
+  path_administracion_uplas: '/api/administracion/ubicaciones/upla',
+  path_administracion_cuadrantes: '/api/administracion/ubicaciones/cuadrante',
+
+  ...CONST_SHARED,
+  ...PATHS,
+  ...PERMISOS,
+};

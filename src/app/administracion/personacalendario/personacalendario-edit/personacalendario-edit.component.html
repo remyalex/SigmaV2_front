@@ -1,0 +1,56 @@
+<h2 mat-dialog-title>{{ constants.editar }}</h2>
+
+<mat-dialog-content [formGroup]="form" *sigmaIsGranted="constants.permiso_administracion_personacalendario_update">
+
+  <input type="hidden" formControlName="id" [(ngModel)]="personacalendario.id">
+  <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+    <div class="item" fxFlex="50%">
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+        <mat-checkbox formControlName="activo" [(ngModel)]="personacalendario.activo" name="activo" id="activo">
+          {{ constants.activo }}
+        </mat-checkbox>
+      </div>
+    </div>
+  </div>
+
+  <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+    <div class="item" fxFlex="50%">
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+      </div>
+    </div>
+    <div class="item" fxFlex="50%">
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+      </div>
+    </div>
+  </div>
+  <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+    <div class="item" fxFlex="50%">
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+
+      </div>
+    </div>
+    <div class="item" fxFlex="50%">
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+<div fxLayout="row" fxLayoutAlign="center" class="flex-p">
+  <span>{{ constants.informacionCampoObligatorio }}</span>
+</div>
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions fxLayoutAlign="end">
+  <button mat-button class="m-1" color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon>
+    {{ constants.cancelar }}
+  </button>
+  <button mat-raised-button class="m-1" color="primary" [disabled]="disableSubmit" (click)="onSubmit()"
+    *sigmaIsGranted="constants.permiso_administracion_personacalendario_update">
+    <mat-icon class="m-1">save</mat-icon>
+    {{ constants.guardar }}
+  </button>
+</mat-dialog-actions>

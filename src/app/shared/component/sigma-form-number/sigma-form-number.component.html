@@ -1,0 +1,45 @@
+<mat-form-field class="w-100">
+    <input
+    type="text" 
+    #input
+    matInput 
+    [formControl]="control"  
+    [placeholder]="placeholder" autocomplete="off" 
+    [required]="required" 
+    pattern="^[0-9]+(.)?([0-9]+)?$"
+    (input)="inputValue($event.target.value)"
+    [numericInput]="numericInput"
+    [readonly]="readonly"/>
+    
+    <mat-error *ngFor="let error of basicErrors">
+      <mat-error *ngIf="control.hasError(error.name)">
+        {{ error.message }}
+      </mat-error>
+    </mat-error>
+
+    <mat-error *ngIf="control.hasError('min')">
+      {{ constants.minimo }} {{ control?.getError('min').min }}.
+    </mat-error>
+
+    <mat-error *ngIf="control.hasError('max')">
+      {{ constants.maximoOigual }} {{ control?.getError('max').max }}.
+    </mat-error>
+
+    <mat-error *ngIf="control.hasError('minlength')">
+      {{ constants.longitud_mimina }} {{ control?.getError('minlength').requiredLength }} 
+      {{ constants.caracteres }}.
+    </mat-error>
+
+    <mat-error *ngIf="control.hasError('maxlength')">
+      {{ constants.longitud_maxima }} {{ control?.getError('maxlength').requiredLength }} 
+      {{ constants.caracteres }}.
+    </mat-error>
+
+    <mat-error *ngIf="control.hasError('maxDecimalValue')">
+      {{ getErrorMaxDecimalValue() }}
+    </mat-error>
+
+    <mat-error *ngIf="control.hasError('maxValue')"> {{ constants.valormaximo }} 1
+    </mat-error>
+    
+  </mat-form-field>

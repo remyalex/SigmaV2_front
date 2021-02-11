@@ -1,0 +1,65 @@
+<h2 mat-dialog-title>{{ constants.editar }} Usuario de evento</h2>
+
+<div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+  <h5>{{ constants.informacionCampoObligatorio }}</h5>
+</div>
+
+<mat-dialog-content [formGroup]="form" *sigmaIsGranted="constants.permiso_administracion_eventousuario_update">
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <div class="w-100">
+        <app-sigma-autocomplete [label]="'Autocomplete usuario'" [labelparametro1]="'Usuario'"
+          (selectItem)="setUsuarioEventousuario($event)" [path]="constants.path_administracion_eventousuario_usuarioId"
+          [searchBy]="'usuario'" [required]="true" [value]="eventousuario.usuario.usuario">
+        </app-sigma-autocomplete>
+        <input matInput type="text" placeholder="" formControlName="usuarioId" [(ngModel)]="eventousuario.usuario"
+          autocomplete="off" hidden>
+        <mat-error *ngIf="enviada && form.get('usuarioId').hasError('required')"> {{ constants.campoRequerido }}
+        </mat-error>
+      </div>
+    </div>
+
+    <div fxFlex>
+      <sigma-form-calendar formControlName="fechaDesde" [maxTarget]="'fechaHasta'" [(ngModel)]="eventousuario.fechaDesde"
+      [type]="this.constants.datepicker.types.calendar" [objeto]="eventousuario" [placeholder]="constants.fechaDesde" >
+    </sigma-form-calendar>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <sigma-form-calendar formControlName="fechaHasta"   [minTarget]="'fechaDesde'" [(ngModel)]="eventousuario.fechaHasta"
+        [type]="this.constants.datepicker.types.calendar" [objeto]="eventousuario" [placeholder]="constants.fechaHasta">
+      </sigma-form-calendar>
+    </div>
+
+    <div fxFlex>
+      <div fxFlex>
+        <sigma-form-select [path]="constants.path_administracion_eventousuario_valorPermitidoId"
+          formControlName="valorPermitidoId" [(ngModel)]="eventousuario.valorPermitido"
+          placeholder="{{ constants.valorPermitidoId }}">
+        </sigma-form-select>
+      </div>
+      <div fxFlex="20" fxLayoutAlign="end center">
+        <mat-checkbox formControlName="activo" [(ngModel)]="eventousuario.activo">{{ constants.activo }}
+        </mat-checkbox>
+      </div>
+    </div>
+  </div>
+
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions fxLayoutAlign="end">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon>
+    {{ constants.cancelar }}
+  </button>
+  <button mat-raised-button color="primary" [disabled]="disableSubmit" (click)="onSubmit()"
+    *sigmaIsGranted="constants.permiso_administracion_eventousuario_update">
+    <mat-icon class="m-1">save</mat-icon>
+    {{ constants.guardar }}
+  </button>
+</mat-dialog-actions>

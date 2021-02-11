@@ -1,0 +1,106 @@
+.landing-header{
+    color: #fff;
+    height: auto;
+    text-align: center;
+    &:before {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 520px;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position-y: center;
+        z-index: -1;
+    }
+    .intro-text{
+        font-size: 36px;
+        padding-bottom: 2%;
+    }
+    .logo-sigma{
+        padding: 5% 0 2%;
+    }
+    .btn-ingresar{
+        font-size: 1.5em;
+        background-color: #004064;
+        color: #fff;
+        padding: 10px 35px;
+    }
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 16px 32px;
+    .list{
+        text-align: left;
+        padding: 16px;
+    }
+    .demo{
+        padding: 16px;
+        .text{
+            font-size: 16px;
+            font-weight: bold;
+        }
+    }
+    .mat-card {
+        background: #fff;
+        color: rgb(255, 255, 255);
+        border: 2px solid white;
+        min-height: 185px;
+    }
+}
+
+.footer-bg{
+    background-color: rgba(255,255,255,0.8);
+    position: absolute;
+    bottom: 0;
+}
+.landing-footer{
+    color:#004064;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 16px;
+}
+.umv-link h4 a {
+    color:#004064;
+    font-size: 1.2em;
+}
+.umv-link h4 a:hover{
+    color:#d4510a;
+}
+.landing-umv{
+    background-image: url("../../../assets/img/landing/fondo_landing.jpg");
+    background-position: center;
+    background-size: cover;
+    min-width: 100%;
+    min-height: 100%;
+}
+.enlace{
+    font-size: 2em;
+}
+@media (max-width: 1230px) and (min-width: 961px) {
+    .mat-card {
+        min-height: 230px!important;
+    }
+}
+@media (max-width: 960px) {
+   .landing-header{
+       .logo{
+            font-size: 36px;
+        }
+        .intro-text{
+            font-size: 24px;
+        }
+   }
+   .footer-bg {position: unset;}
+   .mat-card {min-height: 140px!important;}
+}
+
+@media (max-height: 800px) {
+    .footer-bg{
+        position: static;
+    }
+}

@@ -1,0 +1,50 @@
+<div class="flex-p">
+  <mat-card>
+
+    <mat-card-header fxLayoutAlign="center" class="mb-10">
+      <mat-card-subtitle>
+        <h2>{{ constants.registrarMezclaInsumos }}</h2>
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+        <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+      </div>
+
+      <div [hidden]="processing">
+        <div *ngIf="currentAction == 'list'">
+          <div fxLayout="column" fxLayout.gt-sm="row wrap">
+            <div fxFlex="100" class="flex-p">
+      
+              <mat-tab-group [selectedIndex]="tabSeleccionado.value" (selectedIndexChange)="seleccionarGrid($event)">
+                <mat-tab label="Registro de Mezcla e Insumos Producida y Despachada">
+                  <sigma-grid-mantenimientos #grid [data]="data" [columns]="columns" [filters]="filters" 
+                  [condicion]="condicion"  [showActividadAgrupada]="false" 
+                  [singleActions]="acciones" [showKmCarril]="true" >
+                  </sigma-grid-mantenimientos>
+                </mat-tab>
+              </mat-tab-group>
+      
+            </div>
+          </div>
+        </div>
+      
+      <!--<div *ngIf="currentAction === constants.programarMaquinaria">
+          <sigma-asignar-maquinaria-admin [programacionDiaria]="programacionDiaria" (cancel)="cancelar()">
+          </sigma-asignar-maquinaria-admin>
+        </div>-->
+
+        <div *ngIf="currentAction === 'accionSimple'">
+          <sigma-seleccion-transicion  [(data)]="data"
+            [transiciones]="transicionesIndividuales" (executeTransition)="executeTransition($event)">
+          </sigma-seleccion-transicion>        
+        </div>
+      </div>
+    </mat-card-content>
+
+  </mat-card>
+</div>
+
+
+

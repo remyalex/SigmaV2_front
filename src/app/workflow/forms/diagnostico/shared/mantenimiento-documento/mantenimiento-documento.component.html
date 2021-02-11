@@ -1,0 +1,20 @@
+<h2 mat-dialog-title>Adicionar archivo</h2>
+
+<mat-dialog-content [formGroup]="form">
+  <sigma-form-upload-file formControlName="archivo" [(ngModel)]="mantenimientoDocumento.documento.archivo"
+    [placeholder]="constants.archivo" 
+    [accept]="accept" 
+    [showFile]="false" [sizeFile]="20">
+  </sigma-form-upload-file>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> Cancelar
+  </button>
+  <button mat-raised-button color="primary" (click)="save()" [disabled]="mantenimientoDocumento.documento.archivo === undefined || mantenimientoDocumento.documento.archivo.id === undefined || processing">
+    <mat-icon class="m-1">save</mat-icon> Guardar
+  </button>
+</mat-dialog-actions>

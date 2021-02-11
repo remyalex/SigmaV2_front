@@ -1,0 +1,76 @@
+<h2 mat-dialog-title>Detalle Rol</h2>
+
+<mat-dialog-content>
+  <mat-list class="mb-10">     
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>Nombre</b>:
+        </div>
+        <div fxFlex="60">
+          {{ rol.nombre }}
+        </div>
+      </div>
+    </mat-list-item>
+      
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>Descripción</b>:
+        </div>
+        <div fxFlex="60">
+          {{ rol.descripcion }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>Activo</b>:
+        </div>
+        <div fxFlex="60">
+          <span *ngIf="rol.activo"> Si</span>
+          <span *ngIf="!rol.activo"> No</span>
+        </div>
+      </div>
+    </mat-list-item>    
+
+    <mat-list-item class="mb-10">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>Requiere asignación de zona</b>:
+        </div>
+        <div fxFlex="60">
+          <span *ngIf="rol.usuarioRequiereAsignarZona"> Si</span>
+          <span *ngIf="!rol.usuarioRequiereAsignarZona"> No</span>
+        </div>
+      </div>
+    </mat-list-item>   
+  </mat-list>
+
+  <div class="mat-elevation-z8 mb-20">
+      <mat-table #table [dataSource]="permisos" matSort>
+          <ng-container matColumnDef="nombre">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+            <mat-cell *matCellDef="let rol" data-label="Nombre"> {{ rol.nombre }} </mat-cell>
+          </ng-container>
+          
+          <mat-header-row *matHeaderRowDef="columnsPermisos"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: columnsPermisos"></mat-row>
+      </mat-table>
+      
+      <mat-paginator #paginator [length]="permisos.filteredData.length" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+    
+  </div>
+
+  
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" class="m-1" (click)="close()">
+      <mat-icon class="m-1">close</mat-icon> Cerrar
+  </button>
+</mat-dialog-actions>

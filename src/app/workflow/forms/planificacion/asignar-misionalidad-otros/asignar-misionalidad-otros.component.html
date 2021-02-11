@@ -1,0 +1,21 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="processing">
+  <div *ngIf="currentAction == 'list'">
+    <div fxLayout=" column">
+      <div fxFlex="100" class="flex-p">
+        <mat-tab-group [selectedIndex]="tabSeleccionado.value"
+               (selectedIndexChange)="seleccionarGrid($event)">
+          <mat-tab *ngFor="let transicion of transicionesMasivas" label="{{transicion.nombre}}">
+            <sigma-grid-mantenimientos  #grid [data]="data" [tipoGrid]="'Todos'" [transicion]="transicion" [columns]="columns" [filters]="filters"
+              (executeOnMasiveTransition)="executeMasiveTransition($event)" [showActividadAgrupada]="false"
+              [showKmCarril]="true" [showCheckMasive]="true" [showImport]="true" funcionalidadImportar='IMPORTAR_MISIONALIDAD' >
+            </sigma-grid-mantenimientos>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,67 @@
+<h2 mat-dialog-title>{{ constants.editar }} Tipo falla</h2>
+
+<mat-dialog-content [formGroup]="form" *sigmaIsGranted="constants.permiso_administracion_tipofalla_update">
+  <input type="hidden" formControlName="id" [(ngModel)]="tipofalla.id">
+ 
+  <div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+      <h5>{{ constants.informacionCampoObligatorio }}</h5>
+  </div>
+
+  <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+    <div class="item" fxFlex="50%">
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+        <sigma-general-list value="{{ tipofalla.tipoSuperficie.id }}" [responseType]='constants.objeto'
+          [path]="constants.path_administracion_tipofalla_tipoSuperficieId" etiqueta="{{ constants.tipoSuperficieId }}"
+          [listBy]="'valor'" (optionIdSelected)="setTipoSuperficieTipofalla($event)" required="true">
+        </sigma-general-list>
+        <input matInput type="text" placeholder="" formControlName="tipoSuperficieId"
+          [(ngModel)]="tipofalla.tipoSuperficie" autocomplete="off" hidden>
+        <mat-error *ngIf="enviada && form.get('tipoSuperficieId').hasError('required')"> {{ constants.campoRequerido }}
+        </mat-error>
+      </div>
+    </div>
+    <div class="item" fxFlex="50%">
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="{{ constants.descripcion }}" formControlName="descripcion"
+            [(ngModel)]="tipofalla.descripcion" autocomplete="off" type="text" required pattern="^(?!\s*$).+">
+          <mat-error *ngIf="form.get('descripcion').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+          <mat-error *ngIf="form.get('descripcion').hasError('pattern')"> {{ constants.campoNoVacio }} </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+
+  <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+    <div class="item" fxFlex="50%">
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="{{ constants.valor }}" formControlName="valor" [(ngModel)]="tipofalla.valor"
+            autocomplete="off" type="number" pattern="^(?!\s*$).+" numericInput="true" max="9007199254740991" required>
+          <mat-error *ngIf="form.get('valor').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+          <mat-error *ngIf="form.get('valor').hasError('pattern')"> {{ constants.campoNoVacio }} </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="item" fxFlex="50%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <mat-checkbox formControlName="activo" [(ngModel)]="tipofalla.activo" name="activo" id="activo">
+            {{ constants.activo }}
+          </mat-checkbox>
+        </div>
+      </div>
+  </div>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+    <button type="button" (click)="close()" mat-button color="warn" class="m-1">
+      <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+    </button>
+    <button type="button" class="m-1" mat-raised-button color="primary" (click)="onSubmit()" 
+      *sigmaIsGranted="constants.permiso_administracion_tipofalla_update">
+      <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+    </button>
+  </mat-dialog-actions>
+  

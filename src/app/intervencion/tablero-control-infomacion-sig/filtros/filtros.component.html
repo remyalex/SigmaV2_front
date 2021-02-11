@@ -1,0 +1,47 @@
+<h2 mat-dialog-title>Filtros</h2>
+<!--mat-dialog-content [formGroup]="form"-->
+<mat-dialog-content>
+<div fxLayout="column">
+    <div fxFlex>
+      <sigma-form-select [path]="'/api/administracion/lista/INTERVENCION_ANIO_VIGENCIA_MANTENIMIENTO/items'" [(ngModel)]="criteriaChart.anioVigencia" name="anioVigencia"
+        placeholder="Año Vigencia" [listBy]="'descripcion'" >
+      </sigma-form-select>
+    </div>
+    <div fxFlex>
+      <sigma-form-select [path]="'/api/administracion/ubicaciones/zona'" [(ngModel)]="criteriaChart.zonas" name="zona"
+        placeholder="Zona" [listBy]="'descripcion'" [multiple]="true" (ngModelChange)="cambioZona($event)" >
+      </sigma-form-select>
+    </div>
+    <div fxFlex>
+      <sigma-form-select #selectLocalidades [path]="'/api/administracion/ubicaciones/localidad'" [(ngModel)]="criteriaChart.localidades" name="localidad"
+        placeholder="Localidad" [listBy]="'descripcion'" [multiple]="true" [exclude]="localidadesExcluidas" [excludeBy]="'nombre'">
+      </sigma-form-select>
+    </div>
+    <div fxFlex>
+      <sigma-form-select [path]="'/api/administracion/lista/TAB_MANTENIMIENTO_VIAL_ID_TIPO_ESTRATEGIA/items'"
+        [(ngModel)]="criteriaChart.estrategias" name="estrategia" placeholder="Estrategia" [listBy]="'descripcion'" [multiple]="true">
+      </sigma-form-select>
+    </div>
+    <div fxFlex>
+      <sigma-form-select [path]="'/api/administracion/lista/TIPO_MATERIAL/items'"
+        [(ngModel)]="criteriaChart.tipoMateriales" name="tipoMaterial" placeholder="Tipo Material" [listBy]="'descripcion'" [multiple]="true">
+      </sigma-form-select>
+    </div>
+    <div fxFlex>
+      <sigma-form-select [path]="'/api/administracion/lista/TAB_CONSOLIDADO_DIARIO_OBRA_ID_TIPO_JORNADA/items'"
+        [(ngModel)]="criteriaChart.jornadas" name="jornada" placeholder="Jornada" [listBy]="'descripcion'" [multiple]="true">
+      </sigma-form-select>
+    </div>
+</div>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions fxLayout="row" fxLayoutAlign="end" class="flex-p">
+  <button (click)="atras()" mat-button color="warn" class="m-1">
+    <mat-icon class="m-1">close</mat-icon> Cancelar
+  </button>
+  <button mat-raised-button color="primary" class="m-1" (click)="aplicarFiltros()">
+    <mat-icon class="m-1">done</mat-icon> Aplicar
+  </button>
+</mat-dialog-actions>

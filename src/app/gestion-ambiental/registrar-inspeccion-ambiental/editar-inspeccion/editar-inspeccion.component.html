@@ -1,0 +1,287 @@
+<div fxLayout="column" *sigmaIsGranted="constants.ambiental_inspeccion_update">
+  <div class="flex-p">
+    <mat-card class="p-0 mat-card">
+      <mat-card-header fxLayoutAlign="center">
+        <mat-card-subtitle>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+        <h5>{{ constants.informacionCampoObligatorio }}</h5>
+      </div>
+
+      <mat-card-content class="p-16 m-0" [formGroup]="form">
+
+        <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+          <div class="item" fxFlex="25%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <sigma-form-calendar formControlName="fecha" [(ngModel)]="elementoInspeccion.fecha" [type]="'calendar'"
+                [placeholder]="constants.fecha">
+              </sigma-form-calendar>
+            </div>
+          </div>
+          <div class="item" fxFlex="25%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <sigma-form-select formControlName="zona" [disabled]="true" [(ngModel)]="mantenimiento.zona"
+                [path]="constants.path_lista_items_zonas" name="zona" placeholder="{{constants.zona}}"
+                [listBy]="'descripcion'">
+              </sigma-form-select>
+            </div>
+          </div>
+          <div class="item" fxFlex="25%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <sigma-form-select formControlName="localidad" [disabled]="true" [(ngModel)]="mantenimiento.localidad"
+                [path]="constants.path_lista_items_localidades" name="zona" placeholder="{{constants.localidad}}"
+                [listBy]="'descripcion'">
+              </sigma-form-select>
+            </div>
+          </div>
+          <div class="item" fxFlex="25%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <sigma-form-select formControlName="upla" [disabled]="true" [(ngModel)]="mantenimiento.upla"
+                [path]="constants.path_lista_items_uplas" name="upla" placeholder="{{constants.upla}}"
+                [listBy]="'descripcion'">
+              </sigma-form-select>
+            </div>
+          </div>
+        </div>
+
+        <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+          <div class="item" fxFlex="25%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <sigma-form-select formControlName="barrio" [disabled]="true" [(ngModel)]="mantenimiento.barrio"
+                [path]="constants.path_lista_items_barrios" name="barrio" placeholder="{{constants.barrio}}"
+                [listBy]="'descripcion'">
+              </sigma-form-select>
+            </div>
+          </div>
+          <div class="item" fxFlex="25%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input matInput formControlName="civ" [(ngModel)]="mantenimiento.civ" placeholder="{{constants.civ}}"
+                  id="civ" name="civ" />
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="item" fxFlex="25%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input matInput formControlName="pk" [(ngModel)]="mantenimiento.pk" placeholder="{{constants.pk}}"
+                  id="pk" name="pk" />
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="item" fxFlex="25%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <sigma-form-select formControlName="situacion" [(ngModel)]="elementoInspeccion.situacion"
+                [path]="constants.path_lista_items_situacion" name="situacion" placeholder="{{constants.situacion}}"
+                [listBy]="'descripcion'">
+              </sigma-form-select>
+            </div>
+          </div>
+        </div>
+
+        <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+          <div class="item" fxFlex="25%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <sigma-form-select formControlName="elemento" [disabled]="true" [(ngModel)]="elementoInspeccion.elemento"
+                [path]="constants.path_lista_items_elemento" name="elemento" placeholder="{{constants.AmbElemento}}"
+                [listBy]="'descripcion'">
+              </sigma-form-select>
+            </div>
+          </div>
+          <div class="item" fxFlex="25%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input matInput formControlName="individuosArboreos" placeholder="{{constants.individuosArboreos}}"
+                  id="individuosArboreos" name="individuosArboreos" />
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="item" fxFlex="25%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input matInput formControlName="proteccionArbolesCant" [numericInput]="true"
+                  (keyup)="patternString('proteccionArbolesCant', $event)"
+                  [(ngModel)]="elementoInspeccion.protArbolescantidad" placeholder="{{constants.proteccionArbolesCant}}"
+                  id="proteccionArbolesCant" name="proteccionArbolesCant" type="text" required />
+                <mat-error *ngIf="form.get('proteccionArbolesCant').hasError('required')">
+                  {{ constants.campoRequerido }} </mat-error>
+                <mat-error *ngIf="form.get('proteccionArbolesCant').hasError('max')">
+                  {{ constants.longitud_maxima }} 3. </mat-error>
+                <mat-error *ngIf="form.get('proteccionArbolesCant').hasError('pattern')">
+                  Solo se permiten valores númericos. </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="item" fxFlex="25%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input matInput formControlName="sumideros" placeholder="{{constants.sumideros}}" id="sumideros"
+                  name="sumideros" />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+          <div class="item" fxFlex="25%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input matInput formControlName="proteccionSumiderosCant" [numericInput]="true"
+                  (keyup)="patternString('proteccionSumiderosCant', $event)"
+                  [(ngModel)]="elementoInspeccion.protSumiderosCantidad"
+                  placeholder="{{constants.proteccionSumiderosCant}}" id="proteccionSumiderosCant"
+                  name="proteccionSumiderosCant" type="text" required />
+                <mat-error *ngIf="form.get('proteccionSumiderosCant').hasError('required')">
+                  {{ constants.campoRequerido }} </mat-error>
+                <mat-error *ngIf="form.get('proteccionSumiderosCant').hasError('max')">
+                  {{ constants.longitud_maxima }} 3. </mat-error>
+                <mat-error *ngIf="form.get('proteccionSumiderosCant').hasError('pattern')">
+                  Solo se permiten valores númericos. </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="item" fxFlex="25%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input matInput formControlName="espacioPublico" placeholder="{{constants.espacioPublico}}"
+                  id="espacioPublico" name="espacioPublico" />
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="item" fxFlex="25%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input matInput formControlName="proteccionEspacioPublicoCant" [numericInput]="true"
+                  (keyup)="patternString('proteccionEspacioPublicoCant', $event)"
+                  [(ngModel)]="elementoInspeccion.protEspaciosCantidad"
+                  placeholder="{{constants.proteccionEspacioPublicoCant}}" id="proteccionEspacioPublicoCant"
+                  name="proteccionEspacioPublicoCant" type="text" required />
+                <mat-error *ngIf="form.get('proteccionEspacioPublicoCant').hasError('required')">
+                  {{ constants.campoRequerido }} </mat-error>
+                <mat-error *ngIf="form.get('proteccionEspacioPublicoCant').hasError('max')">
+                  {{ constants.longitud_maxima }} 3. </mat-error>
+                <mat-error *ngIf="form.get('proteccionEspacioPublicoCant').hasError('pattern')"> Solo se permiten
+                  valores númericos. </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="item" fxFlex="25%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input matInput formControlName="banios" placeholder="{{constants.banios}}" id="banios" name="banios" />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+          <div class="item" fxFlex="33%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input matInput formControlName="baniosMantenimientoCant" [numericInput]="true"
+                  (keyup)="patternString('baniosMantenimientoCant', $event)"
+                  [(ngModel)]="elementoInspeccion.protBaniosCantidad"
+                  placeholder="{{constants.baniosMantenimientoCant}}" id="baniosMantenimientoCant"
+                  name="baniosMantenimientoCant" type="text" required />
+                <mat-error *ngIf="form.get('baniosMantenimientoCant').hasError('required')">
+                  {{ constants.campoRequerido }} </mat-error>
+                <mat-error *ngIf="form.get('baniosMantenimientoCant').hasError('max')">
+                  {{ constants.longitud_maxima }} 2. </mat-error>
+                <mat-error *ngIf="form.get('baniosMantenimientoCant').hasError('pattern')"> Solo se permiten valores
+                  númericos. </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="item" fxFlex="33%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <sigma-form-select formControlName="estado" [(ngModel)]="elementoInspeccion.estado"
+                [path]="constants.path_lista_items_estado" name="estado" placeholder="{{constants.estado}}"
+                [listBy]="'descripcion'">
+              </sigma-form-select>
+            </div>
+          </div>
+          <div class="item" fxFlex="33%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <sigma-form-upload-file formControlName="registroFotografico" [(ngModel)]="archivosInspeccionAmb"
+                (ngModelChange)="setArchivoSolicitud($event)" placeholder="{{constants.registroFotografico}}"
+                [multiple]="true">
+              </sigma-form-upload-file>
+            </div>
+          </div>
+        </div>
+
+        <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+          <div class="item" fxFlex="100%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <ul>
+                <li *ngFor="let detalle of elementoInspeccion.detalleInspeccion"> {{ detalle.accion }}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+          <div class="item" fxFlex="100%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <textarea matInput formControlName="accionImplementada" [(ngModel)]="inspeccionDetalleAccion"
+                  (ngModelChange)="detalleInspeccion('accion',$event)" placeholder="{{ constants.accionImplementada }}"
+                  required></textarea>
+                <mat-error *ngIf="form.get('accionImplementada').hasError('required')">
+                  {{ constants.campoRequerido }} </mat-error>
+                <mat-error *ngIf="form.get('accionImplementada').hasError('maxlength')">
+                  {{ constants.longitud_maxima }}
+                  2000
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+        <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+          <div class="item" fxFlex="100%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <ul>
+                <li *ngFor="let detalle of elementoInspeccion.detalleInspeccion"> {{ detalle.observacionElemento }}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+          <div class="item" fxFlex="100%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <textarea matInput formControlName="observaciones" [(ngModel)]="inspeccionDetalleObservacionElemento"
+                  (ngModelChange)="detalleInspeccion('observacionElemento',$event)"
+                  placeholder="{{ constants.observaciones }}" required></textarea>
+                <mat-error *ngIf="form.get('observaciones').hasError('required')">
+                  {{ constants.campoRequerido }} </mat-error>
+                <mat-error *ngIf="form.get('observaciones').hasError('maxlength')">
+                  {{ constants.longitud_maxima }}
+                  2000
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+      </mat-card-content>
+
+      <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+      <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+        <button type="button" (click)="onBack()" mat-button color="warn" class="m-1">
+          <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+        </button>
+        <button type="button" [disabled]="enviada" class="m-1" mat-raised-button color="primary" (click)="onSubmit()">
+          <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</div>

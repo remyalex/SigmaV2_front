@@ -1,0 +1,60 @@
+<h2 mat-dialog-title>{{ constants.detalle }} Tipo falla</h2>
+
+<mat-dialog-content *sigmaIsGranted="constants.permiso_administracion_tipofalla_view">
+  <mat-list>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.tipoSuperficieId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ tipofalla.tipoSuperficie.valor }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.descripcion }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ tipofalla.descripcion }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.valor }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ tipofalla.valor }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="mb-10">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.activo }}</b>:
+        </div>
+        <div class="p-tab" fxFlex="60">
+          <span class="dev-color-red" [hidden]="tipofalla.activo">{{ constants.no }}</span>
+          <span class="dev-color-green" [hidden]="!tipofalla.activo">{{ constants.si }}</span>
+        </div>
+      </div>
+    </mat-list-item>
+
+  </mat-list>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions fxLayoutAlign="end">
+  <button mat-button class="m-1" color="warn" (click)="close()">
+      <mat-icon class="m-1">close</mat-icon>  {{ constants.cerrar }}
+  </button>
+</mat-dialog-actions>

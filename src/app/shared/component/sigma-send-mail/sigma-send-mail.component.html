@@ -1,0 +1,53 @@
+<div fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="space-around" fxFlexAlign="center" [formGroup]="form">
+    <div fxLayoutAlign="center center">
+        <h2 mat-dialog-title>{{ titulo }}</h2>
+    </div>
+    <div>
+        <h4>Agregue los correos a los cuales desea hacer el envió</h4>
+    </div>
+    <div fxLayout="row wrap" fxLayoutAlign="space-around center">
+        <div *ngFor="let email of emails; let key = index">
+            <div fxFlex>
+                <sigma-form-email [placeholder]="'Email'" [(ngModel)]="email.value" formControlName="{{email.name}}">
+                </sigma-form-email>
+            </div>
+            <div fxFlex>
+                <button mat-raised-button class="m-1" color="warn" (click)="deleteMail(key, email.name)">
+                    <mat-icon>person_add_disabled</mat-icon>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="space-around" fxFlexAlign="center">
+    <div>
+        <div fxFlex>
+            <button mat-raised-button class="m-1" color="primary" (click)="addMail()">
+                <mat-icon>person_add</mat-icon>
+            </button>
+        </div>
+    </div>
+    <div>
+        <mat-form-field fxFlex="50">
+            <input matInput placeholder="Asunto" [(ngModel)]="mail.subject">
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field fxFlex="100">
+            <textarea matInput placeholder="Mensaje" [(ngModel)]="mail.body" rows="5"></textarea>
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+        <mat-dialog-actions fxLayoutAlign="end" fxLayout="row" fxLayout.lt-sm="column">
+            <button class="mb-10" fxFlex="25" fxFlex.lt-sm="100" mat-button color="warn" (click)="close()">
+                <mat-icon class="m-1">clear</mat-icon> {{ constants.cancelar }}
+            </button>
+            <button class="mb-10" fxFlex="25" fxFlex.lt-sm="100" mat-raised-button color="primary" (click)="enviar()"
+                [disabled]="!validar()">
+                <mat-icon class="m-1">send</mat-icon> {{ constants.enviar }}
+            </button>
+        </mat-dialog-actions>
+    </div>
+</div>

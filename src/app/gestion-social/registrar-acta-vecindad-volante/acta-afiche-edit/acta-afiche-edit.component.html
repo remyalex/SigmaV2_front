@@ -1,0 +1,188 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div fxLayout="column" *ngIf="!processing">
+  <div class="flex-p">
+    <mat-card class="p-0 mat-card">
+      <mat-card-header fxLayoutAlign="center">
+        <mat-card-subtitle>
+          <h2>{{ constants.editar }} Afiche o Volante</h2>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+        <h5>{{ constants.informacionCampoObligatorio }}</h5>
+      </div>
+
+      <mat-card-content class="p-16 m-0" [hidden]="submitted" [formGroup]="form">
+        <input type="hidden" formControlName="id" [(ngModel)]="actaAfiche.id">
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex="10" class="mt-13">
+            <mat-checkbox formControlName="activo" [(ngModel)]="actaAfiche.activo" name="activo" id="activo">
+              {{ constants.activo }}
+            </mat-checkbox>
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput [placeholder]="constants.tipoIntervencion" [value]="tipoIntervencion" type="text"
+                readonly />
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput [placeholder]="constants.otroTipoIntervencion" [value]="otroTipoIntervencion" type="text"
+                readonly />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <sigma-form-input [placeholder]="constants.fechaRegistro" formControlName="fechaRegistro"
+              [(ngModel)]="actaAfiche.fechaRegistro" [readonly]="true">
+            </sigma-form-input>
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput [placeholder]="constants.localidad"
+                [value]="mantenimiento.localidad == null ? '' : mantenimiento.localidad.nombre" autocomplete="off"
+                type="text" readonly />
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput [placeholder]="constants.upla"
+                [value]="mantenimiento.upla == null ? '' : mantenimiento.upla.nombre" type="text" readonly />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput [placeholder]="constants.barrio"
+                [value]="mantenimiento.barrio == null ? '' : mantenimiento.barrio.nombre" type="text" readonly />
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput [placeholder]="'Nomenclatura'"
+                [value]="mantenimiento.ejeVial + ' desde ' + mantenimiento.desde + ' hasta ' + mantenimiento.hasta"
+                type="text" readonly />
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput [placeholder]="'Frente de obra'" [value]="''" type="text" readonly />
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput [placeholder]="constants.civ" [value]="mantenimiento.civ" type="text" readonly />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="container" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex class="mb-10">
+            <mat-card-content t-card-content class="m-0">
+              <h3 mat-subheader>Registro Fotográfico</h3>
+              <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                <div class="w-100">
+                  <sigma-form-upload-file formControlName="archivo" [(ngModel)]="actaAfiche.actaAficheArchivo.archivo"
+                    [placeholder]="'Archivo foto'" [accept]="'image/*'" [showFile]="true">
+                  </sigma-form-upload-file>
+                </div>
+              </div>
+            </mat-card-content>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div class="w-100" fxFlex>
+            <sigma-form-input [placeholder]="constants.nombreEstablecimiento" formControlName="nombreEstablecimiento"
+              [(ngModel)]="actaAfiche.nombreEstablecimiento" [maxlength]="50">
+            </sigma-form-input>
+          </div>
+
+          <div class="w-100" fxFlex>
+            <sigma-form-input [placeholder]="constants.direccion" formControlName="direccion"
+              [(ngModel)]="actaAfiche.direccion" [maxlength]="50">
+            </sigma-form-input>
+          </div>
+
+          <div fxFlex>
+            <sigma-form-number [placeholder]="constants.telefono" formControlName="telefono"
+              [(ngModel)]="actaAfiche.telefono" [maxlength]="25">
+            </sigma-form-number>
+          </div>  
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <sigma-form-input [placeholder]="constants.personaContacto" formControlName="personaContacto"
+              [(ngModel)]="actaAfiche.personaContacto" [maxlength]="50">
+            </sigma-form-input>
+          </div>
+
+          <div class="w-100" fxFlex>
+            <sigma-form-select formControlName="tipoPiezaDivulgar" [(ngModel)]="actaAfiche.tipoPiezaDivulgar"
+              [path]="constants.path_social_tipo_pieza_divulgar" [placeholder]="constants.tipoPiezaDivulgar"
+              [listBy]="'descripcion'" [orderBy]="'id'">
+            </sigma-form-select>
+          </div>
+
+          <div class="w-100" fxFlex>
+            <sigma-form-number [placeholder]="constants.cantidad" formControlName="cantidad"
+              [(ngModel)]="actaAfiche.cantidad" [maxlength]="5">
+            </sigma-form-number>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <sigma-form-textarea [placeholder]="constants.descripcion" formControlName="descripcion"
+              [(ngModel)]="actaAfiche.descripcion" [maxlength]="300" rows="5">
+            </sigma-form-textarea>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <sigma-form-textarea [placeholder]="constants.observaciones" formControlName="observaciones"
+              [(ngModel)]="actaAfiche.observaciones" [maxlength]="300" rows="5">
+            </sigma-form-textarea>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div class="w-100" fxFlex>
+            <mat-checkbox formControlName="activo" name="activo" id="activo" disabled hidden>Estado</mat-checkbox>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+      <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+        <button mat-button class="m-1" color="warn" (click)="onBack()">
+          <mat-icon class="m-1">close</mat-icon>{{ constants.cancelar }}
+        </button>
+        <button mat-raised-button class="m-1" color="primary" (click)="onSubmit()" [disabled]="disableSubmit"
+          *sigmaIsGranted="constants.permiso_social_actas_create">
+          <mat-icon class="m-1">save</mat-icon>{{ constants.guardar }}
+        </button>
+      </div>
+
+    </mat-card>
+  </div>
+</div>

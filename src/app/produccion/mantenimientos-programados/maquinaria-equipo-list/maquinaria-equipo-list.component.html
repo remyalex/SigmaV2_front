@@ -1,0 +1,368 @@
+<div>
+  <div>
+    <mat-card-header fxLayoutAlign="center" class="mb-10">
+      <mat-card-subtitle>
+        <h2>{{ constants.equipo_name }}</h2>
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form (ngSubmit)="search()">
+        <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <sigma-form-select [path]="constants.path_administracion_equipo_claseEquipoId"
+              [(ngModel)]="criteria.claseEquipoId" name="claseEquipoId" placeholder="{{ constants.claseEquipoId }}">
+            </sigma-form-select>
+          </div>
+          <!--
+          <div fxFlex="100">
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.movil }}" id="movil" [(ngModel)]="criteria.movil" name="movil"
+                type="text" />
+            </mat-form-field>
+          </div>
+-->
+          <div fxFlex>
+            <sigma-form-select [path]="constants.path_administracion_equipo_estadoEquipoId"
+              [(ngModel)]="criteria.estadoEquipoId" name="estadoEquipoId" placeholder="{{ constants.estadoEquipoId }}">
+            </sigma-form-select>
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.numeroInterno }}" id="numeroInterno"
+                [(ngModel)]="criteria.numeroInterno" name="numeroInterno" type="text" />
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <sigma-form-select [path]="constants.path_administracion_equipo" listBy="placaInventario"
+              [(ngModel)]="placaInventarioCriteria" name="placaInventario" placeholder="{{ constants.placaInventario }}">
+            </sigma-form-select>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <!--<div fxFlex="100">
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.placa }}" id="placa" [(ngModel)]="criteria.placa" name="placa"
+                type="text" />
+            </mat-form-field>
+          </div>-->
+<!--
+          <div fxFlex="100">
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.placaInventario }}" id="placaInventario"
+                [(ngModel)]="criteria.placaInventario" name="placaInventario" type="text" />
+            </mat-form-field>
+          </div>
+        -->
+          <div fxFlex>
+            <sigma-form-select [path]="constants.path_administracion_equipo_tipoEquipoId"
+              [(ngModel)]="criteria.tipoEquipoId" name="tipoEquipoId" placeholder="{{ constants.tipoEquipoId }}">
+            </sigma-form-select>
+          </div>
+
+          <div fxFlex>
+            <sigma-form-select [path]="constants.path_administracion_equipo_marcaEquipoId"
+              [(ngModel)]="criteria.marcaEquipoId" name="marcaEquipoId" placeholder="{{ constants.marcaEquipoId }}">
+            </sigma-form-select>
+          </div>
+
+          <div fxFlex>
+            <sigma-form-select [path]="constants.path_administracion_equipo_lugarUmvId" listBy="nombre"
+              [(ngModel)]="criteria.lugarEquipoId" name="lugarEquipoId" placeholder="{{ constants.lugarEquipoId }}">
+            </sigma-form-select>
+          </div>
+
+          <div fxFlex>
+            <button type="submit" mat-raised-button color="primary" class="m-1" (click)="search()">
+              <mat-icon>search</mat-icon> {{ constants.buscar }}
+            </button>
+            <button (click)="clear()" mat-raised-button color="warn" class="m-1">
+              <mat-icon>clear</mat-icon> {{ constants.limpiar }}
+            </button>
+          </div>
+        
+        </div>
+      </form>
+    </mat-card-content>
+  </div>
+</div>
+
+<div class="mat-elevation-z8">
+  <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center">
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+
+  <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+    <mat-icon class="m-1">sms_failed</mat-icon>
+    <h4> {{dataSource.errorMessage$ | async}}</h4>
+  </div>
+
+  <mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort>
+
+    <ng-container matColumnDef="activo">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.activo }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.activo">
+        <span class="dev-color-red" [hidden]="equipo.activo">{{ constants.no }}</span>
+        <span class="dev-color-green" [hidden]="!equipo.activo">{{ constants.si }}</span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="anioModeloId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.anioModeloId }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.anioModeloId">
+        {{ equipo.anioModelo.valor }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="areaUmvId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.areaUmvId }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.areaUmvId">
+        {{ equipo.area.valor}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="cilindraje">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.cilindraje }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.cilindraje">
+        {{equipo.cilindraje}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="claseEquipo.valor">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.claseEquipoId }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.claseEquipoId">
+        {{ equipo.claseEquipo?.valor }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="color">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.color }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.color">
+        {{equipo.color}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="estadoEquipo.valor">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.estadoEquipoId }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.estadoEquipoId">
+        {{ equipo?.estadoEquipo?.valor }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="fechaDesde">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaDesde }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.fechaDesde">
+        {{equipo.fechaDesde}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="fechaHasta">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaHasta }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.acciones">
+        {{equipo.fechaHasta}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="fechaSiguienteMantenimiento">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaSiguienteMantenimiento }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.fechaSiguienteMantenimiento">
+        {{equipo.fechaSiguienteMantenimiento}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="fechaUltimoMantenimiento">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaUltimoMantenimiento }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.fechaUltimoMantenimiento">
+        {{equipo.fechaUltimoMantenimiento}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="horaFinProgramacion">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.horaFinProgramacion }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.horaFinProgramacion">
+        {{equipo.horaFinProgramacion}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="horaInicioProgramacion">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.horaInicioProgramacion }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.horaInicioProgramacion">
+        {{equipo.horaInicioProgramacion}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="horasMantenimiento">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.horasMantenimiento }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.horasMantenimiento">
+        {{equipo.horasMantenimiento}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.id }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.id">
+        {{equipo.id}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="kilometrosMantenimiento">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.kilometrosMantenimiento }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.kilometrosMantenimiento">
+        {{equipo.kilometrosMantenimiento}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="linea">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.linea }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.linea">
+        {{equipo.linea}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="lugar.nombre">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.lugarEquipoId }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.lugarEquipoId">
+        {{ equipo.lugar?.nombre }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="marcaEquipo.valor">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.marcaEquipoId }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.marcaEquipoId">
+        {{ equipo.marcaEquipo?.valor }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="movil">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.movil }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.movil">
+        {{equipo.movil}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="numeroChasis">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.numeroChasis }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.numeroChasis">
+        {{equipo.numeroChasis}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="numeroInterno">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.numeroInterno }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.numeroInterno">
+        {{equipo.numeroInterno}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="numeroMotor">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.numeroMotor }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.numeroMotor">
+        {{equipo.numeroMotor}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="origenEquipoId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.origenEquipoId }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.origenEquipoId">
+        {{ equipo.origenEquipo.valor }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="picoYPlaca">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.picoYPlaca }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.picoYPlaca">
+        {{equipo.picoYPlaca}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="placa">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.placa }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.placa">
+        {{equipo.placa}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="placaInventario">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.placaInventario }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.placaInventario ">
+        {{equipo.placaInventario}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="plazoMantenimiento">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.plazoMantenimiento }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.plazoMantenimiento">
+        {{equipo.plazoMantenimiento}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="tipoCombustibleId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.tipoCombustibleId }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.tipoCombustibleId">
+        {{ equipo.tipoCombustible?.valor }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="equipoTipo.valor">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.tipoEquipoId }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.tipoEquipoId">
+        {{ equipo.equipoTipo?.valor }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="origenEquipo.valor">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Origen
+      </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="'origen'">
+        {{ equipo.origenEquipo?.valor }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="toneladas">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.toneladas }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.toneladas">
+        {{equipo.toneladas}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.acciones">
+        <div>
+          <div class="umv-chip" *ngIf="equipo?.estadoEquipo?.valor !== 'DISPONIBLE'">
+            Equipo no disponible
+          </div>
+          
+          <div *ngIf="equipo?.estadoEquipo?.valor === 'DISPONIBLE'">
+            <mat-spinner color="primary" [diameter]="20"
+              *ngIf="equipoAcciones[equipo.id] && equipoAcciones[equipo.id].loading"></mat-spinner>
+            <button mat-raised-button color="primary" (click)="runAction(equipo, 'ScheduleMaintance')" class="m-1"
+              *ngIf="equipoAcciones[equipo.id] && !equipoAcciones[equipo.id].loading && !equipoAcciones[equipo.id].mantenimiento">
+              <mat-icon matTooltip="Programar Mantenimiento" matTooltipPosition="above">build</mat-icon>
+            </button>
+            <button mat-raised-button color="warn" (click)="runAction(equipo, 'CancelMaintance')" class="m-1"
+              *ngIf="equipoAcciones[equipo.id] && !equipoAcciones[equipo.id].loading && equipoAcciones[equipo.id].mantenimiento">
+              <mat-icon matTooltip="Cancelar Mantenimiento" matTooltipPosition="above">cancel</mat-icon>
+            </button>
+          </div>
+        </div>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size"
+    [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+</div>
+

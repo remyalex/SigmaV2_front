@@ -1,0 +1,132 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="processing">
+
+  <div [hidden]="currentAction !== 'list'">
+    <div fxLayout="row" fxLayout.lt-md="column">
+      <div fxFlex="100" class="flex-p">
+        <mat-tab-group [selectedIndex]="selectedTab" (selectedIndexChange)="seleccionarGrid($event)" *ngIf="condicion">
+          <mat-tab label="PK con solicitud de ensayo">
+            <sigma-grid-mantenimientos #grid [data]="data" [condicion]="condicion" [columns]="columns"
+              [defaultFilters]="defaulFilters" [filters]="filters" [singleActions]="actions"
+              (executeOnSingle)="ejecutar($event)">
+            </sigma-grid-mantenimientos>
+          </mat-tab>
+          <mat-tab *ngIf="condicion" label="Solicitudes de Ensayos Genéricos">
+            <sigma-prod-cargue-resultados-list [generico]="true" [mapService]="mapService"
+              (detalleGen)="detalleGen($event)"></sigma-prod-cargue-resultados-list>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="currentAction=='listSolEn'">
+    <sigma-prod-cargue-resultados-list [mantenimiento]="mantenimiento" (back)="back($event)">
+    </sigma-prod-cargue-resultados-list>
+  </div>
+
+  <div *ngIf="currentAction=='detalleGenerico'">
+    <div fxLayout="column">
+      <div class="flex-p">
+        <mat-card class="p-0 mat-card">
+          <mat-card-header fxLayoutAlign="center">
+            <mat-card-subtitle>
+              <h2>{{ constants.detalle }} Cargue de resultados genéricos de laboratorio</h2>
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content class="p-16 m-0">
+            <!-------------------------->
+            <input type="hidden" [(ngModel)]="ensayo.id">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+              <div fxFlex="50">
+                <mat-form-field class="w-100">
+                  <input matInput placeholder="Fecha solicitud" [(ngModel)]="ensayo.fecha" [value]="ensayo.fecha"
+                    autocomplete="off" type="text" readonly />
+                </mat-form-field>
+              </div>
+
+              <div fxFlex="50">
+                <mat-form-field class="w-100">
+                  <input matInput placeholder="Usuario que solicita" 
+                    [value]="ensayo.usuario.nombres +' '+ensayo.usuario.apellidos"
+                    autocomplete="off" type="text" readonly />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+              <div fxFlex="50">
+                <mat-form-field class="w-100">
+                  <input matInput placeholder="Fecha de ensayo" 
+                    [(ngModel)]="ensayo.fechaRegistroEnsayo" [(value)]="ensayo.fechaRegistroEnsayo" autocomplete="off"
+                    type="text" readonly />
+                </mat-form-field>
+              </div>
+
+              <div fxFlex="50">
+                <mat-form-field class="w-100">
+                  <input matInput placeholder="Usuario que diligencia" 
+                    [value]="ensayo.usuarioTramite.nombres +' '+ensayo.usuarioTramite.apellidos" autocomplete="off"
+                    type="text" readonly />
+                </mat-form-field>
+              </div>
+            </div>
+
+
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+              <div fxFlex class="mb-10">
+                <mat-form-field class="w-100">
+                  <input matInput placeholder="Tipo de Ensayo" 
+                     [(value)]="ensayo.tipoEnsayo.descripcion" autocomplete="off"
+                    type="text" readonly />
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+
+              <div fxFlex class="mb-10">
+                <mat-card-content t-card-content class="m-0">
+                  <h3 mat-subheader>Resultados</h3>
+                  <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                    <div class="w-100">
+                      <div fxFlex class="mb-10">
+                        {{ ensayo.archivo.nombre }}
+                      </div>
+                      <div fxFlex class="mb-10" >
+                        <sigma-show-file id="{{ ensayo.archivo.id }}"></sigma-show-file>
+                      </div>
+                    </div>
+                  </div>
+                </mat-card-content>
+              </div>
+
+            </div>
+
+
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+              <div fxFlex>
+                <mat-form-field class="w-100">
+                  <input matInput placeholder="Observaciones" 
+                    [(ngModel)]="ensayo.observaciones" autocomplete="off" type="text" readonly />
+                </mat-form-field>
+              </div>
+
+            </div>
+            <!-------------------------->
+          </mat-card-content>
+          <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+          <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+            <button mat-button color="warn" class="m-1" (click)="backGen()">
+              <mat-icon class="m-1">close</mat-icon>{{ constants.cancelar }}
+            </button>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

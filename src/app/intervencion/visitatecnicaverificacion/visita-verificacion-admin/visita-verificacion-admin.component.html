@@ -1,0 +1,165 @@
+<div>
+
+        <div fxLayout="row" fxLayoutAlign="start" class="flex-p" *ngIf="!mostrarFormEditarIntervencion">
+            <button mat-stroked-button color="primary" class="m-1 mb-10" (click)="irAGridmantenimientos()">
+                <mat-icon class="m-1">navigate_before</mat-icon> {{ constants.irAtras }}
+            </button>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="start" class="flex-p" *ngIf="mostrarFormEditarIntervencion">
+            <button mat-stroked-button color="primary" class="m-1 mb-10" (click)="onBack()">
+                <mat-icon class="m-1">navigate_before</mat-icon> {{ constants.irAtras }}
+            </button>
+        </div>
+    
+        <div *ngIf="options == 'RegistrarVisita'">
+            <div *ngIf="mostrarDetalleVisitaDiagnostico">
+                <sigma-ver-diagnostico [mantenimiento]="mantenimiento" [mostrarButtonsBackCancelar]="false">
+                </sigma-ver-diagnostico>
+            </div>
+    
+            <div class="row" *ngIf="mostrarBotonCrearActa">
+                <mat-card class="p-0 c-mod">
+                    <mat-card-header fxLayoutAlign="center" class="mb-10">
+                        <mat-card-subtitle>
+                            <h2>Definición</h2>
+                        </mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div fxLayout="row" fxLayoutAlign="center" class="flex-p">
+                            <div fxLayoutAlign="end" class="flex-p">
+                                <button class="m-1" mat-raised-button color="primary" (click)="prepararCreacionNuevaActa()">
+                                    <mat-icon class="m-1">add</mat-icon>
+                                    {{ constants.nuevaActa }}
+                                </button>
+                            </div>
+                        </div>
+
+                    </mat-card-content>
+                </mat-card>
+            </div>
+
+            <div  fxLayout="row" fxLayoutAlign="start" *ngIf="mostrarOpcionesPreguntaSiNo">
+                <div class="m-10">
+                    <label>{{ constants.requiereActualizacionDiagnostico }} </label>
+                    <mat-radio-group [(ngModel)]="opcionSeleccionadaSiNoRequiereActualizacionDiagnostico" (ngModelChange)="onChangeModeloDespuesSeleccionarSiNo($event)"
+                         (change)="procesarEventoClickOpcionesSiNo()" [disabled]="disabledQuestion()">
+                        <mat-radio-button value="1" class="m-1"> Si </mat-radio-button>
+                        <mat-radio-button value="0" class="m-1"> No </mat-radio-button>
+                    </mat-radio-group>
+                </div>
+            </div>
+    
+            <mat-vertical-stepper [linear]="true" #stepper *ngIf="mostrarFormEditarIntervencion" [selectedIndex]="currentStep"
+            (animationDone)="setFocus()" (selectionChange)="selectionChangeStepper($event)">
+    
+                <mat-step [stepControl]="formularioDatosBasicos" >
+                    <ng-template matStepLabel>Datos Basicos de la Visita</ng-template>
+                    <input matInput id="DatosBasicosMat" readonly>
+                    <mat-card-content class="m-0" [formGroup]="formularioDatosBasicos" >  
+                        <input type="hidden" [value]="getStatusSave()"  formControlName="ctrlDatosBasicos">                          
+                        <sigma-visita-verificacion-basicos #sectionDatosBasicos [mantenimiento]="mantenimientoSectionBasicos" 
+                        (saveBasico)="saveRegistroBasicos($event)" [loading]="getLoading()"> 
+                        </sigma-visita-verificacion-basicos>
+                    </mat-card-content>
+                </mat-step>
+                
+    
+                <mat-step [stepControl]="formularioRegistroFallas" >
+                    <ng-template matStepLabel>Registro de la Visita </ng-template>
+                    <input matInput id="RegistroVisitaFallasMat" readonly>
+                    <mat-card-content class="m-0" [formGroup]="formularioRegistroFallas"> 
+                        <input type="hidden" formControlName="ctrlRegistroFallas">                
+                        <sigma-visita-verificacion-fallas #sectionFallas [mantenimiento]="mantenimientoSectionFallas" [loading]="loading"
+                        (saveRegistro)="saveRegistroFallas($event)">
+                        </sigma-visita-verificacion-fallas>
+                    </mat-card-content>
+                </mat-step>
+    
+                 <mat-step  *ngIf="!showOnYes" [stepControl]="formularioFotografias" >
+                    <ng-template matStepLabel>Fotografías de la Visita </ng-template>
+                    <input matInput id="RegistroVisitaFotosMat" readonly>
+                    <mat-card-content class="m-0" [formGroup]="formularioFotografias">
+                        <input type="hidden" formControlName="ctrlFotografias">
+                        <sigma-visita-verificacion-fotografias #sectionFotosDiagnostico  [mantenimiento]="mantenimientoSectionFotosDiagnostico"
+                        (saveRegistro)="saveRegistroFotografiasDiagnostico($event)" [loading]="loading">
+                        </sigma-visita-verificacion-fotografias>
+                    </mat-card-content>
+                </mat-step>
+
+                <mat-step  *ngIf="showOnYes" [stepControl]="formularioObservacionesFotografias">
+                    <ng-template matStepLabel>Observaciones Y Fotografías de la Visita </ng-template>
+                    <input matInput id="ObservacionesFotografiasMat" readonly>
+                    <mat-card-content class="m-0" [formGroup]="formularioObservacionesFotografias">
+                        <input type="hidden" formControlName="ctrlObservacionesFotografias">
+                        <sigma-visita-verificacion-obs-foto #sectionFotosChequeo [mantenimiento]="mantenimientoSectionObservacionFotos"  [loading]="loading"
+                        (saveRegistro)="saveRegistroObservacionFoto($event)">
+                        </sigma-visita-verificacion-obs-foto>
+                    </mat-card-content>
+                </mat-step>
+    
+                <mat-step *ngIf="!showOnYes" [stepControl]="formularioObservaciones">
+                    <ng-template matStepLabel>Observaciones de la Visita </ng-template>
+                    <input matInput id="observacionesMat" readonly>
+                    <mat-card-content class="m-0" [formGroup]="formularioObservaciones">
+                        <input type="hidden" formControlName="ctrlObservaciones">
+                        <sigma-visita-verificacion-observaciones #sectionObservacion [mantenimiento]="mantenimiento" [loading]="loading"
+                        (saveRegistro)="saveRegistroObservaciones($event)"></sigma-visita-verificacion-observaciones>
+                    </mat-card-content>
+                </mat-step> 
+    
+                <mat-step [stepControl]="formularioDetalleGestion">
+                    <ng-template matStepLabel>Detalle de Gestión del Mantenimiento Vial </ng-template>
+                    <input matInput id="DetalleGestionMat" readonly>
+                    <mat-card-content class="m-0" [formGroup]="formularioDetalleGestion">
+                        <input type="hidden" formControlName="ctrlDetalleGestion">
+                        <sigma-mantenimiento-records [mantId]="mantenimiento.id"></sigma-mantenimiento-records>
+                    </mat-card-content>
+                </mat-step>
+    
+                <mat-step [stepControl]="formularioEnvioGestion">
+                    <ng-template matStepLabel>Envio Gestión de Trabajo </ng-template>
+                    <mat-card-content class="m-0" [formGroup]="formularioEnvioGestion">
+                        <input type="hidden" formControlName="ctrlEnvioGestion">
+                        <div>
+                            <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+                            <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+                                <button type="button" (click)="onBack()" mat-button color="warn" class="m-1">
+                                    <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+                                </button>
+                                <button type="button" [disabled]="loading === true" class="m-1" mat-raised-button color="primary"
+                                    (click)="onSubmit()">
+                                    <mat-icon class="m-1">save</mat-icon> {{ constants.guardarTodo }}
+                                </button>
+                                <button type="button" [disabled]="loading === true" class="m-1" mat-raised-button color="primary"
+                                    (click)="onPrepararNuevaActaFinal()">
+                                    <mat-icon class="m-1">add</mat-icon>{{ constants.nuevaActa }}
+                                </button>
+                            </div>
+                            <div  fxLayout="row" fxLayoutAlign="start" *ngIf="mostrarOpcionesPreguntaSiNoParteFinal">
+                                <div class="m-10">
+                                    <label>{{ constants.requiereActualizacionDiagnostico }} </label>
+                                    <mat-radio-group [(ngModel)]="opcionSeleccionadaSiNoRequiereActualizacionDiagnosticoFinal"  [ngModelOptions]="{standalone: true}"
+                                         (ngModelChange)="onModelChangeOpcionesSiNoFinal()">
+                                        <mat-radio-button value="1" class="m-1"> Si </mat-radio-button>
+                                        <mat-radio-button value="0" class="m-1"> No </mat-radio-button>
+                                    </mat-radio-group>
+                                </div>
+                            </div>
+                            <sigma-seleccion-transicion  *ngIf="mostrarTransicionVerificandoFallas === true" #sigmaSeleccionTransicion [data]="data"
+                                [transiciones]="transicionesIndividualesClone" (executeTransition)="executeTransition($event)" (procesing)= "onProcesingTransicion($event)">
+                            </sigma-seleccion-transicion>
+                        </div>
+                    </mat-card-content>
+                </mat-step>
+    
+            </mat-vertical-stepper>
+    
+        </div>
+    
+    
+        <div *ngIf="options == 'ConsultarVisitas'">
+            <sigma-visita-verificacion-programadas [mantenimiento]="mantenimiento" ></sigma-visita-verificacion-programadas>
+        </div>
+    
+    </div>

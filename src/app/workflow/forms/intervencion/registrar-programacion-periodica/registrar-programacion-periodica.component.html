@@ -1,0 +1,125 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="currentAction !== 'list'">
+
+  <div fxLayout=" column" fxLayout.gt-sm="row wrap">
+    <div fxFlex="100" class="flex-p">
+        <mat-card-content>
+          <div>
+            <mat-tab-group [selectedIndex]="tabSeleccionado.value" (selectedIndexChange)="seleccionarGrid($event)">
+              <mat-tab *ngFor="let transicion of transicionesMasivas" label="{{transicion.nombre}}">
+                <sigma-grid-mantenimientos #grid [data]="data" [transicion]="transicion" [columns]="columns"
+                  [filters]="filters" [showActividadAgrupada]="false" [showKmCarril]="true"
+                  [masiveActions]="accionesAsignarProgramacionPeriodica" 
+                  (executeOnMasiveAction)="ejecutar($event)"
+                  (executeOnMasiveTransition)=" executeMasiveTransition($event)" [showKmLineal]="true" [showKmObra]="true"
+                  [showCheckMasive]="true" [showTotalNoCuadrilla]="true" [showTotalDiasDuracionPlaneada]="true">
+                </sigma-grid-mantenimientos>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+        </mat-card-content>
+    </div>
+  </div>
+
+</div>
+
+<!-- Seccion Asignar Programacion Periodica-->
+<div *ngIf="currentAction == 'asignarProgramacionPeriodica'" [formGroup]="formularioAsignar">
+  <mat-card-content class="p-16 m-0">
+
+    <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
+      fxLayoutAlign="left">
+      <div fxFlex="100">
+        <mat-card class="custom-card" >
+          <mat-card-header class="p-1" fxLayoutAlign="space-between center">
+            <mat-card-title class="m-0">
+              <h5>
+                {{ constants.tituloAsignar }}
+              </h5>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content class="p-16">
+            <div fxLayout="column">
+              <div fxFlex="100">
+
+                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                  <div fxFlex="100">
+                    <sigma-form-select [path]="constants.path_vigencia" formControlName="vigencia"
+                      [(ngModel)]="programacionPeriodica.vigencia" [listBy]="'descripcion'"
+                      (ngModelChange)="changePeriodo()" placeholder="{{constants.vigencia }}">
+                    </sigma-form-select>
+                  </div>
+
+                  <div fxFlex="100">
+                    <sigma-form-select [path]="constants.path_periodicidad" formControlName="periodicidad"
+                      [(ngModel)]="programacionPeriodica.periodicidad" [listBy]="'nombre'"
+                      (ngModelChange)="changePeriodicidad()" placeholder="{{ constants.periodicidad }}">
+                    </sigma-form-select>
+                  </div>
+
+                  <div fxFlex="100" *ngIf="showPeriodo">
+                    <sigma-form-select  [path]="urlPeriodo" formControlName="periodo"
+                      [(ngModel)]="programacionPeriodica.periodo" [listBy]="'nombre'" [orderBy]="'id'"
+                      (ngModelChange)="changePeriodo()" placeholder="{{ constants.periodo }}">
+                    </sigma-form-select>
+                  </div>
+                  <div fxFlex="100">
+                    <mat-form-field class="w-100">
+                      <mat-select [(ngModel)]="programacionPeriodica.nroDiasLaborables" formControlName="diaslaborados"
+                        placeholder="{{ constants.num_dias_laborales }}" required>
+                        <mat-option [value]="">{{constants.seleccionar}}</mat-option>
+                        <mat-option *ngFor="let dia of numeroDias" [value]="dia.dia">{{dia.dia}}</mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="formularioAsignar.get('diaslaborados').hasError('required')">
+                        {{ constants.campoRequerido }}
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                  <div fxFlex>
+                    <div class="w-100">
+                      <sigma-form-upload-file formControlName="archivo" [placeholder]="constants.adjuntarFile"
+                        [(ngModel)]="programacionPeriodica.archivo" [accept]="'application/pdf'" [showFile]="false"
+                        [sizeFile]="4" (ngModelChange)="validarCargueDeArchivos()" >
+                      </sigma-form-upload-file>
+                    </div>
+                  </div>
+                </div>
+
+                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                  {{ constants.mensajeCalcularCuadrilla }}
+                </div>
+
+                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                  <sigma-form-input class="w-100" formControlName="mantenimientos"
+                    [(ngModel)]="programacionPeriodica.mantenimientos" placeholder="" [class]="'hidden'">
+                  </sigma-form-input>
+                </div>
+
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </mat-card-content>
+  
+  <mat-divider></mat-divider>
+
+  <div fxLayoutAlign="end" class="pt-16">
+    <button class="m-1" mat-button color="warn" (click)="cancelarFormAsignar()">
+      <mat-icon class="m-1">close</mat-icon>
+      Cancelar
+    </button>
+    <button class="m-1" mat-raised-button [disabled]="processing || !formularioAsignar.valid"
+      color="primary" (click)="saveAsignacion(formularioAsignar)">
+      <mat-icon class="m-1">save</mat-icon>
+      Guardar
+    </button>
+  </div>
+</div>

@@ -1,0 +1,100 @@
+<div fxLayout="column" *sigmaIsGranted="constants.permiso_administracion_tipomantenimiento_create">
+  <div class="flex-p">
+    <mat-card class="p-0 mat-card">
+      <mat-card-header fxLayoutAlign="center">
+        <mat-card-subtitle>
+          <h2>{{ constants.crear }} Tipo Mantenimiento</h2>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+        <h5>{{ constants.informacionCampoObligatorio }}</h5>
+      </div>
+
+      <mat-card-content class="p-16 m-0" [formGroup]="form">
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.nombre }}" formControlName="nombre"
+                [(ngModel)]="tipomantenimiento.nombre" autocomplete="off" type="text" required>
+              <mat-error *ngIf="form.get('nombre').hasError('required')"> {{ constants.campoRequerido }}. </mat-error>
+              <mat-error *ngIf="form.get('nombre').hasError('maxlength')"> {{ constants.longitud_maxima }} 100
+                caracteres. </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <div class="w-100">
+              <sigma-form-select [path]="constants.path_administracion_tipomantenimiento_tipoEquipoId"
+                formControlName="tipoEquipoId" [(ngModel)]="tipomantenimiento.tipoEquipo" 
+                [placeholder]="constants.tipoEquipoId">
+              </sigma-form-select>
+            </div>
+          </div>
+
+          <div fxFlex>
+            <div class="w-100">
+              <sigma-form-select [path]="constants.path_administracion_tipomantenimiento_claseMantenimientoId"
+                formControlName="claseMantenimiento" [(ngModel)]="tipomantenimiento.claseMantenimiento"
+                [placeholder]="constants.claseMantenimientoId">
+              </sigma-form-select>
+            </div>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <textarea matInput placeholder="{{ constants.descripcion }}" rows="1"
+                [(ngModel)]="tipomantenimiento.descripcion" formControlName="descripcion"
+                matTooltip="Descripción del tipo de mantenimiento" matTooltipPosition="above" required></textarea>
+              <mat-error *ngIf="form.get('descripcion').hasError('required')"> {{ constants.campoRequerido }}.
+              </mat-error>
+              <mat-error *ngIf="form.get('descripcion').hasError('maxlength')"> {{ constants.longitud_maxima }} 600
+                caracteres. </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.duracion }}" formControlName="duracion"
+                [(ngModel)]="tipomantenimiento.duracion" autocomplete="off" type="text" [numericInput]="true" min="1"
+                max="4" required>
+              <mat-error *ngIf="form.get('duracion').hasError('required')"> {{ constants.campoRequerido }}. </mat-error>
+              <mat-error *ngIf="form.get('duracion').hasError('max')"> {{ constants.longitud_maxima }} 4 caracteres.
+              </mat-error>
+            </mat-form-field>
+            <mat-error *ngIf="form.get('duracion').hasError('pattern')"> Solo se permiten valores numericos
+            </mat-error>
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <textarea matInput placeholder="{{ constants.procedimiento }}" rows="1"
+                [(ngModel)]="tipomantenimiento.procedimiento" formControlName="procedimiento"
+                matTooltip="Procedimiento del tipo de mantenimiento" matTooltipPosition="above" required></textarea>
+              <mat-error *ngIf="form.get('procedimiento').hasError('required')"> {{ constants.campoRequerido }}.
+              </mat-error>
+              <mat-error *ngIf="form.get('procedimiento').hasError('maxlength')"> {{ constants.longitud_maxima }} 2000
+                caracteres. </mat-error>
+            </mat-form-field>
+          </div>
+
+        </div>
+      </mat-card-content>
+
+      <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+      <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+        <button type="button" (click)="onBack()" mat-button color="warn" class="m-1" [disabled]=disabledBtn_Login>
+          <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+        </button>
+        <button type="button" class="m-1" mat-raised-button color="primary" (click)="onSubmit()"
+          [disabled]=disabledBtn_Login>
+          <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</div>

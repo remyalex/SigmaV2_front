@@ -1,0 +1,71 @@
+<h2 mat-dialog-title>Detalle Lista</h2>
+<mat-dialog-content [formGroup]="form">
+    <div class="mb-10">
+        <div fxLayout fxLayout.xs="column" readonly="readonly" fxLayoutGap="20px" fxLayoutGap.xs="0">
+            <div fxFlex="50%">
+                <mat-checkbox formControlName="activo" disabled>Activo </mat-checkbox>
+            </div>
+        </div>
+        <input type="hidden" formControlName="id">
+        <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+            <div fxFlex="50%">
+                <mat-form-field class="w-100">
+                    <input matInput placeholder="Nombre" formControlName="nombre" readonly="readonly">
+                </mat-form-field>
+            </div>
+            <div fxFlex="50%">
+                <mat-form-field class="w-100">
+                    <textarea matInput placeholder="Descripción" rows="1" formControlName="descripcion"
+                        readonly="readonly"></textarea>
+                </mat-form-field>
+            </div>
+        </div>
+        <div fxLayout fxLayout.xs="column" readonly="readonly" *ngIf="this.dataSource.data.length>0" fxLayoutGap="20px"
+            fxLayoutGap.xs="0" align="end">
+            <div fxFlex>
+                <button mat-raised-button color="primary" (click)="exportAsXLSXItems()">
+                    <mat-icon>get_app</mat-icon> Exportar en Excel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="mat-elevation-z8">
+        <div *ngIf="lista.items.length <= 0" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+            <mat-icon class="m-1">sms_failed</mat-icon>
+            <h4> {{ constants.noResultados }}</h4>
+        </div>
+
+        <mat-table #TABLE #table [dataSource]="dataSource" matSort>
+            <ng-container matColumnDef="valor">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.valor }} </mat-header-cell>
+                <mat-cell *matCellDef="let listasItems" [attr.data-label]="constants.valor"> {{listasItems.valor}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="descripcion">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.descripcion }}  </mat-header-cell>
+                <mat-cell *matCellDef="let listasItems" [attr.data-label]="constants.descripcion"> {{listasItems.descripcion}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="activo">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.activo }} </mat-header-cell>
+                <mat-cell *matCellDef="let listasItems" [attr.data-label]="constants.activo">
+                    <span class="dev-color-red" [hidden]="listasItems.activo">{{ constants.no }}</span>
+                    <span class="dev-color-green" [hidden]="!listasItems.activo">{{ constants.si }}</span>
+                </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+        </mat-table>
+        <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageSize]="criteria.size"
+            [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    </div>
+
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+    <button mat-button color="warn" class="m-1" (click)="close()">
+        <mat-icon class="m-1">close</mat-icon> Cerrar
+    </button>
+
+</mat-dialog-actions>

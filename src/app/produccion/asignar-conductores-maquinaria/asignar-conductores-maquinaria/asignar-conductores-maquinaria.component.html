@@ -1,0 +1,36 @@
+<div fxLayout="column" *sigmaIsGranted="constants.permiso_produccion_asignar_conductores_maquinaria_list">
+  <div class="flex-p">
+    <mat-card>
+      <mat-card-header fxLayoutAlign="center">
+        <mat-card-subtitle>
+          <h2>{{ constants.maquinariaEquipos }}</h2>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+        <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+      </div>
+
+      <div [hidden]="processing">
+        <div *ngIf="currentAction == 'list'">
+          <div fxLayout="column" fxLayout.gt-sm="row wrap">
+            <div fxFlex="100" class="flex-p">
+
+              <mat-tab-group [selectedIndex]="tabSeleccionado.value" (selectedIndexChange)="seleccionarGrid($event)">
+                <mat-tab label="Conductores y Maquinaria Solicitados">
+                  <sigma-grid-mantenimientos #grid [data]="data" [columns]="columns" [filters]="filters"
+                    [condicion]="condicion" *ngIf="condicion" (executeOnSingle)="executeSingleAction($event)"
+                    [singleActions]="acciones">
+                  </sigma-grid-mantenimientos>
+                </mat-tab>
+              </mat-tab-group>
+
+            </div>
+          </div>
+        </div>
+        <div *ngIf="currentAction === 'accionSimple'">
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>

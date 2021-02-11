@@ -1,0 +1,38 @@
+<div fxLayout="column">
+    <div class="flex-p">
+        <mat-card class="p-0 mat-card">
+            <mat-card-header fxLayoutAlign="center">
+                <mat-card-subtitle>
+                    <h2>{{ constants.editar }}</h2>
+                </mat-card-subtitle>
+            </mat-card-header>
+
+            <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+                <h5>{{ constants.informacionCampoObligatorio }}</h5>
+            </div>
+
+            <mat-card-content [formGroup]="form">
+                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+                    <div fxFlex>
+                        <sigma-form-upload-file formControlName="adjunto" [(ngModel)]="acta.adjunto"
+                            [placeholder]="'Adjunto'" [accept]="'application/pdf'" [sizeFile]="2"
+                            [errors]="[{name: 'error', message: 'mensaje'}]">
+                        </sigma-form-upload-file>
+                    </div>
+                </div>
+            </mat-card-content>
+
+            <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+            <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+                <button type="button" class="m-1" (click)="onBack()" mat-button color="warn">
+                    <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+                </button>
+                <button type="button" class="m-1" [disabled]="disableSubmit" mat-raised-button color="primary"
+                    (click)="onSubmit()">
+                    <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+                </button>
+            </div>
+        </mat-card>
+    </div>
+</div>

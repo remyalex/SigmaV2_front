@@ -1,0 +1,216 @@
+<div *ngIf="loading" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div *ngIf="!loading">
+  <mat-card-content [formGroup]="form">
+    <div class="mt-10 mb-10">
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+        <div fxFlex>
+          <sigma-form-input formControlName="tipoIntervencionTotal" [ngModel]="mantenimiento.diagnostico ? 
+            mantenimiento.diagnostico.encabezado ? 
+              mantenimiento.diagnostico.encabezado ? 
+                mantenimiento.diagnostico.encabezado.tipoIntervencionTotal ? 
+                  mantenimiento.diagnostico.encabezado.tipoIntervencionTotal.descripcion : ''  
+                : '' 
+              : '' 
+            : ''" [placeholder]="constants.tipoIntervencion">
+          </sigma-form-input>
+        </div>
+        <div fxFlex>
+          <sigma-form-input formControlName="localidad"
+            [ngModel]="mantenimiento.localidad ? mantenimiento.localidad.nombre : ''"
+            [placeholder]="constants.localidad">
+          </sigma-form-input>
+        </div>
+        <div fxFlex>
+          <sigma-form-input formControlName="upla" [ngModel]="mantenimiento.upla ? mantenimiento.upla.nombre : ''"
+            [placeholder]="constants.upla">
+          </sigma-form-input>
+        </div>
+      </div>
+
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+        <div fxFlex>
+          <sigma-form-input formControlName="barrio" [ngModel]="mantenimiento.barrio ? mantenimiento.barrio.nombre : ''"
+            [placeholder]="constants.barrio">
+          </sigma-form-input>
+        </div>
+        <div fxFlex>
+          <sigma-form-input formControlName="civ" [ngModel]="mantenimiento.civ" [placeholder]="constants.civ">
+          </sigma-form-input>
+        </div>
+        <div fxFlex>
+          <sigma-form-input formControlName="pk" [ngModel]="mantenimiento.pk" [placeholder]="constants.pk">
+          </sigma-form-input>
+        </div>
+      </div>
+
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+        <div fxFlex>
+          <sigma-form-calendar formControlName="fechaCierre" [(ngModel)]="cierre.fechaCierre"
+            [placeholder]="constants.fecha" [type]="constants.datepicker.types.calendar">
+          </sigma-form-calendar>
+        </div>
+        <div fxFlex>
+          <sigma-form-input formControlName="otroTipoIntervencion" [(ngModel)]="cierre.otroTipoIntervencion"
+            [placeholder]="constants.otroTipoIntervencion">
+          </sigma-form-input>
+        </div>
+        <div fxFlex>
+          <sigma-form-number formControlName="escombros" [(ngModel)]="cierre.escombros"
+            [placeholder]="constants.escombros">
+          </sigma-form-number>
+        </div>
+      </div>
+
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+        <div fxFlex>
+          <sigma-form-input formControlName="destinoEscombros" [(ngModel)]="cierre.destinoEscombros"
+            [placeholder]="constants.destinoEscombros">
+          </sigma-form-input>
+        </div>
+        <div fxFlex>
+          <sigma-form-select formControlName="retiroProteccionZonaVerde" [(ngModel)]="cierre.retiroProteccionSelect"
+            [placeholder]="constants.retiroProteccionZonaVerde" [opciones]="opciones" [listBy]="'name'" [id]="'value'">
+          </sigma-form-select>
+        </div>
+        <div fxFlex>
+
+        </div>
+      </div>
+    </div>
+
+
+    <mat-divider></mat-divider>
+
+    <mat-card-content fxLayout="column" fxLayoutGap="10px" class="pt-16 mb-10">
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div fxFlex fxLayout="column">
+          <div fxFlex>
+            <sigma-form-select formControlName="libreResiduoZonaVerde" [(ngModel)]="cierre.libreResiduosSelect"
+              [placeholder]="constants.libreResiduoZonaVerde" [opciones]="opciones" [listBy]="'name'" [id]="'value'">
+            </sigma-form-select>
+          </div>
+          <div fxFlex>
+            <label>{{ constants.libreResiduoZonaVerdeFotografico }}</label>
+            <sigma-form-input formControlName="registroFotograficoLibreResiduo"
+              [(ngModel)]="cierre.registroFotograficoLibreResiduos" [class]="'hidden'"></sigma-form-input>
+
+            <div *ngFor="let foto of cierre.registroFotograficoLibreResiduos">
+              <sigma-form-upload-file [(ngModel)]="foto.archivo" [placeholder]="constants.archivo" [maxUpload]="1"
+                [accept]="'image/*'" [ngModelOptions]="{standalone: true}">
+              </sigma-form-upload-file>
+            </div>
+            <div *ngIf="cierre.registroFotograficoLibreResiduos.length < 2">
+              <button type="button" class="m-1" [disabled]="disableSubmit" mat-raised-button color="primary"
+                (click)="addFoto(cierre.registroFotograficoLibreResiduos, tipoArchivos['LIBRE_RESIDUO'])"
+                *ngIf="cierre.transicionEjecutada == false">
+                <mat-icon class="m-1">add</mat-icon> {{ constants.agregar }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div fxFlex fxLayout="column">
+          <div fxFlex>
+            <sigma-form-select formControlName="retiroProteccionSumidero" [(ngModel)]="cierre.sumiderosSelect"
+              [placeholder]="constants.retiroProteccionSumidero" [opciones]="opciones" [listBy]="'name'" [id]="'value'">
+            </sigma-form-select>
+          </div>
+          <div fxFlex>
+            <label>{{ constants.retiroProteccionSumideroFotografico }}</label>
+            <sigma-form-input formControlName="registroFotograficoSumidero"
+              [(ngModel)]="cierre.registroFotograficoSumideros" [class]="'hidden'"></sigma-form-input>
+
+            <div *ngFor="let foto of cierre.registroFotograficoSumideros">
+              <sigma-form-upload-file [(ngModel)]="foto.archivo" [placeholder]="constants.archivo" [maxUpload]="1"
+                [accept]="'image/*'" [ngModelOptions]="{standalone: true}">
+              </sigma-form-upload-file>
+            </div>
+            <div *ngIf="cierre.registroFotograficoSumideros.length < 2">
+              <button type="button" class="m-1" [disabled]="disableSubmit" mat-raised-button color="primary"
+                (click)="addFoto(cierre.registroFotograficoSumideros, tipoArchivos['SUMIDERO'])"
+                *ngIf="cierre.transicionEjecutada == false">
+                <mat-icon class="m-1">add</mat-icon> {{ constants.agregar }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <mat-divider></mat-divider>
+
+    <mat-card-content fxLayout="column" fxLayoutGap="10px" class="pt-16 mb-10">
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div fxFlex fxLayout="column">
+          <div fxFlex>
+            <sigma-form-select formControlName="retiroProteccionSenalizacion" [(ngModel)]="cierre.senalizacionSelect"
+              [placeholder]="constants.retiroProteccionSenalizacion" [opciones]="opciones" [listBy]="'name'"
+              [id]="'value'">
+            </sigma-form-select>
+          </div>
+          <div fxFlex>
+            <label>{{ constants.retiroProteccionSenalizacionFotografico }}</label>
+            <sigma-form-input formControlName="registroFotograficoSenalizacion"
+              [(ngModel)]="cierre.registroFotograficoSenalizacion" [class]="'hidden'"></sigma-form-input>
+
+            <div *ngFor="let foto of cierre.registroFotograficoSenalizacion">
+              <sigma-form-upload-file [(ngModel)]="foto.archivo" [placeholder]="constants.archivo" [maxUpload]="1"
+                [accept]="'image/*'" [ngModelOptions]="{standalone: true}">
+              </sigma-form-upload-file>
+            </div>
+            <div *ngIf="cierre.registroFotograficoSenalizacion.length < 2">
+              <button type="button" class="m-1" [disabled]="disableSubmit" mat-raised-button color="primary"
+                (click)="addFoto(cierre.registroFotograficoSenalizacion, tipoArchivos['SENALIZACION'])"
+                *ngIf="cierre.transicionEjecutada == false">
+                <mat-icon class="m-1">add</mat-icon> {{ constants.agregar }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div fxFlex fxLayout="column">
+          <div fxFlex>
+            <label>{{ constants.vistaGeneralFotografico }}</label>
+            <sigma-form-input formControlName="registroFotograficoVistaGeneral"
+              [(ngModel)]="cierre.registroFotograficoVistaGeneral" [class]="'hidden'"></sigma-form-input>
+
+            <div *ngFor="let foto of cierre.registroFotograficoVistaGeneral">
+              <sigma-form-upload-file [(ngModel)]="foto.archivo" [placeholder]="constants.archivo" [maxUpload]="1"
+                [accept]="'image/*'" [ngModelOptions]="{standalone: true}">
+              </sigma-form-upload-file>
+            </div>
+            <div *ngIf="cierre.registroFotograficoVistaGeneral.length < 2">
+              <button type="button" class="m-1" [disabled]="disableSubmit" mat-raised-button color="primary"
+                (click)="addFoto(cierre.registroFotograficoVistaGeneral, tipoArchivos['VISTA_GENERAL'])"
+                *ngIf="cierre.transicionEjecutada == false">
+                <mat-icon class="m-1">add</mat-icon> {{ constants.agregar }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <div fxLayout="row" fxLayoutAlign="end" class="pt-16" *ngIf="!disabledForm">
+      <button mat-button color="warn" class="m-1" (click)="close()">
+        <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+      </button>
+      <button type="button" class="m-1" [disabled]="disableSubmit" mat-raised-button color="primary"
+        (click)="onSubmit()">
+        <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+      </button>
+    </div>
+
+    <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+    <div *ngIf="cierre.id" class="w-100">
+      <sigma-mantenimiento-records [mantId]="mantenimiento.id"></sigma-mantenimiento-records>
+      <sigma-seleccion-transicion [(data)]="data" [transiciones]="transicionesIndividuales"
+        (executeTransition)="executeTransition()"></sigma-seleccion-transicion>
+    </div>
+  </mat-card-content>
+
+</div>

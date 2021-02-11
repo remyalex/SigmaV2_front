@@ -1,0 +1,171 @@
+<div>
+  <div>
+    <mat-card-header fxLayoutAlign="center" class="mb-10">
+      <mat-card-subtitle>
+        <h2>{{ constants.titulo }}</h2>
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxLayoutGap="10px">
+      <div fxFlex>
+        <form (ngSubmit)="search()">
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <div fxFlex class="w-100">
+              <sigma-form-calendar [(ngModel)]="criteria.desde" [objeto]="criteria"
+              [maxTarget]="'hasta'" [placeholder]="constants.desde"
+              [type]="constants.datepicker.types.calendar" [ngModelOptions]="{standalone: true}">
+              </sigma-form-calendar>
+            </div>
+            <div fxFlex class="w-100">
+              <sigma-form-calendar [(ngModel)]="criteria.hasta" [objeto]="criteria"
+                [minTarget]="'desde'" [placeholder]="constants.hasta"
+                [type]="constants.datepicker.types.calendar" [ngModelOptions]="{standalone: true}">
+              </sigma-form-calendar>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div fxFlex>
+        <button type="submit" mat-raised-button color="primary" class="m-1" (click)="search()">
+          <mat-icon>search</mat-icon> {{ constants.buscar }}
+        </button>
+        <button (click)="clear()" mat-raised-button color="warn" class="m-1">
+          <mat-icon>clear</mat-icon> {{ constants.limpiar }}
+        </button>
+      </div>
+    </mat-card-content>
+  </div>
+</div>
+
+<div class="mat-elevation-z8">
+  <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center">
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+
+  <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+    <mat-icon class="m-1">sms_failed</mat-icon>
+    <h4> {{dataSource.errorMessage$ | async}}</h4>
+  </div>
+
+  <mat-table #table class="col-x" [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort>
+
+    <ng-container matColumnDef="movil">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.movil }} </mat-header-cell>
+        <mat-cell *matCellDef="let equipoConductorCargue" [attr.data-label]="constants.movil">
+          {{equipoConductorCargue.movil}}
+        </mat-cell>
+      </ng-container>
+    
+    <ng-container matColumnDef="desde">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.desdeColumn }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipoConductorCargue" [attr.data-label]="constants.desdeColumn">
+        {{equipoConductorCargue.desde}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="hasta">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.hastaColumn }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipoConductorCargue" [attr.data-label]="constants.hastaColumn">
+        {{equipoConductorCargue.hasta}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="domingo">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.domingo }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipoConductorCargue" [attr.data-label]="constants.domingo">
+        <span class="dev-color-green" [hidden]="!equipoConductorCargue.domingo">
+          <mat-icon>local_shipping</mat-icon>
+        </span>
+      </mat-cell>
+    </ng-container>  
+
+    <ng-container matColumnDef="lunes">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.lunes }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipoConductorCargue" [attr.data-label]="constants.lunes">
+          <span class="dev-color-green" [hidden]="!equipoConductorCargue.lunes">
+            <mat-icon>local_shipping</mat-icon>
+            <!-- Cargado -->
+          </span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="martes">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.martes }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipoConductorCargue" [attr.data-label]="constants.martes">
+          <span class="dev-color-green" [hidden]="!equipoConductorCargue.martes">
+            <mat-icon>local_shipping</mat-icon>
+            <!-- Cargado -->
+          </span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="miercoles">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.miercoles }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipoConductorCargue" [attr.data-label]="constants.miercoles">
+          <span class="dev-color-green" [hidden]="!equipoConductorCargue.miercoles">
+            <mat-icon>local_shipping</mat-icon>
+            <!-- Cargado -->
+          </span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="jueves">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.jueves }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipoConductorCargue" [attr.data-label]="constants.jueves">
+          <span class="dev-color-green" [hidden]="!equipoConductorCargue.jueves">
+            <mat-icon>local_shipping</mat-icon>
+            <!-- Cargado -->
+          </span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="viernes">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.viernes }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipoConductorCargue" [attr.data-label]="constants.viernes">
+        <span class="dev-color-green" [hidden]="!equipoConductorCargue.viernes">
+          <mat-icon>local_shipping</mat-icon>
+          <!-- Cargado -->
+        </span>
+      </mat-cell>
+    </ng-container>  
+
+    <ng-container matColumnDef="sabado">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.sabado }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipoConductorCargue" [attr.data-label]="constants.sabado">
+        <span class="dev-color-green" [hidden]="!equipoConductorCargue.sabado">
+          <mat-icon>local_shipping</mat-icon>
+        </span>
+      </mat-cell>
+    </ng-container>   
+
+    <!-- <ng-container matColumnDef="activo">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.activo }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipoConductorCargue">
+        <span class="dev-color-red" [hidden]="equipoConductorCargue.activo">{{ constants.no }}</span>
+        <span class="dev-color-green" [hidden]="!equipoConductorCargue.activo">{{ constants.si }}</span>
+      </mat-cell>
+    </ng-container> -->
+
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipoConductorCargue" [attr.data-label]="constants.acciones">
+        <button mat-raised-button color="primary" (click)="detail(equipoConductorCargue)" class="m-1" [disabled]="disableSubmit"
+          *sigmaIsGranted="constants.permiso_administracion_equipoconductor_view">
+          <mat-icon matTooltip="Detalles" matTooltipPosition="above">open_in_new</mat-icon>
+        </button>    
+        <button mat-raised-button color="primary" (click)="edit(equipoConductorCargue)" class="m-1" [disabled]="disableSubmit"
+          *sigmaIsGranted="constants.permiso_administracion_equipoconductor_update">
+          <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+        </button>
+        <button mat-raised-button color="warn" (click)="delete(equipoConductorCargue)" class="m-1" [disabled]="disableSubmit"
+          *sigmaIsGranted="constants.permiso_administracion_equipoconductor_delete">
+          <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size"
+    [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+</div>

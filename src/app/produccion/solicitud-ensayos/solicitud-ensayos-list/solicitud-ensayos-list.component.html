@@ -1,0 +1,146 @@
+<div fxLayout="column"  >
+  <div class="flex-p" [hidden]="action !== 'list'" >
+    <div fxLayoutAlign="end" class="mb-10">
+      <button *ngIf="generico" (click)="crear()" mat-raised-button color="primary">
+        <mat-icon class="m-1">note_add</mat-icon> Crear nuevo
+      </button>
+    </div>
+      <mat-card-header fxLayoutAlign="center">
+        <mat-card-subtitle>
+          <h3>Solicitar Ensayos de Laboratorio Genéricos</h3>
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="mb-10">
+          <form (ngSubmit)="search()">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+              <div fxFlex>
+                <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fecha" [type]="'calendar'"
+                  [placeholder]="'Fecha solicitud'" [ngModelOptions]="{standalone: true}">
+                </sigma-form-calendar>
+              </div>
+              <div fxFlex *ngIf="presentarTipoIntervencion">
+                <sigma-form-select [path]="constants.path_produccion_persona_tipoEnsayo"
+                  [(ngModel)]="criteria.tipoEnsayoId" name="tipoEnsayoId" placeholder="Tipo ensayo"
+                  [listBy]="'descripcion'">
+                </sigma-form-select>
+              </div>
+              <div fxFlex>
+                <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaRegistroEnsayo" [type]="'calendar'"
+                  [placeholder]="'Fecha ensayo'" [ngModelOptions]="{standalone: true}">
+                </sigma-form-calendar>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+              <div fxFlex>
+                <button type="submit" (click)="search()" mat-raised-button color="primary" class="m-1">
+                  <mat-icon class="m-1">search</mat-icon> Buscar
+                </button>
+                <button (click)="Limpiar()" mat-raised-button color="warn" class="m-1">
+                  <mat-icon class="m-1">clear</mat-icon> Limpiar
+                </button>
+                <button layout="row" mat-raised-button color="primary" class="m-1" (click)="exportAsXLSX()"
+                  *sigmaIsGranted="constants.permiso_produccion_ensayos_export"
+                  [disabled]="dataSource.totalElements$.source['_value'] <= 0">
+                  <mat-icon class="m-1">get_app</mat-icon>
+                  {{ constants.exportar }}
+                  <mat-icon *ngIf="cargandoExcel">
+                    <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+                  </mat-icon>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="mat-elevation-z8">
+          <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center">
+            <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+          </div>
+          <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+            <mat-icon class="m-1">sms_failed</mat-icon>
+            <h4> {{ dataSource.errorMessage$ | async }}</h4>
+          </div>
+          <mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort>
+
+            <ng-container matColumnDef="id">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Id Sol. </mat-header-cell>
+              <mat-cell *matCellDef="let ensayo" data-label="Id">
+                {{ ensayo.mantenimiento == null ? ensayo.id : '' }}
+              </mat-cell>
+            </ng-container>
+      
+            <ng-container matColumnDef="pk">
+              <mat-header-cell *matHeaderCellDef> PK </mat-header-cell>
+              <mat-cell *matCellDef="let ensayo" data-label="PK">
+                {{ ensayo.mantenimiento != null ? ensayo.mantenimiento.pk : '' }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="descripcionTipoEnsayo">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo ensayo </mat-header-cell>
+              <mat-cell *matCellDef="let ensayo" data-label="Tipo ensayo">
+                {{ ensayo.descripcionTipoEnsayo }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="fecha">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha solicitud </mat-header-cell>
+              <mat-cell *matCellDef="let ensayo" data-label="Fecha solicitud">
+                {{ ensayo.fecha }} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="usuario.nombres">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Usuario solicitud </mat-header-cell>
+              <mat-cell *matCellDef="let ensayo" data-label="Usuario solicitud">
+                {{ ensayo.usuario != null ? ensayo.usuario.nombres + ' ' + ensayo.usuario.apellidos : '' }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="fechaRegistroEnsayo">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha ensayo </mat-header-cell>
+              <mat-cell *matCellDef="let ensayo" data-label="Fecha ensayo">
+                {{ ensayo.fechaRegistroEnsayo}}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="observaciones">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Observaciones</mat-header-cell>
+              <mat-cell *matCellDef="let ensayo" data-label="Observaciones">
+                {{ ensayo.observaciones}}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="acciones">
+              <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+              <mat-cell *matCellDef="let ensayo" data-label="Acciones">
+                <sigma-show-file id="{{ ensayo.archivo != null ? ensayo.archivo.id : '' }}"></sigma-show-file>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: columns"></mat-row>
+
+          </mat-table>
+          <mat-paginator #paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size"
+            [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+        </div>
+      </mat-card-content>
+
+      <div *ngIf="!generico" fxLayout="row" fxLayoutAlign="end">
+        <mat-divider></mat-divider>
+        <div class="pt-16">
+          <button type="button" class="m-1" (click)="onBack()" mat-button color="warn">
+            <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+          </button>
+        </div>
+      </div>
+    
+</div>
+
+<div *ngIf="action === 'create'" >
+  <sigma-prod-solicitud-ensayos-create [generico]="generico"
+    (back)="ejecutarbackCreate()"
+    (cambiarEstadoTabEnsayoLabPK)="cambioEstadoTabEnsayoLabPK($event)">
+  </sigma-prod-solicitud-ensayos-create>
+</div>

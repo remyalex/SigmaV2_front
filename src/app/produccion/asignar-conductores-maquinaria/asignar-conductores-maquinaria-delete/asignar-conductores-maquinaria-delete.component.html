@@ -1,0 +1,34 @@
+<div fxLayout="column">
+  <div class="flex-p">
+    <mat-card class="p-0 mat-card"></mat-card>
+      <h4 mat-dialog-title>{{ constants.cancelacionPersonal }}</h4>
+
+      <mat-card-content class="p-16 m-0" [formGroup]="form" *sigmaIsGranted="constants.permiso_produccion_asignar_conductores_maquinaria_delete">
+      
+      
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <div fxFlex>
+                <sigma-form-textarea formControlName="cancelacionPersona" placeholder="Motivo de cancelación"
+                 [(ngModel)]="motivo" [rows]="5">
+                </sigma-form-textarea>
+                <!-- <textarea matInput placeholder="" required formControlName="cancelacionPersona" rows="5"></textarea> -->
+                <!-- <mat-error *ngIf="form.get('cancelacionPersona').hasError('required')"> {{ constants.campoRequerido }}
+                </mat-error> -->
+            </div>
+        </div>
+      
+      </mat-card-content>
+      
+      <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+      
+      <mat-dialog-actions align="end" fxLayout="row" fxLayout.lt-sm="column">
+        <button class="mb-10 w-100" fxFlex mat-button color="warn" (click)="close()">
+          <mat-icon class="m-1">close</mat-icon> {{ constants.no }}
+        </button>
+        <button class="mb-10 w-100" fxFlex mat-raised-button color="primary" (click)="onSubmit()" [disabled]="disableSubmit" *sigmaIsGranted="constants.permiso_produccion_asignar_conductores_maquinaria_delete">
+          <mat-icon class="m-1">check_circle_outline</mat-icon> {{ constants.si }}
+        </button>
+      </mat-dialog-actions>
+
+  </div>
+</div>

@@ -1,0 +1,81 @@
+<h2 mat-dialog-title>Cargar Resultado de Solicitudes Aforos</h2>
+
+<div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+  <h5>{{ constants.informacionCampoObligatorio }}</h5>
+</div>
+
+<mat-dialog-content>
+  <ng-template matStepLabel>Archivos </ng-template>
+
+  <div *ngIf="mantenimiento.resultadosSolicitudesAforos.length < maxArchivos && editable" fxLayoutAlign="end">
+    <button [disabled]="processing" mat-raised-button color="primary" (click)="addArchivo()">
+      <mat-icon class="m-1">add</mat-icon>
+      Adicionar archivos
+    </button>
+  </div>
+
+  <form [formGroup]="form">
+    <mat-form-field class="w-100">
+      <input matInput type="text" formControlName="archivos" [(ngModel)]="mantenimiento.resultadosSolicitudesAforos"
+        class="hidden" />
+      <mat-error *ngIf="form.get('archivos').hasError('maxElements')">
+        {{ constants.maxFiles }}
+        {{ form.get('archivos') == null ? '' : form.get('archivos').getError('maxElements').max }}
+        {{ constants.total | lowercase }}
+        ({{ form.get('archivos') == null ? '' : form.get('archivos').getError('maxElements').actual }})
+      </mat-error>
+      <mat-error *ngIf="form.get('archivos').hasError('minElements')">
+        {{ constants.minFiles }}
+        {{ form.get('archivos') == null ? '' : form.get('archivos').getError('minElements').min }}
+        {{ constants.total | lowercase }}
+        ({{ form.get('archivos') == null ? '' : form.get('archivos').getError('minElements').actual }})
+      </mat-error>
+    </mat-form-field>
+  </form>
+
+  <mat-card-content class="m-0" [formGroup]="form">
+    <div class="mat-elevation-z8 mb-20">
+      <mat-table [dataSource]="archivosDatasource">
+        
+        <ng-container matColumnDef="archivos">
+          <mat-header-cell *matHeaderCellDef> Archivo </mat-header-cell>
+          <mat-cell *matCellDef="let archivo" data-label="Archivo">
+            <sigma-show-file *ngIf="archivo.archivo" [showFile]="false" [id]="archivo.archivo.id"></sigma-show-file>
+            <p *ngIf="archivo.archivo">&nbsp;{{archivo.archivo.nombre}}</p>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="observacion">
+          <mat-header-cell *matHeaderCellDef> Observación </mat-header-cell>
+          <mat-cell *matCellDef="let archivo" data-label="Observación">
+            {{archivo.observaciones ? archivo.observaciones : ''}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+          <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+          <mat-cell *matCellDef="let archivo; let i = index;" [attr.data-label]="constants.acciones">
+            <button mat-raised-button color="warn" (click)="removeArchivo(i)" class="m-1">
+              <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="columnasTablaArchivos"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: columnasTablaArchivos;"></mat-row>
+      </mat-table>
+    </div>
+  </mat-card-content>
+</mat-dialog-content>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> Cancelar
+  </button>
+  <button *ngIf="editable" class="m-1" [disabled]="processing" mat-raised-button color="primary"
+    (click)="onSubmit()"> <mat-icon class="m-1">save</mat-icon>
+    {{ constants.guardar }}
+  </button>
+</mat-dialog-actions>

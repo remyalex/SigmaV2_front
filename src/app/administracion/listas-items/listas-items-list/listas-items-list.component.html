@@ -1,0 +1,61 @@
+<div fxLayout="column">
+  <div class="flex-p">
+      <mat-card>
+          <mat-card-header fxLayoutAlign="center">                
+              <mat-card-subtitle><h2>Consultar Listas Items</h2></mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+              <form fxLayout="column" (ngSubmit)="search()">            
+                  <mat-form-field class="w-50">
+                      <textarea class="w-50" matInput placeholder="Nombre" id="nombre"  [(ngModel)]="criteria.nombre" name="nombre"></textarea>
+                  </mat-form-field>            
+                  <button type="submit"  mat-raised-button class="m-1">Buscar </button>
+                </form>
+          </mat-card-content>
+      </mat-card>
+  </div>
+</div>
+
+<div class="mat-elevation-z8"> 
+    <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center" >   
+        <mat-spinner [diameter]="50" color="primary"></mat-spinner>    
+    </div>
+    <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+        <mat-icon class="m-1">sms_failed</mat-icon>  <h4> {{dataSource.errorMessage$ | async}}</h4>
+    </div>
+
+    <mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort >       
+        <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Id. </mat-header-cell>
+            <mat-cell *matCellDef="let listasItems" data-label="Id"> 
+                {{listasItems.id}} </mat-cell>
+        </ng-container>                  
+        <ng-container matColumnDef="ListaId">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Padre </mat-header-cell>
+            <mat-cell *matCellDef="let listasItems" data-label="Padre"> 
+                {{listasItems.ListaId}} </mat-cell>
+        </ng-container>   
+        <ng-container matColumnDef="nombre">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+            <mat-cell *matCellDef="let listasItems" data-label="Nombre"> 
+                {{listasItems.nombre}} </mat-cell>
+        </ng-container>                        
+        <ng-container matColumnDef="acciones">
+            <mat-header-cell *matHeaderCellDef> Acciones  </mat-header-cell>
+            <mat-cell *matCellDef="let listasItems" data-label="Acciones">
+                <button mat-raised-button class="m-1">
+                    <mat-icon matTooltip="Detalles" matTooltipPosition="above">open_in_new</mat-icon>
+                </button>
+                <button mat-raised-button (click)="edit(listasItems)">
+                    <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+                </button>
+                <button mat-raised-button (click)="delete(listasItems)" class="m-1">
+                    <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+                </button>
+            </mat-cell>
+        </ng-container>        
+        <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+    </mat-table>
+    <mat-paginator #paginator [length]= "dataSource.totalElements$ | async" [pageSize]="criteria.size" [pageSizeOptions]="[100]" showFirstLastButtons ></mat-paginator>
+</div>

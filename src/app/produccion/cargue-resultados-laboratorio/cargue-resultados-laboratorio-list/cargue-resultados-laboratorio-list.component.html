@@ -1,0 +1,248 @@
+<div *ngIf="currentActionL=='listSolEn'" class="p-16">
+  <div>
+    <div>
+      <mat-card-content>
+        <div fxLayout="row" fxLayout.lt-md="column">
+          <div fxLayoutAlign="start" fxFlex>
+            <button *ngIf="!generico" mat-stroked-button color="primary" class="mb-10" (click)="onBack()">
+              <mat-icon>arrow_back_ios</mat-icon>
+              {{ constants.atras }}
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+      <div class="mb-10">
+        <form (ngSubmit)="search()">
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <div fxFlex>
+              <sigma-form-calendar [objeto]="criteriaSE" [(ngModel)]="criteriaSE.fecha" [type]="'calendar'"
+                [placeholder]="'Fecha solicitud'" [ngModelOptions]="{standalone: true}">
+              </sigma-form-calendar>
+            </div>
+            <div fxFlex>
+              <sigma-form-select [path]="constants.path_produccion_persona_tipoEnsayo"
+                [(ngModel)]="criteriaSE.tipoEnsayoId" name="tipoEnsayoId" placeholder="Tipo Ensayo"
+                [listBy]="'descripcion'">
+              </sigma-form-select>
+            </div>
+            <div fxFlex>
+              <sigma-form-calendar [objeto]="criteriaSE" [(ngModel)]="criteriaSE.fechaRegistroEnsayo"
+                [type]="'calendar'" [placeholder]="'Fecha ensayo'" [maxTarget]="'fechaRegistroEnsayo'"
+                [ngModelOptions]="{standalone: true}">
+              </sigma-form-calendar>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <div fxFlex>
+              <button type="submit" (click)="search()" mat-raised-button color="primary" class="m-1">
+                <mat-icon>search</mat-icon> Buscar
+              </button>
+              <button (click)="Limpiar()" mat-raised-button color="warn" class="m-1">
+                <mat-icon>clear</mat-icon> Limpiar
+              </button>
+              <button layout="row" mat-raised-button color="primary" class="m-1" (click)="exportAsXLSX()"
+                *sigmaIsGranted="constants.permiso_produccion_ensayos_export"
+                [disabled]="dataSourceSE.totalElements$.source['_value'] <= 0">
+                <mat-icon>get_app</mat-icon>
+                {{ constants.exportar }}
+                <mat-icon *ngIf="cargandoExcel">
+                  <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+                </mat-icon>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="mat-elevation-z8">
+    <div *ngIf="dataSourceSE.loading$ | async" fxLayout="column" fxLayoutAlign="center center">
+      <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+    </div>
+    <div *ngIf="dataSourceSE.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+      <mat-icon class="m-1">sms_failed</mat-icon>
+      <h4> {{ dataSourceSE.errorMessage$ | async }}</h4>
+    </div>
+    <mat-table #table [dataSource]="dataSourceSE" [hidden]="dataSourceSE.loading$" matSort>
+
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef> Id Sol. </mat-header-cell>
+        <mat-cell *matCellDef="let ensayo" data-label="Id">
+          {{ ensayo.mantenimiento == null ? ensayo.id : '' }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="pk">
+        <mat-header-cell *matHeaderCellDef> PK </mat-header-cell>
+        <mat-cell *matCellDef="let ensayo" data-label="PK">
+          {{ ensayo.mantenimiento != null ? ensayo.mantenimiento.pk : '' }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="tipoEnsayo">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo ensayo </mat-header-cell>
+        <mat-cell *matCellDef="let ensayo" data-label="Tipo ensayo">
+          {{ ensayo.tipoEnsayo != null ? ensayo.tipoEnsayo.descripcion : '' }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fecha">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha solicitud </mat-header-cell>
+        <mat-cell *matCellDef="let ensayo" data-label="Fecha solicitud">
+          {{ ensayo.fecha }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="usuario">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Usuario solicitud </mat-header-cell>
+        <mat-cell *matCellDef="let ensayo" data-label="Usuario solicitud">
+          {{ ensayo.usuario != null ? ensayo.usuario.nombres + ' ' + ensayo.usuario.apellidos : '' }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fechaRegistroEnsayo">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha ensayo </mat-header-cell>
+        <mat-cell *matCellDef="let ensayo" data-label="Fecha ensayo">
+          {{ ensayo.fechaRegistroEnsayo}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="acciones">
+        <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+        <mat-cell *matCellDef="let ensayo" [attr.data-label]="constants.acciones">
+          <button *ngIf="ensayo.archivo != null && !generico" mat-raised-button color="primary" (click)="detail(ensayo)" class="m-1"
+            title="ver detalle">
+            <mat-icon matTooltip="Detalle" matTooltipPosition="above">open_in_new</mat-icon>
+          </button>
+          <button *ngIf="ensayo.archivo != null && generico" mat-raised-button color="primary" (click)="detailGen(ensayo)" class="m-1"
+            title="ver detalle">
+            <mat-icon matTooltip="Detalle" matTooltipPosition="above">open_in_new</mat-icon>
+          </button>
+          <button *ngIf="ensayo.archivo == null" mat-raised-button color="primary" (click)="edit(ensayo)" class="m-1"
+            title="editar ensayo">
+            <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columns"></mat-row>
+
+    </mat-table>
+    <mat-paginator #paginator [length]="dataSourceSE.totalElements$ | async" [pageSize]="criteriaSE.size"
+      [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+  </div>
+</div>
+
+<div *ngIf="currentActionL=='editResultado'" class="p-16">
+  <div *ngIf="processingE" fxLayout="column" fxLayoutAlign="center center">
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+
+  <div fxLayout="column" *ngIf="!processingE">
+    <div class="flex-p">
+      <mat-card class="p-0 mat-card">
+        <mat-card-header fxLayoutAlign="center">
+          <mat-card-subtitle>
+            <h2>{{ constants.editar }} Cargue de resultados genéricos de laboratorio</h2>
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+          <h5>{{ constants.informacionCampoObligatorio }}</h5>
+        </div>
+
+        <mat-card-content class="p-16 m-0" [formGroup]="formEdit"
+          *sigmaIsGranted="constants.permiso_produccion_ensayos_update">
+          <input type="hidden" formControlName="id" [(ngModel)]="ensayo.id">
+
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <div fxFlex="50">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="Fecha solicitud" formControlName="fecha" [(ngModel)]="ensayo.fecha"
+                  autocomplete="off" type="text" readonly />
+              </mat-form-field>
+            </div>
+
+            <div fxFlex="50">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="Usuario que solicita" [value]="usuarioNom" autocomplete="off" type="text"
+                  readonly />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <div fxFlex="100">
+              <sigma-form-calendar [(ngModel)]="fechaRegistroEnsayo" formControlName="fechaRegistroEnsayo"
+                [objeto]="ensayo" [type]="constants.datepicker.types.calendar" placeholder="Fecha de Ensayo"
+                [minTarget]="'fecha'" [maxTarget]="'fechaMaxima'">
+              </sigma-form-calendar>
+            </div>
+
+            <div fxFlex="50">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="Usuario que diligencia" [value]="usuarioTramite" autocomplete="off"
+                  type="text" readonly />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <div *ngIf="!generico" fxFlex="50">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="PK" formControlName="pk" [(value)]="ensayo.mantenimiento.pk"
+                  autocomplete="off" type="text" readonly />
+              </mat-form-field>
+            </div>
+
+            <div fxFlex="50">
+              <mat-form-field class="w-100" >
+                <input matInput placeholder="Tipo de Ensayo" formControlName="tipoEnsayo" [ngModel]="ensayo.tipoEnsayo"
+                  [(value)]="ensayo.tipoEnsayo.descripcion" autocomplete="off" type="text" readonly
+                  matTooltip="{{ensayo.tipoEnsayo.descripcion}}" matTooltipPosition="above"
+                  />
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <div fxFlex class="mb-10">
+              <h3 mat-subheader>Resultados</h3>
+              <div class="w-100">
+                <sigma-form-upload-file formControlName="archivo" [(ngModel)]="ensayo.archivo"
+                  [placeholder]="'Archivo formato PDF o Zip'" [sizeFile]="10"
+                  [accept]="'application/pdf,application/zip,application/x-zip-compressed'">
+                </sigma-form-upload-file>
+              </div>
+            </div>
+          </div>
+
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <div fxFlex>
+              <mat-form-field class="w-100">
+                <input matInput placeholder="Observaciones" formControlName="observaciones"
+                  [(ngModel)]="ensayo.observaciones" autocomplete="off" type="text" />
+                <mat-error *ngIf="formEdit.get('observaciones').hasError('maxlength')">{{ constants.longitud_maxima}}
+                  1000
+                  caracteres. </mat-error>
+              </mat-form-field>
+            </div>
+
+          </div>
+        </mat-card-content>
+
+        <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+        <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+          <button mat-button color="warn" class="m-1" (click)="close()">
+            <mat-icon class="m-1">close</mat-icon>{{ constants.cancelar }}
+          </button>
+          <button mat-raised-button color="primary" class="m-1" (click)="onSubmit()"
+            *sigmaIsGranted="constants.permiso_produccion_ensayos_update">
+            <mat-icon class="m-1">save</mat-icon>{{ constants.guardar }}
+          </button>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+</div>

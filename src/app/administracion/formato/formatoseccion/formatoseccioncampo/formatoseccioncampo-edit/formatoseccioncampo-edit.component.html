@@ -1,0 +1,82 @@
+<h2 mat-dialog-title>{{ constants.editar }} {{ constants.titulo }}</h2>
+
+<div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+  <h5>{{ constants.informacionCampoObligatorio }}</h5>
+</div>
+
+<mat-dialog-content [formGroup]="form" *sigmaIsGranted="constants.permiso_administracion_formatoseccioncampo_update">
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <div class="w-100">
+        <mat-checkbox formControlName="activo" [(ngModel)]="formatoseccioncampo.activo" name="activo" id="activo">
+          {{ constants.activo }}
+        </mat-checkbox>
+      </div>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex="100">
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="{{ constants.descripcion }}" formControlName="descripcion"
+            [(ngModel)]="formatoseccioncampo.descripcion" autocomplete="off" type="text" required pattern="^(?!\s*$).+">
+          <mat-error *ngIf="form.get('descripcion').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+          <mat-error *ngIf="form.get('descripcion').hasError('maxlength')"> {{ constants.longitud_maxima }} 250
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="{{ constants.nombre }}" formControlName="nombre"
+          [(ngModel)]="formatoseccioncampo.nombre" autocomplete="off" type="text" required pattern="^(?!\s*$).+">
+        <mat-error *ngIf="form.get('nombre').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+        <mat-error *ngIf="form.get('nombre').hasError('maxlength')"> {{ constants.longitud_maxima }} 100</mat-error>
+      </mat-form-field>
+    </div>
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="{{ constants.orden }}" formControlName="orden"
+          [(ngModel)]="formatoseccioncampo.orden" autocomplete="off" type="text" required [numericInput]="true"
+          (keyup)="patternString($event)" pattern="[0-9]*">
+        <mat-error *ngIf="form.get('orden').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+        <mat-error *ngIf="form.get('orden').hasError('max')"> {{ constants.longitud_maxima }} 4 </mat-error>
+        <mat-error *ngIf="form.get('orden').hasError('pattern')"> Solo se permiten valores numericos </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+
+    <div fxFlex>
+      <div class="w-100">
+        <sigma-form-select [path]="constants.path_administracion_formatoseccioncampo_tipoCampoFormatoId"
+          placeholder="{{ constants.tipoCampoFormatoId }}" required="true" formControlName="tipoCampoFormatoId"
+          [(ngModel)]="formatoseccioncampo.tipoCampoFormato">
+        </sigma-form-select>
+      </div>
+    </div>
+    <div fxFlex>
+      <div class="w-100">
+        <sigma-form-select [path]="constants.path_administracion_formatoseccioncampo_listaId"
+          placeholder="{{ constants.listaId }}" [listBy]="'nombre'" (optionIdSelected)="setDataCampo('lista', $event)"
+          formControlName="listaId" [(ngModel)]="formatoseccioncampo.lista">
+        </sigma-form-select>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button type="button" (click)="close()" mat-button color="warn">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+  </button>
+  <button type="button" mat-raised-button color="primary" (click)="onSubmit()" [disabled]="disableSubmit"
+    *sigmaIsGranted="constants.permiso_administracion_formatoseccioncampo_update">
+    <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+  </button>
+</mat-dialog-actions>

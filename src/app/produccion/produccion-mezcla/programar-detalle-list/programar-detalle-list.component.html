@@ -1,0 +1,207 @@
+<div fxLayout="column" fxLayout.gt-sm="row wrap">
+  <div fxFlex="100" class="flex-p">
+    <mat-card-content>
+      <div>
+        <div>
+          <mat-card-content>
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+              <div fxFlex>
+                <mat-form-field class="w-100">
+                  <input matInput placeholder="Numero Solicitud" [(ngModel)]="solicitud.numero" name="numero"
+                    readonly />
+                </mat-form-field>
+              </div>
+              <div fxFlex>
+                <mat-form-field class="w-100">
+                  <input matInput placeholder="Fecha Solicitud" [(ngModel)]="solicitud.fechaSolicitud"
+                    name="fechaSolicitud" readonly />
+                </mat-form-field>
+              </div>
+              <div fxFlex>
+                <mat-form-field class="w-100">
+                  <input matInput placeholder="Tipo Material" [(ngModel)]="solicitud.tipoMaterialObj.descripcion"
+                    name="tipoMaterial" readonly />
+                </mat-form-field>
+              </div>
+              <div fxFlex>
+                <mat-form-field class="w-100">
+                  <input matInput placeholder="Turno" [(ngModel)]="solicitud.turnoObj.descripcion" name="turno"
+                    readonly />
+                </mat-form-field>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+              <div fxFlex>
+                <button (click)="exportar()" mat-raised-button color="primary" [disabled]="solicitud.items.length < 1">
+                  <mat-icon class="m-1">get_app</mat-icon> {{ constants.exportar }}
+                  <mat-icon *ngIf="cargandoExcel"><mat-spinner color="accent" [diameter]="20"></mat-spinner></mat-icon>
+                </button>
+              </div>
+            </div>
+          </mat-card-content>
+        </div>
+      </div>
+
+      <div class="mat-elevation-z8">
+        <mat-table #table [dataSource]="dataSource" class="col-x" matSort>
+
+          <ng-container matColumnDef="cantidad">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.cantidad }} </mat-header-cell>
+            <mat-cell *matCellDef="let item" [attr.data-label]="constants.cantidad">
+              {{item.cantidad}}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="unidad">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.unidad }} </mat-header-cell>
+            <mat-cell *matCellDef="let item" [attr.data-label]="constants.unidad">
+              {{item.unidad?.descripcion}}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="pk">
+            <mat-header-cell *matHeaderCellDef> {{ constants.pk }} </mat-header-cell>
+            <mat-cell *matCellDef="let item" (click)="localizarPk(item)" [attr.data-label]="constants.pk">
+              {{item.intervencion?.mantenimiento?.pk}}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="civ">
+            <mat-header-cell *matHeaderCellDef> {{ constants.civ }} </mat-header-cell>
+            <mat-cell *matCellDef="let item" [attr.data-label]="constants.civ">
+              {{item.intervencion?.mantenimiento?.civ}}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="localidad">
+            <mat-header-cell *matHeaderCellDef> {{ constants.localidad }} </mat-header-cell>
+            <mat-cell *matCellDef="let item" [attr.data-label]="constants.localidad">
+              {{item.intervencion?.mantenimiento?.localidad?.nombre}}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="barrio">
+            <mat-header-cell *matHeaderCellDef> {{ constants.barrio  }} </mat-header-cell>
+            <mat-cell *matCellDef="let item" [attr.data-label]="constants.barrio">
+              {{item.intervencion?.mantenimiento?.barrio?.nombre}}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="viaDestino">
+            <mat-header-cell *matHeaderCellDef> {{ constants.viaDestino  }} </mat-header-cell>
+            <mat-cell *matCellDef="let item" [attr.data-label]="constants.ejeVial">
+              
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="placa-numeroInterno">
+            <mat-header-cell *matHeaderCellDef> {{ constants.placaNumeroInterno  }} </mat-header-cell>
+            <mat-cell *matCellDef="let item" [attr.data-label]="constants.barrio">
+              
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="ejeVial">
+            <mat-header-cell *matHeaderCellDef> {{ constants.ejeVial  }} </mat-header-cell>
+            <mat-cell *matCellDef="let item" [attr.data-label]="constants.ejeVial">
+              {{item.intervencion?.mantenimiento?.ejeVial}}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="desde">
+            <mat-header-cell *matHeaderCellDef> {{ constants.ejeVialDesde  }} </mat-header-cell>
+            <mat-cell *matCellDef="let item" [attr.data-label]="constants.ejeVialDesde">
+              {{item.intervencion?.mantenimiento?.desde}}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="hasta">
+            <mat-header-cell *matHeaderCellDef> {{ constants.ejeVialHasta  }} </mat-header-cell>
+            <mat-cell *matCellDef="let item" [attr.data-label]="constants.ejeVialHasta">
+              {{item.intervencion?.mantenimiento?.hasta}}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="personasContacto">
+            <mat-header-cell *matHeaderCellDef> {{ constants.personasContacto  }} </mat-header-cell>
+            <mat-cell *matCellDef="let item" [attr.data-label]="constants.personasContacto">
+
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="horaRetiro">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.horaRetiro  }} </mat-header-cell>
+            <mat-cell *matCellDef="let item" [attr.data-label]="constants.horaRetiro">
+              {{item.horaRetiro}}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="fechaRetiro">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaRetiro  }} </mat-header-cell>
+            <mat-cell *matCellDef="let item" [attr.data-label]="constants.fechaRetiro">
+              {{item.fechaRetiro}}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="quienRecibe">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.quienRecibe  }} </mat-header-cell>
+            <mat-cell *matCellDef="let item" [attr.data-label]="constants.quienRecibe">
+              {{ item.quienRecibe ? (item.quienRecibe?.nombres + ' ' + item.quienRecibe?.apellidos) : '' }}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="programado-reprogramar">
+            <mat-header-cell *matHeaderCellDef> {{ constants.programadoReprogramar  }} </mat-header-cell>
+            <mat-cell *matCellDef="let item" [attr.data-label]="constants.programadoReprogramar">
+              <mat-radio-group [(ngModel)]="item.programado" (change)="cambioRadioButton(item)">
+                <div fxLayout="column">
+                  <mat-radio-button [value]="true">Programado</mat-radio-button>
+                  <mat-radio-button [value]="false">Reprogramar</mat-radio-button>
+                </div>
+              </mat-radio-group>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="capacidadDespachar">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.capacidadDespachar  }} </mat-header-cell>
+            <mat-cell *matCellDef="let item" [attr.data-label]="constants.capacidadDespachar">
+              <mat-form-field style="width: 120px;">
+                <input matInput [numericInput]="true" type="number" [(ngModel)]="item.capacidadDespachar" name="capacidadDespachar"
+                  [disabled]="item.programado" />
+              </mat-form-field>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="fechaReprogramacion">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaReprogramacion  }}
+            </mat-header-cell>
+            <mat-cell *matCellDef="let item" [attr.data-label]="constants.fechaReprogramacion">
+              <sigma-form-calendar #calendar style="width: 120px;" [(objeto)]="item" [(ngModel)]="item.fechaReprogramacion" [type]="'calendar'"
+                [formatToModel]="constants.formatoFechaDDMMYYYY" [ngModelOptions]="{standalone: true}" >
+              </sigma-form-calendar>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="observaciones">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.observaciones  }} </mat-header-cell>
+            <mat-cell *matCellDef="let item" [attr.data-label]="constants.observaciones">
+              <mat-form-field style="width: 120px;">
+                <textarea matInput 
+                  [(ngModel)]="item.observaciones" name="observaciones"
+                  [disabled]="item.programado" [rows]="2">
+                </textarea>
+              </mat-form-field>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+        </mat-table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+      </div>
+      <div class="w-100 sigma-sum" fxLayoutAlign="end center">
+        Subtotal: {{subtotal}}
+      </div>
+    </mat-card-content>
+  </div>
+</div>

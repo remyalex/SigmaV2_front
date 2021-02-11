@@ -1,0 +1,41 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+  
+  <div [hidden]="processing">
+  
+    <div *ngIf="currentAction === 'list'">
+      <div fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex="100" class="flex-p">
+  
+          <div>
+            <mat-tab-group [selectedIndex]="tabSeleccionado.value" (selectedIndexChange)="seleccionarGrid($event)">
+              <mat-tab *ngFor="let transicion of transicionesMasivas" label="{{transicion.nombre}}">
+                <sigma-grid-mantenimientos #grid [data]="data" [transicion]="transicion"
+                  [columns]="columns" [filters]="filters" [singleActions]="acciones" (executeOnSingle)="ejecutar($event)"
+                  [defaultFilters]="defaulFilters" 
+                  (executeOnMasiveTransition)="executeMasiveTransition($event)">
+                </sigma-grid-mantenimientos>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+  
+        </div>
+      </div>
+    </div>
+  
+    <div *ngIf="currentAction == 'consultaGestionSocial'">
+      <sigma-social-gestion-social-adelantada-list [mantenimiento]="mantenimiento" (back)="back($event)">
+      </sigma-social-gestion-social-adelantada-list>
+    </div>
+
+    <div *ngIf="currentAction == 'registrarGestionSocial'">
+      <sigma-gestion-social-adelantada-create [mantenimiento]="mantenimiento" (back)="back($event)">
+      </sigma-gestion-social-adelantada-create>
+    </div>
+
+    <div *ngIf="currentAction == 'editarGestionSocial'">
+      <sigma-gestion-social-adelantada-edit [mantenimiento]="mantenimiento" (back)="back($event)">
+      </sigma-gestion-social-adelantada-edit>
+    </div>
+  </div>

@@ -1,0 +1,119 @@
+      <div>
+        <mat-card-content>
+          <div>
+            <div>
+              <mat-card-content>
+                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+                  <div fxFlex>
+                    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+                      <div fxFlex>
+                        <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaSolicitudDesde"
+                          [type]="'calendar'" [placeholder]="'Fecha Solicitud Desde'" [maxTarget]="'fechaSolicitudHasta'"
+                          [formatToModel]="constants.formatoFecha" [ngModelOptions]="{standalone: true}">
+                        </sigma-form-calendar>
+                      </div>
+  
+                      <div fxFlex>
+                        <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaSolicitudHasta"
+                          [type]="'calendar'" [placeholder]="'Fecha Solicitud Hasta'" [minTarget]="'fechaSolicitudDesde'"
+                          [formatToModel]="constants.formatoFecha" [ngModelOptions]="{standalone: true}">
+                        </sigma-form-calendar>
+                      </div>
+                    </div>
+                  </div>
+  
+                  <div fxFlex>
+                    <sigma-form-select [path]="'/api/administracion/lista/TIPO_MATERIAL/items'"
+                      [(ngModel)]="criteria.tipoMaterial" name="tipoMaterial" placeholder="{{constants.tipoMaterial}}"
+                      [listBy]="'descripcion'">
+                    </sigma-form-select>
+                  </div>
+  
+                  <div fxFlex>
+                    <sigma-form-select
+                      [path]="'/api/administracion/lista/ADMINISTRACION_DISPONIBILIDAD_TURNO/items'"
+                      [(ngModel)]="criteria.turno" name="turno" placeholder="{{constants.turno}}"
+                      [listBy]="'descripcion'">
+                    </sigma-form-select>
+                  </div>
+                </div>
+                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+                  <div fxFlex>
+                    <button mat-raised-button color="primary" class="m-1" (click)="search()">
+                      <mat-icon class="m-1">search</mat-icon> {{ constants.buscar }}
+                    </button>
+                    <button (click)="clear()" mat-raised-button color="warn" class="m-1">
+                      <mat-icon class="m-1">clear</mat-icon> {{ constants.limpiar }}
+                    </button>
+                    <button (click)="exportar()" mat-raised-button color="primary" class="m-1" [disabled]="dataSource.solicitudes.length < 1">
+                      <mat-icon class="m-1">get_app</mat-icon> {{ constants.exportar }}
+                      <mat-icon *ngIf="cargandoExcel"><mat-spinner color="accent" [diameter]="20"></mat-spinner></mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </mat-card-content>
+            </div>
+          </div>
+  
+          <div class="mat-elevation-z8">
+            <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center">
+              <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+            </div>
+            <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+              <mat-icon class="m-1">sms_failed</mat-icon>
+              <h4> {{dataSource.errorMessage$ | async}}</h4>
+            </div>
+  
+            <mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort>
+  
+              <ng-container matColumnDef="numero">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.numeroSolicitud }} </mat-header-cell>
+                <mat-cell *matCellDef="let solicitud" [attr.data-label]="constants.numeroSolicitud">
+                  {{solicitud.numero}}
+                </mat-cell>
+              </ng-container>
+  
+              <ng-container matColumnDef="fechaSolicitud">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaSolicitud  }} </mat-header-cell>
+                <mat-cell *matCellDef="let solicitud" [attr.data-label]="constants.fechaSolicitud">
+                  {{solicitud.fechaSolicitud}}
+                </mat-cell>
+              </ng-container>
+  
+              <ng-container matColumnDef="tipoMaterial.descripcion">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.tipoMaterial }} </mat-header-cell>
+                <mat-cell *matCellDef="let solicitud" [attr.data-label]="constants.tipoMaterial">
+                  {{solicitud.tipoMaterialObj?.descripcion}}
+                </mat-cell>
+              </ng-container>
+  
+              <ng-container matColumnDef="turno.descripcion">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.turno }} </mat-header-cell>
+                <mat-cell *matCellDef="let solicitud" [attr.data-label]="constants.turno">
+                  {{solicitud.turnoObj?.descripcion}}
+                </mat-cell>
+              </ng-container>
+  
+              <ng-container matColumnDef="catidadTotal">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.cantidad }} </mat-header-cell>
+                <mat-cell *matCellDef="let solicitud" [attr.data-label]="constants.cantidad">
+                  {{solicitud.catidadTotal}}
+                </mat-cell>
+              </ng-container>
+  
+              <ng-container matColumnDef="acciones">
+                <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+                <mat-cell *matCellDef="let solicitud" [attr.data-label]="constants.acciones">
+                  <button mat-raised-button color="primary" (click)="trabajar(solicitud)" class="m-1">
+                    <mat-icon matTooltip="Trabajar" matTooltipPosition="above">work</mat-icon>
+                  </button>
+                </mat-cell>
+              </ng-container>
+              <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+            </mat-table>
+            <mat-paginator #paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size"
+              [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+          </div>
+        </mat-card-content>
+      </div>

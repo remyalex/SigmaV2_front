@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>{{ constants.cancelar_mantenimiento }}</h2>
+
+
+<mat-dialog-content [formGroup]="form">
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div class="item" fxFlex="100%">
+      <textarea matInput rows="1" formControlName="motivo" [placeholder]="constants.motivo_placeholder">
+      </textarea>
+      <mat-error *ngIf="form.get('motivo').hasError('required')"> El campo Motivo es obligatorio </mat-error>
+      <mat-error *ngIf="form.get('motivo').hasError('maxlength')"> {{ constants.longitud_maxima }} 140
+        caracteres. </mat-error>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button class="m-1" mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+  </button>
+  <button class="m-1" mat-raised-button color="primary" (click)="save()" [disabled]="disableSubmit">
+    <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+  </button>
+</mat-dialog-actions>

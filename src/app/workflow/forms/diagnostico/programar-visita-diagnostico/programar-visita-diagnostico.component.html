@@ -1,0 +1,399 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="processing" *ngIf="newVisita">
+
+  <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="start">
+    <mat-form-field fxFlex="50" fxFlex.lt-md="100" class="w-100">
+      <input matInput placeholder="Tiempo Estimado de Ruta" [(value)]="tiempoRuta" disabled="true">
+    </mat-form-field>
+  </div>
+
+  <mat-divider class="mb-10"></mat-divider>
+
+  <mat-horizontal-stepper [linear]="isLinear" (selectionChange)="onStepChange($event)" #stepper>
+    <mat-step [stepControl]="mantenimientoFormGroup">
+      <!-- Selección de mantenimietnos para programar para visita-->
+      <ng-template matStepLabel>{{ constants.mantenimientos }}</ng-template>
+
+      <mat-card-content fxLayout="column">
+        <div fxFlex>
+          <form (ngSubmit)="search()" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <div fxFlex>
+              <mat-form-field class="w-100">
+                <input matInput placeholder="PK" id="pk" [(ngModel)]="criteria.pk" name="pk" />
+              </mat-form-field>
+            </div>
+
+            <div fxFlex>
+              <sigma-form-select [path]="constants.path_mejoramiento_lista_tipoSolicitud" [(ngModel)]="criteria.origen"
+                [placeholder]="constants.origen" [listBy]="'descripcion'" [ngModelOptions]="{standalone: true}">
+              </sigma-form-select>
+            </div>
+
+            <div fxFlex>
+              <sigma-form-calendar [(ngModel)]="criteria.fechaSolicitudProgramacion"
+                [placeholder]="constants.fechaSolicitudProgramacion" [type]="constants.datepicker.types.calendar"
+                [ngModelOptions]="{standalone: true}">
+              </sigma-form-calendar>
+            </div>
+
+          </form>
+        </div>
+        <div fxFlex>
+          <button type="submit" mat-raised-button color="primary" class="m-1" (click)="search()">
+            <mat-icon>search</mat-icon> {{ constants.buscar }}
+          </button>
+          <button (click)="limpiar()" mat-raised-button color="warn" class="m-1">
+            <mat-icon>clear</mat-icon> {{ constants.limpiar }}
+          </button>
+        </div>
+      </mat-card-content>
+
+      <form [formGroup]="mantenimientoFormGroup">
+        <div class="msj_accion mb-10" fxLayout="row" fxLayoutAlign="start center">
+          <mat-icon class="m-1">info</mat-icon>
+          <p>Seleccione una fecha para continuar</p>
+        </div>
+
+        <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <sigma-form-calendar [(ngModel)]="visita.fecha" formControlName="fecha"
+              [type]="constants.datepicker.types.calendar" [placeholder]="constants.fecha" [objeto]="visita"
+              [minTarget]="'fechaMinima'" (ngModelChange)="cambiaFecha()">
+            </sigma-form-calendar>
+          </div>
+          <div fxFlex>
+            <sigma-form-input class="umv-input-hidden" [(ngModel)]="listaPksSelect" (ngModelChange)="cambioMantenimientos()"
+              formControlName="mantenimientos" [class]="'hidden'">
+            </sigma-form-input>
+          </div>
+        </div>
+
+        <div class="mat-elevation-z8 mb-10">
+          <div *ngIf="(dataSource.loading$ | async)" fxLayout="column" fxLayoutAlign="center center">
+            <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+          </div>
+
+          <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+            <mat-icon class="m-1">sms_failed</mat-icon>
+            <h4> {{dataSource.errorMessage$ | async}}</h4>
+          </div>
+
+          <mat-table #table [dataSource]="dataSource" [hidden]="(dataSource.loading$ | async)" matSort
+            [style.display]="(dataSource.loading$ | async) ? 'none' : 'block'">
+            <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+
+            <ng-container matColumnDef="select">
+              <mat-header-cell *matHeaderCellDef>
+                &nbsp;&nbsp;&nbsp;
+                <mat-checkbox *ngIf="((dataSource.totalElements$ | async)>0? true : false) "
+                  (change)="$event ? masterToggle($event) : null" [checked]="masiveChecked">
+                </mat-checkbox>
+              </mat-header-cell>
+              <mat-cell *matCellDef="let mantenimiento">
+                &nbsp;&nbsp;&nbsp;
+                <mat-checkbox #listCheckboxes (click)="$event.stopPropagation()"
+                  (change)="$event ? toggleChecks(mantenimiento, $event) : null"
+                  [checked]="mantenimientoIsSelected (mantenimiento.id)" [disabled]="mantenimiento.radicadoSalida">
+                </mat-checkbox>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="fechaSolicitudProgramacion">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fecha }} </mat-header-cell>
+              <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.fecha">
+                {{mantenimiento.fechaSolicitudProgramacion }} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="pk">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.pk }} </mat-header-cell>
+              <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.pk" (click)="localizarMantenimientoMapa(mantenimiento)"
+              class="hover-element-pointer">
+                {{ mantenimiento.pk }} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="origen">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.origen }} </mat-header-cell>
+              <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.origen">
+                {{ mantenimiento.origen != null?mantenimiento.origen.descripcion: '' }} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="estadoMantenimiento">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.estadoPk }} </mat-header-cell>
+              <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.estadoPk">
+                {{ mantenimiento.estadoPk ? mantenimiento.estadoPk.descripcion : '' }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="localidad.nombre">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.localidad }} </mat-header-cell>
+              <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.localidad">
+                {{ mantenimiento.localidad!=null?mantenimiento.localidad.nombre:'' }} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="zona">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.zona }} </mat-header-cell>
+              <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.zona">
+                {{ mantenimiento.zona!= null? mantenimiento.zona.nombre:'' }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="cuadrante">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.cuadrante }} </mat-header-cell>
+              <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.cuadrante">
+                {{ mantenimiento.cuadrante != null? mantenimiento.cuadrante.nombre: '' }} </mat-cell>
+            </ng-container>
+
+            <mat-row *matRowDef="let row; columns: columns"></mat-row>
+          </mat-table>
+
+          <mat-paginator #paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size"
+            [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </div>
+
+        <div *ngIf="listaPksSelect.length > 0">
+          <sigma-sumatorias [listaPksSelect]="listaPksSelect" [showCountItems]="true" [showActividadAgrupada]="false"
+            [showKmCarril]="false" [showKmLineal]="false" [showKmObra]="false" [showTotalDiasDuracionPlaneada]="false"
+            [showTotalNoCuadrilla]="false">
+          </sigma-sumatorias>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="pt-16" fxLayoutAlign="end center">
+          <button [disabled]="mantenimientoFormGroup.invalid" mat-raised-button color="primary" matStepperNext>
+            {{ constants.siguiente }}
+          </button>
+        </div>
+      </form>
+    </mat-step>
+
+    <mat-step [stepControl]="equipoFormGroup">
+      <!-- Selección de calendarios de equipos para programar para visita-->
+      <ng-template matStepLabel>{{ constants.equipos }}</ng-template>
+      <form [formGroup]="equipoFormGroup">
+        <div class="msj_accion mb-10" fxLayout="row" fxLayoutAlign="start center">
+          <mat-icon class="m-1">info</mat-icon>
+          <p>Seleccione un equipo para continuar</p>
+        </div>
+
+        <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="100px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <sigma-form-autocomplete [path]="constants.path_administracion_equipo_equipoAutocomplete"
+              [placeholder]="constants.equipo" formControlName="equipo" [(ngModel)]="visita.equipo" [searchBy]="'query'"
+              [moreInfo]="equipoInfo" [id]="'numeroInterno'" (ngModelChange)="cambioEquipo()">
+            </sigma-form-autocomplete>
+          </div>
+          <div fxFlex>
+            <sigma-form-input class="umv-input-hidden" [(ngModel)]="visita.calendariosEquipo" formControlName="equipoCalendarios"
+              [class]="'hidden'">
+            </sigma-form-input>
+          </div>
+        </div>
+
+        <div class="mat-elevation-z8">
+          <div *ngIf="(dataSourceCalendarioEquipo.loading$ | async)" fxLayout="column" fxLayoutAlign="center center">
+            <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+          </div>
+
+          <div *ngIf="dataSourceCalendarioEquipo.error$ | async" class="msj_no_results" fxLayout="row"
+            fxLayoutAlign="center center">
+            <mat-icon class="m-1">sms_failed</mat-icon>
+            <h4> {{dataSourceCalendarioEquipo.errorMessage$ | async }}</h4>
+          </div>
+
+          <mat-table  #sortEquipoCalendario="matSort" [dataSource]="dataSourceCalendarioEquipo" matSort
+            [hidden]="(dataSourceCalendarioEquipo.loading$ | async)" 
+            [style.display]="(dataSourceCalendarioEquipo.loading$ | async) ? 'none' : 'block'">
+
+            <ng-container matColumnDef="select">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>
+                &nbsp;&nbsp;&nbsp;
+              </mat-header-cell>
+              <mat-cell *matCellDef="let equipoCalendario">
+                &nbsp;&nbsp;&nbsp;
+                <mat-checkbox #listCheckboxes (click)="$event.stopPropagation()"
+                  (change)="$event ? changeEquipoCalendarioSelect(equipoCalendario, $event) : null"
+                  [checked]="equipoCalendario.select" [disabled]="!equipoCalendario.disponible">
+                </mat-checkbox>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="inicio">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fecha }} </mat-header-cell>
+              <mat-cell *matCellDef="let equipoCalendario" [attr.data-label]="constants.fecha">
+                {{ equipoCalendario.fechaAgrupada }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="fechaDia">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constantsEquipoCalendario.dia }} </mat-header-cell>
+              <mat-cell *matCellDef="let equipoCalendario" [attr.data-label]="constantsEquipoCalendario.dia">
+                {{ utilitiesServices.getWeekDay(equipoCalendario.inicio) }} {{ constants.al | lowercase }}
+                {{  utilitiesServices.getWeekDay(equipoCalendario.fin) }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="numeroMovil">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constantsEquipoCalendario.numeroMovil }}
+              </mat-header-cell>
+              <mat-cell *matCellDef="let equipoCalendario" [attr.data-label]="constantsEquipoCalendario.numeroMovil">
+                <a mat-button color="primary"
+                  (click)="showEquipo(visita.equipo)">{{ equipoCalendario.numeroMovil }}</a>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="horario">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constantsEquipoCalendario.horario }} </mat-header-cell>
+              <mat-cell *matCellDef="let equipoCalendario" [attr.data-label]="constantsEquipoCalendario.horario">
+                  {{ utilitiesServices.convertDateToString(equipoCalendario.inicio, 'HH:mm') }} {{ constants.hasta }}
+                  {{  utilitiesServices.convertDateToString(equipoCalendario.fin, 'HH:mm') }}
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="columnsEquipo"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: columnsEquipo"></mat-row>
+          </mat-table>
+
+          <mat-paginator (page)="changePageEquipoCalendario($event)"
+            [length]="dataSourceCalendarioEquipo.totalElements$ | async" [pageSize]="criterialEquipoCalendario.size"
+            [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div fxLayout="row" class="p-tab">
+          <div fxFlex class="mt-10" fxLayoutAlign="start center">
+            <button mat-raised-button matStepperPrevious color="primary">{{ constants.anterior }}</button>
+          </div>
+          <div fxFlex fxLayoutAlign="end center">
+            <button mat-raised-button matStepperNext color="primary" [disabled]="equipoFormGroup.invalid">
+              {{ constants.siguiente }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </mat-step>
+
+    <mat-step>
+      <!-- Selección el calendario de personas para programar para visita -->
+      <ng-template matStepLabel>{{ constants.personas }}</ng-template>
+      <form [formGroup]="personaFormGroup">
+        <div class="msj_accion mb-10" fxLayout="row" fxLayoutAlign="start center">
+          <mat-icon class="m-1">info</mat-icon>
+          <p>Seleccione una persona para finalizar</p>
+        </div>
+
+        <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <mat-select [placeholder]="constants.responsable" [(ngModel)]="visita.responsable"
+                formControlName="responsable" (ngModelChange)="cambioPersona()" required>
+                <mat-option [value]="">
+                  {{ constants.seleccionar }}
+                </mat-option>
+                <mat-option *ngFor="let responsable of responsables" [value]="responsable"
+                  [ngStyle]="{'color': responsable.color ? responsable.color : '' }">
+                  {{ responsable.nombres + ' ' + responsable.apellidos }}
+                </mat-option>
+              </mat-select>
+              <mat-icon *ngIf="loadingResponsable" fxLayoutAlign="center end" matSuffix color="warn">
+                <mat-spinner [diameter]="15"></mat-spinner>
+              </mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <sigma-form-input class="umv-input-hidden" [(ngModel)]="visita.calendariosPersona" formControlName="personaCalendarios"
+              [class]="'hidden'">
+            </sigma-form-input>
+          </div>
+        </div>
+
+        <div class="mat-elevation-z8">
+          <div *ngIf="(dataSourceCalendarioPersona.loading$ | async)" fxLayout="column" fxLayoutAlign="center center">
+            <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+          </div>
+
+          <div *ngIf="dataSourceCalendarioPersona.error$ | async" class="msj_no_results" fxLayout="row"
+            fxLayoutAlign="center center">
+            <mat-icon class="m-1">sms_failed</mat-icon>
+            <h4> {{dataSourceCalendarioPersona.errorMessage$ | async }}</h4>
+          </div>
+
+          <mat-table #sortPersonaCalendario="matSort" (matSortChange)="sortData($event)" #table [dataSource]="dataSourceCalendarioPersonaLocal"
+            [hidden]="(dataSourceCalendarioPersona.loading$ | async)" matSort
+            [style.display]="(dataSourceCalendarioPersona.loading$ | async) ? 'none' : 'block'">
+
+            <ng-container matColumnDef="select">
+              <mat-header-cell *matHeaderCellDef>
+                &nbsp;&nbsp;&nbsp;
+              </mat-header-cell>
+              <mat-cell *matCellDef="let personaCalendario">
+                &nbsp;&nbsp;&nbsp;
+                <mat-checkbox #listCheckboxes (click)="$event.stopPropagation()"
+                  (change)="$event ? changePersonaCalendarioSelect(personaCalendario, $event) : null"
+                  [checked]="personaCalendario.select" [disabled]="!personaCalendario.disponible">
+                </mat-checkbox>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="fecha">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fecha }} </mat-header-cell>
+              <mat-cell *matCellDef="let personaCalendario" [attr.data-label]="constants.fecha">
+                {{ utilitiesServices.convertDateToString(personaCalendario.inicio, 'DD-MM-YYYY') }}
+                {{ constants.hasta }}
+                {{ utilitiesServices.convertDateToString(personaCalendario.fin, 'DD-MM-YYYY') }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="dia">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constantspersonaCalendario.dia }} </mat-header-cell>
+              <mat-cell *matCellDef="let personaCalendario" [attr.data-label]="constantspersonaCalendario.dia">
+                {{ utilitiesServices.getWeekDay(personaCalendario.inicio) }} {{ constants.al | lowercase }}
+                {{  utilitiesServices.getWeekDay(personaCalendario.fin) }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="responsable">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constantspersonaCalendario.nombreResponsable }}
+              </mat-header-cell>
+              <mat-cell *matCellDef="let personaCalendario"
+                [attr.data-label]="constantspersonaCalendario.nombreResponsable">
+                {{ visita.responsable ? visita.responsable.nombres + ' ' + visita.responsable.apellidos  : '' }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="horario">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constantspersonaCalendario.horario }} </mat-header-cell>
+              <mat-cell *matCellDef="let personaCalendario" [attr.data-label]="constantspersonaCalendario.horario">
+                {{ utilitiesServices.convertDateToString(personaCalendario.inicio, 'HH:mm') }} {{ constants.hasta }}
+                {{  utilitiesServices.convertDateToString(personaCalendario.fin, 'HH:mm') }}
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="columnsPersona"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: columnsPersona"></mat-row>
+          </mat-table>
+
+          <mat-paginator  #paginatorPersonaCalendario  [length]="this.getCantidadPersonas()" [pageSize]="10"
+            [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </div>
+
+        <mat-divider></mat-divider>
+        <div fxLayout="row" class="mt-10">
+          <div fxFlex fxLayoutAlign="start center">
+            <button mat-raised-button matStepperPrevious color="primary">{{ constants.anterior }}</button>
+          </div>
+
+          <div fxFlex fxLayoutAlign="end center">
+            <button mat-raised-button color="primary" [disabled]="processing" (click)="this.save('', personaFormGroup)">
+              <mat-icon class="m-1">save</mat-icon>{{ constants.guardar }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </mat-step>
+  </mat-horizontal-stepper>
+</div>

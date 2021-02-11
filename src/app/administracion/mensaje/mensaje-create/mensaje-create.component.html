@@ -1,0 +1,99 @@
+<div fxLayout="column">
+  <div class="flex-p">
+    <mat-card class="p-0 mat-card">
+      <mat-card-header fxLayoutAlign="center">
+        <mat-card-subtitle><h2>{{ constants.crear }}</h2></mat-card-subtitle>
+      </mat-card-header>
+
+      <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+        <h5>{{ constants.informacionCampoObligatorio }}</h5>
+      </div>
+
+      <mat-card-content class="p-16 m-0" [hidden]="submitted" [formGroup]="form" 
+      *sigmaIsGranted="constants.permiso_administracion_mensaje_create">
+        
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <div class="w-100">
+              <mat-checkbox formControlName="activo"
+                  [(ngModel)]="mensaje.activo" name="activo" id="activo">{{ constants.activo }}
+              </mat-checkbox>
+            </div>
+          </div>
+
+          <div fxFlex>
+            <div class="w-100">
+              <sigma-general-list
+                [path]="constants.path_administracion_mensaje_destinatarioId" etiqueta="{{ constants.destinatarioId }}" [listBy]="'valor'"
+                (optionIdSelected)="setDestinatarioMensaje($event)"
+                required="true">
+              </sigma-general-list>
+              <input matInput  type="text" placeholder="" formControlName="destinatarioId" [(ngModel)]="mensaje.destinatarioId" autocomplete="off" hidden>
+              <mat-error *ngIf="enviada && form.get('destinatarioId').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+            </div>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+              <mat-form-field class="w-100">
+                <input  [matDatepicker]="datePickerFechaRegistro" matInput placeholder="{{ constants.fechaRegistro }}"  formControlName="fechaRegistro" [(ngModel)]="mensaje.fechaRegistro"  autocomplete="off" required>
+                <mat-datepicker-toggle matSuffix [for]="datePickerFechaRegistro"></mat-datepicker-toggle>
+                <mat-datepicker #datePickerFechaRegistro></mat-datepicker>
+                <mat-error *ngIf="enviada && form.get('fechaRegistro').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+              </mat-form-field>
+          </div>
+
+          <div fxFlex>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.leido }}" formControlName="leido" 
+                [(ngModel)]="mensaje.leido" autocomplete="off" type="number" 
+                required pattern="^(?!\s*$).+">
+                <mat-error *ngIf="form.get('leido').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+                <mat-error *ngIf="form.get('leido').hasError('pattern')"> {{ constants.campoNoVacio }} </mat-error>
+              </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.mensaje }}" formControlName="mensaje" 
+                [(ngModel)]="mensaje.mensaje" autocomplete="off" type="text" 
+                required pattern="^(?!\s*$).+">
+              <mat-error *ngIf="form.get('mensaje').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+              <mat-error *ngIf="form.get('mensaje').hasError('pattern')"> {{ constants.campoNoVacio }} </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.origen }}" formControlName="origen" 
+                [(ngModel)]="mensaje.origen" autocomplete="off" type="text" 
+                required pattern="^(?!\s*$).+">
+                <mat-error *ngIf="form.get('origen').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+                <mat-error *ngIf="form.get('origen').hasError('pattern')"> {{ constants.campoNoVacio }} </mat-error>
+              </mat-form-field>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+      <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+        <button type="button" (click)="onBack()" mat-raised-button color="warn">
+          <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+        </button>
+        <button type="button" [disabled]="disableSubmit" mat-raised-button color="primary" (click)="onSubmit()"
+        *sigmaIsGranted="constants.permiso_administracion_mensaje_create">
+          <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</div>

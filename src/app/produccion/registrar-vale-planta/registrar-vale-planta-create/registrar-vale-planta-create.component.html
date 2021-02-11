@@ -1,0 +1,133 @@
+<div fxLayout="column">
+  <div class="flex-p">
+    <mat-card class="p-0 mat-card">
+      <mat-card-header fxLayoutAlign="center">
+        <mat-card-subtitle><h2>{{ constants.crear }} {{ constants.titulo2 }}</h2></mat-card-subtitle>
+      </mat-card-header>
+
+      <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+        <h5>{{ constants.informacionCampoObligatorio }}</h5>
+      </div>
+
+      <mat-card-content class="p-16 m-0" [formGroup]="form" 
+      *sigmaIsGranted="constants.permiso_produccion_registrar_vale_planta_create">
+        
+        <input type='hidden' formControlName="plantaId" [(ngModel)]="registro.planta">
+        <input type='hidden' formControlName="tipoValeId" [(ngModel)]="registro.tipoVale">
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <sigma-form-number formControlName="numeroVale" [(ngModel)]="registro.numeroVale" 
+              [placeholder]="constants.numeroVale">
+            </sigma-form-number>
+          </div>
+          <div fxFlex>
+            <sigma-form-calendar formControlName="fecha" 
+              [(ngModel)]="registro.valesIngreso[0].fechaRegistro" [objeto]="registro" [minTarget]="'fechaMin'"
+              [maxTarget]="'fecha'" [placeholder]="constants.fecha" [type]="constants.datepicker.types.calendar">
+            </sigma-form-calendar>
+          </div>
+        </div>
+        
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <sigma-form-calendar formControlName="horaEntrada" 
+              [(ngModel)]="registro.valesIngreso[0].horaEntrada"
+              [placeholder]="constants.horaEntrada" [type]="constants.datepicker.types.timer">
+            </sigma-form-calendar>
+          </div>
+          <div fxFlex>
+            <sigma-form-calendar formControlName="horaSalida" 
+              [(ngModel)]="registro.valesIngreso[0].horaSalida"
+              [placeholder]="constants.horaSalida" [type]="constants.datepicker.types.timer">
+            </sigma-form-calendar>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <sigma-form-select [path]="constants.path_produccion_registrar_vale_planta_tipoMaterialId"
+              [(ngModel)]="registro.valesIngreso[0].tipoMaterial" formControlName="tipoMaterialId"
+              placeholder="{{ constants.tipoMaterial }}">
+            </sigma-form-select>
+          </div>
+          <div fxFlex>
+            <sigma-form-select [path]="constants.path_produccion_registrar_vale_planta_turnoId"
+              [(ngModel)]="registro.turno" formControlName="turnoId"
+              placeholder="{{ constants.turno }}">
+            </sigma-form-select>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <sigma-form-autocomplete [placeholder]="constants.proveedor" formControlName="proveedorId"
+              [(ngModel)]="registro.valesIngreso[0].proveedor" [path]="constants.path_produccion_registrar_vale_planta_personaId"
+              [searchBy]="'nombres'" [id]="'nombres'" [moreInfo]="personaInfo">
+            </sigma-form-autocomplete>
+          </div>
+
+          <div fxFlex>
+            <sigma-form-autocomplete [placeholder]="constants.jefeBascula" formControlName="jefeBasculaId"
+              [(ngModel)]="registro.jefeBascula" [path]="constants.path_produccion_registrar_vale_planta_usuarioId"
+              [searchBy]="'usuario'" [id]="'nombres'" [moreInfo]="personaInfo">
+            </sigma-form-autocomplete>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <sigma-form-autocomplete 
+              [path]="constants.path_produccion_registrar_vale_planta_equipoAutocomplete"
+              [placeholder]="constants.placaVehiculo" formControlName="equipoId" 
+              [(ngModel)]="registro.valesIngreso[0].equipo" [searchBy]="'query'"
+              [moreInfo]="equipoInfo" [id]="'numeroInterno'">
+            </sigma-form-autocomplete>
+          </div>
+          <div fxFlex>
+            <sigma-form-number formControlName="pesoBruto" 
+              [(ngModel)]="registro.valesIngreso[0].pesoBruto" 
+              [placeholder]="constants.pesoBruto" (ngModelChange)="setPesoNeto($event)">
+            </sigma-form-number>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <sigma-form-number formControlName="pesoTara" 
+              [(ngModel)]="registro.valesIngreso[0].pesoTara" 
+              [placeholder]="constants.pesoTara" (ngModelChange)="setPesoNeto($event)">
+            </sigma-form-number>
+          </div>
+          <div fxFlex>
+            <sigma-form-number formControlName="pesoNeto" 
+              [(ngModel)]="registro.valesIngreso[0].pesoNeto" 
+              [placeholder]="constants.pesoNeto">
+            </sigma-form-number>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex="50">
+            <sigma-form-autocomplete [placeholder]="constants.nombreRecibe" formControlName="recibeId"
+            [(ngModel)]="registro.valesIngreso[0].recibe" [path]="constants.path_produccion_registrar_vale_planta_personaId"
+            [searchBy]="'nombres'" [id]="'nombres'" [moreInfo]="personaInfo">
+            </sigma-form-autocomplete>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+      <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+        <button type="button" (click)="onBack()" mat-button color="warn" class="m-1">
+          <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+        </button>
+        <button type="button" class="m-1" mat-raised-button color="primary" (click)="onSubmit()" [disabled]="disabledBtn_Login"
+          *sigmaIsGranted="constants.permiso_produccion_registrar_vale_planta_create">
+            <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</div>

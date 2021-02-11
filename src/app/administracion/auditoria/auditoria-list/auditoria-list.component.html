@@ -1,0 +1,138 @@
+<div>
+  <div>
+    <mat-card-header fxLayoutAlign="center">
+      <mat-card-subtitle>
+        <h2>Auditoría</h2>
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.accion }}" id="accion" [(ngModel)]="criteria.accion"
+                name="accion" type="text" />
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.objetoid }}" id="objetoid" [(ngModel)]="criteria.objetoid"
+                name="objetoid" type="text" />
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.tabla }}" id="tabla" [(ngModel)]="criteria.tabla" name="tabla"
+                type="text" />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <sigma-form-select [path]="constants.path_administracion_auditoria_usuarioId" [(ngModel)]="criteria.usuario"
+              name="usuario" [placeholder]="'' + constants.usuarioId" [listBy]="'nombresYapellidos'">
+            </sigma-form-select>
+          </div>
+
+          <div fxFlex>
+            <button type="submit" mat-raised-button color="primary" class="m-1" (click)="search()">
+              <mat-icon>search</mat-icon> {{ constants.buscar }}
+            </button>
+            <button (click)="clear()" mat-raised-button color="warn" class="m-1">
+              <mat-icon>clear</mat-icon> {{ constants.limpiar }}
+            </button>
+            <button layout="row" mat-raised-button color="primary" class="m-1" (click)="exportAsXLSX()"
+              *sigmaIsGranted="constants.permiso_administracion_auditoria_export">
+              <mat-icon>get_app</mat-icon>
+              {{ constants.exportar }}
+              <mat-icon *ngIf="cargandoExcel">
+                <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+              </mat-icon>
+            </button>
+          </div>
+        </div>
+      </form>
+    </mat-card-content>
+  </div>
+</div>
+
+<div class="mat-elevation-z8">
+  <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center">
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+
+  <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+    <mat-icon class="m-1">sms_failed</mat-icon>
+    <h4> {{dataSource.errorMessage$ | async}}</h4>
+  </div>
+
+  <mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort>
+
+    <ng-container matColumnDef="accion">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.accion }} </mat-header-cell>
+      <mat-cell *matCellDef="let auditoria" [attr.data-label]="constants.accion">
+        {{auditoria.accion}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="data">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.data }} </mat-header-cell>
+      <mat-cell *matCellDef="let auditoria" [attr.data-label]="constants.data">
+        {{auditoria.data}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="fecha">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fecha }} </mat-header-cell>
+      <mat-cell *matCellDef="let auditoria" [attr.data-label]="constants.fecha">
+        {{  auditoria.fechaFormat}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.id }} </mat-header-cell>
+      <mat-cell *matCellDef="let auditoria" [attr.data-label]="constants.id">
+        {{auditoria.id}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="objetoid">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.objetoid }} </mat-header-cell>
+      <mat-cell *matCellDef="let auditoria" [attr.data-label]="constants.objetoid">
+        {{auditoria.objeto}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="tabla">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.tabla }} </mat-header-cell>
+      <mat-cell *matCellDef="let auditoria" [attr.data-label]="constants.tabla">
+        {{auditoria.tabla}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="usuario">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.usuario }} </mat-header-cell>
+      <mat-cell *matCellDef="let auditoria" [attr.data-label]="constants.usuario">
+        {{auditoria.usuario.apellidos}} {{auditoria.usuario.nombres}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+      <mat-cell *matCellDef="let auditoria" [attr.data-label]="constants.acciones">
+        <button mat-raised-button color="primary" (click)="detail(auditoria)" class="m-1"
+          *sigmaIsGranted="constants.permiso_administracion_auditoria_view">
+          <mat-icon matTooltip="Detalles" matTooltipPosition="above">open_in_new</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size"
+    [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+</div>

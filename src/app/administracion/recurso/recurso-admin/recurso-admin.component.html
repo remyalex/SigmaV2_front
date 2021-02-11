@@ -1,0 +1,19 @@
+<div fxLayout="column" fxLayout.gt-sm="row wrap">
+  <div fxFlex="100" class="flex-p">
+    <mat-card>
+      <mat-card-content>
+        <mat-tab-group [selectedIndex]="selectedTab" #tabGroup>
+          <mat-tab label="{{ constants.disponibilidad.personas }}" >
+            <sigma-administracion-personadisponibilidad-admin></sigma-administracion-personadisponibilidad-admin>
+          </mat-tab>
+          <mat-tab label="{{ constants.disponibilidad.equipos }}">
+            <sigma-administracion-equipodisponibilidad-admin ></sigma-administracion-equipodisponibilidad-admin>
+          </mat-tab>
+          <mat-tab label="{{ constants.disponibilidad.lugares }}">
+            <sigma-administracion-lugardisponibilidad-admin></sigma-administracion-lugardisponibilidad-admin>
+          </mat-tab>
+        </mat-tab-group>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

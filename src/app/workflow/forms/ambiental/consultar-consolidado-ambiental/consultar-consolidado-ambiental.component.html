@@ -1,0 +1,24 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="processing" >
+
+  <div *ngIf="currentAction === 'list'">
+    <div fxLayout="row" fxLayout.lt-md="column">
+      <div fxFlex="100" class="flex-p">
+        <div>
+          <mat-tab-group [selectedIndex]="tabSeleccionado.value" (selectedIndexChange)="seleccionarGrid($event)">
+            <mat-tab *ngIf="condicion" label="Consolidado ambiental">
+              <sigma-grid-mantenimientos #grid [data]="data" [columnsToExport]="columnsExport" [condicion]="condicion" [columns]="columns"
+                [defaultFilters]="defaulFilters" 
+                [filters]="filters" (executeOnSingle)="executeSingleAction($event)" [exportTo]="'pdf'">
+              </sigma-grid-mantenimientos>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,114 @@
+<h2 mat-dialog-title>{{ constants.detalle }} Actividad</h2>
+
+<mat-dialog-content *sigmaIsGranted="constants.permiso_administracion_procesoactividad_view">
+  <mat-list>
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.nombre }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ procesoactividad.nombre }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.descripcion }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ procesoactividad.descripcion }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.area }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ procesoactividad.area != null ? procesoactividad.area.descripcion: '' }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.cargo }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ procesoactividad.cargo != null ? procesoactividad.cargo.descripcion : '' }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.permisoId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ procesoactividad.permiso != null ? procesoactividad.permiso.nombre : '' }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.url }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ procesoactividad.url }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.componenteUI }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ procesoactividad.componenteUI != null ? procesoactividad.componenteUI.nombre : '' }}
+        </div>
+      </div>
+    </mat-list-item>
+
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.duracion }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ procesoactividad.duracion }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="mb-10">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.activo }}</b>:
+        </div>
+        <div class="p-tab" fxFlex="60">
+          <span class="dev-color-red" [hidden]="procesoactividad.activo">{{ constants.no }}</span>
+          <span class="dev-color-green" [hidden]="!procesoactividad.activo">{{ constants.si }}</span>
+        </div>
+      </div>
+    </mat-list-item>
+  </mat-list>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" class="m-1" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cerrar }}
+  </button>
+</mat-dialog-actions>

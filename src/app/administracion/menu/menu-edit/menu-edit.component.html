@@ -1,0 +1,149 @@
+<h2 mat-dialog-title>Editar Menú</h2>
+
+<div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+  <h5>Todos los campos con * son obligatorios</h5>
+</div>
+
+<mat-dialog-content [formGroup]="form">
+  <input type="hidden" formControlName="id" [(ngModel)]="menu.id" />
+
+  <div class="container" fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+    <div class="item" fxFlex="50%">
+      <mat-form-field class="w-100">
+        <input matInput placeholder="{{constantes.titulo}}" formControlName="titulo" [(value)]="menu.titulo"
+          autocomplete="off" type="text" required />
+        <mat-error *ngIf="form.get('titulo').hasError('required')"> {{ constantes.campoRequerido }} </mat-error>
+        <mat-error *ngIf="form.get('titulo').hasError('maxlength')">{{ constantes.longitud_maxima }} 100 caracteres.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="item" fxFlex="50%">
+      <mat-form-field class="w-100">
+        <input matInput placeholder="{{constantes.descripcion}}" formControlName="descripcion"
+          [(value)]="menu.descripcion" autocomplete="off" type="text" required />
+        <mat-error *ngIf="form.get('descripcion').hasError('required')"> {{ constantes.campoRequerido }} </mat-error>
+        <mat-error *ngIf="form.get('descripcion').hasError('maxlength')">{{ constantes.longitud_maxima }} 300
+          caracteres. </mat-error>
+      </mat-form-field>
+    </div>
+
+  </div>
+
+  <div class="container" fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+    <div class="item" fxFlex="50%">
+      <mat-form-field class="w-100">
+        <mat-label>Tipo de enlace</mat-label>
+        <mat-select placeholder="Seleccione {{constantes.tipoEnlace}}"
+          (selectionChange)="seleccionarTipoEnlace($event.value)" [(value)]="tipoEnlace" required>
+          <mat-option value="Interno"> Interno </mat-option>
+          <mat-option value="Externo"> Externo </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get('parent').hasError('required')"> {{ constantes.campoRequerido }} </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="item" fxFlex="50%">
+      <div *ngIf="tipoEnlace == 'Interno'" class="w-100">
+        <mat-form-field fxFlex="100">
+          <input matInput placeholder="{{constantes.url}}" formControlName="routerLink" [(value)]="menu.routerLink"
+            autocomplete="off" type="text" />
+          <mat-error *ngIf="form.get('routerLink').hasError('required')"> {{ constantes.campoRequerido }} </mat-error>
+          <mat-error *ngIf="form.get('routerLink').hasError('maxlength')">{{ constantes.longitud_maxima }} 300
+            caracteres. </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="container">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-sm="0">
+          <div *ngIf="tipoEnlace == 'Externo'" class="item" fxFlex="50%" fxFlex.lt-md="100%">
+            <mat-form-field class="w-100">
+              <input matInput class="w-100" placeholder="{{ constantes.href }}" formControlName="href"
+                [(value)]="menu.href" autocomplete="off" type="text" />
+              <mat-error *ngIf="form.get('href').hasError('required')"> {{ constantes.campoRequerido }} </mat-error>
+              <mat-error *ngIf="form.get('href').hasError('maxlength')">{{ constantes.longitud_maxima }} 300 caracteres.
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div *ngIf="tipoEnlace == 'Externo'" class="item" fxFlex="50%" fxFlex.lt-md="100%">
+            <mat-form-field class="w-100">
+              <mat-select formControlName="target" placeholder="{{ constantes.target }}" [(value)]="menu.target">
+                <mat-option value="_blank"> Blank </mat-option>
+                <mat-option value="_self"> Selft </mat-option>
+                <mat-option value="_parent"> Parent </mat-option>
+                <mat-option value="_top"> Top </mat-option>
+                <!-- <mat-option value="framename"> Framename </mat-option> -->
+              </mat-select>
+              <mat-error *ngIf="form.get('target').hasError('required')"> {{ constantes.campoRequerido }} </mat-error>
+              <mat-error *ngIf="form.get('target').hasError('maxlength')">{{ constantes.longitud_maxima }} 300
+                caracteres. </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+    <div class="item" fxFlex="50%">
+      <mat-form-field class="w-100">
+        <mat-label>Menú padre</mat-label>
+        <mat-select formControlName="parent" placeholder="Seleccione {{constantes.padre}}" (selectionChange)="seleccionarMenuPadre($event.value)" [(ngModel)]="menu.parent.id" [(value)]="parentId" required>
+          <mat-option *ngFor="let option of listaMenu" [value]="option.id">
+            {{ option.titulo }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get('parent').hasError('required')"> {{ constantes.campoRequerido }} </mat-error>
+      </mat-form-field>  
+    </div>
+
+    <div class="item" fxFlex="50%">
+      <sigma-form-select placeholder="Permiso" formControlName="permiso" [(ngModel)]="menu.permiso"
+        [path]="constantes.path_permisos" [listBy]="'nombre'">
+      </sigma-form-select>
+    </div>
+  </div>
+
+  <div class="container" fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+
+    <div class="item" fxFlex="50%">
+      <sigma-form-autocomplete [path]="constantes.path_administracion_menu_icon"
+        [placeholder]="constantes.icon"
+        formControlName="iconoLista" (ngModelChange)="onChangeIconoSeleccionado($event)"
+        [valueAsImage]="true"
+        [moreInfo]="{descripcion: 'descripcion'}" [searchBy]="'lista_id=3201&descripcion'">
+      </sigma-form-autocomplete>
+    </div>
+
+    <div class="item" fxFlex="50%">
+      <mat-form-field class="w-100">
+        <input matInput placeholder="{{constantes.orden}}" formControlName="orden" [(value)]="menu.orden"
+          autocomplete="off" type="number" required />
+        <mat-error *ngIf="form.get('orden').hasError('required')"> {{ constantes.campoRequerido }} </mat-error>
+        <mat-error *ngIf="form.get('orden').hasError('max')">{{ constantes.longitud_maxima}}19 caracteres. </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="container" fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+    <div class="item" fxFlex="50%">
+      <mat-checkbox formControlName="activo" name="activo" [(value)]="menu.activo" id="activo">{{ constantes.activo }}
+      </mat-checkbox>
+      <mat-error *ngIf="enviada && form.get('activo').hasError('required')"> {{ constantes.campoRequerido }}
+      </mat-error>
+    </div>
+  </div>
+  <!-- <app-vertical-menu [menuItems]="menuItems" [menuParentId]="0" (onClickMenuItem)="updatePS($event)"></app-vertical-menu>  -->
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()" [disabled]="disabledBtn_Login">
+    <mat-icon class="m-1">close</mat-icon> {{ constantes.cancelar }}
+  </button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="disabledBtn_Login">
+    <mat-icon class="m-1">save</mat-icon> {{ constantes.guardar }}
+  </button>
+</mat-dialog-actions>

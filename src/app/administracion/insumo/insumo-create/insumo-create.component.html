@@ -1,0 +1,83 @@
+<div fxLayout="column" *sigmaIsGranted="constants.permiso_administracion_insumo_create">
+  <div class="flex-p">
+    <mat-card class="p-0 mat-card">
+      <mat-card-header fxLayoutAlign="center">
+        <mat-card-subtitle>
+          <h2>{{ constants.crear }} Insumo</h2>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+        <h5>{{ constants.informacionCampoObligatorio }}</h5>
+      </div>
+
+      <mat-card-content class="p-16 m-0" [formGroup]="form">
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.codigo }}" formControlName="codigo" [(ngModel)]="insumo.codigo"
+                autocomplete="off" type="text" required>
+              <mat-error *ngIf="form.get('codigo').hasError('required')"> {{ constants.campoRequerido }}. </mat-error>
+              <mat-error *ngIf="form.get('codigo').hasError('maxlength')"> {{ constants.longitud_maxima }} 20
+                caracteres. </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <sigma-form-select class="w-100" [path]="constants.path_administracion_insumo_claseInsumoId"
+              placeholder="{{ constants.claseInsumoId }}" required="true" formControlName="claseInsumoId"
+              [(ngModel)]="insumo.claseInsumo">
+            </sigma-form-select>
+          </div>
+
+          <div fxFlex>
+            <sigma-form-select class="w-100" [path]="constants.path_administracion_insumo_unidadMedidaId"
+              placeholder="{{ constants.unidadMedidaId }}" required="true" formControlName="unidadMedidaId"
+              [(ngModel)]="insumo.unidadMedida">
+            </sigma-form-select>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex="33">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.nombre }}" formControlName="nombre"
+                  [(ngModel)]="insumo.nombre" autocomplete="off" type="text" required>
+                <mat-error *ngIf="form.get('nombre').hasError('required')"> {{ constants.campoRequerido }}. </mat-error>
+                <mat-error *ngIf="form.get('nombre').hasError('maxlength')"> {{ constants.longitud_maxima }} 100
+                  caracteres. </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div fxFlex>
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <textarea matInput placeholder="{{ constants.descripcion }}" rows="1" [(ngModel)]="insumo.descripcion"
+                  formControlName="descripcion" matTooltip="Descripción de la lista" matTooltipPosition="above" required>
+                </textarea>
+                <mat-error *ngIf="form.get('descripcion').hasError('required')"> {{ constants.campoRequerido }}.
+                </mat-error>
+                <mat-error *ngIf="form.get('descripcion').hasError('maxlength')"> {{ constants.longitud_maxima }} 600
+                  caracteres. </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+      <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+        <button type="button" (click)="onBack()" mat-button color="warn" class="m-1">
+          <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+        </button>
+        <button type="button" [disabled]="enviada" class="m-1" mat-raised-button color="primary" (click)="onSubmit()">
+          <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</div>

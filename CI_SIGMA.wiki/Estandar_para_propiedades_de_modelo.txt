@@ -1,0 +1,7 @@
+ /** Identificador único de registro en la base de datos */
+    public id: number;
+	
+ /** Permite saber si el registro se encuentra activo en el sistema */
+    public activo = true;
+	
+	

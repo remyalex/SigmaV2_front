@@ -1,0 +1,89 @@
+<div>
+  <div>
+    <mat-card-content fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxLayoutWrap fxLayoutGap="0.5%"
+      fxLayoutAlign="right">    
+      <div fxFlex="100" fxLayoutAlign="end">
+        <button mat-raised-button color="primary" class="m-1" (click)="crear();"
+          *sigmaIsGranted="constants.permiso_administracion_personanovedad_create">
+          <mat-icon class="m-1">note_add</mat-icon> {{ constants.crearNuevo }}
+        </button>
+        <button layout="row" mat-raised-button color="primary" class="m-1" (click)="exportAsXLSX()"
+          *sigmaIsGranted="constants.permiso_administracion_personanovedad_export"
+          [disabled]="persona.novedades.length <= 0">
+          <mat-icon>get_app</mat-icon>
+          {{ constants.exportar }}
+          <mat-icon *ngIf="cargandoExcel">
+            <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+          </mat-icon>
+        </button>
+      </div>
+    </mat-card-content>
+  </div>
+</div>
+
+<div class="mat-elevation-z8">
+  <div *ngIf="persona.novedades.length <= 0" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+    <mat-icon class="m-1">sms_failed</mat-icon>
+    <h4> {{ constants.noResultados }}</h4>
+  </div>
+
+  <mat-table #table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="activo">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.activo }} </mat-header-cell>
+      <mat-cell *matCellDef="let personanovedad" [attr.data-label]="constants.activo">
+        <span class="dev-color-red" [hidden]="personanovedad.activo">{{ constants.no }}</span>
+        <span class="dev-color-green" [hidden]="!personanovedad.activo">{{ constants.si }}</span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="fechaDesde">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaDesde }} </mat-header-cell>
+      <mat-cell *matCellDef="let personanovedad" [attr.data-label]="constants.fechaDesde">{{personanovedad.fechaDesde}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="fechaHasta">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaHasta }} </mat-header-cell>
+      <mat-cell *matCellDef="let personanovedad" [attr.data-label]="constants.fechaHasta">{{personanovedad.fechaHasta}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="observaciones">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.observaciones }} </mat-header-cell>
+      <mat-cell *matCellDef="let personanovedad" [attr.data-label]="constants.observaciones">{{personanovedad.observaciones}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="tipoNovedadPersonaId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.tipoNovedadPersonaId }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let personanovedad" [attr.data-label]="constants.tipoNovedadPersonaId">
+        {{ personanovedad.tipoNovedadPersona ? personanovedad.tipoNovedadPersona.valor : ''  }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+      <mat-cell *matCellDef="let personanovedad" [attr.data-label]="constants.acciones">
+        <button mat-raised-button color="primary" (click)="detail(personanovedad)"
+          *sigmaIsGranted="constants.permiso_administracion_personanovedad_view" class="m-1">
+          <mat-icon matTooltip="Detalles" matTooltipPosition="above">open_in_new</mat-icon>
+        </button>
+        <button mat-raised-button color="primary" (click)="edit(personanovedad)"
+          *sigmaIsGranted="constants.permiso_administracion_personanovedad_update" class="m-1">
+          <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+        </button>
+        <button mat-raised-button color="warn"
+          (click)="delete(dataSource.filteredData.indexOf(personanovedad), personanovedad)"
+          *sigmaIsGranted="constants.permiso_administracion_personanovedad_delete" class="m-1">
+          <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [length]="dataSource?.filteredData.length" [pageSize]="criteria.size"
+    [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+</div>

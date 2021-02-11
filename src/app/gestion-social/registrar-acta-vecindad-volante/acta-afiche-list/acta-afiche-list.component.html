@@ -1,0 +1,93 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="listAfiche">
+  <div class="mt-10 mb-10">
+    <h3>Registro de Afiche de Volante Pk {{mantenimiento.pk}}</h3>
+  </div>
+
+  <mat-card-content>
+    <div fxLayoutAlign="end" class="mt-10 mb-10" *ngIf="!consultar">
+      <button *sigmaIsGranted="constants.permiso_social_actas_create" mat-raised-button color="primary" class="m-1"
+        (click)="create();">
+        <mat-icon class="m-1">note_add</mat-icon>{{ constants.crearNuevo }}
+      </button>
+    </div>
+
+    <div class="mat-elevation-z8">
+      <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center">
+        <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+      </div>
+      <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+        <mat-icon class="m-1">sms_failed</mat-icon>
+        <h4> {{ dataSource.errorMessage$ | async }}</h4>
+      </div>
+
+      <mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort>
+
+        <ng-container matColumnDef="numero">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.numeral }} </mat-header-cell>
+          <mat-cell *matCellDef="let actaAfiche; index as i" [attr.data-label]="constants.numeral">
+            {{actaAfiche.noAfiche}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaRegistro">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaRegistro }} </mat-header-cell>
+          <mat-cell *matCellDef="let actaAfiche" [attr.data-label]="constants.fechaRegistro ">
+            {{ actaAfiche.fechaRegistro }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+          <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+          <mat-cell *matCellDef="let actaAfiche" [attr.data-label]="constants.acciones">
+            <div *ngIf="!consultar">
+              <button mat-raised-button color="primary" (click)="edit(actaAfiche)" class="m-1" *ngIf="!consultar">
+                <mat-icon matTooltip="Editar acta Afiche" matTooltipPosition="above">edit</mat-icon>
+              </button>
+              <button mat-raised-button color="primary" (click)="detail(actaAfiche)" class="m-1" *ngIf="!consultar">
+                <mat-icon matTooltip="Consultar Afiche" matTooltipPosition="above">open_in_new</mat-icon>
+              </button>
+            </div>
+            <div *ngIf="consultar">
+              <button *sigmaIsGranted="constants.permiso_social_actas_export_pdf" [disabled]="disabledReport"
+                mat-raised-button color="primary" (click)="exportarPDF(actaAfiche)" class="m-1">
+                <mat-icon matTooltip="Exportar" matTooltipPosition="above">cloud_download</mat-icon>
+              </button>
+              <button mat-raised-button color="primary" (click)="adjuntar(actaAfiche)" class="m-1" *ngIf="consultar">
+                <mat-icon matTooltip="Adjuntar" matTooltipPosition="above">attach_file</mat-icon>
+              </button>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: columns"></mat-row>
+
+      </mat-table>
+      <mat-paginator #paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size"
+        [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+    </div>
+
+  </mat-card-content>
+
+  <mat-divider></mat-divider>
+
+  <div fxLayout="row" fxLayoutAlign="end" class="pt-16">
+    <button mat-button class="m-1" color="warn" (click)="onBack()">
+      <mat-icon class="m-1">close</mat-icon>{{ constants.cancelar }}
+    </button>
+  </div>
+</div>
+
+<div *ngIf="creaAfiche">
+  <app-acta-afiche-create [mantenimientoAux]="mantenimiento" (back)="list($event)">
+  </app-acta-afiche-create>
+</div>
+
+<div *ngIf="editarVolante">
+  <app-acta-afiche-edit [mantenimientoAux]="mantenimiento" [actaAficheAux]="actaAfiche" (back)="list($event)">
+  </app-acta-afiche-edit>
+</div>

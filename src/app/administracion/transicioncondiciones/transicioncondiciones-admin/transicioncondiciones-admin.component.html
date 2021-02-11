@@ -1,0 +1,16 @@
+<div fxLayout="column" fxLayout.gt-sm="row wrap">
+  <div fxFlex="100" class="flex-p">
+    <mat-card>
+      <mat-card-content>
+        <div fxLayoutAlign="end">
+          <button mat-raised-button color="primary" class="m-1 mb-10" (click)="create();"
+            *sigmaIsGranted="constants.administracion_transicioncondiciones_create">
+            <mat-icon class="m-1">note_add</mat-icon> {{ constants.crearNuevo }}
+          </button>
+        </div>
+        <sigma-administracion-transicioncondiciones-list *sigmaIsGranted="constants.administracion_transicioncondiciones_list">
+        </sigma-administracion-transicioncondiciones-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

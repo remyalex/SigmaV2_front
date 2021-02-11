@@ -1,0 +1,20 @@
+
+
+<div *ngIf="currentAction === constants.accionListaSolicitudes">
+  <sigma-programar-mezcla-solicitud-list (trabajarSolicitud)="trabajarSolicitud($event)"></sigma-programar-mezcla-solicitud-list>
+</div>
+
+<div *ngIf="currentAction === constants.accionTrabajarSolicitud" >
+  <div fxLayout="row" fxLayout.lt-md="column">
+    <div fxLayoutAlign="start" fxFlex>
+      <button id="cu-08-editar-boton-atras" mat-stroked-button color="primary" class="m-1 mb-10" (click)="onBack()">
+        <mat-icon>arrow_back_ios</mat-icon> 
+        {{ constants.atras }}
+      </button>
+    </div>
+</div>
+  <sigma-programar-detalle-list [(solicitud)]="solicitud" (programacionValida)="validacionProgramacion($event)" ></sigma-programar-detalle-list>
+  <sigma-seleccion-transicion *ngIf="solicitud.items && solicitud.items.length > 0 && programacionValida" [transiciones]="transicionesMasivas" [(data)]="data"
+      (executeTransition)="confirmarTransicion($event)" [disabledSend]="disabledSendTransicion">
+  </sigma-seleccion-transicion>
+</div>

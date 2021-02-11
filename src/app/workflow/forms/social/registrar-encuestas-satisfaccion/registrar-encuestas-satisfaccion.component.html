@@ -1,0 +1,46 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+  
+  <div [hidden]="processing">
+  
+    <div [hidden]="currentAction !== 'list'">
+      <div fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex="100" class="flex-p">
+  
+          <div>
+            <mat-tab-group [selectedIndex]="tabSeleccionado.value" (selectedIndexChange)="seleccionarGrid($event)" *ngIf="condicion">
+              <mat-tab label="Registrar encuestas de satisfacción">
+                <sigma-grid-mantenimientos #grid [data]="data" [columns]="columns" [filters]="filters" [defaultFilters]="defaulFilters"
+                [condicion]="condicion" [singleActions]="acciones" (executeOnSingle)="ejecutar($event)"   (executeOnSearch)="onSearch($event)"
+                [masiveActions]="accionesMasivas" (executeOnMasiveAction)="ejecutar($event)" [showCheckMasive]="true">
+                </sigma-grid-mantenimientos>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+  
+        </div>
+      </div>
+    </div>
+  
+    <div *ngIf="currentAction === 'adicionar'">
+      <app-encuesta-satisfaccion-create (irAlGrid)="mostrarSeccionGrid($event)"></app-encuesta-satisfaccion-create>
+    </div>
+
+    <div *ngIf="currentAction === 'listar'">
+      <app-encuesta-satisfaccion-list (irAlGrid)="mostrarSeccionGrid($event)" (accionEncuestaSatisfaccion)="accionEncuestaSatisfaccion($event)"></app-encuesta-satisfaccion-list>
+    </div>
+
+    <div *ngIf="currentAction === 'edit'">
+      <app-encuesta-satisfaccion-edit (irAEncuestaSatisfaccionList)="accionEncuestaSatisfaccion($event)"></app-encuesta-satisfaccion-edit>
+    </div>
+
+    <div *ngIf="currentAction === 'attach'">
+      <app-encuesta-satisfaccion-attach (irAEncuestaSatisfaccionList)="accionEncuestaSatisfaccion($event)"></app-encuesta-satisfaccion-attach>
+    </div>
+
+    <sigma-seleccion-transicion *ngIf="verTransicion" [(data)]="data"
+      [transiciones]="transicionesMasivas"
+      (executeTransition)="executeTransitions()"></sigma-seleccion-transicion>
+
+  </div>

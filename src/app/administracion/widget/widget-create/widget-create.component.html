@@ -1,0 +1,86 @@
+<div fxLayout="column">
+  <div class="flex-p">
+    <mat-card class="p-0 mat-card">
+      <mat-card-header fxLayoutAlign="center">
+        <mat-card-subtitle><h2>{{ constants.crear }} Widget</h2></mat-card-subtitle>
+      </mat-card-header>
+
+      <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+        <h5>{{ constants.informacionCampoObligatorio }}</h5>
+      </div>
+
+      <mat-card-content class="p-16 m-0"  [formGroup]="form" 
+      *sigmaIsGranted="constants.permiso_administracion_widget_create">   
+        <div fxFlex="100">
+                
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+            <div fxFlex="50">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.titulo }}" formControlName="titulo" 
+                [(ngModel)]="widget.titulo" autocomplete="off" type="text" 
+                required pattern="^(?!\s*$).+">
+                <mat-error *ngIf="form.get('titulo').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+                <mat-error *ngIf="form.get('titulo').hasError('pattern')"> {{ constants.campoNoVacio }} </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div fxFlex="50">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.descripcion }}" formControlName="descripcion" 
+                [(ngModel)]="widget.descripcion" autocomplete="off" type="text" 
+                required pattern="^(?!\s*$).+">
+                <mat-error *ngIf="form.get('descripcion').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+                <mat-error *ngIf="form.get('descripcion').hasError('pattern')"> {{ constants.campoNoVacio }} </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+            <div fxFlex="100">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.url }}" formControlName="url" 
+                [(ngModel)]="widget.url" autocomplete="off" type="text" 
+                required pattern="^(?!\s*$).+">
+                <mat-error *ngIf="form.get('url').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+                <mat-error *ngIf="form.get('url').hasError('pattern')"> {{ constants.campoNoVacio }} </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+            <div fxFlex="100">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.urlVerMas }}" formControlName="urlVerMas" 
+                [(ngModel)]="widget.urlVerMas" autocomplete="off" type="text" 
+                pattern="^(?!\s*$).+">
+                <mat-error *ngIf="form.get('urlVerMas').hasError('pattern')"> {{ constants.campoNoVacio }} </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+            <div fxFlex="50">
+              <sigma-form-select formControlName="permiso" [(ngModel)]="widget.permiso"
+                [path]="constants.path_administracion_widget_permisoId" [listBy]="'nombre'"
+                [placeholder]="constants.permisoId">
+              </sigma-form-select>
+            </div>
+          </div>
+
+        </div>  
+      </mat-card-content>
+
+      <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+      <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+        <button type="button" (click)="onBack()" mat-button color="warn" class="m-1" [disabled]=disabledButton>
+          <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }} 
+        </button>
+        <button type="button" [disabled]="disableSubmit" class="m-1" mat-raised-button color="primary" (click)="onSubmit()"
+        *sigmaIsGranted="constants.permiso_administracion_widget_create" [disabled]=disabledButton>
+          <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</div>

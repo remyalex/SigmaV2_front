@@ -1,0 +1,73 @@
+<h2 mat-dialog-title>{{ constants.editar }} Insumo</h2>
+
+<mat-dialog-content [formGroup]="form">
+  <input type="hidden" formControlName="id" [(ngModel)]="insumo.id">
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="{{ constants.codigo }}" formControlName="codigo" [(ngModel)]="insumo.codigo"
+          autocomplete="off" type="text" required>
+        <mat-error *ngIf="form.get('codigo').hasError('required')"> {{ constants.campoRequerido }}. </mat-error>
+        <mat-error *ngIf="form.get('codigo').hasError('maxlength')"> {{ constants.longitud_maxima }} 20 caracteres.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div fxFlex>
+      <sigma-form-select class="w-100" [path]="constants.path_administracion_insumo_claseInsumoId"
+        placeholder="{{ constants.claseInsumoId }}" required="true" formControlName="claseInsumoId"
+        [(ngModel)]="insumo.claseInsumo">
+      </sigma-form-select>
+    </div>
+
+    <div fxFlex>
+      <sigma-form-select class="w-100" [path]="constants.path_administracion_insumo_unidadMedidaId"
+        placeholder="{{ constants.unidadMedidaId }}" required="true" formControlName="unidadMedidaId"
+        [(ngModel)]="insumo.unidadMedida">
+      </sigma-form-select>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="{{ constants.nombre }}" formControlName="nombre" [(ngModel)]="insumo.nombre"
+          autocomplete="off" type="text" required>
+        <mat-error *ngIf="form.get('nombre').hasError('required')"> {{ constants.campoRequerido }}. </mat-error>
+        <mat-error *ngIf="form.get('nombre').hasError('maxlength')"> {{ constants.longitud_maxima }} 100 caracteres.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="{{ constants.descripcion }}" formControlName="descripcion"
+          [(ngModel)]="insumo.descripcion" autocomplete="off" type="text" required>
+        <mat-error *ngIf="form.get('descripcion').hasError('required')"> {{ constants.campoRequerido }}. </mat-error>
+        <mat-error *ngIf="form.get('descripcion').hasError('maxlength')"> {{ constants.longitud_maxima }} 600
+          caracteres. </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div fxFlex>
+      <div class="w-100">
+        <mat-checkbox formControlName="activo" [(ngModel)]="insumo.activo" name="activo" id="activo">
+          {{ constants.activo }}
+        </mat-checkbox>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+  </button>
+  <button class="m-1" mat-raised-button color="primary" [disabled]="enviada" (click)="onSubmit()">
+    <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+  </button>
+</mat-dialog-actions>

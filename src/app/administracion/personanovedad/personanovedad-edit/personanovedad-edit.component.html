@@ -1,0 +1,76 @@
+<h2 mat-dialog-title>{{ constants.editar }} Novedad</h2>
+
+<div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+  <h5>{{ constants.informacionCampoObligatorio }}</h5>
+</div>
+
+<mat-card-content class="p-16 m-0" [hidden]="submitted" [formGroup]="form">
+
+  <input type="hidden" formControlName="id" [(ngModel)]="personanovedad.id">
+  <input type="hidden" formControlName="personaId" [(ngModel)]="personanovedad.personaId">
+  <input type="hidden" formControlName="activo" [(ngModel)]="personanovedad.activo">
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <div class="w-100">
+        <sigma-form-select [path]="constants.path_administracion_personanovedad_tipoNovedadPersonaId"
+          formControlName="tipoNovedadPersonaId" [(ngModel)]="personanovedad.tipoNovedadPersona"
+          [placeholder]="constants.tipoNovedadPersonaId">
+        </sigma-form-select>
+      </div>
+    </div>
+
+    <div fxFlex *ngIf="false">
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+        <mat-checkbox formControlName="activo" [(ngModel)]="personanovedad.activo">
+          {{ constants.activo }}
+        </mat-checkbox>
+      </div>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <sigma-form-calendar formControlName="fechaDesde" [(ngModel)]="personanovedad.fechaDesde"
+        [type]="this.constants.datepicker.types.fullCalendar" [placeholder]="constants.fechaDesde"
+        [maxTarget]="'fechaHasta'" [objeto]="personanovedad">
+      </sigma-form-calendar>
+    </div>
+
+    <div fxFlex>
+      <sigma-form-calendar formControlName="fechaHasta" [(ngModel)]="personanovedad.fechaHasta"
+        [type]="this.constants.datepicker.types.fullCalendar" [placeholder]="constants.fechaHasta"
+        [minTarget]="'fechaDesde'" [objeto]="personanovedad">
+      </sigma-form-calendar>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+        <mat-form-field class="w-100">
+          <textarea matInput rows="1" placeholder="{{ constants.observaciones }}" formControlName="observaciones"
+            [(ngModel)]="personanovedad.observaciones" autocomplete="off" maxlength="300">
+          </textarea>
+          <mat-error *ngIf="form.get('observaciones').hasError('required')">
+            {{ constants.campoRequerido }}.
+          </mat-error>
+          <mat-error *ngIf="form.get('observaciones').hasError('maxlength')">
+            {{ constants.longitud_maxima }} 300 {{ constants.caracteres }}.
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+</mat-card-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> Cancelar
+  </button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="disableSubmit">
+    <mat-icon class="m-1">save</mat-icon> Guardar
+  </button>
+</mat-dialog-actions>

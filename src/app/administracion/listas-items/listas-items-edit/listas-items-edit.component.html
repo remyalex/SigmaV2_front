@@ -1,0 +1,43 @@
+<h2 mat-dialog-title>Editar Lista Item</h2>
+
+<mat-dialog-content [formGroup]="form">
+  <input type="hidden" formControlName="id" />
+  <input type="hidden" formControlName="listaId" />
+  <div class="container" fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+    <div class="item" fxFlex="100%">
+      <mat-form-field class="w-100">
+        <input matInput placeholder="Valor" formControlName="valor" 
+        [(ngModel)]="listaItems.valor" appUpper
+        matTooltip="Valor del ítem de la lista" matTooltipPosition="above" required/>
+        <mat-error *ngIf="form.get('valor').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+        <mat-error *ngIf="form.get('valor').hasError('maxlength')"> {{ constants.error.longitud100}} </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="item" fxFlex="100%">
+      <mat-form-field class="w-100">
+        <textarea matInput placeholder="Descripción" rows="1" formControlName="descripcion" 
+        [(ngModel)]="listaItems.descripcion" appUpper
+        matTooltip="Descripción del ítem la lista" matTooltipPosition="above" required></textarea>
+        <mat-error *ngIf="form.get('descripcion').hasError('required')">  {{ constants.campoRequerido }} </mat-error>
+        <mat-error *ngIf="form.get('descripcion').hasError('maxlength')"> {{ constants.error.longitud100 }}</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="container" fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+    <div class="item" fxFlex="100%">
+      <mat-checkbox formControlName="activo" [(ngModel)]="listaItems.activo">Activo</mat-checkbox>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+ 
+<mat-dialog-actions fxLayout="row" fxLayoutAlign="end" class="flex-p">
+  <button mat-button class="m-1" color="warn" (click)="close()">  
+    <mat-icon class="m-1">close</mat-icon> Cancelar
+</button>
+<button mat-raised-button class="m-1" color="primary" (click)="onSubmit()" [disabled]="disabledBtn_Login">
+    <mat-icon class="m-1">save</mat-icon>    Guardar
+</button> 
+</mat-dialog-actions>

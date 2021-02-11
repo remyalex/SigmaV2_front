@@ -1,0 +1,87 @@
+<div *ngIf="isAvailable()">
+    <div fxLayoutAlign="end" class="mb-10">
+      <button [disabled]="processing" mat-raised-button color="primary" (click)="addFotos()">
+        <mat-icon class="m-1">add</mat-icon>
+        Adicionar fotos
+      </button>
+    </div> 
+    <form [formGroup]="formularioFotos" class="mb-10">
+      <mat-form-field class="w-100">
+        <input matInput type="text" formControlName="fotos" [(ngModel)]="mantenimiento.diagnostico.fotos"
+          class="hidden" />
+        <mat-error *ngIf="(formularioFotos.get('fotos').valid === false  && this.formularioFotos.get('fotos').getError('maxElements') !== undefined)">
+          {{ constants.maxFiles }}
+          {{ formularioFotos.get('fotos') == null ? '' : formularioFotos.get('fotos').getError('maxElements').max }}
+          {{ constants.total | lowercase }}
+          ({{ formularioFotos.get('fotos') == null ? '' : formularioFotos.get('fotos').getError('maxElements').actual }})
+        </mat-error>
+        <mat-error *ngIf="(formularioFotos.get('fotos').valid === false && this.formularioFotos.get('fotos').getError('minElements') !== undefined)">
+          {{ constants.minFiles }}
+          {{ formularioFotos.get('fotos') == null ? '' : formularioFotos.get('fotos').getError('minElements').min }}
+          {{ constants.total | lowercase }}
+          ({{ formularioFotos.get('fotos') == null ? '' : formularioFotos.get('fotos').getError('minElements').actual }})
+        </mat-error>
+      </mat-form-field>
+    </form>
+    <mat-card-content class="m-0">
+        <div class="mat-elevation-z8">
+          <mat-table [dataSource]="fotosDatasource" matSort (matSortChange)="sortData($event)">
+            
+            <ng-container matColumnDef="numeroFoto">
+              <mat-header-cell *matHeaderCellDef  mat-sort-header> N° </mat-header-cell>
+              <mat-cell *matCellDef ="let foto" data-label="N°">
+                {{ foto.numeroFoto }}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="fechaRegistro">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Registro</mat-header-cell>
+              <mat-cell *matCellDef="let foto" data-label="Fecha Registro">
+                {{ foto.fechaRegistro }}
+              </mat-cell>
+            </ng-container>
+  
+            <ng-container matColumnDef="nombreFoto">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Archivo</mat-header-cell>
+              <mat-cell *matCellDef="let foto" data-label="Archivo">
+                {{ foto.archivo.ruta.substring(foto.archivo.ruta.lastIndexOf('\\') + 1) }}
+              </mat-cell>
+            </ng-container>
+  
+            <ng-container matColumnDef="fotos">
+              <mat-header-cell *matHeaderCellDef> Imagen </mat-header-cell>
+              <mat-cell *matCellDef="let foto" data-label="Imagen">
+                <sigma-show-file *ngIf="foto.archivo" [showFile]="true" [id]="foto.archivo.id"></sigma-show-file>
+              </mat-cell>
+            </ng-container>
+  
+            <ng-container matColumnDef="acciones">
+              <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+              <mat-cell *matCellDef="let foto; let i = index;" [attr.data-label]="constants.acciones">
+                <button mat-raised-button color="warn" (click)="removeFoto(i)" class="m-1" [disabled]= "!isEditable || loading">
+                  <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+                </button>
+              </mat-cell>
+            </ng-container>
+  
+            <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+          </mat-table>
+        </div>
+      </mat-card-content>
+
+    <div fxLayout="column wrap" fxLayoutGap="10px" class="mb-10">
+    <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px">
+      
+    </div>
+
+    <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+    <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+      <button type="button"  class="m-1" mat-raised-button color="primary" (click)="saveSeccion()" 
+      [disabled]="!isEditable || loading">
+        <mat-icon class="m-1">save</mat-icon> {{ constants.guardarSeccion }}
+      </button>
+    </div>
+  </div>
+</div>

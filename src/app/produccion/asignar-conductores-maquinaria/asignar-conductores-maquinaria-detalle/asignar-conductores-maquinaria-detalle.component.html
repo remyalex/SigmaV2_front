@@ -1,0 +1,186 @@
+<h2 mat-dialog-title>{{ constants.maquinariaEquipos }}</h2>
+
+<br>
+<!--<mat-card-content>
+    <div>
+        <form (ngSubmit)="search()">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+              <div fxFlex>
+                  <sigma-form-select name="tipoEnsayo"  [path]="constants.path_produccion_turno" [placeholder]="'Filtro'">
+                  </sigma-form-select>
+              </div>
+                <div fxFlex>
+                    <mat-form-field class="w-100">
+                        <input matInput placeholder="Valor" name="nosolicitud">
+                    </mat-form-field>
+                </div>
+            </div>
+        </form>
+    </div>
+</mat-card-content>-->
+
+
+<mat-card-content>
+    <form (ngSubmit)="search()">
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+              <sigma-form-select name="filtroMaquinaria" [(ngModel)]="criteria.filtroIntervencion" [opciones]="itemsMaquinaria" [listBy]="'descripcion'" placeholder="Filtro">
+              </sigma-form-select>
+          </div>
+            <div fxFlex>
+                <mat-form-field class="w-100">
+                    <input matInput placeholder="Valor" name="valorMaquinaria" [(ngModel)]="criteria.valorIntervencion">
+                </mat-form-field>
+            </div>
+        </div>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <button type="submit" (click)="search()" mat-raised-button color="primary" class="m-1">
+                <mat-icon>search</mat-icon> Buscar
+            </button>
+            <button (click)="Limpiar()" mat-raised-button color="warn" class="m-1">
+                <mat-icon>clear</mat-icon> Limpiar
+            </button>
+        </div>
+    </form>
+</mat-card-content>
+
+<mat-dialog-content>
+
+    <div class="mat-elevation-z8">
+        <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center">
+            <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+        </div>
+        <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+            <mat-icon class="m-1">sms_failed</mat-icon>
+            <h4> {{ dataSource.errorMessage$ | async }}</h4>
+        </div>
+        <mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort>
+
+
+            <ng-container matColumnDef="no" >
+                <mat-header-cell *matHeaderCellDef>  </mat-header-cell>
+                <mat-cell *matCellDef="let item; let k = index" [attr.data-label]="constants.lecturaInicial">
+                  <div class="w-100" >
+                    <mat-checkbox name="activo-{{k}}" id="activo-{{k}}" #checkbox="matCheckbox" [(ngModel)]="item.formulario" (change)="updateCheck(dataSource.ensayosData, k, $event.checked, item)" [checked]="item.formulario">
+                    </mat-checkbox>
+                    
+                  </div>      
+                </mat-cell>
+              </ng-container>
+
+            <ng-container matColumnDef="idConductor">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> No Interno </mat-header-cell>
+                <mat-cell *matCellDef="let item" [attr.data-label]="constants.idConductor">
+                    {{item.idConductor}}
+                </mat-cell>
+            </ng-container>
+
+
+            <ng-container matColumnDef="tipoEquipo">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </mat-header-cell>
+                <mat-cell *matCellDef="let item" [attr.data-label]="constants.tipoEquipo">
+                    {{item.tipoEquipo}}
+                </mat-cell>
+            </ng-container>
+
+
+            <ng-container matColumnDef="claseEquipo">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Clasificación </mat-header-cell>
+                <mat-cell *matCellDef="let item" [attr.data-label]="constants.claseEquipo">
+                    {{item.claseEquipo}}
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="placaInventario">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Placa / N. Inventario </mat-header-cell>
+                <mat-cell *matCellDef="let item" [attr.data-label]="constants.placaInventario">
+                    {{item.placaInventario}}
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="estadoEquipo">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+                <mat-cell *matCellDef="let item" [attr.data-label]="constants.estadoEquipo">
+                    {{item.estadoEquipo}}
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="marcaEquipo">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Marca </mat-header-cell>
+                <mat-cell *matCellDef="let item" [attr.data-label]="constants.marcaEquipo">
+                    {{item.marcaEquipo}}
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="lugar">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Lugar </mat-header-cell>
+                <mat-cell *matCellDef="let item" [attr.data-label]="constants.lugar">
+                    {{item.lugar}}
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="fechaProgramacionSolicitada">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Inicio </mat-header-cell>
+                <mat-cell *matCellDef="let item" [attr.data-label]="constants.fechaProgramacionSolicitada">
+                    {{item.fechaProgramacionSolicitada ? getHumanDate(item.fechaProgramacionSolicitada) : ''}}
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="fechaDevolucion">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha devolución </mat-header-cell>
+                <mat-cell *matCellDef="let item" [attr.data-label]="constants.fechaDevolucion">
+                    {{item.fechaDevolucion}}
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="jornada">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Jornada </mat-header-cell>
+                <mat-cell *matCellDef="let item" [attr.data-label]="constants.jornada">
+                    {{item.jornada}}
+                </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="asignarPersonal">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Asignar Personal </mat-header-cell>
+                <mat-cell *matCellDef="let item; let p = index" [attr.data-label]="constants.asignarPersonal">
+                    <div fxFlex *ngIf="item.personaEliminar === false">
+                        <sigma-form-select name="personalProgramar-{{p}}"   [opciones]="item.seleccionar" [(ngModel)]="item.personalProgramar" [listBy]="'descripcion'" [placeholder]="">
+                        </sigma-form-select>
+                    </div>   
+
+                    <div fxFlex *ngIf="item.personaEliminar === true">
+                        <mat-form-field class="w-100">
+                            <input matInput [disabled]="true" [value]="getNamePersonal(item)" name="nosolicitud">
+                        </mat-form-field>
+                    </div>
+                    
+
+                </mat-cell>
+            </ng-container>
+
+
+
+            <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: columns"></mat-row>
+
+        </mat-table>
+        <mat-paginator #paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+    </div>
+</mat-dialog-content>
+
+<br>
+<br>
+
+<mat-dialog-actions align="end">
+    <button mat-button color="warn" (click)="close()">
+        <mat-icon class="m-1">close</mat-icon>{{ constants.cerrar }}
+    </button>
+
+    <button mat-raised-button color="warn" (click)="cancelPersona(dataSource.ensayosData)" [disabled]="disableDelete">
+        <mat-icon class="m-1">close</mat-icon>{{ constants.cancelarPersonal }}
+    </button>
+
+    <button mat-raised-button color="primary" (click)="savePersona(dataSource.ensayosData)" [disabled]="disableSubmit" *sigmaIsGranted="constants.permiso_produccion_asignar_conductores_maquinaria_update">
+        <mat-icon class="m-1">save</mat-icon>{{ constants.programarPersonal }}
+    </button>
+</mat-dialog-actions>

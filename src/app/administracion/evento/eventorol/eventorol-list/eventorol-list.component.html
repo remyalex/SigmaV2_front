@@ -1,0 +1,90 @@
+<div>
+  <div>
+    <mat-card-content fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxLayoutWrap fxLayoutGap="0.5%" fxLayoutAlign="center">
+      <div fxFlex="50%"> </div>
+      <div fxFlex="50%" fxLayoutAlign="end">
+          <button mat-raised-button color="primary" class="m-1 mb-10" (click)="crear();"
+          *sigmaIsGranted="constants.permiso_administracion_eventorol_create">
+          <mat-icon class="m-1">note_add</mat-icon> {{ constants.crearNuevo }}
+          </button>
+      </div>
+    </mat-card-content>
+  </div>
+</div>
+
+<div class="mat-elevation-z8">
+  <div *ngIf="loader" fxLayout="column" fxLayoutAlign="center center" >
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+
+  <div *ngIf="noInfoToShow" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+    <mat-icon class="m-1">sms_failed</mat-icon>  <h4> {{ constants.noResultados }}</h4>
+  </div>
+
+  <mat-table #table [dataSource]="listEventoRol" [hidden]="!noInfoToShow" class="mat-elevation-z8" matSort >
+    
+    <ng-container matColumnDef="activo">
+      <mat-header-cell *matHeaderCellDef mat-sort-header > {{ constants.activo }} </mat-header-cell>
+      <mat-cell *matCellDef="let eventorol" [attr.data-label]="constants.activo">
+        <span class="dev-color-red" [hidden]="eventorol.activo">{{ constants.no }}</span>
+        <span class="dev-color-green" [hidden]="!eventorol.activo">{{ constants.si }}</span>
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="eventoId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.eventoId }} </mat-header-cell>
+      <mat-cell *matCellDef="let eventorol" [attr.data-label]="constants.eventoId">
+        {{ eventorol.eventoValor }}
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="fechaDesde">
+      <mat-header-cell *matHeaderCellDef mat-sort-header > {{ constants.fechaDesde }} </mat-header-cell>
+      <mat-cell *matCellDef="let eventorol" [attr.data-label]="constants.fechaDesde">
+        {{eventorol.fechaDesde}}
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="fechaHasta">
+      <mat-header-cell *matHeaderCellDef mat-sort-header > {{ constants.fechaHasta }} </mat-header-cell>
+      <mat-cell *matCellDef="let eventorol" [attr.data-label]="constants.fechaHasta">
+        {{eventorol.fechaHasta}}
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header > {{ constants.id }} </mat-header-cell>
+      <mat-cell *matCellDef="let eventorol" [attr.data-label]="constants.id">
+        {{eventorol.id}}
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="rolId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.rolId }} </mat-header-cell>
+      <mat-cell *matCellDef="let eventorol" [attr.data-label]="constants.rolId">
+        {{ eventorol.rol.nombre }}
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+      <mat-cell *matCellDef="let eventorol" [attr.data-label]="constants.acciones">
+        <button mat-raised-button  color="primary" (click)="detail(eventorol)" class="m-1"
+          *sigmaIsGranted="constants.permiso_administracion_eventorol_view">
+          <mat-icon matTooltip="Detalles" matTooltipPosition="above">open_in_new</mat-icon>
+        </button>
+        <button mat-raised-button color="primary" (click)="edit(eventorol)" class="m-1"
+          *sigmaIsGranted="constants.permiso_administracion_eventorol_update">
+          <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+        </button>
+        <button mat-raised-button color="warn" (click)="delete(eventorol)" class="m-1"
+          *sigmaIsGranted="constants.permiso_administracion_eventorol_delete">
+          <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [length]= "lengthList" [pageSize]="criteria.size" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+</div>

@@ -1,0 +1,224 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="processing">
+
+  <div *ngIf="currentAction == 'autoprogramar'">
+    <mat-card-content class="p-16 m-0">
+
+      <div class="mb-10" fxLayout="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
+        fxLayoutAlign="left">
+
+        <div fxFlex="100">
+          <div class="p-0" [formGroup]="formularioConsultaPK">
+            <h3>Información de PK</h3>
+            <div fxLayout="column" class="m-0">
+
+              <div fxFlex="100">
+                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                  <div fxFlex="50">
+                    <mat-form-field class="w-100">
+                      <input matInput placeholder="Estado PK" formControlName="estado"
+                        [ngModel]="data.mantenimiento.estadoPk != null?data.mantenimiento.estadoPk.descripcion:''"
+                        readonly>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                  <div fxFlex="50">
+                    <mat-form-field class="w-100">
+                      <input matInput placeholder="Pk" formControlName="pk" [(ngModel)]="data.mantenimiento.pk"
+                        readonly>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex="50">
+                    <mat-form-field class="w-100">
+                      <input matInput placeholder="CIV" formControlName="civ" [(ngModel)]="data.mantenimiento.civ"
+                        readonly>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex>
+                    <mat-form-field class="w-100">
+                      <input matInput placeholder="Ancho de Calzada" formControlName="calzadaAncho"
+                        [(ngModel)]="data.mantenimiento.ancho" readonly>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px" fxLayoutGap.lt-lg="0">
+                  <div fxFlex>
+                    <mat-form-field class="w-100">
+                      <input matInput placeholder="Área de Calzada" formControlName="calzadaArea"
+                        [(ngModel)]="data.mantenimiento.area" readonly>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex>
+                    <mat-form-field class="w-100">
+                      <input matInput placeholder="Longitud" formControlName="longitud"
+                        [(ngModel)]="data.mantenimiento.longitud" readonly>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex>
+                    <mat-form-field class="w-100">
+                      <input matInput placeholder="Barrio" formControlName="barrioNombre"
+                        [ngModel]="data.mantenimiento.barrio != null ?data.mantenimiento.barrio.nombre: ''"
+                        readonly>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex>
+                    <mat-form-field class="w-100">
+                      <input matInput placeholder="Eje Vial" formControlName="ejeVial"
+                        [(ngModel)]="data.mantenimiento.ejeVial" readonly>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px" fxLayoutGap.lt-lg="0">
+                  <div fxFlex>
+                    <mat-form-field class="w-100">
+                      <input matInput placeholder="Tipo malla" formControlName="malla"
+                        [ngModel]="data.mantenimiento.tipoMalla !=  null ?data.mantenimiento.tipoMalla.descripcion:''"
+                        readonly>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex>
+                    <mat-form-field class="w-100">
+                      <input matInput placeholder="Desde" formControlName="desde"
+                        [(ngModel)]="data.mantenimiento.desde" readonly>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex>
+                    <mat-form-field class="w-100">
+                      <input matInput placeholder="Hasta" formControlName="hasta"
+                        [(ngModel)]="data.mantenimiento.hasta" readonly>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex>
+                    <mat-form-field class="w-100">
+                      <input matInput placeholder="Localidad" formControlName="localidadNombre"
+                        [ngModel]="data.mantenimiento.localidad != null?data.mantenimiento.localidad.nombre:''"
+                        readonly>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px" fxLayoutGap.lt-lg="0">
+                  <div fxFlex>
+                    <mat-form-field class="w-100">
+                      <input matInput placeholder="Sector" formControlName="sector"
+                        [ngModel]="data.mantenimiento.sector != null?data.mantenimiento.sector.descripcion:''"
+                        readonly>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex>
+                    <mat-form-field class="w-100">
+                      <input matInput placeholder="Tipo Superficie" formControlName="tipoSuperficie"
+                        [ngModel]="data.mantenimiento.tipoSuperficie != null?data.mantenimiento.tipoSuperficie.descripcion: ''"
+                        readonly>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex>
+                    <mat-form-field class="w-100">
+                      <input matInput placeholder="Seccion Vial" formControlName="seccionVial"
+                        [ngModel]="data.mantenimiento.tipoSeccionVial != null?data.mantenimiento.tipoSeccionVial.descripcion:''"
+                        readonly>
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex>
+                    <sigma-form-select formControlName="origen" [(ngModel)]="data.mantenimiento.origen"
+                      [path]="constants.path_workflow_diagnostico_origen" [placeholder]="constants.origen"
+                      [listBy]="'descripcion'">
+                    </sigma-form-select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div fxFlex="100"
+          *ngIf="data.mantenimiento.origen?data.mantenimiento.origen.id == tipoSolicitudPeticionario.id:false">
+          <mat-card class="p-0 c-mod" [formGroup]="formularioConsultaRadicadoEntrada">
+            <mat-card-header color="primary" fxLayoutAlign="center">
+              <mat-card-subtitle>
+                <h3>Información radicado</h3>
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content class="p-16">
+              <div fxLayout="column" fxLayoutGap="10px">
+                <div fxFlex="100">
+                  <div class="w-100" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+                    <div fxFlex="70" fxFlex.lg="60" fxFlex.md="100">
+                      <sigma-form-number placeholder="Radicado de entrada"
+                        formControlName="entradaConsultaRadicadoEntrada" [(ngModel)]="entradaConsultaRadicadoEntrada"
+                        [maxlength]=20></sigma-form-number>
+                    </div>
+                    <div fxFlex="30" fxFlex.lg="40" fxFlex.md="100">
+                      <button mat-raised-button color="primary" (click)="buscarRadicado()"
+                        [disabled]='processingSelectPk'>
+                        <mat-icon class="m-1">search</mat-icon>
+                        Buscar Radicado
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div fxFlex="100">
+                  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                    <div fxFlex="50">
+                      <mat-form-field class="w-100">
+                        <input matInput placeholder="Radicado de entrada" formControlName="radicadoEntrada"
+                          [(ngModel)]="data.mantenimiento.solicitudRadicadoEntrada" readonly>
+                      </mat-form-field>
+                    </div>
+                    <div fxFlex="50">
+                      <mat-form-field class="w-100">
+                        <input matInput placeholder="Fecha Radicacion" formControlName="fechaRadicacion"
+                          [(ngModel)]="data.mantenimiento.solicitudFecha" readonly>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                    <div fxFlex="50">
+                      <mat-form-field class="w-100">
+                        <input matInput placeholder="Fecha Vencimiento" formControlName="fechaVencimiento"
+                          [(ngModel)]="data.mantenimiento.solicitudVencimiento" readonly>
+                      </mat-form-field>
+                    </div>
+                    <div fxFlex="50">
+                      <mat-form-field class="w-100">
+                        <input matInput placeholder="Remitente" formControlName="remitente"
+                          [(ngModel)]="data.mantenimiento.solicitudRemitente" readonly>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                    <div fxFlex="50">
+                      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+                        <mat-form-field class="w-100">
+                          <input matInput placeholder="Asunto" formControlName="asunto"
+                            [(ngModel)]="data.mantenimiento.solicitudAsunto" readonly>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div fxFlex="50">
+                      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+                        <mat-form-field class="w-100">
+                          <input matInput placeholder="Dependencia Asignada" formControlName="dependenciaAsignada"
+                            [(ngModel)]="data.mantenimiento.solicitudDependenciaAsignada" readonly>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+
+      <sigma-seleccion-transicion
+        *ngIf="data.mantenimiento.origen !== null && (data.mantenimiento.origen.id === tipoSolicitudPeticionario.id ? data.mantenimiento.solicitudRadicadoEntrada !== null : true )"
+        [transiciones]="transicionesIndividuales" [data]="data" (executeTransition)="guardarEnviarProgramacion($event)">
+      </sigma-seleccion-transicion>
+    </mat-card-content>
+  </div>
+</div>

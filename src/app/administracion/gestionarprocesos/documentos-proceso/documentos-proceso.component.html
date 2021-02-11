@@ -1,0 +1,62 @@
+<div class="p-8">
+  <div class="mat-elevation-z8 mb-10 mt-10">
+    <div *ngIf="loader" fxLayout="column" fxLayoutAlign="center center">
+      <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+    </div>
+    <div *ngIf="noInfoToShow" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+      <mat-icon class="m-1">sms_failed</mat-icon>
+      <h4> {{ constants.noResultados}}</h4>
+    </div>
+
+    <mat-table #table [dataSource]="listaDocumentos" [hidden]="!loader" class="mat-elevation-z8" matSort>
+
+      <!-- <ng-container matColumnDef="activo">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.estado }} </mat-header-cell>
+        <mat-cell *matCellDef="let documentos" [attr.data-label]="constants.activo">
+          <span class="dev-color-red" [hidden]="documentos.activo">{{ constants.no }}</span>
+          <span class="dev-color-green" [hidden]="!documentos.activo">{{ constants.si }}</span>
+        </mat-cell>
+      </ng-container> -->
+
+      <ng-container matColumnDef="idTipoDocumento">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.idTipoDocumento }} </mat-header-cell>
+        <mat-cell *matCellDef="let documentos" [attr.data-label]="constants.idTipoDocumento">
+          {{documentos.id}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fecha">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fecha }} </mat-header-cell>
+        <mat-cell *matCellDef="let documentos" [attr.data-label]="constants.fecha">
+          {{documentos.fecha}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="tipoDocumento">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.tipoDocumento }} </mat-header-cell>
+        <mat-cell *matCellDef="let documentos" [attr.data-label]="constants.tipoDocumento">
+          {{documentos.tipoDocumento?.descripcion}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="archivoId">
+        <mat-header-cell *matHeaderCellDef> {{ constants.archivo }} </mat-header-cell>
+        <mat-cell *matCellDef="let formato" [attr.data-label]="constants.archivo">
+          <sigma-show-file id="{{ formato.archivo?.id }}"></sigma-show-file>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="estado">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.estado }} </mat-header-cell>
+        <mat-cell *matCellDef="let documento" [attr.data-label]="constants.estado">
+          {{documento.estadoDocumento ? documento.estadoDocumento.descripcion : ''}}
+        </mat-cell>
+      </ng-container>
+      
+      <mat-header-row *matHeaderRowDef="columns" [hidden]="!loader"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columns"></mat-row>
+    </mat-table>
+    <mat-paginator #paginator [length]="lengthList" [pageSize]="10"
+      [pageSizeOptions]="[5, 10, 20]" [hidden]="!loader" showFirstLastButtons ></mat-paginator>
+  </div>
+</div>

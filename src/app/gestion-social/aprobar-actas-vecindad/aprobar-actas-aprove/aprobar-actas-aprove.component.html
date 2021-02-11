@@ -1,0 +1,90 @@
+<div fxLayout="column">
+    <div class="flex-p">
+        <mat-card>
+            <mat-card-header fxLayoutAlign="center">
+                <mat-card-subtitle>
+                    <h2>Consultar Actas de Vecindad</h2>
+                </mat-card-subtitle>
+            </mat-card-header>
+
+           <mat-card-content class="flex-p">
+
+                <div class="mat-elevation-z8">
+                    <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center">
+                        <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+                    </div>
+                    <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row"
+                        fxLayoutAlign="center center">
+                        <mat-icon class="m-1">sms_failed</mat-icon>
+                        <h4> {{ dataSource.errorMessage$ | async }}</h4>
+                    </div>
+                    <mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort>
+    
+                        <ng-container matColumnDef="checked">
+                            <mat-header-cell *matHeaderCellDef>
+                                <mat-checkbox (change)='selectAll($event)' [hidden]="disableSubmit"></mat-checkbox>
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let acta">
+                                <mat-checkbox [(ngModel)]="acta.aprobado" [hidden]="disableSubmit"></mat-checkbox>
+                            </mat-cell>
+                        </ng-container>
+    
+                        <ng-container matColumnDef="numeralAscendente">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Numeral ascendente </mat-header-cell>
+                            <mat-cell *matCellDef="let acta" data-label="Numeral ascendente">
+                                {{ acta.id }}
+                            </mat-cell>
+                        </ng-container>
+    
+                        <ng-container matColumnDef="noActaVecindad">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Identificador del acta de vecindad
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let acta" data-label="Identificador">
+                                {{ acta.noActaVecindad }}
+                            </mat-cell>
+                        </ng-container>
+    
+                        <ng-container matColumnDef="fecha">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de registro del acta</mat-header-cell>
+                            <mat-cell *matCellDef="let acta" data-label="Fecha Registro">
+                                {{ acta.fecha }} </mat-cell>
+                        </ng-container>
+    
+                        <ng-container matColumnDef="aprobado">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Acta de vecindad aprobado </mat-header-cell>
+                            <mat-cell *matCellDef="let acta" data-label="Aprobado">
+                                <span class="dev-color-red" [hidden]="acta.aprobado">{{ constants.no }}</span>
+                                <span class="dev-color-green" [hidden]="!acta.aprobado">{{ constants.si }}</span>
+                            </mat-cell>
+                        </ng-container>
+    
+                        <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: columns"></mat-row>
+    
+                    </mat-table>
+                    <mat-paginator #paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size"
+                        [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+                </div>
+
+                <sigma-seleccion-transicion *ngIf="showGestion" [(data)]="data" [transiciones]="actividad.transiciones"
+                (executeTransition)="guardarTodo()"></sigma-seleccion-transicion>
+            </mat-card-content>
+
+            <mat-divider></mat-divider>
+
+            <div fxLayout="row" fxLayoutAlign="end" class="pt-16">  
+                <button type="button" class="m-1" (click)="onBack()" mat-button color="warn">
+                    <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+                </button> 
+                <button *sigmaIsGranted="constants.aprobar_actas_aprove" type="button" class="m-1"
+                    [disabled]="disableSubmit" mat-raised-button color="primary" (click)="aprobarActas()">
+                    <mat-icon class="m-1">check_circle_outline</mat-icon> Aprobar
+                </button>
+                <button *sigmaIsGranted="constants.aprobar_actas_save_all" type="button" class="m-1"
+                    [disabled]="disableSaveAll" mat-raised-button color="primary" (click)="gestionarSeleccion()">
+                    <mat-icon class="m-1">save</mat-icon> Guardar todo
+                </button>
+            </div>          
+        </mat-card>
+    </div>
+</div>

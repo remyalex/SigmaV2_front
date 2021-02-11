@@ -1,0 +1,21 @@
+<mat-form-field class="w-100">
+    <mat-select placeholder="{{etiqueta}}" (selectionChange)="select($event.value)" [disabled]="disabled"
+        [value]="value ? value[id] : ''" [required]="required">
+        <mat-option value>Seleccionar</mat-option>
+        
+        <mat-option *ngFor="let option of optionsList" value="{{ option[id] }}">
+            {{option[listBy]}}
+        </mat-option>
+    </mat-select>
+</mat-form-field>
+
+<!-- 
+    <sigma-general-list
+    [value]="criteria.id"
+    [path]="'/api/administracion/menu'"
+    etiqueta="Anio Modelo"
+    [listBy]="'titulo'"
+    [required]="required"
+    (optionIdSelected)="menuSelected($event)">
+    </sigma-general-list> 
+-->

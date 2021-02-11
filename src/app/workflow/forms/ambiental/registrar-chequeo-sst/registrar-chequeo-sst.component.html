@@ -1,0 +1,312 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="processing">
+
+  <div *ngIf="currentAction === 'list'">
+    <div fxLayout="row" fxLayout.lt-md="column">
+      <div fxFlex="100" class="flex-p">
+
+        <div>
+          <mat-tab-group [selectedIndex]="tabSeleccionado.value" (selectedIndexChange)="seleccionarGrid($event)">
+            <div>
+              <mat-tab *ngFor="let transicion of transicionesIndividuales" label="{{transicion.nombre}}">
+                <sigma-grid-mantenimientos #grid [data]="data" [transicion]="transicion" [columns]="columns"
+                  [filters]="filters" [singleActions]="acciones" (executeOnSingle)="executeSingleAction($event)"
+                  (executeOnMasiveTransition)="executeMasiveTransition($event)" [defaultFilters]="defaulFilters">
+                </sigma-grid-mantenimientos>
+              </mat-tab>
+            </div>
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Seccion Registrar Lista de Chequeo Sst   -->
+  <div *ngIf="currentAction == 'registrarChequeoSst'">
+    <div fxLayout="row" fxLayout.lt-md="column">
+      <div fxLayoutAlign="start" fxFlex>
+        <button id="cu-08-editar-boton-atras" mat-stroked-button color="primary" class="m-1 mb-10" (click)="back()">
+          <mat-icon>arrow_back_ios</mat-icon>
+          {{ constants.atras }}
+        </button>
+      </div>
+    </div>
+    <mat-card-content class="p-16 m-0" [formGroup]="form">
+
+      <h3>{{ constants.chequeoSST.seleccioneChequeoSST }}</h3>
+
+      <div fxLayout="column">
+        <div fxFlex="100">
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+            <div fxFlex="50" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+              <div fxFlex="50">
+                <sigma-form-input formControlName="fecha" [ngModel]="data.mantenimiento.fechaInicioVisita"
+                  [placeholder]="constants.fecha">
+                </sigma-form-input>
+              </div>
+            </div>
+            <div fxFlex="50" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+              <div fxFlex="50">
+                <div>
+                  <sigma-form-select formControlName="tieneCarpa" [(ngModel)]="listaChequeoSst.tieneCarpaSelect"
+                    [placeholder]="constants.chequeoSST.carpas" [opciones]="opciones" [listBy]="'name'" [id]="'value'"
+                    (ngModelChange)="changeTiene(listaChequeoSst.tieneCarpaSelect, 'tieneCarpa', 'cantidadCarpa')">
+                  </sigma-form-select>
+                </div>
+              </div>
+              <div fxFlex="50" *ngIf="listaChequeoSst.tieneCarpa">
+                <div>
+                  <sigma-form-number [placeholder]="constants.chequeoSST.cantidadCarpas"
+                    [(ngModel)]="listaChequeoSst.cantidadCarpa" formControlName="cantidadCarpa">
+                  </sigma-form-number>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+            <div fxFlex="50" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+              <div fxFlex="50">
+                <div>
+                  <sigma-form-select formControlName="tieneBotiquin" [(ngModel)]="listaChequeoSst.tieneBotiquinSelect"
+                    [placeholder]="constants.chequeoSST.botiquin" [opciones]="opciones" [listBy]="'name'" [id]="'value'"
+                    (ngModelChange)="changeTiene(listaChequeoSst.tieneBotiquinSelect, 'tieneBotiquin', 'cantidadBotiquin')">
+                  </sigma-form-select>
+                </div>
+              </div>
+              <div fxFlex="50" *ngIf="listaChequeoSst.tieneBotiquin">
+                <div>
+                  <sigma-form-input [placeholder]="constants.chequeoSST.cantidadBotiquin"
+                    formControlName="cantidadBotiquin" [(ngModel)]="listaChequeoSst.cantidadBotiquin">
+                  </sigma-form-input>
+                </div>
+              </div>
+            </div>
+            <div fxFlex="50" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+              <div fxFlex="50">
+                <div>
+                  <sigma-form-select formControlName="tieneCamilla" [(ngModel)]="listaChequeoSst.tieneCamillaSelect"
+                    [placeholder]="constants.chequeoSST.camilla" [opciones]="opciones" [listBy]="'name'" [id]="'value'"
+                    (ngModelChange)="changeTiene(listaChequeoSst.tieneCamillaSelect, 'tieneCamilla', 'cantidadCamilla')">
+                  </sigma-form-select>
+                </div>
+              </div>
+              <div fxFlex *ngIf="listaChequeoSst.tieneCamilla">
+                <div>
+                  <sigma-form-input [placeholder]="constants.chequeoSST.cantidadCamilla"
+                    formControlName="cantidadCamilla" [(ngModel)]="listaChequeoSst.cantidadCamilla">
+                  </sigma-form-input>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+            <div fxFlex="50" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+              <div fxFlex="50">
+                <sigma-form-select formControlName="tieneInmovilizadores"
+                  [(ngModel)]="listaChequeoSst.tieneInmovilizadoresSelect"
+                  [placeholder]="constants.chequeoSST.inmovilizadores" [opciones]="opciones" [listBy]="'name'"
+                  [id]="'value'"
+                  (ngModelChange)="changeTiene(listaChequeoSst.tieneInmovilizadoresSelect, 'tieneInmovilizadores', 'cantidadInmovilizadores')">
+                </sigma-form-select>
+              </div>
+              <div fxFlex *ngIf="listaChequeoSst.tieneInmovilizadores">
+                <div>
+                  <sigma-form-input [placeholder]="constants.chequeoSST.cantidadInmovilizadores"
+                    formControlName="cantidadInmovilizadores" [(ngModel)]="listaChequeoSst.cantidadInmovilizadores">
+                  </sigma-form-input>
+                </div>
+              </div>
+            </div>
+            <div fxFlex="50" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+              <div fxFlex="50">
+                <sigma-form-select formControlName="tieneExtintor" [(ngModel)]="listaChequeoSst.tieneExtintorSelect"
+                  [placeholder]="constants.chequeoSST.extintor" [opciones]="opciones" [listBy]="'name'" [id]="'value'"
+                  (ngModelChange)="changeTiene(listaChequeoSst.tieneExtintorSelect, 'tieneExtintor', 'cantidadExtintor')">
+                </sigma-form-select>
+              </div>
+              <div fxFlex *ngIf="listaChequeoSst.tieneExtintor">
+                <div>
+                  <sigma-form-input [placeholder]="constants.chequeoSST.cantidadExtintor"
+                    formControlName="cantidadExtintor" [(ngModel)]="listaChequeoSst.cantidadExtintor">
+                  </sigma-form-input>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+            <div fxFlex="50" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+              <div fxFlex="50">
+                <sigma-form-select formControlName="tieneSenalizacionSst"
+                  [(ngModel)]="listaChequeoSst.tieneSenalizacionSstSelect"
+                  [placeholder]="constants.chequeoSST.senalizacionSST" [opciones]="opciones" [listBy]="'name'"
+                  [id]="'value'"
+                  (ngModelChange)="changeTiene(listaChequeoSst.tieneSenalizacionSstSelect, 'tieneSenalizacionSst', 'cantidadSenalizacionSst')">
+                </sigma-form-select>
+              </div>
+              <div fxFlex *ngIf="listaChequeoSst.tieneSenalizacionSst">
+                <div>
+                  <sigma-form-input [placeholder]="constants.chequeoSST.cantidadSenalizacionSst"
+                    formControlName="cantidadSenalizacionSst" [(ngModel)]="listaChequeoSst.cantidadSenalizacionSst">
+                  </sigma-form-input>
+                </div>
+              </div>
+            </div>
+            <div fxFlex="50" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+              <div fxFlex="50">
+                <sigma-form-select formControlName="tieneMaquinaria" [(ngModel)]="listaChequeoSst.tieneMaquinariaSelect"
+                  [placeholder]="constants.chequeoSST.maquinaria" [opciones]="opciones" [listBy]="'name'" [id]="'value'"
+                  (ngModelChange)="changeTiene(listaChequeoSst.tieneMaquinariaSelect, 'tieneMaquinaria', 'cantidadMaquinaria')">
+                </sigma-form-select>
+              </div>
+              <div fxFlex *ngIf="listaChequeoSst.tieneMaquinaria">
+                <div>
+                  <sigma-form-input [placeholder]="constants.chequeoSST.cantidadMaquinaria"
+                    formControlName="cantidadMaquinaria" [(ngModel)]="listaChequeoSst.cantidadMaquinaria">
+                  </sigma-form-input>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+            <div fxFlex="50" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+              <div fxFlex="50">
+                <sigma-form-select formControlName="coi" [(ngModel)]="listaChequeoSst.coi"
+                  [path]="constants.path_administracion_coi" [placeholder]="constants.chequeoSST.coi">
+                </sigma-form-select>
+              </div>
+              <div fxFlex>
+                <div>
+                  <sigma-form-calendar formControlName="fechaCoi" [(ngModel)]="listaChequeoSst.fechaCoi"
+                    [objeto]="listaChequeoSst" [maxTarget]="'fechaCoi'" [placeholder]="constants.fechaCoi"
+                    [type]="constants.datepicker.types.calendar">
+                  </sigma-form-calendar>
+                </div>
+              </div>
+            </div>
+            <div fxFlex="50" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+              <div fxFlex="50">
+                <sigma-form-select formControlName="tieneAuxiliaresTrafico"
+                  [(ngModel)]="listaChequeoSst.tieneAuxiliaresTraficoSelect"
+                  [placeholder]="constants.chequeoSST.auxiliaresTrafico" [opciones]="opciones" [listBy]="'name'"
+                  [id]="'value'"
+                  (ngModelChange)="changeTiene(listaChequeoSst.tieneAuxiliaresTraficoSelect, 'tieneAuxiliaresTrafico', 'cantidadAuxiliaresTrafico')">
+                </sigma-form-select>
+              </div>
+              <div fxFlex *ngIf="listaChequeoSst.tieneAuxiliaresTrafico">
+                <div>
+                  <sigma-form-input [placeholder]="constants.chequeoSST.auxiliaresTrafico"
+                    formControlName="cantidadAuxiliaresTrafico" [(ngModel)]="listaChequeoSst.cantidadAuxiliaresTrafico">
+                  </sigma-form-input>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+            <div fxFlex="50" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+              <div fxFlex="50">
+                <sigma-form-select formControlName="usoEpp" [(ngModel)]="listaChequeoSst.usoEpp"
+                  [path]="constants.path_administracion_usoEpp" [placeholder]="constants.chequeoSST.usoEpp">
+                </sigma-form-select>
+              </div>
+              <div fxFlex>
+                <div>
+                  <sigma-form-input [placeholder]="constants.chequeoSST.cantidadUsoEpp" formControlName="cantidadUsoEpp"
+                    [(ngModel)]="listaChequeoSst.cantidadUsoEpp">
+                  </sigma-form-input>
+                </div>
+              </div>
+            </div>
+            <div fxFlex="50" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+              <div fxFlex="50">
+                <sigma-form-select formControlName="senalizacionPmt" [(ngModel)]="listaChequeoSst.senalizacionPmt"
+                  [path]="constants.path_administracion_senalizacionPmt"
+                  [placeholder]="constants.chequeoSST.senalizacionPmt">
+                </sigma-form-select>
+              </div>
+
+              <div fxFlex>
+                <div>
+                  <sigma-form-input [placeholder]="constants.chequeoSST.cantidadSenalizacionPmt"
+                    formControlName="cantidadSenalizacionPmt" [(ngModel)]="listaChequeoSst.cantidadSenalizacionPmt">
+                  </sigma-form-input>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Cargar Imagenes -->
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <div fxFlex>
+              <div>
+                <sigma-form-upload-file formControlName="archivoId" [(ngModel)]="listaChequeoSst.archivo"
+                  [placeholder]="constants.chequeoSST.archivoFormato" [maxUpload]="1"
+                  [accept]="'application/pdf, image/*, application/zip'">
+                </sigma-form-upload-file>
+              </div>
+            </div>
+          </div>
+
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <div fxFlex>
+              <label>{{ constants.chequeoSST.registroFotografico }}</label>
+              <sigma-form-input formControlName="registroFotografico"
+                [(ngModel)]="listaChequeoSst.listaChequeoSstArchivo" [class]="'hidden'"></sigma-form-input>
+            </div>
+            <div fxFlex="30">
+              <div *ngIf="listaChequeoSst.listaChequeoSstArchivo.length < 5">
+                <button type="button" [disabled]="form.get('registroFotografico').disabled" class="m-1"
+                  mat-raised-button color="primary" (click)="addFoto(listaChequeoSst.listaChequeoSstArchivo)">
+                  <mat-icon class="m-1">add</mat-icon> {{ constants.agregar }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0" class="mt-10">
+            <div fxFlex *ngFor="let foto of listaChequeoSst.listaChequeoSstArchivo">
+              <sigma-form-upload-file [(ngModel)]="foto.archivo" [placeholder]="constants.archivo" [maxUpload]="1"
+                [accept]="'image/*'" [ngModelOptions]="{standalone: true}"
+                [disabled]="form.get('registroFotografico').disabled">
+              </sigma-form-upload-file>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </mat-card-content>
+
+    <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+    <div fxLayout="row" fxLayoutAlign="end" class="mt-10">
+      <button mat-button color="warn" class="m-1" (click)="back()">
+        <mat-icon class="m-1">close</mat-icon>
+        {{ constants.cancelar }}
+      </button>
+      <button *ngIf="!disabledForm" [disabled]="processing" mat-raised-button color="primary" class="m-1"
+        (click)="onSubmit()">
+        <mat-icon class="m-1">save</mat-icon>
+        {{ constants.guardar }}
+      </button>
+      <button *ngIf="!disabledForm" [disabled]="disableSubmit" mat-raised-button color="primary" class="m-1"
+        (click)="saveAllShow()">
+        <mat-icon class="m-1">save</mat-icon>
+        {{ constants.guardarTodo }}
+      </button>
+    </div>
+
+    <div *ngIf="listaChequeoSst.id > 0 && !disabledForm && showTransition" class="w-100">
+      <sigma-mantenimiento-records [mantId]="mantenimiento.id"></sigma-mantenimiento-records>
+      <sigma-seleccion-transicion [(data)]="data" [transiciones]="transicionesIndividuales"
+        (executeTransition)="saveAll()">
+      </sigma-seleccion-transicion>
+    </div>
+  </div>
+
+</div>

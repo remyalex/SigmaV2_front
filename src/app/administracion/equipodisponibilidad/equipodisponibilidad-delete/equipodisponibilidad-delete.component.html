@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>{{ constants.eliminar }}</h2>
+
+<h3 mat-dialog-title>{{ constants.eliminarRegistro }}</h3>
+
+<mat-dialog-content [formGroup]="form">
+  <input type="hidden" formControlName="id">
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions fxLayoutAlign="end" fxLayout="row" fxLayout.lt-sm="column">
+  <button class="mb-10 w-100" fxFlex mat-button class="m-1" color="warn" (click)="close()" [disabled]="disableSubmit" >
+  	<mat-icon class="m-1">clear</mat-icon>
+  	{{ constants.no }}
+  </button>
+  <button class="mb-10 w-100" fxFlex mat-raised-button class="m-1" color="primary" (click)="save()" 
+  	*sigmaIsGranted="constants.permiso_administracion_equipodisponibilidad_delete" [disabled]="disableSubmit" >
+  	<mat-icon class="m-1">check_circle_outline</mat-icon>
+	{{ constants.si }}
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,18 @@
+<div *ngIf="show">
+  <div *ngIf="showFile">
+    <div *ngIf="loading" fxLayoutAlign="center center">
+      <mat-spinner [diameter]="20"></mat-spinner>
+    </div>
+    <div fxLayoutAlign="center center">
+      <img *ngIf="!loading" class="sigma-img" [src]="imageSrc | safeResourceUrl" alt="file.nombre">
+    </div>
+  </div>
+  <div *ngIf="!showFile">
+    <a id="descargar" mat-stroked-button color="accent" target="_blank" (click)="descargar()">
+      <mat-icon class="m-1">cloud_download</mat-icon>
+    </a>
+  </div>
+</div>
+<div *ngIf="!show">
+  <span>{{ constants.noDocumento }}</span>
+</div>

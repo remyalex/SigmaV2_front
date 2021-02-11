@@ -1,0 +1,93 @@
+<!-- INICIO COMPONENTE DUAL-LIST -->
+<!-- -------------------------- -->
+<div class="dual-list" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+  <div class="listbox" fxFlex.sm="100" fxFlex="50">
+    <button
+      type="button"
+      name="addBtn"
+      class="mat-raised-button mat-primary w-100 mb-10"
+      (click)="moveItem(available, confirmed)"
+      [ngClass]="direction() ? 'point-right' : 'point-left'"
+      [disabled]="available.pick.length == 0"
+    >
+      {{ format.add }}
+    </button>
+    <form *ngIf="filter" class="filter">
+      <input class="form-control" name="filterSource" [(ngModel)]="available.picker" (ngModelChange)="onFilter(available)" />
+    </form>
+    <div class="record-picker">
+      <ul
+        [ngStyle]="{ 'max-height': height, 'min-height': height }"
+        [ngClass]="{ over: available.dragOver }"
+        (drop)="drop($event, confirmed)"
+        (dragover)="allowDrop($event, available)"
+        (dragleave)="dragLeave()"
+      >
+        <li
+          *ngFor="let item of available.sift; let idx = index"
+          (click)="disabled ? null : selectItem(available, item); shiftClick($event, idx, available, item)"
+          [ngClass]="{ selected: isItemSelected(available.pick, item), disabled: disabled }"
+          [draggable]="!disabled && format.draggable"
+          (dragstart)="drag($event, item, available)"
+          (dragend)="dragEnd(available)"
+        >
+          <label>{{ item.nombre }}</label>
+        </li>
+      </ul>
+    </div>
+    <div class="button-bar mb-10" fxLayoutAlign="space-between">
+      <button type="button" class="mat-raised-button mat-primary" (click)="selectAll(available)" [disabled]="disabled || isAllSelected(available)">
+        {{ format.all }}
+      </button>
+      <button type="button" class="mat-raised-button mat-accent" (click)="selectNone(available)" [disabled]="!isAnySelected(available)">
+        {{ format.none }}
+      </button>
+    </div>
+  </div>
+
+  <div class="listbox" fxFlex.sm="100" fxFlex="50">
+    <button
+      type="button"
+      name="removeBtn"
+      class="mat-raised-button w-100 mat-warn mb-10"
+      (click)="moveItemConfirmed(confirmed, available)"
+      [ngClass]="direction() ? 'point-left' : 'point-right'"
+      [disabled]="confirmed.pick.length == 0"
+    >
+      {{ format.remove }}
+    </button>
+    <form *ngIf="filter" class="filter">
+      <input class="form-control" name="filterDestination" [(ngModel)]="confirmed.picker" (ngModelChange)="onFilter(confirmed)" />
+    </form>
+    <div class="record-picker">
+      <ul
+        [ngStyle]="{ 'max-height': height, 'min-height': height }"
+        [ngClass]="{ over: confirmed.dragOver }"
+        (drop)="drop($event, available)"
+        (dragover)="allowDrop($event, confirmed)"
+        (dragleave)="dragLeave()"
+      >
+        <li
+          *ngFor="let itemS of confirmed.list; let idx = index"
+          (click)="disabled ? null : selectItem(confirmed, itemS); shiftClick($event, idx, confirmed, itemS)"
+          [ngClass]="{ selected: isItemSelected(confirmed.pick, itemS), disabled: disabled }"
+          [draggable]="!disabled && format.draggable"
+          (dragstart)="drag($event, itemS, confirmed)"
+          (dragend)="dragEnd(confirmed)"
+        >
+          <label>{{ itemS.nombre }}</label>
+        </li>
+      </ul>
+    </div>
+    <div class="button-bar mb-10" fxLayoutAlign="space-between">
+      <button type="button" class="mat-raised-button mat-primary" (click)="selectAll(confirmed)" [disabled]="disabled || isAllSelected(confirmed)">
+        {{ format.all }}
+      </button>
+      <button type="button" class="mat-raised-button mat-accent" (click)="selectNone(confirmed)" [disabled]="!isAnySelected(confirmed)">
+        {{ format.none }}
+      </button>
+    </div>
+  </div>
+</div>  
+<!-- -------------------------- -->
+<!-- FIN COMPONENTE DUAL-LIST -->

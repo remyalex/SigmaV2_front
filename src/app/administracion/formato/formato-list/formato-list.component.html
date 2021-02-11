@@ -1,0 +1,133 @@
+<div>
+  <div>
+    <mat-card-header fxLayoutAlign="center">
+      <mat-card-subtitle>
+        <h2>{{ constants.titulo }}</h2>
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxLayoutWrap fxLayoutGap="0.5%"
+      fxLayoutAlign="center">
+      <div fxFlex="50%">
+        <form fxLayout="column" (ngSubmit)="search()">
+
+          <div fxFlex="100">
+            <sigma-form-select [path]="constants.path_administracion_formato_tipoDocumentoId"
+              placeholder="{{ constants.tipoDocumentoId }}" required="true" name="tipoDocumento"
+              [(ngModel)]="criteria.tipoDocumento" [listBy]="'descripcion'">
+            </sigma-form-select>
+            <!-- <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.codigo }}" id="codigo" [(ngModel)]="criteria.codigo"
+                name="codigo" type="text" />
+            </mat-form-field> -->
+          </div>
+        </form>
+      </div>
+      <div fxFlex="50%">
+        <button type="submit" mat-raised-button color="primary" class="m-1" (click)="search()">
+          <mat-icon>search</mat-icon> {{ constants.buscar }}
+        </button>
+        <button (click)="clear()" mat-raised-button color="warn" class="m-1">
+          <mat-icon>clear</mat-icon> {{ constants.limpiar }}
+        </button>
+        <button [disabled]="dataSource.totalElements$.source['_value'] <= 0" layout="row" mat-raised-button
+          color="primary" class="m-1" (click)="exportAsXLSX()"
+          *sigmaIsGranted="constants.permiso_administracion_formato_export">
+          <mat-icon>get_app</mat-icon>
+          {{ constants.exportar }}
+          <mat-icon *ngIf="cargandoExcel">
+            <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+          </mat-icon>
+        </button>
+      </div>
+    </mat-card-content>
+  </div>
+</div>
+
+<div class="mat-elevation-z8">
+  <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center">
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+  <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+    <mat-icon class="m-1">sms_failed</mat-icon>
+    <h4> {{dataSource.errorMessage$ | async}}</h4>
+  </div>
+
+  <mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort>
+
+    <ng-container matColumnDef="activo">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.activo }} </mat-header-cell>
+      <mat-cell *matCellDef="let formato" [attr.data-label]="constants.activo">
+        <span class="dev-color-red" [hidden]="formato.activo">{{ constants.no }}</span>
+        <span class="dev-color-green" [hidden]="!formato.activo">{{ constants.si }}</span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="codigo">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.codigo }} </mat-header-cell>
+      <mat-cell *matCellDef="let formato" [attr.data-label]="constants.codigo">
+        {{formato.codigo}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="archivoId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.archivo }} </mat-header-cell>
+      <mat-cell *matCellDef="let formato" [attr.data-label]="constants.archivo">
+        <sigma-show-file id="{{ formato.archivo.id }}"></sigma-show-file>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="plantilla">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.plantilla }} </mat-header-cell>
+      <mat-cell *matCellDef="let formato" [attr.data-label]="constants.plantilla">
+        {{formato.plantilla}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="tipoDocumentoId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.tipoDocumentoId }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let formato" [attr.data-label]="constants.tipoDocumentoId">
+        {{ formato.tipoDocumento?.descripcion }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+      <mat-cell *matCellDef="let formato" [attr.data-label]="constants.acciones">
+        <div fxLayout.lt-md="row" fxLayout.lt-xl="column">
+          <div fxFlex>
+            <button mat-raised-button color="primary" (click)="detail(formato)" class="m-1"
+              *sigmaIsGranted="constants.permiso_administracion_formato_view">
+              <mat-icon matTooltip="Detalles" matTooltipPosition="above">open_in_new</mat-icon>
+            </button>
+            <button mat-raised-button color="primary" (click)="edit(formato)" class="m-1"
+              *sigmaIsGranted="constants.permiso_administracion_formato_update">
+              <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+            </button>
+          </div>
+          <div fxFlex fxLayoutAlign="start">
+            <div fxLayout="row">
+              <div *ngIf="!formato.noSecciones">
+                <button mat-raised-button color="warn" (click)="delete(formato)" class="m-1"
+                  *sigmaIsGranted="constants.permiso_administracion_formato_delete">
+                  <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+                </button>
+              </div>
+              <a (click)="secciones(formato)" mat-raised-button color="primary" class="m-1"
+                matTooltip="{{ constants.listSecciones }}" matTooltipPosition="above"
+                *sigmaIsGranted="constantsSeccion.permiso_administracion_formatoseccion_list">
+                <mat-icon>list</mat-icon>
+              </a>
+            </div>
+          </div>
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size"
+    [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+</div>

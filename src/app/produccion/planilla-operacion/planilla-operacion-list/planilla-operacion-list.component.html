@@ -1,0 +1,85 @@
+<div>
+  <div>
+    <mat-card-header fxLayoutAlign="center" class="mb-10">
+      <mat-card-subtitle>
+        <h2>{{ constants.registrarPlanilla }}</h2>
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form (ngSubmit)="search()">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="0.8%" fxLayoutGap.lt-md="0" fxLayoutAlign="start">
+          <div fxFlex="100">
+            <sigma-form-select [path]="constants.path_administracion_tipo_tarjeta"
+              [(ngModel)]="criteria.tipoTarjetaId" name="tipoTarjetaId" placeholder="{{ constants.tipoTarjeta }}">
+            </sigma-form-select>
+          </div>
+          <div fxFlex="50%">
+            <button type="submit" mat-raised-button color="primary" class="m-1" (click)="search()">
+              <mat-icon>search</mat-icon> {{ constants.buscar }}
+            </button>
+            <button (click)="clear()" mat-raised-button color="warn" class="m-1">
+              <mat-icon>clear</mat-icon> {{ constants.limpiar }}
+            </button>
+          </div>
+        </div>
+
+      </form>
+    </mat-card-content>
+  </div>
+</div>
+
+
+<div class="mat-elevation-z8">
+  <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center">
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+
+  <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+    <mat-icon class="m-1">sms_failed</mat-icon>
+    <h4> {{dataSource.errorMessage$ | async}}</h4>
+  </div>
+
+  <mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort>
+
+
+    <ng-container matColumnDef="numeroTarjeta">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.numeroId }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.numeroTarjeta">
+        {{equipo.numeroTarjeta}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="fechaOperacion">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaOperacion }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.fechaOperacion">
+        {{getHumanDate(equipo.fechaOperacion)}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="equipoConductor">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.operador }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.equipoConductor">
+        {{equipo.equipoConductor?.conductor?.nombres}} {{equipo.equipoConductor?.conductor?.apellidos}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.acciones">
+        <button mat-raised-button color="primary" (click)="edit(equipo)" class="m-1"
+          *sigmaIsGranted="constants.permiso_produccion_registrar_planilla_operacion_update">
+          <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+        </button>
+        <button mat-raised-button color="warn" (click)="delete(equipo)" class="m-1"
+          *sigmaIsGranted="constants.permiso_produccion_registrar_planilla_operacion_delete">
+          <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns; let i = index"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size"
+    [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+</div>

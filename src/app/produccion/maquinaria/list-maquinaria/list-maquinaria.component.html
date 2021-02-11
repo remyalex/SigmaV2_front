@@ -1,0 +1,122 @@
+<form (ngSubmit)="search()" class="mb-10">
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <sigma-form-select [path]="constants.path_administracion_tipoMaquinaria" [(ngModel)]="criteria.tipoEquipoId"
+        name="tipoEquipoId" placeholder="{{ constants.tipoMaquinaria }}">
+      </sigma-form-select>
+    </div>
+
+    <div fxFlex>
+      <sigma-form-select [path]="constants.path_administracion_claseEquipo" [(ngModel)]="criteria.claseEquipoId"
+        name="claseEquipoId" placeholder="{{ constants.claseEquipo }}">
+      </sigma-form-select>
+    </div>
+
+    <div fxFlex>
+      <sigma-form-select [path]="constants.path_administracion_marcaEquipo" [(ngModel)]="criteria.marcaEquipoId"
+        name="marcaEquipoId" placeholder="{{ constants.marca }}">
+      </sigma-form-select>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <sigma-form-select [path]="constants.path_administracion_equipo_lugarUmvId" [(ngModel)]="criteria.lugarEquipoId"
+        name="lugarId" placeholder="{{ constants.lugar }}" [listBy]="'nombre'">
+      </sigma-form-select>
+    </div>
+
+    <div fxFlex>
+      <sigma-form-select [path]="constants.path_produccion_maquinaria_list" listBy="placaInventario"
+        [(ngModel)]="placaInventarioCriteria" name="placaInventario" placeholder="{{ constants.placaInventario }}">
+      </sigma-form-select>
+    </div>
+
+    <div fxFlex>
+      <button type="submit" mat-raised-button color="primary" class="m-1" (click)="search()">
+        <mat-icon class="m-1">search</mat-icon> {{ constants.buscar }}
+      </button>
+      <button (click)="clear()" mat-raised-button color="warn" class="m-1">
+        <mat-icon class="m-1">clear</mat-icon> {{ constants.limpiar }}
+      </button>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0" fxLayoutAlign="start">
+    
+  </div>
+</form>
+
+<div class="mat-elevation-z8 mt-10">
+<div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+<div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+  <mat-icon class="m-1">sms_failed</mat-icon> <h4>{{dataSource.errorMessage$ | async}}</h4>
+</div>
+
+
+<mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$"  matSort>
+
+  <ng-container matColumnDef="id">
+    <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.numero}} </mat-header-cell>
+    <mat-cell *matCellDef="let maq" [attr.data-label]="constants.numero"> {{maq.id}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="numeroContrato">
+    <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.numeroContrato}} </mat-header-cell>
+    <mat-cell *matCellDef="let maq" [attr.data-label]="constants.numeroContrato"> {{maq.numeroContrato}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="contratista">
+    <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.contratista}} </mat-header-cell>
+    <mat-cell *matCellDef="let maq" [attr.data-label]="constants.contratista"> {{maq.contratista}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="tipoEquipoId">
+    <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.tipoMaquinaria}} </mat-header-cell>
+    <mat-cell *matCellDef="let maq" [attr.data-label]="constants.tipoMaquinaria"> {{maq.equipoTipo?.valor}}
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="claseEquipoId">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{constants.claseEquipo}} </mat-header-cell>
+    <mat-cell *matCellDef="let maq" [attr.data-label]="constants.claseEquipo"> {{maq.claseEquipo?.valor}}
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="placaInventario">
+    <mat-header-cell *matHeaderCellDef mat-sort-header> {{constants.placaInventario}} </mat-header-cell>
+    <mat-cell *matCellDef="let maq" [attr.data-label]="constants.placaInventario"> {{maq.placaInventario}}
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="marcaEquipoId">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>{{constants.marca}} </mat-header-cell>
+    <mat-cell *matCellDef="let maq" [attr.data-label]="constants.marca"> {{maq.marcaEquipo?.valor}} </mat-cell>
+  </ng-container>
+  <ng-container matColumnDef="lugarEquipoId">
+    <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.lugar }}
+    </mat-header-cell>
+    <mat-cell *matCellDef="let maq" [attr.data-label]="constants.lugar">
+      {{maq.lugar?.nombre}}
+    </mat-cell>
+  </ng-container>
+  
+  <ng-container matColumnDef="acciones">
+    <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+    <mat-cell *matCellDef="let maq" [attr.data-label]="constants.acciones">
+      <button *ngFor="let accion of acciones" mat-raised-button color="warn" (click)="executeAction(maq, accion)"
+        class="m-1">
+        <mat-icon matTooltip="{{accion.tooltip}}" matTooltipPosition="above">{{accion.icon}}</mat-icon>
+      </button>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+</mat-table>
+
+<mat-paginator #paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size"
+  [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+</div>

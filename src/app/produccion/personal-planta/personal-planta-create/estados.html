@@ -1,0 +1,31 @@
+<h1 mat-dialog-title>Estados</h1>
+<div mat-dialog-content>
+<form #forma1="ngForm" novalidate=""  style="height: 250px;">
+        <mat-form-field class="formbasic-full-width">
+                <mat-label>Estado</mat-label>
+                <mat-select  [(ngModel)]="data.id" placeholder="Estado"  name="id"  #id="ngModel" required>
+                    <mat-option *ngFor="let item of data.dataEstados" [value]="item.id">
+                        {{item.nombre}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="formbasic-full-width">
+                <input matInput [(ngModel)]="data.observaciones" placeholder="Observaciones" name="observaciones" required maxlength="250" #observaciones="ngModel">
+            </mat-form-field>
+
+            <mat-form-field class="formbasic-full-width">
+                <input matInput [matDatepicker]="dtfechaEstado" placeholder="Fecha Estado" #fechaEstado="ngModel" required [(ngModel)]="data.fechaEstado" name="fechaEstado">
+                <mat-datepicker-toggle matSuffix [for]="dtfechaEstado"></mat-datepicker-toggle>
+                <mat-datepicker #dtfechaEstado></mat-datepicker>
+            </mat-form-field>
+
+        <mat-dialog-actions align="end">
+            <button mat-button (click)="onNoClick()">Cerrar</button>
+            <button type="button" mat-raised-button [mat-dialog-close]="data" [disabled]="!forma1.valid">Guardar</button>
+        </mat-dialog-actions>
+
+
+</form>
+
+</div>

@@ -1,0 +1,96 @@
+<h2 mat-dialog-title>Adicionar falla</h2>
+
+<div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+  <h5>{{ constants.informacionCampoObligatorio }}</h5>
+</div>
+
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+      <div fxFlex *ngIf="visibilityUnidadMuestreo">
+        <sigma-form-select-multi-labels formControlName="unidadMuestreoFalla" [(ngModel)]="falla.unidadMuestreo"
+          [opciones]="listado_muestras" [placeholder]="constants.unidadMuestreo" [labelOption]="['consecutivo','abscisaInicial','abscisaFinal']"
+          [listBy]="'abscisaInicial'" (ngModelChange)="cambioUnidad($event, falla.area)" >
+        </sigma-form-select-multi-labels>
+      </div>
+      <div fxFlex *ngIf="visibilityTipoFalla">
+        <sigma-form-select-desc-valor formControlName="tipoFalla" [(ngModel)]="falla.tipoFalla"
+          (ngModelChange)="cambioTipoFalla($event)" 
+          [path]="path_tipo_falla" [placeholder]="constants.tipo_falla"> 
+        </sigma-form-select-desc-valor>
+      </div>
+    </div>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+      <div fxFlex *ngIf="visibilityTipoSuperficie">
+        <sigma-form-select formControlName="tipoSuperficieFalla"
+        [(ngModel)]="falla.tipoSuperficie"
+        [path]="constants.path_workflow_diagnostico_encabezado_tipo_superficie"
+        [placeholder]="constants.tipoSuperficie" [listBy]="'descripcion'">
+        </sigma-form-select>
+      </div>
+      <div fxFlex>
+        <sigma-form-select formControlName="severidadFalla" [(ngModel)]="falla.severidad"
+          [path]="constants.path_workflow_diagnostico_fallas_severidad" [placeholder]="constants.severidad"
+          [listBy]="'descripcion'"  [orderBy]="'valor'" >
+        </sigma-form-select>
+      </div> 
+    </div>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+      <div fxFlex *ngIf="visibilityLongitudFalla">
+        <sigma-form-number formControlName="longitudFalla" [(ngModel)]="falla.longitud" 
+          [placeholder]="labelLongitud" [numericInput]="true" 
+          (ngModelChange)="calcularAreaFalla()">
+        </sigma-form-number>
+      </div>
+      <div fxFlex *ngIf="visibilityAnchoFalla">
+        <sigma-form-number formControlName="anchoFalla" [(ngModel)]="falla.ancho" 
+          [placeholder]="labelAncho" [numericInput]="true" (ngModelChange)="calcularAreaFalla()">
+        </sigma-form-number>
+      </div>
+    </div>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+      <div fxFlex *ngIf="visibilityAnchoLosasFalla">
+        <sigma-form-number formControlName="anchoLosasFalla" [(ngModel)]="falla.anchoLosa"
+        [numericInput]="true" (ngModelChange)="calcularAreaFalla()" [placeholder]="constants.longitudLosa">
+        </sigma-form-number>
+      </div>
+      <div fxFlex *ngIf="visibilityLongitudLosasFalla">
+        <sigma-form-number formControlName="longitudLosasFalla" [(ngModel)]="falla.longitudLosa" 
+        [numericInput]="true" (ngModelChange)="calcularAreaFalla()" [placeholder]="constants.anchoLosa">
+        </sigma-form-number>
+      </div>
+    </div>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+      <div fxFlex *ngIf="visibilityNumeroLosas">
+        <sigma-form-number formControlName="numeroLosasFalla" [(ngModel)]="falla.numeroLosas"
+          [errors]="[{name: 'max', message: 'El número de losas no debe ser mayor que el de la unidad de muestreo.'}]"
+          [numericInput]="true" [placeholder]="constants.numeroLosas" (ngModelChange)="calcularAreaFalla()">
+        </sigma-form-number>
+      </div>
+      <div fxFlex>
+        <sigma-form-number readonly formControlName="areaFalla" [(ngModel)]="falla.area" [placeholder]="constants.area" 
+        [errors]="[{name: 'max', message: mensajeFalla}]">
+        </sigma-form-number>
+      </div>
+    </div>
+    <div class="mt-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+      <div fxFlex="50" *ngIf="visibilityTipoIntervencionFalla">
+        <sigma-form-select formControlName="tipoIntervencionFalla" [(ngModel)]="falla.tipoIntervencion"
+          [path]="path_tipo_intervencion"
+          [placeholder]="constants.tipoIntervencion" [listBy]="'descripcion'">
+        </sigma-form-select>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> Cancelar
+  </button>
+  <button mat-raised-button color="primary" appPrevenirMultiplesClicks (clearClick)="save()">
+    <mat-icon class="m-1">save</mat-icon> Guardar
+  </button>
+</mat-dialog-actions>

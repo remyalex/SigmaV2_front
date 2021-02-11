@@ -1,0 +1,24 @@
+<div fxLayout="column" fxLayout.gt-sm="row wrap">
+    
+
+    <div fxFlex="100" class="flex-p">
+        <mat-card>
+            <div fxLayoutAlign="end">
+                <button mat-raised-button class="m-1 mb-10" color="primary" (click)="create();">
+                    <mat-icon class="m-1">note_add</mat-icon>{{ constants.crearNuevo }}
+                </button>
+            </div>
+            
+            <mat-card-header fxLayoutAlign="center" class="mb-10">
+                <mat-card-subtitle>
+                    <h2>Crear maquinaria o equipo</h2>
+                </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <sigma-list-maquinaria *sigmaIsGranted="constants.permiso_produccion_maquinaria_list" 
+                    [acciones]="acciones" (runAction)="runAction($event)" #listMaquinaria>
+                </sigma-list-maquinaria>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

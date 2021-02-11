@@ -1,0 +1,121 @@
+<div>
+  <div fxFlex="20" fxLayout="row">
+    <sigma-form-select [path]="'/api/administracion/lista/UMV_ZONAS/items'" [(ngModel)]="zona" name="zona"
+      placeholder="Zona" [listBy]="'descripcion'" (ngModelChange)="filtrar()"
+      [disabled]="estadoAsignacion !== 'asignacion'">
+    </sigma-form-select>
+
+  </div>
+</div>
+
+<div>
+  <div class="mat-elevation-z8">
+    
+    <mat-table #table class="col-x" [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="select">
+        <mat-header-cell *matHeaderCellDef>
+          <mat-checkbox 
+            (change)="$event ? seleccionarTodos($event) : null" [disabled]="estadoAsignacion === 'guardado'"
+            [checked]="mantenimientos.length == mantenimientosSeleccionados.length">
+          </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let mantenimiemnto">
+          <mat-checkbox #listCheckboxes (click)="$event.stopPropagation()" [disabled]="estadoAsignacion === 'guardado'"
+            (change)="$event ? seleccionMantenimiento(mantenimiemnto, $event) : null" 
+            [checked]="check(mantenimiemnto)">
+          </mat-checkbox>
+        </mat-cell>
+      </ng-container>  
+
+      <ng-container matColumnDef="posicion">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> No. </mat-header-cell>
+        <mat-cell *matCellDef="let mantenimiento" data-label="No."> 
+          {{mantenimiento.posicion}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="pk">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> PK </mat-header-cell>
+        <mat-cell *matCellDef="let mantenimiento" data-label="PK"> 
+          {{ mantenimiento.pk }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="civ">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> CIV </mat-header-cell>
+        <mat-cell *matCellDef="let mantenimiento" data-label="CIV"> 
+          {{ mantenimiento.civ }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fechaInicioVisita">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Inicial de Programación de Intervención </mat-header-cell>
+        <mat-cell *matCellDef="let mantenimiento" data-label="Fecha Inicial de Programación de Intervención"> 
+          {{mantenimiento.fechaInicioVisita}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fechaFinVisita">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Final de Programación de Intervención </mat-header-cell>
+        <mat-cell *matCellDef="let mantenimiento" data-label="Fecha Final de Programación de Intervención"> 
+          {{mantenimiento.fechaFinVisita}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="turnoEjecucion">
+        <mat-header-cell *matHeaderCellDef> Turno de Ejecución </mat-header-cell>
+        <mat-cell *matCellDef="let mantenimiento" data-label="Turno de Ejecución"> 
+          <div class="table-input"> 
+            <sigma-form-select [path]="'/api/administracion/lista/TAB_CONSOLIDADO_DIARIO_OBRA_ID_TIPO_JORNADA/items'"
+              [(ngModel)]="mantenimiento.intervenciones[0].turnoResidenteAmbiental" [listBy]="'descripcion'"
+              [ngModelOptions]="{standalone: true}" [disabled]="estadoAsignacion === 'guardado'">
+            </sigma-form-select>
+          </div>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="nombreZona">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Zona </mat-header-cell>
+        <mat-cell *matCellDef="let mantenimiento" data-label="Zona">
+          {{mantenimiento.nombreZona}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="nombreLocalidad">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Localidad </mat-header-cell>
+        <mat-cell *matCellDef="let mantenimiento" data-label="Localidad">
+          {{ mantenimiento.nombreLocalidad }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="nombreUpla">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> UPZ </mat-header-cell>
+        <mat-cell *matCellDef="let mantenimiento" data-label="UPZ">
+          {{ mantenimiento.nombreUpla }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="nombreCuadrante">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Cuadrante </mat-header-cell>
+        <mat-cell *matCellDef="let mantenimiento" data-label="Cuadrante">
+          {{ mantenimiento.nombreCuadrante }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="nombreBarrio">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Barrio </mat-header-cell>
+        <mat-cell *matCellDef="let mantenimiento" data-label="Barrio">
+          {{ mantenimiento.nombreBarrio }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="nombreResidenteAmbiental">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre Residente Ambiental </mat-header-cell>
+        <mat-cell *matCellDef="let mantenimiento" data-label="Nombre Residente Ambiental">
+            {{ mantenimiento.nombreResidenteAmbiental }}
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+    </mat-table>
+
+    <!-- <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator> -->
+    <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+  </div>
+</div>

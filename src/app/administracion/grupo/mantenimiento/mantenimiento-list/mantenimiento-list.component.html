@@ -1,0 +1,148 @@
+<div fxLayout="column" fxLayout.gt-sm="row wrap">
+  <div fxFlex="100" class="flex-p">
+
+    <mat-card-content>
+      <div fxLayoutAlign="end">
+        <button mat-raised-button color="primary" class="m-1 mb-10" (click)="create();"
+          *sigmaIsGranted="constants.permiso_administracion_mantenimiento_create">
+          <mat-icon class="m-1">note_add</mat-icon> {{ constants.agregarMantenimiento }}
+        </button>
+      </div>
+
+      <div *sigmaIsGranted="constants.permiso_administracion_mantenimiento_list">
+        <div>
+          <div>
+            <mat-card-header fxLayoutAlign="center">
+              <mat-card-subtitle>
+                <h2>Calzadas</h2>
+              </mat-card-subtitle>
+            </mat-card-header>
+
+            <mat-card-content class="container">
+              <div class="w-100">
+                <form fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutAlign="center">
+                  <div fxFlex>
+                    <mat-form-field class="w-100">
+                      <input matInput placeholder="{{ constants.pk }}" id="pk" [(ngModel)]="criteria.pk" name="pk"
+                        type="text" />
+                    </mat-form-field>
+                  </div>
+
+                  <div fxFlex>
+                    <button type="submit" mat-raised-button color="primary" class="m-1" (click)="search()">
+                      <mat-icon>search</mat-icon> {{ constants.buscar }}
+                    </button>
+                    <button (click)="clear()" mat-raised-button color="warn" class="m-1">
+                      <mat-icon>clear</mat-icon> {{ constants.limpiar }}
+                    </button>
+                    <button layout="row" mat-raised-button [disabled]="exportOption" color="primary" class="m-1"
+                      (click)="exportAsXLSX()" *sigmaIsGranted="constants.permiso_administracion_mantenimiento_export">
+                      <mat-icon>get_app</mat-icon>
+                      {{ constants.exportar }}
+                      <mat-icon *ngIf="cargandoExcel">
+                        <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+                      </mat-icon>
+                    </button>
+                    <button fxFlex.sm="50" fxFlex.xs="50" mat-raised-button color="primary" class="m-1"
+                      (click)="importar()">
+                      <mat-icon>cloud_upload</mat-icon>
+                      Importar
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+            </mat-card-content>
+          </div>
+        </div>
+
+        <div class="mat-elevation-z8">
+          <div *ngIf="loader" fxLayout="column" fxLayoutAlign="center center">
+            <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+          </div>
+          <div class="msj_no_results" *ngIf="noInfoToShow" fxLayout="row" fxLayoutAlign="center center">
+            <mat-icon class="m-1">sms_failed</mat-icon>
+            <h4>No hay Pks asignados al grupo</h4>
+          </div>
+
+          <mat-table #table [dataSource]="listaMantenimientos" [hidden]="!loader" matSort>
+
+            <ng-container matColumnDef="pk">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.pk }} </mat-header-cell>
+              <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.pk">
+                {{mantenimiento.pk}}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="localidad.nombre">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.localidad }} </mat-header-cell>
+              <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.localidad">
+                {{mantenimiento.localidad != null ? mantenimiento.localidad.nombre: ''}}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="zona.nombre">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.zona }} </mat-header-cell>
+              <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.zona">
+                {{mantenimiento.zona != null ? mantenimiento.zona.nombre: ''}}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="barrio.nombre">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.barrio }} </mat-header-cell>
+              <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.barrio">
+                {{mantenimiento.barrio != null ? mantenimiento.barrio.nombre: ''}}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="upla.nombre">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.upla }} </mat-header-cell>
+              <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.upla">
+                {{mantenimiento.upla != null ? mantenimiento.upla.nombre: ''}}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="cuadrante.nombre">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.cuadrante }} </mat-header-cell>
+              <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.cuadrante">
+                {{mantenimiento.cuadrante != null ? mantenimiento.cuadrante.nombre: ''}}
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="activo">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.activo }} </mat-header-cell>
+              <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.activo">
+                <span class="dev-color-red" [hidden]="mantenimiento.grupoActivo">{{ constants.no }}</span>
+                <span class="dev-color-green" [hidden]="!mantenimiento.grupoActivo">{{ constants.si }}</span>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="estado">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Eliminado </mat-header-cell>
+              <mat-cell *matCellDef="let mantenimiento" data-label="Eliminado">
+                <span [hidden]="!mantenimiento.grupoActivo">{{ constants.no }}</span>
+                <span [hidden]="mantenimiento.grupoActivo">{{ constants.si }}</span>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="acciones">
+              <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+              <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.acciones">
+                <button mat-raised-button color="warn" (click)="delete(mantenimiento)" class="m-1"
+                  *sigmaIsGranted="constants.permiso_administracion_mantenimiento_delete">
+                  <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+                </button>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="columns" [hidden]="!loader"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+          </mat-table>
+          <mat-paginator #paginator [length]="lengthList" [pageSize]="criteria.size" [pageSizeOptions]="[5, 10, 20]"
+            [hidden]="!loader" showFirstLastButtons></mat-paginator>
+        </div>
+      </div>
+    </mat-card-content>
+
+  </div>
+</div>

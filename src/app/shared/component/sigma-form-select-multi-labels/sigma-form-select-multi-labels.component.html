@@ -1,0 +1,41 @@
+<mat-form-field class="w-100">
+  
+  <mat-select
+    #select 
+    [placeholder]="placeholder"
+    [(value)]="value"
+    [formControl]="control"
+    [required]="required"
+    (selectionChange)=changeValue($event.value)
+    [multiple]="multiple"
+    [compareWith]="compararObjetos">
+
+    <mat-option *ngIf="!multiple" value>{{ constants.seleccionar }}</mat-option>
+
+    <mat-option *ngFor="let option of optionsList" [value]="option">
+      {{option[labelOption[0]] + ' (' + option[labelOption[1]] + 'm - ' + option[labelOption[2]] + 'm)' }}
+    </mat-option>
+  </mat-select>
+
+  <mat-icon *ngIf="loading" fxLayoutAlign="center end" matSuffix color="warn">
+    <mat-spinner [diameter]="15"></mat-spinner>
+  </mat-icon>
+   
+  <mat-error *ngFor="let error of basicErrors">
+    <mat-error *ngIf="control.hasError(error.name)">
+      {{ error.message }}
+    </mat-error>
+  </mat-error>
+</mat-form-field>
+
+<!--<sigma-form-select-multi-labels 
+  formControlName="control" -> (Obligatorio, hace la conexión con el controlador)
+  [(ngModel)]="modelo" -> (Obligatorio, el binding con el modelo)
+  [path]="url" -> (Obligatorio, url para la petición de datos)
+  [placeholder]="texto" -> (Opcional, campo para el label)
+  [multiple]="true|false" -> (Opcional, Permite seleccionar uno o más elementes )
+  [listBy]="atributo" -> (Opcional, es el valor que presente en las opciones, por defecto esta 'valor')
+  [id]="atributo" -> (Opcional, es el valor que presente en el value de las opciones, por defecto esta 'id')
+  [errors]="[{name: 'error', message: 'mensaje'}]" -> (Opcional, en caso de necesaitar agregar nuevos errores al control)
+>
+</sigma-form-select-multi-labels>-->

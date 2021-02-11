@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>Confirmando acción</h2>
+
+<h3 mat-dialog-content>Seleccione el formato para exportar la información</h3>
+
+<mat-radio-group aria-label="Select an option" [(ngModel)]="formatType">
+  <mat-radio-button [value]="'excel'"><img alt="Excel" src="../../../../assets/img/documentFormats/excel.png">
+  </mat-radio-button>
+  <mat-radio-button [value]="'pdf'"><img alt="PDF" src="../../../../assets/img/documentFormats/pdf.png">
+  </mat-radio-button>
+</mat-radio-group>
+<br>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions fxLayoutAlign="end">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">clear</mat-icon> Cancelar
+  </button>
+  <button mat-raised-button color="primary" (click)="descargar()" [disabled]="formatType === undefined">
+    <mat-icon class="m-1">check_circle_outline</mat-icon> Descargar
+  </button>
+</mat-dialog-actions>

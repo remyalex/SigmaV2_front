@@ -1,0 +1,27 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="processing">
+  <div *ngIf="currentAction == 'list'">
+    <div fxLayout="column" fxLayout.gt-sm="row wrap">
+      <div fxFlex="100" class="flex-p">
+
+        <mat-tab-group [selectedIndex]="tabSeleccionado.value" (selectedIndexChange)="seleccionarGrid($event)">
+          <mat-tab label="Asignar Maquinaria Disponible">
+            <sigma-grid-mantenimientos #grid *ngIf="condicion" [condicion]="condicion" [data]="data" [showActividadAgrupada]="false" [showKmCarril]="false"
+              [columns]="columns" [filters]="filtros" [singleActions]="singleActions" (executeOnSingle)="ejecutar($event)"
+              [masiveActions]="masiveActions" (executeOnMasiveAction)="ejecutarMasive($event)" >
+            </sigma-grid-mantenimientos>
+          </mat-tab>
+        </mat-tab-group>
+
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="currentAction === constants.programarMaquinaria">
+    <sigma-asignar-maquinaria-admin [programacionDiaria]="programacionDiaria" (cancel)="cancelar()">
+    </sigma-asignar-maquinaria-admin>
+  </div>
+</div>

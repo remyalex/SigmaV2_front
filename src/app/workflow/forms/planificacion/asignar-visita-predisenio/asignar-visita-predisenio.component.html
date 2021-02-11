@@ -1,0 +1,84 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="processing">
+  <div [hidden]="currentAction !== 'list'">
+    <div fxLayout="column" fxLayout.gt-sm="row wrap">
+      <div fxFlex="100" class="flex-p">
+        <mat-tab-group [selectedIndex]="tabSeleccionado.value" 
+              (selectedIndexChange)="seleccionarGrid($event)">
+          <mat-tab label="Asignar Ingeniero de Diseño">
+            <sigma-grid-mantenimientos #grid [data]="data" 
+              [columns]="columnsAsignar" [filters]="filtersAsignar" [condicion]="condicionAsignarIngenieroPredisenio"
+              [masiveActions]="asignarIngenieroDisenio" (executeOnMasiveAction)="ejecutar($event)" [showCheckMasive] ="true">
+            </sigma-grid-mantenimientos>
+          </mat-tab>
+          <mat-tab *ngFor="let transicion of transicionesMasivas" label="{{transicion.nombre}}">
+            <sigma-grid-mantenimientos #grid [data]="data" [transicion]="transicion" [columns]="columnsTransicion"
+              [filters]="filtersProgramarAsignacion" [condicion]="condicionAsignarVisitaPredisenio"
+              (executeOnMasiveTransition)="executeMasiveTransition($event)" [showActividadAgrupada]="false"
+              [showKmCarril]="false" [showCheckMasive] ="true" >
+            </sigma-grid-mantenimientos>
+          </mat-tab>
+          <mat-tab label="Ver asignaciones">
+            <sigma-grid-mantenimientos #grid [data]="data"
+              [columns]="columnsVerAsignacion" [filters]="filtersVerAsignacion" 
+              [defaultFilters]="defaulFiltersVerAsignaciones" 
+              [condicion]="condicionVerAsignacionIngenieroPredisenio">
+            </sigma-grid-mantenimientos>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+
+  <!-- Seccion Asignación Ingeniero de Diseño -->
+  <div *ngIf="currentAction == 'asignarIngenieroVisitaPredisenio'">
+
+      <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
+        fxLayoutAlign="left">
+
+        <div fxFlex="100" class="mt-10">
+          <h3>Asignar Ingeniero de Diseño</h3>
+            <mat-card-content class="m-0 mt-10" [formGroup]="formularioAsignarIngenieroDisenio">
+              <div fxLayout="row" fxLayoutGap="10px">
+                <div fxFlex.lg="50" fxFlex.md="50" fxFlex.sm="50" fxFlex="100">
+                  <mat-form-field class="w-100">
+                    <mat-label>Seleccionar ingeniero de diseño</mat-label>
+                    <mat-select [placeholder]="constants.ingenieroDisenio" [(ngModel)]="ingenieroDisenio"
+                      formControlName="ingenieroDisenio">
+                      <mat-option [value]="">
+                        {{ constants.seleccionar }}
+                      </mat-option>
+                      <mat-option *ngFor="let ingeniero of ingenieros" [value]="ingeniero"
+                        [ngStyle]="{'color': ingeniero.color ? ingeniero.color : '' }">
+                        {{ ingeniero.nombres + ' ' + ingeniero.apellidos }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-icon *ngIf="loadingIngeniero" fxLayoutAlign="center end" matSuffix color="warn">
+                      <mat-spinner [diameter]="15"></mat-spinner>
+                    </mat-icon>
+                  </mat-form-field>
+                </div>
+              </div>
+            </mat-card-content>
+        </div>
+      </div>
+    <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+    <div fxLayout="row" fxLayoutAlign="end" class="p-16">
+      <mat-dialog-actions>
+        <button mat-button class="m-1" color="warn" (click)="onBack()">
+          <mat-icon class="m-1">close</mat-icon>
+          {{ constants.cancelar }}
+        </button>
+        <button mat-button mat-raised-button class="m-1" color="primary" [disabled]="!ingenieroDisenio || processing"
+          (click)="saveIngenieroDisenio()">
+          <mat-icon class="m-1">save</mat-icon>
+          Guardar
+        </button>
+      </mat-dialog-actions>
+    </div>
+  </div>
+
+</div>

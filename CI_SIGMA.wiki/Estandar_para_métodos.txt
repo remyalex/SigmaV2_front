@@ -1,0 +1,713 @@
+
+--------------------------------------------------------------------------------------------------
+------------------------- COMPONENTES GENERALES --------------------------------------------------
+--------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------
+
+PARA ADMIN
+
+/** Componente encargado de gestionar los {} */
+@Component
+
+--------------------------------------------------------------------------------------------------
+
+PARA CREAR
+
+/** Componente encargado de gestionar la creación de {}*/
+@Component
+
+
+--------------------------------------------------------------------------------------------------
+PARA ELIMINACIÓN
+
+/** Componente encargado de gestionar la eliminación de un {} */
+@Component({
+
+
+--------------------------------------------------------------------------------------------------
+PARA DETALLE 
+
+/** Componente encargado de gestionar la visualización de un {}*/
+@Component({
+
+--------------------------------------------------------------------------------------------------
+PARA EDITAR
+
+/** Componente encargado de gestionar la edición de un {}*/
+@Component
+
+--------------------------------------------------------------------------------------------------
+PARA LISTAR 
+
+/** Componente encargado de gestionar la visualización del listados de {}*/
+@Component({
+
+
+--------------------------------------------------------------------------------------------------
+PARA WORKFLOW 
+
+/** Componente encargado de gestionar el proceso de */
+@Component({
+
+
+--------------------------------------------------------------------------------------------------
+PARA SIGMA COMPONENT
+
+/**
+ * Componente usado para estandarizar el campo de {}
+ * en todos los formularios del sistema
+ */
+@Component({
+
+--------------------------------------------------------------------------------------------------
+------------------------- CONSTRUCTORES ----------------------------------------------------------
+--------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------
+
+PARA CREAR
+
+  
+  /**
+   * Método encargado de construir una instancia de componente
+   *
+   * @param servicio Servicio usado en el componente para gestionar las peticiones
+   * @param router Componente usado para redireccionar entre componentes
+   * @param data Información a procesar
+   * @param dialogRef Referencia al componente dialog que invoco la funcionalidad
+   * @param formBuilder Componente usado para Agrupar elementos en el formulario
+   * @param dialog Componente gráfico usado para presentar cuadros de dialogo
+   * @param snackBar Componente usado para abrir un recuadro modal
+   * @param utilitiesService Componente de utilidades de peticiones a servicios
+   * @param differs Elemento usado para mantener la información clonada
+   * @param excelService Servicio usado en el componente para peticiones de archivos de Excel
+   * @param _router Componente usado para recibir parametros por URL
+   */
+  constructor(
+    private servicio: EquipoService,
+    private router: Router,
+    public formBuilder: FormBuilder,
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog,
+    private utilitiesService: UtilitiesService
+  )
+
+
+  /**
+   * Método encargado de construir una instancia de componente
+   *
+   * @param servicio Servicio usado en el componente para gestionar las peticiones
+   * @param router Componente usado para redireccionar entre componentes
+   * @param formBuilder Componente usado para Agrupar elementos en el formulario
+   * @param dialog Componente gráfico usado para presentar cuadros de dialogo
+   * @param snackBar Componente usado para abrir un recuadro modal
+   * @param utilitiesService Componente de utilidades de peticiones a servicios
+   */
+  constructor(
+    private servicio: ListasService,
+    private router: Router,
+    public formBuilder: FormBuilder,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
+    private utilitiesService: UtilitiesService,
+    )
+--------------------------------------------------------------------------------------------------
+  PARA ELIMINAR
+
+ /**
+  * Método encargado de construir una instancia de la clase
+  * @param servicio Servicio usado en el componente para gestionar las peticiones
+  * @param data Información a procesar
+  * @param fb Componente usado para Agrupar elementos en el formulario
+  * @param snackBar Componente usado para abrir un recuadro modal
+  * @param dialogRef Componente gráfico usado para presentar cuadros de dialogo
+  * @param utilitiesService Componente de utilidades de peticiones a servicios
+  */
+  constructor(
+    private dialogRef: MatDialogRef<GrupoDeleteComponent>,
+    private fb: FormBuilder,
+    @Inject(MAT_DIALOG_DATA) data: GrupoModel,
+    private servicio: GrupoService,
+    private snackBar: MatSnackBar
+  )
+
+
+--------------------------------------------------------------------------------------------------
+  PARA DETALLE
+
+  /**
+  * Método encargado de construir una instancia de la clase
+  *
+  * @param dialogRef Componente gráfico usado para presentar cuadros de dialogo
+  * @param data Información a procesar
+  */
+  constructor(
+    private dialogRef: MatDialogRef<InsumoDetailComponent>,
+    @Inject(MAT_DIALOG_DATA) data: Insumo
+  )
+
+
+--------------------------------------------------------------------------------------------------
+  PARA EDITAR
+
+  /**
+   * Método encargado de construir una instancia de componente
+   *
+   * @param servicio Servicio usado en el componente para gestionar las peticiones
+   * @param router Componente usado para redireccionar entre componentes
+   * @param data Información a procesar
+   * @param dialogRef Referencia al componente dialog que invoco la funcionalidad
+   * @param formBuilder Componente usado para Agrupar elementos en el formulario
+   * @param dialog Componente gráfico usado para presentar cuadros de dialogo
+   * @param differs Elemento usado para mantener la información clonada.
+   * @param snackBar Componente usado para abrir un recuadro modal
+   * @param utilitiesServices Componente de utilidades de peticiones a servicios
+   */
+  constructor(
+    private servicio: InsumoService,
+    private router: Router,
+    private snackBar: MatSnackBar,
+    private dialogRef: MatDialogRef<InsumoEditComponent>,
+    private formBuilder: FormBuilder,
+    @Inject(MAT_DIALOG_DATA) data: Insumo,
+    private dialog: MatDialog,
+    private utilitiesServices: UtilitiesService
+  )
+
+--------------------------------------------------------------------------------------------------
+  PARA LISTAR
+  
+  /**
+   * Método encargado de construir una instancia de componente
+   *
+   * @param servicio Servicio usado en el componente para gestionar las peticiones
+   * @param snackBar Componente usado para abrir un recuadro modal
+   * @param dialog Componente gráfico usado para presentar cuadros de dialogo
+   * @param excelService Servicio usado en el componente para peticiones de archivos de Excel
+   */
+  constructor(
+    private servicio: InsumoService,
+    private dialog: MatDialog,
+    private excelService: ExcelService,
+    private snackBar: MatSnackBar
+  )
+  
+  
+--------------------------------------------------------------------------------------------------
+  PARA GESTION WORKFLOW
+   
+  
+   /**
+   * Método encargado de construir una instancia de componente
+   *
+   * @param servicio Servicio usado en el componente para gestionar las peticiones
+   * @param snackBar Componente usado para abrir un recuadro modal
+   * @param utilitiesServices Componente de utilidades de peticiones a servicios
+   * @param dialog Componente gráfico usado para presentar cuadros de dialogo
+   * @param excelService Servicio usado en el componente para peticiones de archivos de Excel
+   * @param commonService Componente usado para invocar los servicios de mantenimiento
+   * @param workflowService Componente usado para invocar los servicios de workflow
+   * @param tokenStorageService Componente usado para obtener información del token del usuario
+   * @param mapService Componente usado para gestionar información del mapa
+   * @param formBuilder Componente usado para gestionar los elementos del formulario
+   */
+  constructor(
+    servicio: MantenimientoService,
+    commonService: CommonService,
+    formBuilder: FormBuilder,
+    workflowService: WorkflowService,
+    excelService: ExcelService,
+    utilitiesServices: UtilitiesService,
+    snackBar: MatSnackBar,
+    tokenStorageService: TokenStorageService,
+    mapService: MapService,
+  )
+  
+  
+  
+--------------------------------------------------------------------------------------------------
+  PARA COMPONENTE DE SIGMA FORM
+   
+  
+  /**
+   * Método encargado de construir una instancia de componente
+   *
+   * @param ngControl Control de tipo de ng del componente del formulario
+   * @param _controlName Nombre del Control a usar en el formulario
+   */
+  constructor(
+    @Optional() @Self() ngControl: NgControl,
+    @Optional() private _controlName: FormControlName
+  )
+
+
+--------------------------------------------------------------------------------------------------
+------------------------- OTROS MÉTODOS COMPONENTES ----------------------------------------------------------
+--------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------
+  
+  /**
+   * Método encargado de realizar el llamado del componente encagado de
+   * gestionar la creación de un objeto del componente.
+   */
+  create(): void {
+  
+--------------------------------------------------------------------------------------------------
+  
+  /** Método encargado de inicializar el componente */
+  ngOnInit() 
+
+--------------------------------------------------------------------------------------------------
+  /** Método encargado de gestionar la paginación de la información de
+   *  la grilla usada en el componente
+   */
+  ngAfterViewInit()
+
+--------------------------------------------------------------------------------------------------
+
+  /** Método encargado de instanciar el componente */
+  new()
+
+--------------------------------------------------------------------------------------------------
+
+  /** Método encargado de gestionar el cierre del dialog del componente */
+  close ()
+
+--------------------------------------------------------------------------------------------------
+
+  /** Método encargado de devolver a la pagina principal el componente */
+  onBack(): void
+  cancel(): void
+
+--------------------------------------------------------------------------------------------------
+
+  /** Método encargado de Realizar la carga del archivo desde el cliente y retornar
+   * el listado de objetos con la información del archivo en el modelo */
+  import() {
+
+--------------------------------------------------------------------------------------------------
+
+  /** Método encargado de realizar la descarga archivo con formato excel en el cual
+   * el usuario diligenciará la información que posteriormente cargará
+   */
+   descargarFormato()
+
+--------------------------------------------------------------------------------------------------
+
+   /** Método encargado de realizar solicitud de almacenamiento al servicio*/
+  save()
+  
+--------------------------------------------------------------------------------------------------
+
+   /** Método encargado de realizar validar datos de entrada solicitar
+    * almacenamiento de información al método save
+    */
+   onSubmit()
+   
+--------------------------------------------------------------------------------------------------
+
+  /**
+   * Método encargado de marcar las validaciones erroneas en el formulario
+   * @param anyForm Grupo del formulario q se esta procesando
+   */
+  private markAndValidateAllInputs(anyForm: FormGroup)
+  
+--------------------------------------------------------------------------------------------------
+
+ /**
+   * Método encargado de actualizar el valor del equipo
+   * en el modelo del negocio
+   *
+   * @param event Evento trasmitido por el usuario con la informacion
+   * seleccionada en el formulario.
+   */
+  setDataEquipo(atributo: any, objetoAtributo: any)
+
+--------------------------------------------------------------------------------------------------
+
+  /** Método encargado de notificar los cambios del componente hacia el modelo */
+  ngDoCheck():
+
+--------------------------------------------------------------------------------------------------
+
+  /** Método encargado de limpiar los datos del formulario de consulta */
+  Limpiar(): 
+  clear():
+  
+--------------------------------------------------------------------------------------------------
+
+  /**
+   * Método encargado de adicionar los errores identificados
+   * en el validator a la sección de errores del campo del formulario
+   */
+  addErrors() {
+  
+--------------------------------------------------------------------------------------------------
+
+  /**
+   * Método encargado de establecer el valor digitado por el usuario
+   * a la variable del modelo del componente
+   *
+   * @param value valor digitado por el usuario en el campo del formulario
+   **/
+  writeValue(value: any) {
+    this.email = value;
+  }
+
+--------------------------------------------------------------------------------------------------
+
+  /**
+   * Método encargado de registar la funcion ingresada al onchange
+   * del componente
+   *
+   * @param fn Funcion con la que se definirá la acción onchange
+   * del control del formulario
+   **/
+  registerOnChange(fn) {
+    this.onChange = fn;
+  }
+
+--------------------------------------------------------------------------------------------------
+
+  /**
+   * Método encargado de registar la funcion ingresada al ontouched
+   * del componente
+   *
+   * @param fn Funcion con la que se definirá la acción ontouched
+   * del control del formulario
+   **/
+  registerOnTouched(fn) {
+    this.onTouch = fn;
+  }
+
+--------------------------------------------------------------------------------------------------
+
+  /**
+   * Método encargado de asignar la bandera de activo al contol
+   * indicado
+   *
+   * @param control Control al cual se le asignará la bandera de requerida
+  */
+  activeRequired(control: FormControl) {
+
+  /**
+   * Método en cargado de actualizar el modelo del componente una
+   * vez notificado un cambio en los campos
+   */
+  customerChanged(changes: KeyValueChanges<string, any>)
+  
+--------------------------------------------------------------------------------------------------
+
+  /** Método encargado de establecer el estado de deshabilitado del
+   * campo del formulario en el componente
+   *
+   * @param isDisabled Valor que indica si el campo se encuentra en estado
+   * dehabilitado
+   **/
+  setDisabledState(isDisabled: boolean): void { }
+
+--------------------------------------------------------------------------------------------------
+
+  /**
+   * Método encargado de asignar el valor al campo dl formulario
+   * @param value Valor a asignar al campo del formulario
+   */
+  inputValue(value: string) {
+  
+--------------------------------------------------------------------------------------------------
+
+  /** Método encargado de darle formato a las fechas del formulario */
+  formatoFechas()
+
+--------------------------------------------------------------------------------------------------
+
+  /**
+   * Método encargado de actualizar el formato a las fechas del formulario actualizadas
+   *
+   * @param atributo Nombre del atributo que se va a actualizar
+   * @param event Evento con el valor actualizado por el usuario
+   * @param tipo Tipo de atributo a actualizar
+   * */
+  changeDate(atributo: any, event: any, tipo: string = null)
+  
+--------------------------------------------------------------------------------------------------
+
+  /**
+   * Método usado para establecer conexión con el servidor
+   *
+   * @param collectionViewer Visor de la colección que devolverá el observable con información
+   */
+  connect(collectionViewer: CollectionViewer): Observable
+  
+--------------------------------------------------------------------------------------------------
+
+  /**
+   * Método usado para finalizar la petición de conexión con el servidor.
+   *
+   * @param collectionViewer Visor de la colección que devolverá el observable con información
+   */
+  disconnect(collectionViewer: CollectionViewer): void 
+  
+--------------------------------------------------------------------------------------------------
+
+  /**
+   * Método encargado de cargar los datos según el criterio enviado como parámetro
+   *
+   * @param criteria Objeto de tipo Criteria con los filtros de la consulta a realizar
+   */
+  loadData(criteria: EquipoCriteria): void
+  
+--------------------------------------------------------------------------------------------------
+    
+  /**
+  * Método encargado de solicitar el listado de los pks al servicio
+  */
+  loadData()
+
+--------------------------------------------------------------------------------------------------
+  
+  /** Método encargado de formar la consulta de filtros a realizar por el componente */
+  public getUrlParameters (): string
+  
+--------------------------------------------------------------------------------------------------
+
+   /**
+   * Método encargado de asignar al modelo el valor modificado en el formulario
+   *
+   * @param _id Identificador único del valor a asignar en el modelo
+   **/
+   setEquipoDisponibilidadEquipocalendario(_id: number)
+  
+____________________________________________________________________________________________________
+
+
+  /** Método encargado de invocar la petición de consulta 
+  * al servicio según los criterios definidos 
+  */
+  search(): void {
+
+____________________________________________________________________________________________________
+
+ 
+  /**
+   * Método en cargado de actualizar el modelo del componente una
+   * vez notificado un cambio en los campos
+   *
+   * @param changes Diccionario de claves que se modificaron
+   */
+  customerChanged(changes: KeyValueChanges<string, any>) {
+  
+____________________________________________________________________________________________________
+  
+  /**
+   * Método encargado de mantener la sinconización entre los
+   * pks del mapa y los de la grilla cuando se a seleccionado un pk en el mapa.
+   *
+   * @param filaTabla pk seleccionado a adicionar en listado de pks Seleccionados
+   * @param event Evento se selección de pk en el mapa
+   */
+  toggleChecks(filaTabla: any, event: any) {
+  
+____________________________________________________________________________________________________
+  
+   /**
+   * Método encargado de invocar el componente de eliminación del registro seleccionado
+   * en la grilla desde el listado actual
+   *
+   * @param
+   */
+  delete(
+ 
+____________________________________________________________________________________________________
+  
+  /**
+   * Método encarga de gestionar la exportación de los datos
+   * presentados en la grilla mediante un archivo PDF
+   */
+   exportarPDF()  
+____________________________________________________________________________________________________
+  
+   /**
+   * Método encarga de gestionar la exportación de los datos
+   * presentados en la grilla mediante un archivo excel
+   */
+   exportAsXLSX()
+____________________________________________________________________________________________________
+
+
+  /**
+   * Método encargado de realizar el llamado al componente de creación
+   * de un registro de la grilla.
+   */
+  crear ()
+
+____________________________________________________________________________________________________
+
+   /**
+   * Método encargado de realizar el llamado al componente de edición
+   * de un registro de la grilla.
+   *
+   * @param {nombre_parametro} Objeto que encapsula los datos del registro seleccionado
+   * que se va a editar
+   */
+  edit({nombre_parametro}:
+
+____________________________________________________________________________________________________
+
+ 
+   /**
+   * Método encargado de realizar el llamado al componente de visualización del detalle
+   * de un registro de la grilla.
+   *
+   * @param {nombre_parametro} Objeto que encapsula los datos del registro seleccionado
+   * del cual se va a presentar el detalle de la información
+   */
+  detail({nombre_parametro}:
+  
+____________________________________________________________________________________________________
+
+   
+  /**
+   * Método encargado de realizar el llamado al componente de eliminación
+   * de un registro de la grilla.
+   *
+   * @param {nombre_parametro} Objeto que encapsula los datos del registro seleccionado
+   * que se va a editar
+   */
+  delete({nombre_parametro}:
+
+
+  /**
+   * Método encargado de limpiar los campos de filtros de la grilla
+   * y refrescar la grilla.
+   */
+  clear()
+  ____________________________________________________________________________________________________
+
+  /** Método encargado de almacenar el archivo Excel
+   * @param buffer Objeto que recibe el archivo xlsx
+   * @param fileName nombre del archivo
+   */
+  private saveAsExcelFile(buffer: any, fileName: string)
+
+____________________________________________________________________________________________________
+
+  /**
+   * Método encargado de actualizar el formato de texto del formulario
+   *
+   * @param atributo Nombre del atributo que se va a actualizar
+   * @param event Evento con el valor actualizado por el usuario
+   * */
+  patternString(attr, data)
+  
+____________________________________________________________________________________________________
+
+  
+  /**
+   * Método encargado de redireccionar la acción del usuario a la acción del servicio
+   *
+   * @param mantenimiento Mantenimiento al cual se le va a aplicar la
+   * accion realizada por el usuario
+   */
+  work(mantenimiento: any)
+  
+____________________________________________________________________________________________________
+
+   
+  /**
+  * Método encargado de realizar el llamado del componente encagado de
+  * gestionar el llamado al componente admin del componente.
+  */
+  OnGoUrlAdmin():
+  
+____________________________________________________________________________________________________
+  
+  /**
+   * Método encargado de gestionar la presentación del
+   * mensaje de usuario en el componente
+   *
+   * @param message Mensaje a presentar por parte del usuario
+   * @param clase Clase del mensaje q se presentará al usuario
+   **/
+  showMessage(message: string, clase: string )
+  
+____________________________________________________________________________________________________
+
+/** Método encargado de mostrar mensajes de error en el componente
+   * @param message mensaje que se mostrará en snackBar
+   * @param action el label for the snackbar.
+   */
+  public enviarMensaje(message: string, action: string) 
+
+____________________________________________________________________________________________________
+  /**
+   * Método encargado de realizar el llamado del componente encagado de
+   * gestionar la creación de un nuevo registro del componente.
+   */
+  add():
+
+____________________________________________________________________________________________________
+
+  /**
+   * Método encargado de realizar el llamado del componente encagado de
+   * gestionar la edición un registro.
+   *
+   * @param unidad Objeto con los valores actualizados que se modificarán
+   * @param index Indice de la posición del item a modificar
+   */
+  editarMuestreo(unidad: DiagnosticoUnidadMuestraModel, index: number) {
+  
+____________________________________________________________________________________________________
+  
+  /**
+   * Método encargado de realizar el llamado de eliminación
+   * de un registro de otros factores
+   *
+   * @param index Indice de la posición del item a eliminar
+   */
+  removeFactor(index: number)
+
+
+____________________________________________________________________________________________________
+ 
+  /**
+   * Método encargado de gestionar la acción del usuario
+   * sobre el boton de acciones individuales del pk presentado en la grilla
+   *
+   * @param mantenimiento Objeto de tipo manteniento con la información del
+   * registro seleccionado en la grilla
+   **/
+  work(mantenimiento: WorkflowMantenimientoModel) {
+
+____________________________________________________________________________________________________
+ 
+  /** Método encargado de gestionar el llamado de las acciones
+   * individuales de grilla por pk seleccionado
+   *
+   * @param event evento con nombre de la accion seleccionado por el usuario
+   **/
+  ejecutar(event: any) {
+  
+____________________________________________________________________________________________________
+
+  /**
+   * Método encargado de eecutar la transicion de forma masiva para varios
+   * pks seleccionados por el usuario.
+   *
+   * @param event Evento con datos de mantenimientos seleccionados por el usuario
+   */
+  executeMasiveTransition(event: any): void {
+  
+____________________________________________________________________________________________________
+
+  
+  /**
+   * Método encargado de realizar la selección de la grilla según
+   * el tag en el que se encuentre el usuario
+   *
+   * @param tab Tab seleccionado por el usuario
+   */
+  public aseleccionarGrid(tab: number) {
+
+____________________________________________________________________________________________________
+
+  

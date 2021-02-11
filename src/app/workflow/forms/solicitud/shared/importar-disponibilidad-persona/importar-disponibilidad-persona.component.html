@@ -1,0 +1,65 @@
+<h2 mat-dialog-title>Importar Disponibilidad</h2>
+
+<mat-dialog-content *ngIf="!finished" [formGroup]="form">
+  <sigma-form-upload-file formControlName="archivoId" [(ngModel)]="importarExcelModel.archivo"
+    [placeholder]="'Archivo formato Excel (XLSX)'"
+    [accept]="'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'">
+  </sigma-form-upload-file>
+</mat-dialog-content>
+
+<mat-dialog-content *ngIf="finished">
+  <div class="mat-elevation-z8">
+    <mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="data.identificacion">
+        <mat-header-cell *matHeaderCellDef> Identificación </mat-header-cell>
+        <mat-cell *matCellDef="let row" data-label="Identificación"> 
+          {{row.data.identificacion}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="data.fechaDesde">
+        <mat-header-cell *matHeaderCellDef> Fecha desde </mat-header-cell>
+        <mat-cell *matCellDef="let row" data-label="Fecha desde"> 
+          {{row.data.fechaDesde}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="data.fechaHasta">
+        <mat-header-cell *matHeaderCellDef> Fecha hasta </mat-header-cell>
+        <mat-cell *matCellDef="let row" data-label="Fecha hasta"> 
+          {{row.data.fechaHasta}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="error">
+        <mat-header-cell *matHeaderCellDef> Importado? </mat-header-cell>
+        <mat-cell *matCellDef="let row" data-label="Importado?">
+          <span class="dev-color-green" [hidden]="row.error">SI</span>
+          <span class="dev-color-red" [hidden]="!row.error">NO</span>
+        </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="message">
+        <mat-header-cell *matHeaderCellDef> Observaciones </mat-header-cell>
+        <mat-cell *matCellDef="let row" data-label="Observaciones"> 
+          {{row.message}} </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <mat-paginator #paginator [length]="dataSource.data.length" [(pageSize)]="pageSize" [pageSizeOptions]="[5, 10, 20]">
+    </mat-paginator>
+  </div>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-raised-button 
+    color="primary" class="m-1" (click)="descargarFormato()">
+    <mat-icon >cloud_download</mat-icon> Plantilla
+  </button>
+  <button *ngIf="!finished" [disabled]="processing" mat-button color="warn" (click)="cancel()">
+    <mat-icon class="m-1">close</mat-icon> Cancelar
+  </button>
+  <button *ngIf="!finished" mat-raised-button color="primary" (click)="import()"
+    [disabled]="processing || (importarExcelModel.archivo== null ?  true : !importarExcelModel.archivo.id)">
+    <mat-icon class="m-1">save</mat-icon> Importar
+  </button>
+  <button *ngIf="finished" mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> Terminar
+  </button>
+</mat-dialog-actions>

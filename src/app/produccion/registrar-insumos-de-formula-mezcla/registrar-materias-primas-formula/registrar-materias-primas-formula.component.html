@@ -1,0 +1,54 @@
+<h2 mat-dialog-title>Adicionar materia prima</h2>
+<mat-dialog-content [formGroup]="formuarlioFormulaMateriaPrima">
+
+  <div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+    <h5>{{ constants.informacionCampoObligatorio }}</h5>
+  </div>
+
+  <input type="hidden" formControlName="id" [(ngModel)]="materiaPrima.id">
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+
+    <div fxFlex>
+      <sigma-form-select formControlName="materiaPrima" [(ngModel)]="materiaPrima.materiaPrima"
+        [path]="constants.path_formula_mezcla_materia_prima" [placeholder]="constants.materiaPrima"
+        [listBy]="'descripcion'">
+      </sigma-form-select>
+    </div>
+
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput type="text" [numericInput]="false" [required]="true" placeholder="{{constants.masaUnitaria}}"
+          formControlName="masaUnitaria" [(ngModel)]="materiaPrima.masaUnitaria" autocomplete="off">
+        <mat-error *ngIf="formuarlioFormulaMateriaPrima.get('masaUnitaria').hasError('required')">
+          {{ constants.campoRequerido }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <sigma-form-number [numericInput]="true" formControlName="valor" [(ngModel)]="materiaPrima.valor"
+        [placeholder]="constants.valor">
+      </sigma-form-number>
+    </div>
+    <div fxFlex>
+      <input type="hidden" formControlName="consecutivo" [(ngModel)]="materiaPrima.consecutivo" />
+      <sigma-form-select formControlName="unidadMedida" [(ngModel)]="materiaPrima.unidadMedida"
+        [path]="constants.path_formula_mezcla_unidad_medida" [placeholder]="constants.unidadMedida" [listBy]="'descripcion'">
+      </sigma-form-select>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> Cancelar
+  </button>
+  <button mat-raised-button color="primary" (click)="save()">
+    <mat-icon class="m-1">save</mat-icon> Agregar
+  </button>
+</mat-dialog-actions>

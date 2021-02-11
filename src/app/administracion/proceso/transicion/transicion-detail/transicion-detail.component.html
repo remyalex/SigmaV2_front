@@ -1,0 +1,138 @@
+<h2 mat-dialog-title>{{ constants.detalle }} Transición</h2>
+
+<mat-dialog-content *sigmaIsGranted="constants.permiso_administracion_procesotransicion_view">
+  <mat-list>
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.nombre }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ transicion.nombre }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.descripcion }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ transicion.descripcion }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.permisoId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ transicion.permiso.nombre }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>Estado PK</b>:
+        </div>
+        <div fxFlex="60">
+          {{ transicion.estadoPk?.descripcion }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.actividadInicioId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ transicion.actividadInicial.nombre }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.actividadFinId }}</b>:
+        </div>
+        <div fxFlex='60'>
+          {{ transicion.actividadFinal.nombre }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>Tipo Asignación</b>:
+        </div>
+        <div fxFlex="60">
+          {{ transicion.tipoAsignacion?.descripcion }}
+        </div>
+      </div>
+    </mat-list-item>
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.requiereObservacion }}</b>:
+        </div>
+        <div class="p-tab" fxFlex="60">
+          <span class="dev-color-red" [hidden]="transicion.requiereObservacion">{{ constants.no }}</span>
+          <span class="dev-color-green" [hidden]="!transicion.requiereObservacion">{{ constants.si }}</span>
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>Masiva:</b>
+        </div>
+        <div class="p-tab" fxFlex="60">
+          <span class="dev-color-red" [hidden]="transicion.esMasiva">{{ constants.no }}</span>
+          <span class="dev-color-green" [hidden]="!transicion.esMasiva">{{ constants.si }}</span>
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>Reasignable:</b>
+        </div>
+        <div class="p-tab" fxFlex="60">
+          <span class="dev-color-red" [hidden]="transicion.esReasignable">{{ constants.no }}</span>
+          <span class="dev-color-green" [hidden]="!transicion.esReasignable">{{ constants.si }}</span>
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="mb-10">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.activo }}</b>:
+        </div>
+        <div class="p-tab" fxFlex="60">
+          <span class="dev-color-red" [hidden]="transicion.activo">{{ constants.no }}</span>
+          <span class="dev-color-green" [hidden]="!transicion.activo">{{ constants.si }}</span>
+        </div>
+      </div>
+    </mat-list-item>
+
+  </mat-list>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()">
+      <mat-icon class="m-1">close</mat-icon> {{ constants.cerrar }}
+  </button>
+</mat-dialog-actions>

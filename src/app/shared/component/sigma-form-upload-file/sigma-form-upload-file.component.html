@@ -1,0 +1,82 @@
+<input #inputFile type="file" hidden (change)="agregarFiles($event)" [accept]="accept" [multiple]="multiple">
+
+<div fxLayout="column" class="form-input-file-upload" (click)="onTouch()">
+  <mat-form-field class="w-100" fxFlex>
+    <input #input matInput [formControl]="control" [placeholder]="placeholder" autocomplete="off" type="text"
+      [required]="required" readonly (click)="selectFile()" [value]="getValue()" class="hover-element-pointer"
+      class="hidden" />
+
+    <mat-icon *ngIf="validateShowAttachFile()" matSuffix color="primary" class="hover-element-pointer" (click)="selectFile()">
+      attach_file</mat-icon>
+    <mat-icon matSuffix *ngIf="files.length > 0 && !control.disabled" (click)="eliminar()" color="warn"
+      class="hover-element-pointer" matTooltip="{{ constants.eliminarTodoMensaje }}">
+      delete
+    </mat-icon>
+
+    <mat-error *ngFor="let error of basicErrors">
+      <mat-error *ngIf="control.hasError(error.name)">
+        {{ error.message }}
+      </mat-error>
+    </mat-error>
+    <mat-error *ngIf="control.hasError('maxFiles')">
+      {{ constants.maxFiles }} {{ control?.getError('maxFiles').max }} {{ constants.total | lowercase }}
+      ({{control?.getError('maxFiles').actual }})
+    </mat-error>
+    <mat-error *ngIf="control.hasError('minFiles')">
+      {{ constants.minFiles }} {{ control?.getError('minFiles').min }} {{ constants.total | lowercase }}
+      ({{control?.getError('minFiles').actual }})
+    </mat-error>
+    <mat-error *ngIf="control.hasError('typeFiles')">
+      {{ errorTipoArchivos }}
+      <!-- {{ constants.typeFiles }} ({{control?.getError('typeFiles').typeAccept }}) -->
+    </mat-error>
+    <mat-error *ngIf="control.hasError('sizeFile')">
+      {{ constants.fileSize }} {{ control?.getError('sizeFile').size }}M
+    </mat-error>
+  </mat-form-field>
+
+  <div fxLayout="row wrap" fxLayout.lt-sm="column">
+    <div fxFlex *ngFor="let file of files; let i = index" class="card-upload-file mt-10 mb-10">
+      <div *ngIf="object.keys(file).length > 0">
+        <mat-spinner [diameter]="20" *ngIf="!file.id && file.success"></mat-spinner>
+      </div>
+      <mat-card *ngIf="file.id">
+        <mat-card-header>
+          <span class="white" fxFlex="90">
+            {{ showNameFile(file) | slice:0:30 }}{{ showNameFile(file).length > 30 ? '...' : '' }}
+          </span>
+
+          <mat-icon matSuffix *ngIf="multiple" (click)="eliminarElemento(i)" color="warn"
+            class="hover-element-pointer" fxFlex="10" fxLayoutAlign="center center">
+            delete
+          </mat-icon>
+        </mat-card-header>
+
+        <mat-card-content fxLayoutAlign="center center">
+          <div *ngIf="showFile">
+            <sigma-show-file *ngIf="file" [showFile]="true" [id]="file.id"></sigma-show-file>
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions fxLayoutAlign="center">
+          <div *ngIf="!showFile">
+            <sigma-show-file *ngIf="file" [id]="file.id"></sigma-show-file>
+          </div>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+</div>
+  <!--<sigma-form-upload-file 
+    formControlName="control" -> (Obligatorio, hereda el control del input )
+    [(ngModel)]="modelo" -> (Oblugatorio, permite shacer el blinding con los datos)
+    [placeholder]="texto" -> (Opcional, campo para el label)
+    [multiple]="true|false" -> (Opcional, campo para indicar si el input permite subir mas de un archivo a la vez)
+    [accept]="'application/*'" ->(Valor pre establecido *, se puede enviar un string separado por ',', ejemplo 'application/pdf,application/*', recibe todo el listado de mymeTypes de archivos)
+    [maxUpload]="1 a n" -> (Opcional, valida que el número máximo de elementos que se pueden subir)
+    [minUpload]"1 a n" -> (Opcional, valida que el número mínimo de elementos que se pueden subir)
+    [showFile]="true|false" -> (Opcional, se se indica activa presentara una pantalla con la vista del archivo adjunto, solo para imágenes)
+    [sizeFile]="1 a n" -> (Valor pre establecido 10, valida que el peso máximo para subir un archivo, tamaño en Megas)
+    [errors]="[{name: 'error', message: 'mensaje'}]" -> (Opcional, en caso de necesaitar agregar nuevos errores al control)
+  >
+  </sigma-form-upload-file>-->

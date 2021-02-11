@@ -1,0 +1,12 @@
+<ng-container *ngIf="errores.length >= 1">
+  <div style="margin-left: 15px">
+    <ul>
+      <li *ngFor="let error of errores">
+        {{ error.message }}
+      </li>
+    </ul>
+  </div>
+</ng-container>
+<ng-container *ngIf="messageDefault">
+  <span >{{ messageDefault }}</span>
+</ng-container>

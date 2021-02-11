@@ -1,0 +1,67 @@
+<div fxLayoutAlign="end">
+  <button tton mat-raised-button [disabled]="!componentVisible"
+    *sigmaIsGranted="constants.registro_diario_cuadrilla_calidad_nuevo" color="primary" class="m-1 mb-10"
+    (click)="add()">
+    <mat-icon class="m-1">note_add</mat-icon> Crear nuevo
+  </button>
+</div>
+<div class="mat-elevation-z8">
+  <mat-table #table [dataSource]="dataCuadrillaMaterial" matSort>
+
+    <ng-container matColumnDef="numeroMuestras">
+      <mat-header-cell *matHeaderCellDef> {{ constants.numeroMuestras }} </mat-header-cell>
+      <mat-cell *matCellDef="let calidad" [attr.data-label]="constants.numeroMuestras">
+        {{ calidad.numeroMuestras }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="tipoEnsayo">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.tipoEnsayo }} </mat-header-cell>
+      <mat-cell *matCellDef="let calidad" [attr.data-label]=" constants.tipoEnsayo">
+        {{ calidad.tipoEnsayo ? calidad.tipoEnsayo.descripcion : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="tipoMaterial">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.tipoMaterial }} </mat-header-cell>
+      <mat-cell *matCellDef="let calidad" [attr.data-label]="constants.tipoMaterial">
+        {{ calidad.tipoMaterial ? calidad.tipoMaterial.descripcion : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="resultado">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.resultado }} </mat-header-cell>
+      <mat-cell *matCellDef="let calidad" [attr.data-label]="constants.resultado">
+        {{ calidad.resultado }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+      <mat-cell *matCellDef="let calidad ; let i = index;" [attr.data-label]="constants.acciones">
+        <button mat-raised-button *sigmaIsGranted="constants.registro_diario_cuadrilla_calidad_editar" color="primary"
+          (click)="edit(calidad, i)" [disabled]="!componentVisible" class="m-1">
+          <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+        </button>
+        <button mat-raised-button *sigmaIsGranted="constants.registro_diario_cuadrilla_calidad_delete" color="warn"
+          (click)="delete(calidad, i)" [disabled]="!componentVisible" class="m-1">
+          <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [length]="lengthList" [pageSize]="criteria.size" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>
+
+<div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+  <button type="button" [disabled]="!componentVisible"
+    *sigmaIsGranted="constants.registro_diario_cuadrilla_calidad_save_seccion" class="m-1" mat-raised-button
+    color="primary" (click)="onSubmit()">
+    <mat-icon class="m-1">save</mat-icon> {{ constants.guardarSeccion }}
+  </button>
+</div>
+<div [formGroup]="thirteenthFormGroup">
+  <input type="hidden" formControlName="successForm" [(ngModel)]="successInput">
+</div>

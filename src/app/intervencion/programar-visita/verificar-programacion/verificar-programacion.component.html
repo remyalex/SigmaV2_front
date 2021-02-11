@@ -1,0 +1,304 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="processing" [hidden]="currentAction != constants.currentAction.list">
+  <form [formGroup]="formCriteria" (ngSubmit)="search()" fxLayout="column">
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0" class="w-100">
+      <div fxFlex>
+        <sigma-form-select class="w-100" [(ngModel)]="criteria.zona" formControlName="zona"
+          [placeholder]="constants.zona" [path]="constants.path_workflow_diagnostico_zonas" [listBy]="'descripcion'">
+        </sigma-form-select>
+      </div>
+
+      <div fxFlex>
+        <sigma-form-select class="w-100" [(ngModel)]="criteria.actividadAgrupada" formControlName="tipoIntervencion"
+          [placeholder]="constants.tipoIntervencion"
+          [path]="'/api/administracion/lista/getItemsFiltroActividadAgrupada'" [listBy]="'descripcion'">
+        </sigma-form-select>
+      </div>
+
+      <div fxFlex>
+        <button type="submit" mat-raised-button color="primary" class="m-1" (click)="searchData()"
+          [disabled]="editEnabled">
+          <mat-icon>search</mat-icon> {{ constants.buscar }}
+        </button>
+        <button (click)="limpiar()" mat-raised-button color="warn" class="m-1" [disabled]="disabledCirteriaVerificar || editEnabled">
+          <mat-icon>clear</mat-icon> {{ constants.limpiar }}
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <form fxLayout="column" [formGroup]="form" class="mt-10">
+    <div fxLayout="row">
+      <div class="liner_top" fxFlex>
+        <h4>{{ constants.directorObraResidente }}</h4>
+      </div>
+    </div>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+      <div fxFlex="40">
+        <mat-form-field class="w-100">
+          <mat-select [(ngModel)]="visitaVerificacion.directorObra" formControlName="directorObra"
+             (selectionChange)="cambiarDirectorObra($event)" name="directorObra">
+            <mat-option>Seleccionar</mat-option>
+            <mat-option *ngFor="let directorObra of directoresObra" [value]="directorObra">
+              {{directorObra.nombresYapellidos}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div *ngIf="visitaVerificacion.directorObra" class="mt-20" fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+        <div fxFlex>
+            <h5>{{ constants.numeroVisitasProgramadasSinRealizar }}: <span class="color-visitas ml-10">{{ (mantenimientoTotalesVisitas.totalVisitasSinRealizar + this.mantenimientosSeleccionados.length) }}</span></h5>
+        </div>
+          
+        <div fxFlex>
+            <h5>{{ constants.numeroVisitasProgramadasVigentes }}: <span class="color-visitas ml-10">{{ (mantenimientoTotalesVisitas.totalVisitasVigentes) }}</span></h5>    
+          <mat-icon fxFlex="20" *ngIf="loadingNumeroVisitasProgramadasSinRealizar" fxLayoutAlign="center end" matSuffix
+            color="warn">
+            <mat-spinner [diameter]="15"></mat-spinner>
+          </mat-icon>
+        </div>
+      </div>
+    </div>
+
+    <div fxLayout="column">
+      <div fxFlex>
+        <sigma-form-input [(ngModel)]="visitaVerificacion.visitaVerificacionMantenimientos"
+          formControlName="mantenimientos" [class]="'hidden'">
+        </sigma-form-input>
+      </div>
+
+      <div class="mat-elevation-z8 mt-10 mb-10">
+        <div *ngIf="(dataSource.loading$ | async)" fxLayout="column" fxLayoutAlign="center center">
+          <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+        </div>
+
+        <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+          <mat-icon class="m-1">sms_failed</mat-icon>
+          <h4> {{dataSource.errorMessage$ | async}}</h4>
+        </div>
+
+        <mat-table #table class="col-x" [dataSource]="dataSource" [hidden]="(dataSource.loading$ | async)" matSort
+          [style.display]="(dataSource.loading$ | async) ? 'none' : 'block'">
+          <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+
+          <ng-container matColumnDef="select">
+            <mat-header-cell *matHeaderCellDef>
+              &nbsp;&nbsp;&nbsp;
+              <mat-checkbox #listCheckboxes (click)="$event.stopPropagation()" [checked]="validateSelectedAll()"
+                (change)="$event ? selectAll($event) : null" [disabled]=SelectAllDisabled>
+              </mat-checkbox>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let mantenimiento; let i = index">
+              &nbsp;&nbsp;&nbsp;
+              <mat-checkbox #listCheckboxes (click)="$event.stopPropagation()" [checked]="reviewSelectionMantenimiento(mantenimiento)"
+              (change)="$event ? mantenimientosChecked(mantenimiento, $event) : null" [disabled]="reviewMantenimientoSeleccionable(mantenimiento)">
+              </mat-checkbox>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="pk">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.pk }} </mat-header-cell>
+            <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.pk">
+              {{ mantenimiento.pk }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="civ">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.civ }} </mat-header-cell>
+            <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.civ">
+              {{ mantenimiento.civ }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="zona">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.zona }} </mat-header-cell>
+            <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.zona">
+              {{ mantenimiento.zona != null?mantenimiento.zona.nombre: '' }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="fechaProgramacion">
+            <mat-header-cell *matHeaderCellDef mat-sort-header="fechaSolicitudProgramacion">
+              {{ constants.fechaProgramacion }}
+            </mat-header-cell>
+            <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.fechaProgramacion">
+              {{ fechaActualSistema }}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="fechaInicioVisita">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaInicioVisita }}
+            </mat-header-cell>
+            <mat-cell *matCellDef="let mantenimiento; let i = index" formArrayName="fechas" [attr.data-label]="constants.fechaInicioVisita">
+              <div fxLayout="column" class="table-input">
+                <div *ngIf="!mantenimiento.editFechas">{{ mantenimiento.fechaInicioVisita ? utilitiesService.convertDateToString(mantenimiento.fechaInicioVisita, 'DD/MM/YYYY') : '' }}</div>
+                <div *ngIf="mantenimiento.editFechas" [formGroupName]="i">
+                  <sigma-form-calendar [type]="constants.datepicker.types.calendar" formControlName="startdate" [objeto]="mantenimiento"
+                    [placeholder]="constants.fechaInicioVisita" [maxTarget]="'fechaFinVisita'"  [(ngModel)]="mantenimiento.fechaInicioVisita"
+                    [minTarget]="'fechaMinima'"  [formatToModel]="constants.formatoDDMMYYYY" (ngModelChange)="onChangeFechaVisita(mantenimiento)">
+                  </sigma-form-calendar>
+                </div>
+              </div>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="fechaFinVisita">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaFinVisita }}
+            </mat-header-cell>
+            <mat-cell *matCellDef="let mantenimiento; let i = index" formArrayName="fechas" [attr.data-label]="constants.fechaFinVisita">
+              <div fxLayout="column" class="table-input">
+                <div *ngIf="!mantenimiento.editFechas">{{ mantenimiento.fechaFinVisita ? utilitiesService.convertDateToString(mantenimiento.fechaFinVisita, 'DD/MM/YYYY') : '' }}</div>
+                <div *ngIf="mantenimiento.editFechas" [formGroupName]="i">
+                  <sigma-form-calendar [type]="constants.datepicker.types.calendar" formControlName="enddate" [objeto]="mantenimiento"
+                    [placeholder]="constants.fechaFinVisita" [minTarget]="'fechaInicioVisita'"  (ngModelChange)="onChangeFechaVisita(mantenimiento)"
+                    [(ngModel)]="mantenimiento.fechaFinVisita" [formatToModel]="constants.formatoDDMMYYYY">
+                  </sigma-form-calendar>
+                </div>
+              </div>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="directorObra">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.directorObra }}
+            </mat-header-cell>
+            <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.directorObra">
+              {{ mantenimiento.directorObra ? mantenimiento.directorObra.nombres : ''  }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="acciones">
+            <mat-header-cell *matHeaderCellDef> {{ constants.acciones }}</mat-header-cell>
+            <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.acciones">
+              <button mat-raised-button color="primary" [matMenuTriggerFor]="menu">
+                <mat-icon matTooltip="{{ constants.verDetallePk }}" matTooltipPosition="above">
+                  remove_red_eye
+                </mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <a mat-menu-item (click)="diagnosticar(mantenimiento)">
+                  <mat-icon>info</mat-icon>
+                  <span>{{ constants.actaVisitaTecnica }}</span>
+                </a>
+                <a mat-menu-item (click)="disenoApique(mantenimiento)">
+                  <mat-icon>info</mat-icon>
+                  <span>{{ constants.disenoApique }}</span>
+                </a>
+                <a mat-menu-item (click)="revisarDiseno(mantenimiento)">
+                  <mat-icon>info</mat-icon>
+                  <span>{{ constants.revisarDiseno }} </span>
+                </a>
+                <a mat-menu-item (click)="vistaConjunta(mantenimiento)">
+                  <mat-icon>info</mat-icon>
+                  <span>{{ constants.vistaConjunta }}</span>
+                </a>
+              </mat-menu>
+              &nbsp;
+              <button *ngIf="mantenimiento.habilitarInput == true" mat-raised-button color="primary" (click)="habilitarCamposEdit(mantenimiento)">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </mat-cell>
+          </ng-container>
+
+          <mat-row *matRowDef="let row; columns: columns"></mat-row>
+        </mat-table>
+
+        <mat-paginator #paginator [length]="dataSource.totalElements$ | async"
+          [pageSize]="criteria.size" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+    </div>
+
+    <div fxLayout="row" class="w-100 mb-10" *ngIf="!editEnabled">
+      <div fxFlex fxLayoutAlign="center center">
+        <button mat-raised-button color="primary" class="m-1" (click)="onSubmitAsignar()"
+          [disabled]="btnAsignarEnabled || (dataSource.loading$ | async)">
+          <mat-icon class="m-1">how_to_reg</mat-icon>{{ constants.asignar }}
+        </button>
+      </div>
+      <div fxFlex fxLayoutAlign="center center">
+        <button mat-raised-button color="primary" class="m-1"(click)="habilitarEditar()"
+          [disabled]="btnAsignarEnabled || (dataSource.loading$ | async)">
+          <mat-icon class="m-1">edit</mat-icon>{{ constants.editar }}
+        </button>     
+      </div>
+    </div>
+  </form>
+
+  <div class="w-100 mt-10 mb-10" *ngIf="editEnabled">
+    <div *ngIf="saveEdit">
+      <div fxFlex fxLayoutAlign="center center">
+        <button class="m-1" mat-button color="warn" (click)="cancelEdit()"
+        [disabled]="btCancelEditDisabled || (dataSource.loading$ | async)">
+          <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+        </button>
+      </div>
+      <div fxFlex fxLayoutAlign="center center">
+        <button mat-raised-button class="m-1" color="primary" (click)="onSubmitEditar()"
+        [disabled]="btnSaveEditDisabled || (dataSource.loading$ | async)">
+          <mat-icon class="m-1">save</mat-icon>{{ constants.guardar }}
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="!saveEdit && !saveAllActivity" class="w-100 mt-10 mb-10">
+      <div fxFlex fxLayoutAlign="center center">
+        <button mat-raised-button color="primary" class="m-1"(click)="habilitarCampos()">
+          <mat-icon class="m-1">edit</mat-icon>{{ constants.editar }}
+        </button>     
+      </div>
+      <div fxFlex fxLayoutAlign="center center">
+        <button mat-raised-button color="primary" class="m-1" (click)="guardarTodo()">
+          <mat-icon class="m-1">save</mat-icon>{{ constants.guardarTodo }}
+        </button>
+      </div>
+    </div>  
+
+    <div *ngIf="saveAllActivity" class="w-100">
+      <sigma-seleccion-transicion [transiciones]="transicionesMasivas" [(data)]="data" [defaultUser]="visitaVerificacion.directorObra"
+        (executeTransition)="executeMasiveTransition($event)">
+      </sigma-seleccion-transicion>
+    </div>
+  </div>
+
+</div>
+
+<div *ngIf="currentAction == constants.currentAction.detalleDiagnosticar">
+  <div fxLayout="row" fxLayout.lt-md="column">
+    <div fxLayoutAlign="start" fxFlex>
+      <button mat-stroked-button color="primary" class="m-1 mb-10" (click)="closeAccion()">
+        <mat-icon>arrow_back_ios</mat-icon>
+        {{ constants.atras }}
+      </button>
+    </div>
+  </div>
+  <sigma-ver-diagnostico
+    [mantenimiento]="mantenimientoDiagnostico"
+    [mostrarButtonsBackCancelar]="false"
+    [isLinear]="isLinearDiagnostico" >
+  </sigma-ver-diagnostico>
+</div>
+
+<div *ngIf="currentAction == constants.currentAction.disenoApique">
+  <sigma-predisenio-detail [(predisenio)]="mantenimientoDisenoApique.predisenio"
+    [mantenimiento]="mantenimientoDisenoApique" (back)="backRevisarDiseno($event)"
+    [showCancelar]="false"
+    [forceDisableApique]="true">
+  </sigma-predisenio-detail>
+</div>
+
+<div *ngIf="currentAction == constants.currentAction.revisarDiseno">
+  <sigma-disenio-detail *ngIf="mantenimientoRevisarDiseno.disenio" 
+    [(disenio)]="mantenimientoRevisarDiseno.disenio"
+    [mantenimiento]="mantenimientoRevisarDiseno" [componentExterno]="true" 
+    (back)="backRevisarDisenio($event)" [permiso]="permiso" >
+  </sigma-disenio-detail>
+</div>
+
+<div *ngIf="currentAction == constants.currentAction.vistaConjunta">
+  <sigma-disenio-detail *ngIf="mantenimientoVistaConjunta.disenio"
+    [(disenio)]="mantenimientoVistaConjunta.disenio"
+    [mantenimiento]="mantenimientoVistaConjunta" [componentExterno]="true"
+    (back)="backRevisarDiseno($event)" [permiso]="permiso"
+    [botonCerrar]="false">
+  </sigma-disenio-detail>
+</div>

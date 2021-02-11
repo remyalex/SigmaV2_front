@@ -1,0 +1,351 @@
+<mat-vertical-stepper [linear]="false" #stepper>
+  <div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+
+  <!-- sección información general del diseño -->
+  <mat-step [stepControl]="formuarlioDisenioInformacion">
+    <ng-template matStepLabel>Información de Diseño</ng-template>
+    <mat-card-content class="m-0" [formGroup]="formuarlioDisenioInformacion">
+
+      <input type="hidden" formControlName="id" [(ngModel)]="disenioInformacion.id">
+
+      <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+        <div fxFlex>
+          <sigma-form-select formControlName="tipoSuperficie" [(ngModel)]="disenioInformacion.tipoSuperficie"
+            [path]="constantsDisenioInformacion.path_disenio_informacion_tipo_superficie"
+            [placeholder]="constantsDisenioInformacion.tipoSuperficie" [listBy]="'descripcion'">
+          </sigma-form-select>
+        </div>
+        <div fxFlex>
+          <sigma-form-select formControlName="materialGranular" [(ngModel)]="disenioInformacion.materialGranular"
+            [path]="constantsDisenioInformacion.path_disenio_informacion_material_granular"
+            [placeholder]="constantsDisenioInformacion.materialGranular" [listBy]="'descripcion'">
+          </sigma-form-select>
+        </div>
+      </div>
+
+      <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+        <div fxFlex>
+          <sigma-form-select formControlName="tipoIntervencionFinal"
+            [(ngModel)]="disenioInformacion.tipoIntervencionFinal"
+            [path]="constantsDisenioInformacion.path_disenio_informacion_tipo_intervencion_final"
+            [placeholder]="constantsDisenioInformacion.tipoIntervencionFinal" [listBy]="'descripcion'">
+          </sigma-form-select>
+        </div>
+        <div fxFlex>
+          <mat-form-field class="w-100">
+            <input matInput type="text" [numericInput]="true" placeholder="{{constantsDisenioInformacion.espesor}}"
+              formControlName="espesor" [(ngModel)]="disenioInformacion.espesor" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+        <div fxFlex>
+          <sigma-form-select formControlName="metodologia" [(ngModel)]="disenioInformacion.metodologia"
+            [path]="constantsDisenioInformacion.path_disenio_informacion_metodologia_disenio"
+            [placeholder]="constantsDisenioInformacion.metodologia" [listBy]="'descripcion'">
+          </sigma-form-select>
+        </div>
+        <div fxFlex>
+          <mat-form-field class="w-100">
+            <input matInput type="text" [numericInput]="true" placeholder="{{constantsDisenioInformacion.cbrInicial}}"
+              formControlName="cbrInicial" [(ngModel)]="disenioInformacion.cbrInicial" autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+      <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+    </mat-card-content>
+  </mat-step>
+
+  <!-- sección parametros del diseño -->
+  <mat-step [stepControl]="formuarlioDisenioParametro">
+    <ng-template matStepLabel>Parámetros de Diseño</ng-template>
+    <mat-card-content class="m-0" [formGroup]="formuarlioDisenioParametro">
+
+      <input type="hidden" formControlName="id" [(ngModel)]="disenioParametro.id">
+
+      <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+        <div fxFlex>
+          <sigma-form-select formControlName="clasificacionSubrasante"
+            [(ngModel)]="disenioParametro.clasificacionSubrasante"
+            [path]="constantsDisenioParametro.path_disenio_parametro_clasificacion_subrasante"
+            [placeholder]="constantsDisenioParametro.clasificacionSubrasante" [listBy]="'descripcion'">
+          </sigma-form-select>
+        </div>
+        <div fxFlex>
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constantsDisenioParametro.nee }}" formControlName="nee"
+              [(ngModel)]="disenioParametro.nee" autocomplete="off" type="text" [numericInput]="true"
+              pattern="^(?!\s*$).+">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+        <div fxFlex>
+          <mat-form-field class="w-100">
+            <input matInput type="text" [numericInput]="true" placeholder="{{constantsDisenioParametro.cbrDisenio}}"
+              formControlName="cbrDisenio" [(ngModel)]="disenioParametro.cbrDisenio" autocomplete="off">
+          </mat-form-field>
+        </div>
+        <div fxFlex>
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constantsDisenioParametro.tpdvc }}" formControlName="tpdvc"
+              [(ngModel)]="disenioParametro.tpdvc" autocomplete="off" type="text" [numericInput]="true"
+              pattern="^(?!\s*$).+">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+        <div fxFlex>
+          <mat-form-field class="w-100">
+            <input matInput type="text" [numericInput]="true" placeholder="{{constantsDisenioParametro.ks}}"
+              formControlName="ks" [(ngModel)]="disenioParametro.ks" autocomplete="off">
+          </mat-form-field>
+        </div>
+        <div fxFlex>
+          <mat-form-field class="w-100">
+            <input matInput type="text" [numericInput]="true"
+              placeholder="{{constantsDisenioParametro.numeroEstructuralEfectivo}}"
+              formControlName="numeroEstructuralEfectivo" [(ngModel)]="disenioParametro.numeroEstructuralEfectivo"
+              autocomplete="off">
+          </mat-form-field>
+        </div>
+      </div>
+      <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+    </mat-card-content>
+  </mat-step>
+
+  <!-- sección capas del diseño -->
+  <mat-step [stepControl]="formuarlioDisenioCapa">
+    <ng-template matStepLabel>Capas(diseño)</ng-template>
+    <mat-card-content class="m-0" [formGroup]="formuarlioDisenioCapa">
+
+      <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+
+        <input type="hidden" formControlName="idCapa1" [(ngModel)]="disenioCapa1.id">
+        <div fxFlex="40">
+          <mat-card class="p-0 c-mod">
+            <mat-card-header fxLayoutAlign="center">
+              <h3 mat-subheader>Capa 1</h3>
+            </mat-card-header>
+            <mat-card-content class="p-16 m-0">
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                <div fxFlex="100">
+                  <sigma-form-select formControlName="tipoCapa1" [(ngModel)]="disenioCapa1.tipo"
+                    [path]="constantsDisenioCapas.path_disenio_capas_tipo" [placeholder]="constantsDisenioCapas.tipo"
+                    [listBy]="'descripcion'">
+                  </sigma-form-select>
+                </div> 
+              </div>
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                <div fxFlex="100">
+                  <mat-form-field class="w-100">
+                    <input matInput type="text" [numericInput]="true" placeholder="{{constantsDisenioCapas.espesor}}"
+                      formControlName="espesorCapa1" [(ngModel)]="disenioCapa1.espesor" autocomplete="off">
+                  </mat-form-field>
+                </div> 
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <input type="hidden" formControlName="idCapa2" [(ngModel)]="disenioCapa2.id">
+        <div fxFlex="40">
+          <mat-card class="p-0 c-mod">
+            <mat-card-header fxLayoutAlign="center">
+              <h3 mat-subheader>Capa 2</h3>
+            </mat-card-header>
+            <mat-card-content class="p-16 m-0">
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                <div fxFlex="100">
+                  <sigma-form-select formControlName="tipoCapa2" [(ngModel)]="disenioCapa2.tipo"
+                    [path]="constantsDisenioCapas.path_disenio_capas_tipo" [placeholder]="constantsDisenioCapas.tipo"
+                    [listBy]="'descripcion'">
+                  </sigma-form-select>
+                </div> 
+              </div>
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                <div fxFlex="100">
+                  <mat-form-field class="w-100">
+                    <input matInput type="text" [numericInput]="true" placeholder="{{constantsDisenioCapas.espesor}}"
+                      formControlName="espesorCapa2" [(ngModel)]="disenioCapa2.espesor" autocomplete="off">
+                  </mat-form-field>
+                </div> 
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <input type="hidden" formControlName="idCapa3" [(ngModel)]="disenioCapa3.id">
+        <div fxFlex="40">
+          <mat-card class="p-0 c-mod">
+            <mat-card-header fxLayoutAlign="center">
+              <h3 mat-subheader>Capa 3</h3>
+            </mat-card-header>
+            <mat-card-content class="p-16 m-0">
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                <div fxFlex="100">
+                  <sigma-form-select formControlName="tipoCapa3" [(ngModel)]="disenioCapa3.tipo"
+                    [path]="constantsDisenioCapas.path_disenio_capas_tipo" [placeholder]="constantsDisenioCapas.tipo"
+                    [listBy]="'descripcion'">
+                  </sigma-form-select>
+                </div> 
+              </div>
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                <div fxFlex="100">
+                  <mat-form-field class="w-100">
+                    <input matInput type="text" [numericInput]="true" placeholder="{{constantsDisenioCapas.espesor}}"
+                      formControlName="espesorCapa3" [(ngModel)]="disenioCapa3.espesor" autocomplete="off">
+                  </mat-form-field>
+                </div> 
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+
+      <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+
+        <input type="hidden" formControlName="idCapa4" [(ngModel)]="disenioCapa4.id">
+        <div fxFlex="40">
+          <mat-card class="p-0 c-mod">
+            <mat-card-header fxLayoutAlign="center">
+              <h3 mat-subheader>Capa 4</h3>
+            </mat-card-header>
+            <mat-card-content class="p-16 m-0">
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                <div fxFlex="100">
+                  <sigma-form-select formControlName="tipoCapa4" [(ngModel)]="disenioCapa4.tipo"
+                    [path]="constantsDisenioCapas.path_disenio_capas_tipo" [placeholder]="constantsDisenioCapas.tipo"
+                    [listBy]="'descripcion'">
+                  </sigma-form-select>
+                </div> 
+              </div>
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                <div fxFlex="100">
+                  <mat-form-field class="w-100">
+                    <input matInput type="text" [numericInput]="true" [required]="true"
+                      placeholder="{{constantsDisenioCapas.espesor}}" formControlName="espesorCapa4"
+                      [(ngModel)]="disenioCapa4.espesor" autocomplete="off">
+                    <mat-error *ngIf="formuarlioDisenioCapa.get('espesorCapa4').hasError('pattern')">
+                      Solo se permiten números con hasta 2 dígitos decimales.
+                    </mat-error>
+                    <mat-error *ngIf="formuarlioDisenioCapa.get('espesorCapa4').hasError('max')">
+                      El valor máximo permitido es 50.
+                    </mat-error>
+                    <mat-error *ngIf="formuarlioDisenioCapa.get('espesorCapa4').hasError('required')">
+                      {{ constantsDisenioInformacion.campoRequerido }}
+                    </mat-error>
+                  </mat-form-field>
+                </div> 
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <input type="hidden" formControlName="idCapa5" [(ngModel)]="disenioCapa5.id">
+        <div fxFlex="40">
+          <mat-card class="p-0 c-mod">
+            <mat-card-header fxLayoutAlign="center">
+              <h3 mat-subheader>Capa 5</h3>
+            </mat-card-header>
+            <mat-card-content class="p-16 m-0">
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                <div fxFlex="100">
+                  <sigma-form-select formControlName="tipoCapa5" [(ngModel)]="disenioCapa5.tipo"
+                    [path]="constantsDisenioCapas.path_disenio_capas_tipo" [placeholder]="constantsDisenioCapas.tipo"
+                    [listBy]="'descripcion'">
+                  </sigma-form-select>
+                </div> 
+              </div>
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                <div fxFlex="100">
+                  <mat-form-field class="w-100">
+                    <input matInput type="text" [numericInput]="true" [required]="true"
+                      placeholder="{{constantsDisenioCapas.espesor}}" formControlName="espesorCapa5"
+                      [(ngModel)]="disenioCapa5.espesor" autocomplete="off">
+                    <mat-error *ngIf="formuarlioDisenioCapa.get('espesorCapa5').hasError('pattern')">
+                      Solo se permiten números con hasta 2 dígitos decimales.
+                    </mat-error>
+                    <mat-error *ngIf="formuarlioDisenioCapa.get('espesorCapa5').hasError('max')">
+                      El valor máximo permitido es 50.
+                    </mat-error>
+                    <mat-error *ngIf="formuarlioDisenioCapa.get('espesorCapa5').hasError('required')">
+                      {{ constantsDisenioInformacion.campoRequerido }}
+                    </mat-error>
+                  </mat-form-field>
+                </div> 
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <div fxFlex="40"></div>
+
+      </div>
+
+    </mat-card-content>
+
+    <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+  </mat-step>
+
+  <!-- sección información complementaria del diseño -->
+  <mat-step [stepControl]="formuarlioDisenioInformacionComplementaria">
+    <ng-template matStepLabel>Complementarios</ng-template>
+    <mat-card-content class="m-0" [formGroup]="formuarlioDisenioInformacionComplementaria">
+
+      <input type="hidden" formControlName="id" [(ngModel)]="disenioInformacionComplementaria.id">
+
+      <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+        <div fxFlex>
+          <sigma-form-select formControlName="geosinteticos"
+            [(ngModel)]="disenioInformacionComplementaria.geosinteticos"
+            [path]="constantsDisenioInformacionComplementaria.path_disenio_informacion_complementaria_geosinteticos"
+            [placeholder]="constantsDisenioInformacionComplementaria.geosinteticos" [listBy]="'descripcion'">
+          </sigma-form-select>
+        </div>
+        <div fxFlex>
+          <sigma-form-select formControlName="sistemaDrenaje"
+            [(ngModel)]="disenioInformacionComplementaria.sistemaDrenaje"
+            [path]="constantsDisenioInformacionComplementaria.path_disenio_informacion_complementaria_sistema_drenaje"
+            [placeholder]="constantsDisenioInformacionComplementaria.sistemaDrenaje" [listBy]="'descripcion'">
+          </sigma-form-select>
+        </div>
+      </div>
+
+      <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+    </mat-card-content>
+  </mat-step>
+
+  <!-- sección información del diseño - Observaciones -->
+  <mat-step [stepControl]="formuarlioDisenioInformacionObservaciones">
+    <ng-template matStepLabel>Observaciones de Información del diseño</ng-template>
+    <mat-card-content class="m-0" [formGroup]="formuarlioDisenioInformacionObservaciones">
+
+      <input type="hidden" formControlName="id" [(ngModel)]="disenioInformacionObservaciones.id">
+
+      <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+        <div fxFlex>
+          <sigma-form-input formControlName="observaciones" [(ngModel)]="disenioInformacionObservaciones.observaciones"
+            [placeholder]="constantsDisenioInformacion.observaciones">
+          </sigma-form-input>
+        </div>
+      </div>
+
+      <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+    </mat-card-content>
+  </mat-step>
+
+</mat-vertical-stepper>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<div fxLayoutAlign="end" class="mt-10">
+  <button type="button" (click)="componentExterno ? onBackExterno(): onBack()" mat-button color="warn" class="m-1">
+    <mat-icon class="m-1">close</mat-icon> {{ constantsDisenioInformacion.cancelar }}
+  </button>
+</div>

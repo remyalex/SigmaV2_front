@@ -1,0 +1,99 @@
+<h2 mat-dialog-title>{{ constants.actividades }}</h2>
+
+<div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+  <h5>{{ constants.informacionCampoObligatorio }}</h5>
+</div>
+
+<mat-dialog-content [formGroup]="form_actividades" *sigmaIsGranted="constants.permiso_produccion_programar_personal_planta_update">
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput type="text" placeholder="{{ constants.item }}"
+          formControlName="nombreItem" [(ngModel)]="actividades.nombreItem"
+          autocomplete="off" >
+          <mat-error *ngIf="form_actividades.get('nombreItem').hasError('required')"> {{ constants.campoRequerido }}
+          </mat-error>
+        <mat-error *ngIf="form_actividades.get('nombreItem').hasError('maxlength')"> {{ constants.longitud_maxima }} 100
+          caracteres. </mat-error>
+      </mat-form-field>
+    </div>
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput type="text" placeholder="{{ constants.descripcion }}"
+          formControlName="descripcion" [(ngModel)]="actividades.descripcion"
+          autocomplete="off" >
+          <mat-error *ngIf="form_actividades.get('descripcion').hasError('required')"> {{ constants.campoRequerido }}
+          </mat-error>
+        <mat-error *ngIf="form_actividades.get('descripcion').hasError('maxlength')"> {{ constants.longitud_maxima }} 150
+          caracteres. </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput type="text" placeholder="{{ constants.calificacion }}"
+          formControlName="calificacion" [(ngModel)]="actividades.calificacion"
+          autocomplete="off" >
+          <mat-error *ngIf="form_actividades.get('calificacion').hasError('required')"> {{ constants.campoRequerido }}
+          </mat-error>
+      </mat-form-field>
+    </div>
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput type="text" placeholder="{{ constants.variableControl }}"
+          formControlName="variableControl" [(ngModel)]="actividades.variableControl"
+          autocomplete="off" >
+        <mat-error *ngIf="form_actividades.get('variableControl').hasError('maxlength')"> {{ constants.longitud_maxima }} 20
+          caracteres. </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput type="text" placeholder="{{ constants.lecturaInicial }}"
+          formControlName="lecturaInicial" pattern="^(?!\s*$).+" [(ngModel)]="actividades.lecturaInicial"
+          autocomplete="off" >
+
+      </mat-form-field>
+    </div>
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput type="text" placeholder="{{ constants.lecturaFinal }}"
+          formControlName="lecturaFinal" pattern="^(?!\s*$).+" [(ngModel)]="actividades.lecturaFinal"
+          autocomplete="off" >
+
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput type="text" placeholder="{{ constants.observacion }}"
+          formControlName="observacion" [(ngModel)]="actividades.observacion"
+          autocomplete="off" >
+          <mat-error *ngIf="form_actividades.get('observacion').hasError('required')"> {{ constants.campoRequerido }}
+          </mat-error>
+        <mat-error *ngIf="form_actividades.get('observacion').hasError('maxlength')"> {{ constants.longitud_maxima }} 300
+          caracteres. </mat-error>
+      </mat-form-field>
+    </div>
+
+  </div>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon>{{ constants.cancelar }}
+  </button>
+  <button mat-raised-button [disabled]="disableSubmit" color="primary" (click)="onSubmit()"
+    *sigmaIsGranted="constants.permiso_produccion_programar_personal_planta_update">
+    <mat-icon class="m-1">save</mat-icon>{{ constants.guardar }}
+  </button>
+</mat-dialog-actions>

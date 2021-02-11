@@ -1,0 +1,30 @@
+<div class="flex-p">
+  <mat-card class="p-0">
+    <mat-card-header fxLayoutAlign="center">
+      <mat-card-subtitle>
+        <h2>Aprobar Actas de Vecindad</h2>
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+      <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+    </div>
+
+    <div [hidden]="processing">
+
+      <div *ngIf="currentAction == 'list'">
+        <div fxLayout="row" fxLayout.lt-md="column">
+          <div fxFlex="100" class="flex-p">
+            <mat-tab-group [selectedIndex]="tabSeleccionado.value" (selectedIndexChange)="seleccionarGrid($event)" *ngIf="condicion">
+              <mat-tab label="PKs">
+                <sigma-grid-mantenimientos #grid [data]="data" [columns]="columns" [filters]="filters" [condicion]="condicion"
+                   (executeOnSingle)="ejecutar($event)" [singleActions]="acciones">
+                </sigma-grid-mantenimientos>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>

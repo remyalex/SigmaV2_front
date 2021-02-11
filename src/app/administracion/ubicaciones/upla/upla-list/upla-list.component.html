@@ -1,0 +1,100 @@
+<div>
+  <div>
+    <mat-card-header fxLayoutAlign="center">
+      <mat-card-subtitle>
+        <h2>{{ constants.consultar }}</h2>
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input  matInput placeholder="{{ constants.id }}" id="id" [(ngModel)]="criteria.id" name="id" [numericInput]="true"
+                type="text"  />
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.nombre }}" id="nombre" [(ngModel)]="criteria.nombre" name="nombre"
+                type="text" />
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <button  mat-raised-button color="primary" class="m-1" (click)="search()">
+              <mat-icon>search</mat-icon> {{ constants.buscar }}
+            </button>
+            <button (click)="clear()" mat-raised-button color="warn" class="m-1">
+              <mat-icon>clear</mat-icon> {{ constants.limpiar }}
+            </button>
+          </div>
+      </div>
+    </mat-card-content>
+  </div>
+</div>
+
+<div class="mat-elevation-z8">
+  <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center">
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+  <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+    <mat-icon class="m-1">sms_failed</mat-icon>
+    <h4> {{dataSource.errorMessage$ | async}}</h4>
+  </div>
+
+  <mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort>
+
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.id }} </mat-header-cell>
+      <mat-cell *matCellDef="let upla" [attr.data-label]="constants.id">
+        {{upla.id}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="nombre">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.nombre  }} </mat-header-cell>
+      <mat-cell *matCellDef="let upla" [attr.data-label]="constants.nombre">
+        {{upla.nombre}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="valor">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.valor }} </mat-header-cell>
+      <mat-cell *matCellDef="let upla" [attr.data-label]="constants.valor">
+        {{upla.valor}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="activo">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.activo }} </mat-header-cell>
+      <mat-cell *matCellDef="let upla" [attr.data-label]="constants.activo">
+        <span class="dev-color-red" [hidden]="upla.activo">{{ constants.no }}</span>
+        <span class="dev-color-green" [hidden]="!upla.activo">{{ constants.si }}</span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+      <mat-cell *matCellDef="let upla" [attr.data-label]="constants.acciones">
+        <button mat-raised-button color="primary" (click)="detail(upla)" class="m-1"
+          *sigmaIsGranted="constants.permiso_administracion_upla_detail">
+          <mat-icon matTooltip="Detalles" matTooltipPosition="above">open_in_new</mat-icon>
+        </button>
+        <button mat-raised-button color="primary" (click)="edit(upla)" class="m-1"
+          *sigmaIsGranted="constants.permiso_administracion_upla_edit">
+          <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+        </button>
+        <button mat-raised-button color="warn" (click)="delete(upla)" class="m-1"
+          *sigmaIsGranted="constants.permiso_administracion_upla_delete">
+          <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size"
+    [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+</div>

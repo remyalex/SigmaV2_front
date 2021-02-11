@@ -1,0 +1,169 @@
+<h2 mat-dialog-title>{{ constants.detalle }} Persona</h2>
+
+<mat-dialog-content>
+  <mat-list>
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.tipoIdentificacionId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ persona.tipoIdentificacion ? persona.tipoIdentificacion.valor : ''}}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.identificacion }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ persona.identificacion }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.nombres }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ persona.nombres }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.apellidos }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ persona.apellidos }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.correo }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ persona.correo }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.categoriaPersonaId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ persona.categoriaPersona ? persona.categoriaPersona.valor : '' }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.tipoRegimenId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ persona.tipoRegimen ? persona.tipoRegimen.valor : '' }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.areaUmvId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ persona.areaUmv ? persona.areaUmv.descripcion : '' }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.cargoId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ persona.cargo ? persona.cargo.descripcion : '' }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.estadoPersonaId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ persona.estado ? persona.estado.valor : '' }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.telefono }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ persona.telefono }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.horaInicioProgramacion }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ formatHora(persona.horaInicioProgramacion) }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.horaFinProgramacion }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ formatHora(persona.horaFinProgramacion) }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="mb-10">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.activo }}</b>:
+        </div>
+        <div class="p-tab" fxFlex="60">
+          <span class="dev-color-red" [hidden]="persona.activo">{{ constants.no }}</span>
+          <span class="dev-color-green" [hidden]="!persona.activo">{{ constants.si }}</span>
+        </div>
+      </div>
+    </mat-list-item>
+
+  </mat-list>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cerrar }}
+  </button>
+</mat-dialog-actions>

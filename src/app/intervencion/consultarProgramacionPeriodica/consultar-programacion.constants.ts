@@ -1,0 +1,113 @@
+import { CONST_SHARED } from 'src/app/shared/constantes-shared';
+
+/** 
+*  Constantes con valores de URL´s relacionadas con el componente 
+*/
+export const PATHS = {
+    path_intervencion_consulta_programacion_periodica: '/api/intervencion/programacionPeriodico',
+    path_mejoramiento_lista_estadopk: '/api/administracion/lista/ESTADO_PK_INTERVENCION/items',
+    path_mejoramiento_lista_upla: '/api/administracion/ubicaciones/upla',
+    path_mejoramiento_lista_tipoIntervencion: '/api/administracion/tipoIntervencion/listByReferenciaIntervencion/647373/0',
+    path_mejoramiento_lista_estrategia: '/api/administracion/lista/TAB_MANTENIMIENTO_VIAL_ID_TIPO_ESTRATEGIA/items',
+    path_lista_vigencia: '/api/administracion/lista/VIGENCIA/items',
+    path_lista_periodicidad: '/api/mejoramiento/periodicidad/parents',
+    path_lista_periodo: '/api/mejoramiento/periodicidad/1/itemsChildrens',
+    path_mejoramiento_lista_localidades: '/api/administracion/ubicaciones/localidad',
+    path_mejoramiento_lista_zonas: '/api/administracion/ubicaciones/zona',
+    path_mejoramiento_lista_barrios: '/api/administracion/ubicaciones/barrio',
+    path_administracion_usuario_by_zona: '/api/usuario',
+    path_lista_items_estadoObra: '/api/administracion/lista/UMV_CUADRILLA_INT_ESTADO_OBRA/items'
+};
+
+/**
+ * Declaración de constantes de etiquetas propias usadas en el componente
+ */
+export const CONST_CONSULTAR_PROGRAMACION_PERIODICA = {
+    consultaProgPer: 'Consulta de Programación Periódica de Intervención',
+    visualizar: 'Visualizar',
+    consultar: 'Consultar',
+    buscar: 'Buscar',
+    cancelar: 'Cancelar',
+    //filtros
+    criterio: 'Criterio',
+    zona: 'Zona',
+    localidad: 'Localidad',
+    upla: 'UPZ',
+    barrio: 'Barrio',
+    directorDeObra: 'Director(a) de Obra',
+    tipoIntervencion: 'Tipo de Intervención',
+    estrategia: 'Estrategia',
+    vigencia: 'Vigencia',
+    periodicidad: 'Periodicidad',
+    periodo: 'Periodo',
+    fechaInicialCorte: 'Fecha Inicial Corte',
+    fechaFinalCorte: 'Fecha Final Corte',
+    estadoPK: 'Estado del PK',
+    estadoObra: 'Estado de la Obra',
+    //columnas 1
+    pk: 'Pk',
+    civ: 'CIV',
+    fechaInicialReal: 'Fecha Inicial Real',
+    fechaFinalReal: 'Fecha Final Real',
+    duracionReal: 'Duración Real (días)',
+    duracionPlaneada: 'Duración Planeada (días)',
+    estadoAvance: 'Estado del avance',
+    kmCarrilImpacto: 'Km Carril Impacto',
+    kmCarrilLineal: 'Km Carril Lineal',
+    kmCarrilObra: 'Km Carril Obra',
+    //columnas 2
+    fechaProgDiaria: 'Fecha Programación Diaria',
+    jornada: 'Jornada',
+    fechaRegDiarioCuadrilla: 'Fecha Registro Diario Cuadrilla',
+    //columnasTotales
+    totalKmImpacto: 'Total KM Carril Impacto',
+    totalKmLineal: 'Total KM Carril Lineal',
+    totalKmObra: 'Total KM Carril Obra',
+    totalDiasDuracionPlaneada: 'Total Días Duración Planeada',
+    //headersExport
+    no: 'No',
+    noLocal: 'No. Local',
+    pkIdCalzada: 'Pk_Id_Calz',
+    ejeVial: 'Eje Vial',
+    desde: 'Desde',
+    hasta: 'Hasta',
+    elementos: 'Elemento',
+    actividad: 'Actividad',
+    actAgrupada: 'Act_Agrupada',
+    tipoMalla: 'Tipo Malla',
+    tipoMallaVial1: 'Tipo Malla Vial 1',
+    anchoPk: 'Ancho Pk',
+    longitudH: 'Longitud_H',
+    areaPk: 'Area Pk',
+    estado: 'Estado',
+    origen: 'Origen',
+    superficie: 'Superficie',
+    huecos: 'Huecos',
+    mezcla: 'Mezcla',
+    concreto: 'Concreto',
+    programa: 'Programa',
+    programacion: 'Programación',
+    mesMeta: 'Mes Meta Planeación',
+    estadoEjecucion: 'Estado Ejecución',
+    finEjecucion: 'Fin de Ejecución',
+    anoMes: 'Año/Mes',
+    residente: 'Residente',
+    director: 'Director',
+    trimestre: 'Trimestre',
+    fecha: 'Fecha',
+    esMisional: 'Es Misional ?',
+    esPaOSf: 'Es PA o SF ?',
+    pmt: 'PMT',
+    horarioPmt: 'Horario PMT',
+    project: 'Project',
+    observacionGISmvl: 'Observacion GI_SMVL',
+    observacionGI: 'Observacion G.I',
+    observacion2020: 'Observacion 2020',
+    inicio: 'INICIO',
+    enEjecucion: 'EN EJECUCION',
+    inicioTerminado: 'INICIO/TERMINADO',
+    terminado: 'TERMINADO',
+    ...CONST_SHARED,
+    ...PATHS
+};
+

@@ -1,0 +1,178 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="processing">
+  <div *ngIf="currentAction == 'list'">
+    <div fxLayout="column" fxLayout.gt-sm="row wrap">
+      <div fxFlex="100" class="flex-p" *ngIf="condicion && condicionConsulta">
+
+        <mat-tab-group [selectedIndex]="tabSeleccionado.value" (selectedIndexChange)="seleccionarGrid($event)"
+          (selectedTabChange)="getResidentesSSTesConPksAsignados()">
+
+          <mat-tab label="Asignar PK’s a Residentes SST">
+            <sigma-grid-mantenimientos #grid [data]="data" [condicion]="condicion" [columns]="columns"
+              [filters]="filtersTransiciones" [showActividadAgrupada]="false" [showKmCarril]="false"
+              [masiveActions]="accionesMasivas" (executeOnMasiveAction)="ejecutar($event)"
+              [defaultFilters]="defaulFilters" [reponsableForViewGrid]="reponsableForViewGrid" >
+            </sigma-grid-mantenimientos>
+          </mat-tab>
+
+          <mat-tab label="Consultar asignaciones residentes SST ">
+            <sigma-grid-mantenimientos #grid [data]="data" [condicion]="condicionConsulta" [columns]="columnsConsultar"
+              [filters]="filtersConsulta"  [showCheckSingle]="true" [showCheckMasive]="true"
+              [defaultFilters]="defaultFiltersConsultar">
+            </sigma-grid-mantenimientos>
+
+            <mat-card-content class="p-16 m-0">
+              <div>
+                <div fxFlex.lg="50" fxFlex.md="50" fxFlex="100" class="mat-elevation-z8">
+
+                  <div *ngIf="loadingResidentes" fxLayout="column" fxLayoutAlign="center center">
+                    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+                  </div>
+
+                  <div *ngIf="errorServiceResidentesSST" class="msj_no_results" fxLayout="row"
+                    fxLayoutAlign="center center">
+                    <mat-icon class="m-1">sms_failed</mat-icon>
+                    <h4> {{errorServiceResidentesSST}}</h4>
+                  </div>
+
+                  <div [hidden]="loadingResidentes">
+                    <mat-table [dataSource]="dataSourceResidenteSST" #sortResidentes="matSort" matSort>
+                      <ng-container matColumnDef="numeral">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Numeral Ascendente </mat-header-cell>
+                        <mat-cell *matCellDef="let residente; let i = index;" data-label="Numeral Ascendente"> 
+                          {{residente.posicion}} </mat-cell>
+                      </ng-container>
+
+                      <ng-container matColumnDef="nombres">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                        <mat-cell *matCellDef="let residente" data-label="Nombre"> 
+                          {{residente.nombres}} </mat-cell>
+                      </ng-container>
+
+                      <ng-container matColumnDef="cant_Pks_Asig_Residente_SST">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Cantidad de PK's Asignados </mat-header-cell>
+                        <mat-cell *matCellDef="let residente" data-label="Cantidad de PK's Asignados"> 
+                          {{residente.cant_Pks_Asig_Residente_SST}} </mat-cell>
+                      </ng-container>
+
+                      <mat-header-row *matHeaderRowDef="columnsResidentesSSTConsultar"></mat-header-row>
+                      <mat-row *matRowDef="let row; columns: columnsResidentesSSTConsultar;"></mat-row>
+                    </mat-table>
+
+                    <mat-paginator #paginadorResidentes [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
+                    </mat-paginator>
+                  </div>
+
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-tab>
+
+        </mat-tab-group>
+
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="currentAction == 'asignarResidenteSST'">
+    <mat-card-content class="p-16 m-0">
+      <ng-template matStepLabel>{{ constants.personas }}</ng-template>
+      <div fxLayout="column" fxLayoutGap="10px" fxFlexAlign="center">
+        <div>
+          <div fxFlex.lg="50" fxFlex.md="50" fxFlex="100" class="mat-elevation-z8">
+
+            <div *ngIf="loadingResidentes" fxLayout="column" fxLayoutAlign="center center">
+              <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+            </div>
+
+            <div *ngIf="errorServiceResidentesSST" class="msj_no_results" fxLayout="row"
+              fxLayoutAlign="center center">
+              <mat-icon class="m-1">sms_failed</mat-icon>
+              <h4> {{errorServiceResidentesSST}}</h4>
+            </div>
+
+            <div [hidden]="loadingResidentes">
+              <mat-table [dataSource]="dataSourceResidenteSST" #sortResidentes="matSort" matSort>
+
+                <ng-container matColumnDef="numeral">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Numeral Ascendente </mat-header-cell>
+                  <mat-cell *matCellDef="let residente; let i = index;" data-label="Numeral Ascendente"> 
+                    {{residente.posicion}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="nombres">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+                  <mat-cell *matCellDef="let residente" data-label="Nombre"> 
+                    {{residente.nombres}} {{residente.apellidos}}  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="cant_Pks_Asig_Residente_SST">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Cantidad de PK's Asignados </mat-header-cell>
+                  <mat-cell *matCellDef="let residente" data-label="Cantidad de PK's Asignados"> 
+                    {{residente.cant_Pks_Asig_Residente_SST}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="select">
+                  <mat-header-cell *matHeaderCellDef> Selección </mat-header-cell>
+                  <mat-cell *matCellDef="let residente; let i = index;" data-label="Selección">
+                    <mat-radio-button (click)="$event.stopPropagation()"
+                      [disabled]="estadoAsignacion !== constants.asignacion"
+                      (change)="$event ? toggelChecksResidente(residente, $event) : null"></mat-radio-button>
+                  </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="columnsResidentesSST"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: columnsResidentesSST;"></mat-row>
+              </mat-table>
+              <mat-paginator #paginadorResidentes [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="residenteSSTSeleccionado" class="mb-10">
+          <sigma-mantenimientos-seleccionados-sst [mantenimientos]="mantenimientos"
+            (mantenimientosSelectEmit)="actualizarMantenimientosSeleccionados($event)"
+            [residenteSST]="residenteSSTSeleccionado" [estadoAsignacion]="estadoAsignacion">
+          </sigma-mantenimientos-seleccionados-sst>
+        </div>
+
+      </div>
+    </mat-card-content>
+    
+    <mat-divider></mat-divider>
+    
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0" Align="end" class="mt-10">
+      <div fxFlex>
+        <button (click)="cancelar()" mat-button color="warn" class="m-1">
+          <mat-icon>close</mat-icon> Cancelar
+        </button>
+        <button type="submit" *ngIf="estadoAsignacion === constants.asignacion" [disabled]="!validate()"
+          mat-raised-button color="primary" class="m-1" (click)="asignar()">
+          <mat-icon>assignment_turned_in</mat-icon> Asignar
+        </button>
+        <button type="submit" *ngIf="estadoAsignacion === constants.edicion" [disabled]="!validate()"
+          mat-raised-button color="primary" class="m-1" (click)="asignar()">
+          <mat-icon>save</mat-icon> Guardar
+        </button>
+        <button type="submit" *ngIf="estadoAsignacion === constants.guardado" mat-raised-button color="primary"
+          class="m-1" (click)="setEstadoEditar()" [disabled]="showSeleccionTransicion">
+          <mat-icon>edit</mat-icon> Editar
+        </button>
+        <button type="submit" *ngIf="estadoAsignacion === constants.guardado" [disabled]="!validate()"
+          mat-raised-button color="primary" class="m-1" (click)="guardarTodo()">
+          <mat-icon>save</mat-icon> Guardar Todo
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="showSeleccionTransicion" class="mt-10">
+      <sigma-seleccion-transicion [data]="data" [transiciones]="transicionesIndividuales"
+        (executeTransition)="executeTransition($event)" [defaultUser]="residenteSSTSeleccionado.usuario" >
+      </sigma-seleccion-transicion>
+    </div>
+    
+  </div>
+</div>

@@ -1,0 +1,368 @@
+<h2 mat-dialog-title>{{ constants.detalle }}</h2>
+
+<mat-dialog-content *sigmaIsGranted="constants.permiso_produccion_programar_personal_planta_view">
+  <mat-list>
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.activo }}</b>:
+        </div>
+        <div class="p-tab" fxFlex="60">
+          <span class="dev-color-red" [hidden]="equipo.activo">{{ constants.no }}</span>
+          <span class="dev-color-green" [hidden]="!equipo.activo">{{ constants.si }}</span>
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.id }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipo.id }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.numeroInterno }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipo.numeroInterno }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.placaInventario }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipo.placaInventario }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.placa }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipo.placa }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.picoYPlaca }}</b>:
+        </div>
+        <div class="p-tab" fxFlex="60">
+          <span class="dev-color-red" [hidden]="equipo.picoYPlaca == null || equipo.picoYPlaca">{{ constants.no }}</span>
+          <span class="dev-color-green" [hidden]="!equipo.picoYPlaca">{{ constants.si }}</span>
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.movil }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipo.movil }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.claseEquipoId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipo.claseEquipo?.valor }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.tipoEquipoId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipo.equipoTipo?.valor }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.origenEquipoId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipo.origenEquipo?.valor }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.plazoMantenimiento }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipo.plazoMantenimiento }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.kilometrosMantenimiento }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipo.kilometrosMantenimiento }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.fechaUltimoMantenimiento }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipo.fechaUltimoMantenimiento }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.fechaSiguienteMantenimiento }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipo.fechaSiguienteMantenimiento }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.marcaEquipoId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipo.marcaEquipo?.valor }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.linea }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipo.linea }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.cilindraje }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipo.cilindraje }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.tipoCombustibleId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipo.tipoCombustible?.valor }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.anioModeloId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipo.anioModelo?.valor }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.color }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipo.color }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.areaUmvId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipo.area?.valor }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.lugarUmvId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipo.lugar?.nombre }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.numeroMotor }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipo.numeroMotor }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.numeroChasis }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipo.numeroChasis }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.horaInicioProgramacion }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipo.horaInicioProgramacion }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.horaFinProgramacion }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipo.horaFinProgramacion }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.fechaDesde }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipo.fechaDesde }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.fechaHasta }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipo.fechaHasta }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.estadoEquipoId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipo.estadoEquipo?.valor }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.horasMantenimiento }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipo.horasMantenimiento }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.cantidadPasajeros }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipo.cantidadPasajeros }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="mb-10">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.toneladas }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipo.toneladas }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <!-- next -->
+  </mat-list>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cerrar }}</button>
+</mat-dialog-actions>

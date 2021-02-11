@@ -1,0 +1,137 @@
+<mat-card-content class="p-16 m-0">
+  <form>
+    <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+         
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48">
+        <sigma-form-select #directorObraComponent [(ngModel)]="criteria.directorDeObra"
+          [path]="constants.path_administracion_all_usuarios_director_obra_autocomplete" [listBy]="'nombres'"
+          [placeholder]="'' + constants.directorDeObra" [ngModelOptions]="{standalone: true}">
+        </sigma-form-select>
+      </div>
+
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48">
+        <sigma-form-select [path]="'/api/administracion/lista/getItemsFiltroActividadAgrupada'"
+          [(ngModel)]="criteria.tipoIntervencion" name="tipoIntervenciones"
+          [placeholder]="'' + constants.tipoIntervencion" [listBy]="'valor'">
+        </sigma-form-select>
+    </div>
+  
+      <div fxFlex.gt-sm="0 0 18" fxFlex.md="0 0 48">
+          <sigma-form-select [isForCache]="false" [path]="'/api/administracion/lista/UMV_ESTADO_PROGRAMACION_DEL_PK/items'"
+            [(ngModel)]="criteria.estadoProgramacion" name="estadoProgramacion" [exclude] = "fieldsExclude" [excludeBy]="'valor'"
+            [placeholder]="'' + constants.estadoProgramacion" [listBy]="'descripcion'">
+          </sigma-form-select>
+      </div>
+  
+    </div>
+  
+    <!-- Botones de los Filtros-->
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+      <div fxFlex >
+        <button id="cu-08-filtros-boton-buscar" type="submit" mat-raised-button color="primary" 
+          class="m-1" (click)="search()">
+          <mat-icon>search</mat-icon> Buscar
+        </button>
+        <button id="cu-08-filtros-boton-limpiar" (click)="clear()" mat-raised-button color="warn"
+          class="m-1">
+          <mat-icon>clear</mat-icon> Limpiar
+        </button>
+      </div>
+    
+    </div>
+
+    <!-- Grid -->
+    <div class="mat-elevation-z8  mt-10">
+      <div *ngIf="loading" fxLayout="column" fxLayoutAlign="center center">
+        <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+      </div>
+      <div *ngIf=" dataSource !== undefined && dataSource.filteredData.length == 0 && loading == false" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+        <mat-icon class="m-1">sms_failed</mat-icon>
+        <h4> {{ errorMensaje }}</h4>
+      </div>
+      <mat-table #table [dataSource]="dataSource" [hidden]="loading" class="col-x" matSort>
+    
+        <ng-container matColumnDef="nroActa">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> No Acta </mat-header-cell>
+          <mat-cell *matCellDef="let element" data-label="No Acta"> {{element.nroActa}} </mat-cell>
+        </ng-container>
+    
+        <ng-container matColumnDef="fechaInicio">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de visita inicio </mat-header-cell>
+          <mat-cell *matCellDef="let element" data-label="Fecha de visita inicio"> {{element.fechaInicio}} </mat-cell>
+        </ng-container>
+    
+        <ng-container matColumnDef="fechaFinal">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha final de visita </mat-header-cell>
+          <mat-cell *matCellDef="let element" data-label="Fecha final de visita"> {{element.fechaFinal}} </mat-cell>
+        </ng-container>
+    
+        <ng-container matColumnDef="fechaVisita">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha visita </mat-header-cell>
+          <mat-cell *matCellDef="let element" data-label="Fecha visita"> {{element.fechaVisita}} </mat-cell>
+        </ng-container>
+    
+        <ng-container matColumnDef="estadoProgramacion.descripcion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Estado programación </mat-header-cell>
+          <mat-cell *matCellDef="let element" data-label="Estado programación"> {{element.estadoProgramacion !== null ? element.estadoProgramacion.descripcion : ''}} </mat-cell>
+        </ng-container>
+    
+        <ng-container matColumnDef="radicadoIntervencion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Radicado de intervención </mat-header-cell>
+          <mat-cell *matCellDef="let element" data-label="Radicado de intervención"> {{element.radicadoIntervencion}} </mat-cell>
+        </ng-container>
+    
+        <ng-container matColumnDef="zona.nombre">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Zona </mat-header-cell>
+          <mat-cell *matCellDef="let element" data-label="Zona"> {{element.zona?.nombre}} </mat-cell>
+        </ng-container>
+    
+        <ng-container matColumnDef="localidad.nombre">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Localidad </mat-header-cell>
+          <mat-cell *matCellDef="let element" data-label="Localidad"> {{element.localidad? element.localidad.nombre: ''}} </mat-cell>
+        </ng-container>
+    
+        <ng-container matColumnDef="directorObra.nombresYApellidos">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Director de Obra </mat-header-cell>
+          <mat-cell *matCellDef="let element" data-label="Director de Obra"> {{element.directorObra?.nombres + ' ' + element.directorObra?.apellidos}} </mat-cell>
+        </ng-container>
+    
+        <ng-container matColumnDef="tipoIntervencion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo Intervención </mat-header-cell>
+          <mat-cell *matCellDef="let element" data-label="Tipo Intervención"> {{element.tipoIntervencion}} </mat-cell>
+        </ng-container>
+    
+        <ng-container matColumnDef="requiereActualizacion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Requiere Actualización </mat-header-cell>
+          <mat-cell *matCellDef="let element" data-label="Requiere Actualización">
+              <span class="dev-color-red" [hidden]="element.requiereActualizacion">{{ constants.no }}</span>
+              <span class="dev-color-green" [hidden]="!element.requiereActualizacion">{{ constants.si }}</span>
+          </mat-cell>
+        </ng-container>
+    
+        <ng-container matColumnDef="acciones">
+          <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+          <mat-cell *matCellDef="let element" data-label="Acciones">
+            <button mat-raised-button color="primary" class="m-1" (click)="exportarPDF('reporteVisitaDiagnostico', element.mantenimientoId)">
+                <mat-icon matTooltip="Exportar Diagnóstico Mejoramiento" matTooltipPosition="above">cloud_download</mat-icon><!--Diagnóstico Mejoramiento-->
+            </button>
+            <button mat-raised-button color="basic" class="m-1" (click)="exportarPDF('reporteVisitaIntervencion', element.id)" [disabled] = "element.nroActa === ''">
+                <mat-icon matTooltip="Exportar Diagnóstico Intervención" matTooltipPosition="above">cloud_download</mat-icon><!--Diagnóstico Intervención-->
+            </button>
+          </mat-cell>
+        </ng-container>
+    
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row >
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+    
+      <mat-paginator #paginator [length]="lengthList" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+    </div>
+
+  </form>
+
+  
+  
+</mat-card-content>
+
+

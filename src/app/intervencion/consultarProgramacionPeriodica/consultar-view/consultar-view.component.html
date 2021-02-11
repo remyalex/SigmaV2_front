@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>Archivo</h2>
+
+<mat-dialog-content>
+
+  <mat-card-content fxLayoutAlign="center center">
+    <sigma-show-file id="{{ idArchivo }}"></sigma-show-file>
+  </mat-card-content>
+
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="center">
+  <button type="button" (click)="onBack()" mat-button color="warn" class="m-1">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+  </button>
+</mat-dialog-actions>

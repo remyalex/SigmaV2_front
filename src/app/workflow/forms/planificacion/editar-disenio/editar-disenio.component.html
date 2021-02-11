@@ -1,0 +1,49 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="processing">
+
+  <div [hidden]="currentAction !== 'list'">
+    <div fxLayout=" column" fxLayout.gt-sm="row wrap">
+      <div fxFlex="100" class="flex-p">
+        <!-- <mat-card> -->
+        <mat-card-content>
+          <div>
+            <mat-tab-group [selectedIndex]="tabSeleccionado.value" (selectedIndexChange)="seleccionarGrid($event)">
+              <mat-tab label="Actualizar visita diseño">
+                <sigma-grid-mantenimientos #grid [data]="data" [condicion]="condicion"
+                  [columns]="columns" [filters]="filters" [singleActions]="acciones"
+                  (executeOnSingle)="ejecutar($event)">
+                </sigma-grid-mantenimientos>
+              </mat-tab>
+              <mat-tab *ngFor="let transicion of transicionesMasivas" label="{{transicion.nombre}}">
+                <sigma-grid-mantenimientos #grid [data]="data" 
+                  [transicion]="transicion" [columns]="columns" [filters]="filters" [singleActions]="acciones"
+                  (executeOnSingle)="ejecutar($event)" (executeOnMasiveTransition)="executeMasiveTransition($event)">
+                </sigma-grid-mantenimientos>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+        </mat-card-content>
+        <!-- </mat-card> -->
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="currentAction == 'work'">
+    <sigma-disenio-edit *ngIf="disenio" [(disenio)]="disenio" [mantenimiento]="mantenimiento"
+      (saveFuncion)="saveFunction($event)" (back)="back($event)"></sigma-disenio-edit>
+    <sigma-disenio-create *ngIf="!disenio" [mantenimiento]="mantenimiento" [disenioCurrent]="disenioCurrent"
+      (saveFuncion)="saveFunction($event)" (back)="back($event)"></sigma-disenio-create>
+    <sigma-seleccion-transicion *ngIf="disenio" [(data)]="data" [transiciones]="transicionesIndividuales"
+      (executeTransition)="executeTransition()"></sigma-seleccion-transicion>
+  </div>
+
+  <div *ngIf="currentAction == 'formDisenioInformacion'">
+    <sigma-disenio-informacion-editar [(disenio)]="disenio" [mantenimiento]="mantenimiento"
+      (saveFuncion)="saveDisenioFunction($event)" (back)="back($event)">
+    </sigma-disenio-informacion-editar>
+  </div>
+
+</div>

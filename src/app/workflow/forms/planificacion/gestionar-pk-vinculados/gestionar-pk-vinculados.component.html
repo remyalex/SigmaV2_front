@@ -1,0 +1,86 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="processing">
+
+  <div [hidden]="currentAction !== 'list'">
+    <div fxLayout="row" fxLayout.lt-md="column">
+      <div fxFlex="100" class="flex-p">
+        <mat-tab-group [selectedIndex]="tabSeleccionado.value" (selectedIndexChange)="seleccionarGrid($event)">
+          <mat-tab *ngFor="let transicion of transicionesMasivas" label="{{transicion.nombre}}">
+            <sigma-grid-mantenimientos #grid [data]="data" [transicion]="transicion" [columns]="columnsTransiciones"
+              [filters]="filtersTransiciones" (executeOnSingle)="ejecutarIndividual($event)"
+              (executeOnMasiveTransition)=" executeMasiveTransition($event)" [masiveActions]="accionesRadicadoSalida"
+              (executeOnMasiveAction)="ejecutar($event)" [singleActions]="actions" [showActividadAgrupada]="false"
+              [showExport]="false" [showCheckMasive]="true">
+            </sigma-grid-mantenimientos>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div *ngIf="currentAction == 'asignarRadicadoSalida'">
+  <mat-card-content class="p-16 m-0">
+
+    <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
+      fxLayoutAlign="left">
+
+      <div fxFlex="100">
+        <mat-card class="p-0 c-mod mt-10 mb-10" [formGroup]="formularioConsultaRadicadoSalida">
+          <mat-card-header color="primary" fxLayoutAlign="center center">
+            <mat-card-subtitle class="m-0">
+              <h3>Información radicado salida</h3>
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content class="p-16">
+            <div fxLayout="column" fxLayoutGap="10px">
+              <div fxFlex>
+                <div class="w-100" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+                  <div fxFlex="70" fxFlex.lg="60" fxFlex.md="100">
+                    <sigma-form-number placeholder="Radicado de salida" formControlName="entradaConsultaRadicadoSalida"
+                      [(ngModel)]="entradaConsultaRadicadoSalida" [maxlength]=20></sigma-form-number>
+                  </div>
+                  <div fxFlex="30" fxFlex.lg="40" fxFlex.md="100">
+                    <button mat-raised-button color="primary" (click)="buscarRadicadoSalida()">
+                      <mat-icon class="m-1">search</mat-icon>
+                      Buscar Radicado
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div fxFlex>
+                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+                  <div fxFlex="50">
+                    <mat-form-field class="w-100">
+                      <input matInput placeholder="Radicado de salida" formControlName="solicitudRadicadoSalida"
+                        [ngModel]="data.mantenimiento.solicitudRadicadoSalida" readonly>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </mat-card-content>
+
+  <mat-divider></mat-divider>
+
+  <div fxLayoutAlign="end" class="pt-16">
+    <button class="m-1" mat-button color="warn" (click)="cancel()">
+      <mat-icon class="m-1">close</mat-icon>
+      Cancelar
+    </button>
+    <button class="m-1" [disabled]="processing || !data.mantenimiento.solicitudRadicadoSalida" mat-raised-button
+      color="primary" (click)="saveRadicado()">
+      <mat-icon class="m-1">save</mat-icon>
+      Guardar
+    </button>
+  </div>
+</div>

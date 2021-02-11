@@ -1,0 +1,183 @@
+<div>
+  <div>
+    <mat-card-header fxLayoutAlign="center">
+      <mat-card-subtitle>
+        <h2>{{ constants.titulo }}</h2>
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxLayoutWrap fxLayoutGap="0.5%"
+      fxLayoutAlign="center">
+      <!-- <div fxFlex="90%">
+        <form fxLayout="column" (ngSubmit)="search()">
+          <div fxFlex="100">
+           
+          </div>
+        </form>
+      </div> 
+      <div fxFlex="10%">
+        <button type="submit" mat-raised-button color="primary" class="m-1" (click)="search()">
+          <mat-icon>search</mat-icon> {{ constants.buscar }}
+        </button>
+        <button (click)="clear()" mat-raised-button color="warn" class="m-1">
+          <mat-icon>clear</mat-icon> {{ constants.limpiar }}
+        </button>
+        <button [disabled]="dataSource.totalElements$.source['_value'] <= 0" layout="row" mat-raised-button
+          color="primary" class="m-1" 
+          *sigmaIsGranted="constants.permiso_produccion_registrar_vale_planta_export">
+          <mat-icon>get_app</mat-icon>
+          {{ constants.exportar }}
+          <mat-icon *ngIf="cargandoExcel">
+            <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+          </mat-icon>
+        </button>
+      </div> -->
+    </mat-card-content>
+  </div>
+</div>
+
+<div class="mat-elevation-z8">
+  <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center">
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+  <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+    <mat-icon class="m-1">sms_failed</mat-icon>
+    <h4> {{dataSource.errorMessage$ | async}}</h4>
+  </div>
+
+  <mat-table #table class="col-x" [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort>
+
+    <ng-container matColumnDef="numeroVale">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.numeroVale }} </mat-header-cell>
+      <mat-cell *matCellDef="let registro" [attr.data-label]="constants.numeroVale"> {{ registro.numeroVale }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="horaEntrada">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.horaEntrada }} </mat-header-cell>
+      <mat-cell *matCellDef="let registro" [attr.data-label]="constants.horaEntrada"> 
+        {{ registro.valesIngreso && registro.valesIngreso.length > 0 ? formatHora(registro.valesIngreso[0].horaEntrada) : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="horaSalida">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.horaSalida }} </mat-header-cell>
+      <mat-cell *matCellDef="let registro" [attr.data-label]="constants.horaSalida"> 
+        {{ registro.valesIngreso && registro.valesIngreso.length > 0 ? formatHora(registro.valesIngreso[0].horaSalida) : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="turno">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.turno }} </mat-header-cell>
+      <mat-cell *matCellDef="let registro" [attr.data-label]="constants.turno"> 
+        {{ registro.turno ? registro.turno.descripcion: '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="tipoMaterial">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.tipoMaterial }} </mat-header-cell>
+      <mat-cell *matCellDef="let registro" [attr.data-label]="constants.tipoMaterial"> 
+        {{ registro.valesIngreso && registro.valesIngreso.length > 0  && registro.valesIngreso[0].tipoMaterial ? registro.valesIngreso[0].tipoMaterial.descripcion : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="proveedor">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.proveedor }} </mat-header-cell>
+      <mat-cell *matCellDef="let registro" [attr.data-label]="constants.proveedor"> 
+        {{ registro.valesIngreso && registro.valesIngreso.length > 0  && registro.valesIngreso[0].proveedor ? registro.valesIngreso[0].proveedor.nombresYapellidos : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="jefeBascula">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.jefeBascula }} </mat-header-cell>
+      <mat-cell *matCellDef="let registro" [attr.data-label]="constants.jefeBascula"> 
+        {{ registro.jefeBascula? registro.jefeBascula.nombresYapellidos : '' }}
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="placa">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.placaVehiculo }} </mat-header-cell>
+      <mat-cell *matCellDef="let registro" [attr.data-label]="constants.placaVehiculo"> 
+        {{ registro.valesIngreso && registro.valesIngreso.length > 0  && registro.valesIngreso[0].equipo ? registro.valesIngreso[0].equipo.placa : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="pesoBruto">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.pesoBruto }} </mat-header-cell>
+      <mat-cell *matCellDef="let registro" [attr.data-label]="constants.pesoBruto"> 
+        {{ registro.valesIngreso && registro.valesIngreso.length > 0  && registro.valesIngreso[0].pesoBruto ? registro.valesIngreso[0].pesoBruto : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="pesoTara">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.pesoTara }} </mat-header-cell>
+      <mat-cell *matCellDef="let registro" [attr.data-label]="constants.pesoTara"> 
+        {{ registro.valesIngreso && registro.valesIngreso.length > 0  && registro.valesIngreso[0].pesoTara ? registro.valesIngreso[0].pesoTara : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="pesoNeto">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.pesoNeto }} </mat-header-cell>
+      <mat-cell *matCellDef="let registro" [attr.data-label]="constants.pesoNeto"> 
+        {{ registro.valesIngreso && registro.valesIngreso.length > 0  && registro.valesIngreso[0].pesoNeto ? registro.valesIngreso[0].pesoNeto : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="recibe">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.nombreRecibe }} </mat-header-cell>
+      <mat-cell *matCellDef="let registro" [attr.data-label]="constants.nombreRecibe"> 
+        {{ registro.valesIngreso && registro.valesIngreso.length > 0  && registro.valesIngreso[0].recibe ? registro.valesIngreso[0].recibe.nombresYapellidos : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="fecha">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fecha }} </mat-header-cell>
+      <mat-cell *matCellDef="let registro" [attr.data-label]="constants.fecha"> 
+        {{ registro.valesIngreso && registro.valesIngreso.length > 0  && registro.valesIngreso[0].fechaRegistro ? registro.valesIngreso[0].fechaRegistro : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="activo">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.activo }} </mat-header-cell>
+      <mat-cell *matCellDef="let registro" [attr.data-label]="constants.activo">
+        <span class="dev-color-red" [hidden]="registro.activo">{{ constants.no }}</span>
+        <span class="dev-color-green" [hidden]="!registro.activo">{{ constants.si }}</span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+      <mat-cell *matCellDef="let registro" [attr.data-label]="constants.acciones">
+        <div fxLayout.lt-md="row" fxLayout.lt-xl="column">
+          <div fxFlex>
+            <button mat-raised-button color="primary" (click)="detail(registro)" class="m-1"
+              *sigmaIsGranted="constants.permiso_produccion_registrar_vale_planta_view">
+              <mat-icon matTooltip="Detalles" matTooltipPosition="above">open_in_new</mat-icon>
+            </button>
+            <button mat-raised-button color="primary" (click)="edit(registro)" class="m-1"
+              *sigmaIsGranted="constants.permiso_produccion_registrar_vale_planta_update">
+              <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+            </button>
+            
+          </div>
+          <div fxFlex fxLayoutAlign="start">
+            <button *sigmaIsGranted="constants.permiso_produccion_registrar_vale_planta_attach" 
+              mat-raised-button color="primary" (click)="attach(registro)" class="m-1">
+              <mat-icon>cloud_upload</mat-icon>
+            </button>
+            <div *ngIf="!registro.noSecciones">
+              <button mat-raised-button color="warn" (click)="delete(registro)" class="m-1"
+                *sigmaIsGranted="constants.permiso_produccion_registrar_vale_planta_delete">
+                <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size"
+    [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+</div>

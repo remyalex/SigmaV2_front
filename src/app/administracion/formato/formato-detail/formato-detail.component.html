@@ -1,0 +1,70 @@
+<h2 mat-dialog-title>{{ constants.detalle }} Formato</h2>
+
+<mat-dialog-content *sigmaIsGranted="constants.permiso_administracion_formato_view">
+  <mat-list>
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.activo }}</b>:
+        </div>
+        <div class="p-tab" fxFlex="60">
+          <span class="dev-color-red" [hidden]="formato.activo">{{ constants.no }}</span>
+          <span class="dev-color-green" [hidden]="!formato.activo">{{ constants.si }}</span>
+        </div>  
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.codigo }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ formato.codigo }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.plantilla }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ formato.plantilla }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.tipoDocumentoId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ formato.tipoDocumento?.descripcion }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="mb-10">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.archivo }}</b>:
+        </div>
+        <div fxFlex="60">
+          <sigma-show-file id="{{ formato.archivo.id }}"></sigma-show-file>
+        </div>
+      </div>
+    </mat-list-item>
+    
+  </mat-list>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" class="m-1" (click)="close()">
+      <mat-icon class="m-1">close</mat-icon> {{ constants.cerrar }}
+  </button>
+</mat-dialog-actions>

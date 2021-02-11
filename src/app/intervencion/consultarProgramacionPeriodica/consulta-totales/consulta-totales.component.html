@@ -1,0 +1,43 @@
+<div class="mat-elevation-z8">
+  <mat-table #table class="col-x" [dataSource]="dataSourceTotales" matSort>
+    <mat-header-row *matHeaderRowDef="columnsTotales"></mat-header-row>
+
+    <ng-container matColumnDef="estadoObra">
+      <mat-header-cell *matHeaderCellDef> {{constants.estadoObra}} </mat-header-cell>
+      <mat-cell *matCellDef="let total" [attr.data-label]="constants.estadoObra">
+        {{total.estadoObra}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="TotalKmImpacto">
+      <mat-header-cell *matHeaderCellDef> {{constants.totalKmImpacto}} </mat-header-cell>
+      <mat-cell *matCellDef="let total" [attr.data-label]="constants.totalKmImpacto"> 
+        {{total.totalKmImpacto | number:'1.1-5'}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="TotalKmLineal">
+      <mat-header-cell *matHeaderCellDef> {{constants.totalKmLineal}} </mat-header-cell>
+      <mat-cell *matCellDef="let total" [attr.data-label]="constants.totalKmLineal">
+        {{total.totalKmLineal | number:'1.1-5'}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="TotalKmObra">
+      <mat-header-cell *matHeaderCellDef> {{constants.totalKmObra}} </mat-header-cell>
+      <mat-cell *matCellDef="let total" [attr.data-label]="constants.totalKmObra">
+        {{total.totalKmObra | number:'1.1-5'}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="diasDuracionPlaneada">
+      <mat-header-cell *matHeaderCellDef> {{constants.totalDiasDuracionPlaneada}} </mat-header-cell>
+      <mat-cell *matCellDef="let total" [attr.data-label]="constants.totalDiasDuracionPlaneada">
+        {{total.duracionPlaneada | number:'1.1-5'}}
+      </mat-cell>
+    </ng-container>
+
+    <mat-row *matRowDef="let row; columns: columnsTotales"></mat-row>
+  </mat-table>
+  
+</div>

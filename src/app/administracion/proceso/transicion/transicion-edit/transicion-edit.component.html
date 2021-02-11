@@ -1,0 +1,159 @@
+<h2 mat-dialog-title>{{ constants.editar }} Transición</h2>
+
+<div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+  <h5>Todos los campos con * son obligatorios</h5>
+</div>
+
+<mat-dialog-content [formGroup]="form">
+  <input type="hidden" formControlName="id" [(ngModel)]="transicionToEdit.id" type="text" type="hidden">
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="{{ constants.nombre }}" formControlName="nombre"
+          [(ngModel)]="transicionToEdit.nombre" autocomplete="off" type="text" required pattern="^(?!\s*$).+">
+        <mat-error *ngIf="form.get('nombre').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+        <mat-error *ngIf="form.get('nombre').hasError('maxlength')"> {{ constants.longitud_maxima }} 255
+          caracteres. </mat-error>
+      </mat-form-field>
+    </div>
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <textarea matInput placeholder="{{ constants.descripcion }}" [(ngModel)]="transicionToEdit.descripcion" rows="1"
+          formControlName="descripcion" matTooltip="Descripción del proceso" matTooltipPosition="above"
+          required></textarea>
+        <mat-error *ngIf="form.get('descripcion').hasError('required')"> {{ constants.campoRequerido }}
+        </mat-error>
+        <mat-error *ngIf="form.get('descripcion').hasError('maxlength')"> {{ constants.longitud_maxima }} 255
+          caracteres. </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <sigma-form-select placeholder="{{constants.permisoId}}" formControlName="permiso"
+        [(ngModel)]="transicionToEdit.permiso" [path]="constants.path_administracion_procesotransicion_permisos"
+        [listBy]="'nombre'">
+      </sigma-form-select>
+    </div>
+    <div fxFlex>
+      <sigma-form-select placeholder="Estado PK" formControlName="estadopk" [(ngModel)]="transicionToEdit.estadoPk"
+        [path]="constants.path_administracion_procesotransicion_estadoPk" [listBy]="'descripcion'">
+      </sigma-form-select>
+    </div>
+    <div fxFlex>
+      <sigma-form-select placeholder="Tipo Asignación" formControlName="tipoasignacion"
+        [(ngModel)]="transicionToEdit.tipoAsignacion"
+        [path]="constants.path_administracion_procesotransicion_tipoasignacion" [listBy]="'descripcion'">
+      </sigma-form-select>
+    </div>
+  </div>
+  
+  <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <sigma-form-select placeholder="Estado Mantenimiento" formControlName="estadoMantenimiento"
+        [(ngModel)]="transicionToEdit.estadoMantenimiento"
+        [path]="constants.path_administracion_procesotransicion_estadoMantenimiento" [listBy]="'descripcion'">
+      </sigma-form-select>
+    </div>
+    <div fxFlex>
+      <sigma-form-select placeholder="Condicion" formControlName="condicion" [(ngModel)]="transicionToEdit.condicion" (ngModelChange)="condicionFunct($event)"
+        [path]="constants.path_administracion_procesotransicion_condicionList" [listBy]="'nombre'">
+      </sigma-form-select>
+    </div>
+  </div>
+
+  <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+    <div fxFlex="40">
+      <mat-card class="p-0 c-mod min-h-18">
+        <mat-card-header fxLayoutAlign="center">
+          <mat-card-subtitle>
+            <h3>Origen</h3>
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content class="p-16 m-0">
+          <div class="container" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+            <div class="item" fxFlex="100%">
+              <sigma-form-select [opciones]="proceso?.actividades" placeholder="{{ constants.actividadInicioId }}"
+                [listBy]="'nombre'" required="true" formControlName="actividadInicioId"
+                [(ngModel)]="transicionToEdit.actividadInicial">
+              </sigma-form-select>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div fxFlex>
+      <mat-card class="p-0 c-mod min-h-18">
+        <mat-card-header fxLayoutAlign="center">
+          <mat-card-subtitle>
+            <h3>Destino</h3>
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content class="p-16 m-0">
+          <label><b>Actividad final Actual: </b>{{ transicionToEdit.actividadFinal?.nombre }}</label>
+          <div class="container" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+            <div class="item" fxFlex="100%">
+              <sigma-form-select [path]="constants.path_administracion_procesotransicion_procesoinfolist"
+                placeholder="Proceso" [listBy]="'nombre'" formControlName="proceso">
+              </sigma-form-select>
+            </div>
+          </div>
+          <div class="container" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+            <div class="item" fxFlex="100%" id="tAId" style="display: none">
+              <sigma-form-select #actividadFinal placeholder="{{ constants.actividadFinId }}"
+                [listBy]="'nombre'" formControlName="actividadFinId" [(ngModel)]="transicionToEdit.actividadFinal"
+                required="true">
+              </sigma-form-select>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+    <div fxFlex="100" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+      <div fxFlex>
+        <mat-checkbox formControlName="requiereObservacion" [checked]="transicionToEdit.requiereObservacion"
+          [(ngModel)]="transicionToEdit.requiereObservacion">
+          {{constants.requiereObservacion}}
+        </mat-checkbox>
+      </div>
+
+      <div fxFlex>
+        <mat-checkbox formControlName="esMasiva" [checked]="transicionToEdit.esMasiva"
+          [(ngModel)]="transicionToEdit.esMasiva">
+          {{constants.esMasiva}}
+        </mat-checkbox>
+      </div>
+
+      <div fxFlex>
+        <mat-checkbox formControlName="esReasignable" [checked]="transicionToEdit.esReasignable"
+          [(ngModel)]="transicionToEdit.esReasignable">
+          {{constants.reasignable}}
+        </mat-checkbox>
+      </div>
+
+      <div fxFlex>
+        <mat-checkbox formControlName="activoTransicion" [(ngModel)]="transicionToEdit.activo" name="activoTransicion"
+          id="activoTransicion" [checked]="transicionToEdit.activo">
+          {{ constants.activo }}
+        </mat-checkbox>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions fxLayout="row" fxLayoutAlign="end" class="flex-p" [formGroup]="form"
+  *sigmaIsGranted="constants.permiso_administracion_procesotransicion_update">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+  </button>
+  <button mat-raised-button [disabled]="disableSubmit" color="primary" (click)="onSubmit()"
+    *sigmaIsGranted="constants.permiso_administracion_procesotransicion_update">
+    <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+  </button>
+</mat-dialog-actions>

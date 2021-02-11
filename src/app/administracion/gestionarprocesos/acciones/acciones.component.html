@@ -1,0 +1,314 @@
+<mat-card-content>
+  <mat-vertical-stepper [linear]="true" #stepper>
+    <!-- REASIGNAR USUARIO FORM -->
+    <mat-step>
+      <ng-template matStepLabel>Reasignar usuario</ng-template>
+      <mat-card-content class="p-8 m-0" [formGroup]="formularioReasignarUsuario">
+        <div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+          <h5>{{ constants.informacionCampoObligatorio }}</h5>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput formControlName="usuarioActual" [placeholder]="constants.responsable + ' Actual'"
+                [value]="usuarioActual">
+            </mat-form-field>
+          </div>
+          
+          <div fxFlex>
+            <sigma-form-select class="w-100" formControlName="usuarioNuevo" [(ngModel)]="mantenimiento.responsable"
+              [placeholder]="constants.responsable + ' Nuevo'" [isForCache]="false"
+              [path]="path_reasignarusuarios" [listBy]="'usuario'" [orderBy]="'usuario'">
+            </sigma-form-select>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <textarea matInput formControlName="observaciones" [placeholder]="constants.observaciones" rows="1" required>
+              </textarea>
+              <mat-error *ngIf="formularioReasignarUsuario.get('observaciones').hasError('required')"> El campo Observación es obligatorio </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+          <button type="button" class="m-1" (click)="reasignarUsuario()" mat-raised-button color="primary">
+            <mat-icon class="m-1">save</mat-icon> Reasignar usuario
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-step>
+
+    <!-- REASIGNAR ACTIVIDAD FORM -->
+    <mat-step>
+      <ng-template matStepLabel>Reasignar Actividad</ng-template>
+      <mat-card-content class="p-8 m-0" [formGroup]="formularioReasignarActividad">
+        <div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+          <h5>{{ constants.informacionCampoObligatorio }}</h5>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <textarea matInput formControlName="actividadActual" [placeholder]="constants.actividad + ' Actual'"
+                [value]="actividadActual">
+              </textarea>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <div fxFlex='100'>
+              <sigma-form-select class="w-100" formControlName="proceso" [placeholder]="'Proceso'"
+                [path]="constants.path_administracion_gestionarprocesos_procesoinfolist" [listBy]="'nombre'" 
+                [orderBy]="'nombre'">
+              </sigma-form-select>
+            </div>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <sigma-form-select class="w-100" #ReasignarSelectActividad formControlName="actividadNuevo" 
+              [(ngModel)]="mantenimiento.actividadActual" [placeholder]="constants.actividad + ' Nuevo'"
+              [listBy]="'nombre'" [orderBy]="'nombre'">
+            </sigma-form-select>
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <textarea matInput formControlName="estadoPkActual" [placeholder]="constants.estadoPk + ' Actual'"
+                [value]="estadoPkActual">
+              </textarea>          
+            </mat-form-field>
+          </div>
+        </div>  
+      
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex="48">
+            <mat-form-field class="w-100">
+              <mat-label>{{constants.estadoPk + ' Nuevo'}}</mat-label>
+              <mat-select formControlName="estadoPkNuevo" required>
+                <mat-option *ngFor="let estados of listaEstadoPk" [value]="estados" (click)="setEstadoPk(estados)">
+                  {{estados.descripcion}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <textarea matInput formControlName="observaciones" rows="1" [placeholder]="constants.observaciones" required>
+            </textarea>
+            <mat-error *ngIf="formularioReasignarActividad.get('observaciones').hasError('required')"> El campo Observación es obligatorio </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+          <button type="button" class="m-1" (click)="reasignarActividad()" mat-raised-button color="primary">
+            <mat-icon class="m-1">save</mat-icon> Reasignar Actividad
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-step>  
+
+    <!-- DEVOLVER ACTIVIDAD FORM -->
+    <mat-step>
+      <ng-template matStepLabel>Devolver Actividad</ng-template>
+      <mat-card-content class="p-8 m-0" [formGroup]="formularioDevolverGestion">
+        <div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+          <h5>{{ constants.informacionCampoObligatorio }}</h5>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <textarea matInput formControlName="actividadActual" [placeholder]="constants.actividad + ' Actual'"
+                [value]="actividadActual">
+              </textarea>  
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <textarea matInput formControlName="actividadAnterior" [placeholder]="constants.actividad + ' Anterior'"
+                [value]="actividadAnterior">
+              </textarea>  
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput formControlName="usuarioActual" [placeholder]="constants.responsable + ' Actual'"
+                [value]="usuarioActual">
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput formControlName="usuarioAnterior" [placeholder]="constants.responsable + ' Anterior'"
+                [value]="usuarioAnterior">
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <textarea matInput formControlName="estadoPkActual" [placeholder]="constants.estadoPk + ' Actual'"
+                [value]="estadoPkActual">
+              </textarea>  
+            </mat-form-field>
+          </div>
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <mat-label>{{constants.estadoPk + ' Nuevo'}}</mat-label>
+              <mat-select formControlName="estadoPkNuevo" required>
+                <mat-option *ngFor="let estados of listaEstadoPk" [value]="estados" (click)="setEstadoPk(estados)">
+                  {{estados.descripcion}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <textarea matInput formControlName="observaciones" rows="1" [placeholder]="constants.observaciones" required>
+              </textarea>
+              <mat-error *ngIf="formularioDevolverGestion.get('observaciones').hasError('required')"> El campo Observación es obligatorio </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+          <button type="button" class="m-1" (click)="devolverGestion()" mat-raised-button color="primary">
+            <mat-icon class="m-1">save</mat-icon> Devolver Actividad
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-step>
+
+    <!-- TERMINAR GESTION FORM -->
+    <mat-step>
+      <ng-template matStepLabel>Terminar Gestión</ng-template>
+      <mat-card-content class="p-8 m-0" [formGroup]="formularioTerminarGestion">
+        <div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+          <h5>{{ constants.informacionCampoObligatorio }}</h5>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+                <textarea matInput formControlName="actividadActual" [placeholder]="constants.actividad + ' Actual'"
+                [value]="actividadActual">
+                </textarea>  
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <sigma-form-select class="w-100" formControlName="proceso" [placeholder]="'Proceso'"
+              [path]="constants.path_administracion_gestionarprocesos_procesoinfolist" [listBy]="'nombre'" [orderBy]="'nombre'">
+            </sigma-form-select>
+          </div>
+        </div> 
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <sigma-form-select class="w-100" #TerminarSelectActividad formControlName="actividadFin"
+              [(ngModel)]="mantenimiento.actividadActual" [placeholder]="constants.actividad + ' Final'"
+              [listBy]="'nombre'" [orderBy]="'nombre'">
+            </sigma-form-select>
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <textarea matInput formControlName="estadoPkActual" [placeholder]="constants.estadoPk + ' Actual'"
+                [value]="estadoPkActual">
+              </textarea>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex="48">
+            <mat-form-field class="w-100">
+              <mat-label>{{constants.estadoPk + ' Nuevo'}}</mat-label>
+              <mat-select formControlName="estadoPkNuevo" required>
+                <mat-option *ngFor="let estados of listaEstadoPk" [value]="estados" (click)="setEstadoPk(estados)">
+                  {{estados.descripcion}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <textarea matInput formControlName="observaciones" rows="1" [placeholder]="constants.observaciones" required>
+              </textarea>
+              <mat-error *ngIf="formularioTerminarGestion.get('observaciones').hasError('required')"> El campo Observación es obligatorio </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+          <button type="button" class="m-1" (click)="terminarGestion()" mat-raised-button color="primary">
+            <mat-icon class="m-1">save</mat-icon> Terminar Gestión
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-step>  
+    
+    <!-- ANULAR GESTION FORM -->
+    <mat-step>
+      <ng-template matStepLabel>Anular Gestión</ng-template>
+      <mat-card-content class="p-8 m-0" [formGroup]="formularioAnularGestion">
+        <div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+          <h5>{{ constants.informacionCampoObligatorio }}</h5>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <textarea matInput formControlName="actividadActual" [placeholder]="constants.actividad + ' Actual'"
+                [value]="actividadActual">
+              </textarea>  
+            </mat-form-field>
+          </div>
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput formControlName="usuarioActual" [placeholder]="constants.responsable + ' Actual'"
+                [value]="usuarioActual">
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <textarea matInput formControlName="observaciones" rows="1" [placeholder]="constants.observaciones" required>
+                </textarea>
+              <mat-error *ngIf="formularioAnularGestion.get('observaciones').hasError('required')"> El campo Observación es obligatorio </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+          <button type="button" class="m-1" (click)="anularGestion()" mat-raised-button color="primary">
+            <mat-icon class="m-1">save</mat-icon> Anular Gestión
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-step>  
+  </mat-vertical-stepper>
+</mat-card-content>

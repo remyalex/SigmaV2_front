@@ -1,0 +1,51 @@
+<mat-form-field class="w-100">
+  
+  <input 
+    #input 
+    matInput 
+    type="text"
+    [placeholder]="placeholder" 
+    aria-label="State" 
+    [formControl]="control" 
+    [required]="required"
+    (input)="searchFilter($event.target.value)"
+    [matAutocomplete]="auto" >
+  
+  <mat-icon *ngIf="loading" fxLayoutAlign="center end" matSuffix color="warn">
+    <mat-spinner [diameter]="15"></mat-spinner>
+  </mat-icon>
+
+  <mat-autocomplete 
+    (optionSelected)="selected($event)" autoActiveFirstOption #auto="matAutocomplete"
+    [displayWith]="displayFn">
+    <mat-option *ngFor="let option of options" [value]="option">
+      <div *ngIf="multipleInformacion">
+        <mat-icon *ngIf="valueAsImage" >{{ option['valor'] }}</mat-icon>
+        <span *ngFor="let item of moreInfo | keyvalue; let i = index">
+          {{ item.value }}: {{option[item.key]}} {{ i < objectKeys(moreInfo).length - 1 ? ',' : '' }}
+        </span>
+      </div>
+      <div *ngIf="!multipleInformacion">
+        <mat-icon *ngIf="valueAsImage" >{{ option[valor] }}</mat-icon>
+        <span>{{ option[searchBy] }}</span>
+      </div>
+    </mat-option>
+  </mat-autocomplete>
+
+  <mat-error *ngFor="let error of basicErrors">
+    <mat-error *ngIf="control.hasError(error.name)">
+      {{ error.message }}
+    </mat-error>
+  </mat-error>
+</mat-form-field>
+
+<!--<sigma-form-autocomplete 
+    formControlName="control" -> (Obligatorio, hace la conexión con el controlador)
+    [(ngModel)]="modelo" -> (Obligatorio, el binding con el modelo)
+    [path]="url" -> (Obligatorio, url para la petición de datos)
+    [searchBy]="atributo" -> (Obligatorio, es el valor que presente en las opciones, por defecto esta 'nombre')
+    [placeholder]="texto" -> (Opcional, campo para el label)
+    [moreInfo]="{nombre: 'valor'}" -> (Opcional, es un objeto que presenta las información en las opciones)
+    [errors]="[{name: 'error', message: 'mensaje'}]" -> (Opcional, en caso de necesitar agregar nuevos errores al control)
+  >
+  </sigma-form-autocomplete>-->

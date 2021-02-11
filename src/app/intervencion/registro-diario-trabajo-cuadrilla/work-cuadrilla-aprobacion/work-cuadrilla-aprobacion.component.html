@@ -1,0 +1,25 @@
+<div fxLayout="column" [formGroup]="sixteenthFormGroup">
+  <mat-card-content class="p-16 m-0">
+
+    <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+
+      <div class="item" fxFlex="100%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+            <label>{{ constants.apruebaTrabajoDiarioCuadrilla }} </label>
+            <mat-radio-group [(ngModel)]="checkedAprobacion" formControlName="apruebaCuadrilla" (ngModelChange)="answer($event)">
+              <mat-radio-button *ngFor="let data of aprobadoCuadrillaTrabajo" [value]="data" class="m-1"> {{ data }} </mat-radio-button>
+            </mat-radio-group>
+        </div>
+      </div>
+
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+      <button type="button" [disabled]="componentVisible" *sigmaIsGranted="constants.registro_diario_cuadrilla_aprobacion" class="m-1" mat-raised-button color="primary" (click)="onSubmit()">
+        <mat-icon class="m-1">save</mat-icon> {{ constants.guardarSeccion }}
+      </button>
+    </div>
+
+  </mat-card-content>
+
+</div>

@@ -1,0 +1,14 @@
+<h2>Diagrama</h2>
+<mat-dialog-content>
+
+  <h3>{{proceso.nombre}}</h3>
+  <p>{{proceso.descripcion}}</p>
+  <div class="network-canvas" [visNetwork]="visNetwork" [visNetworkData]="visNetworkData"
+    [visNetworkOptions]="visNetworkOptions" (initialized)="networkInitialized()"></div>
+</mat-dialog-content>
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> Cerrar
+  </button>
+</mat-dialog-actions>

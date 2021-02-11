@@ -1,0 +1,133 @@
+<div>
+  <div>
+    <mat-card-header fxLayoutAlign="center">
+      <mat-card-subtitle>
+        <h2>Gestionar Procesos</h2>
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content class="container">
+      <div fxFlex="100">
+        <form>
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <div fxFlex>
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.pkIdCalzadas }}" id="pkValor" [(ngModel)]="criteria.pkValor"
+                  name="pkValor" type="text" />
+              </mat-form-field>
+            </div>
+
+            <div fxFlex>
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.idMantenimiento }}" id="idMantenimiento"
+                  [(ngModel)]="criteria.idMantenimiento" name="idMantenimiento" type="text" />
+              </mat-form-field>
+            </div>
+
+            <div fxFlex>
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.civ }}" id="civ" [(ngModel)]="criteria.civ" name="civ"
+                  type="text" />
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <div fxFlex>
+              <button type="submit" mat-raised-button color="primary" class="m-1" (click)="search()">
+                <mat-icon>search</mat-icon> {{ constants.buscar }}
+              </button>
+              <button (click)="clear()" mat-raised-button color="warn" class="m-1">
+                <mat-icon>clear</mat-icon> {{ constants.limpiar }}
+              </button>
+              <button layout="row" mat-raised-button color="primary"
+                [disabled]="dataSource.totalElements$.source['_value'] <= 0" class="m-1" (click)="export()">
+                <mat-icon>get_app</mat-icon>
+                {{ constants.exportar }}
+                <mat-spinner *ngIf="cargandoExcel" color="accent" [diameter]="20"></mat-spinner>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </mat-card-content>
+  </div>
+</div>
+
+<div class="mat-elevation-z8">
+  <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center">
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+
+  <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+    <mat-icon class="m-1">sms_failed</mat-icon>
+    <h4> {{dataSource.errorMessage$ | async}}</h4>
+  </div>
+
+  <div [hidden]="showTable">
+    <mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$ | async" matSort>
+
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.idMantenimiento }} </mat-header-cell>
+        <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.idMantenimiento">
+          {{mantenimiento.id}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="pk">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.pkIdCalzadas }} </mat-header-cell>
+        <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.pkIdCalzadas">
+          {{mantenimiento.pk}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="civ">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.civ }} </mat-header-cell>
+        <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.civ">
+          {{mantenimiento.civ}}
+        </mat-cell>
+      </ng-container>
+      
+      <ng-container matColumnDef="estadoPk">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.estadoPk }} </mat-header-cell>
+        <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.estadoPk">
+          {{mantenimiento.estadoPk != null ? mantenimiento.estadoPk.descripcion : '' }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="origen">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.descripcionOrigen }} </mat-header-cell>
+        <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.descripcionOrigen">
+          {{mantenimiento.origen != null ? mantenimiento.origen.descripcion : ''}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fechaVisitaTecnica">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaVisita }} </mat-header-cell>
+        <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.fechaVisita">
+          {{mantenimiento.fechaVisitaTecnica}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="actividadActual">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.actividadActual }} </mat-header-cell>
+        <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.actividadActual">
+          {{ mantenimiento.actividadActual != null? mantenimiento.actividadActual.nombre : '' }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="acciones">
+        <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+        <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.acciones">
+          <button mat-raised-button color="primary" (click)="edit(mantenimiento)" class="m-1"
+            *sigmaIsGranted="constants.permiso_administracion_gestionarprocesos_update">
+            <mat-icon matTooltip="Seleccionar" matTooltipPosition="above">check_box</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+    </mat-table>
+  </div>
+  <mat-paginator #paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size"
+    [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>

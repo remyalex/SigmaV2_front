@@ -1,0 +1,82 @@
+<div class="p-8">
+  <div class="mat-elevation-z8 mb-10 mt-10">
+    <div *ngIf="loader" fxLayout="column" fxLayoutAlign="center center">
+      <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+    </div>
+    <div *ngIf="noInfoToShow" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+      <mat-icon class="m-1">sms_failed</mat-icon>
+      <h4> {{ constants.noResultados}}</h4>
+    </div>
+
+    <mat-table #table class="col-x" [dataSource]="dataSource" [hidden]="noInfoToShow && !loader" matSort (matSortChange) = "sortData($event)">
+
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.id }} </mat-header-cell>
+        <mat-cell *matCellDef="let gestion" [attr.data-label]="constants.id">
+          {{gestion.id}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="actividad">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.actividad }} </mat-header-cell>
+        <mat-cell *matCellDef="let gestion" [attr.data-label]="constants.actividad">
+          {{ gestion.actividad ? gestion.actividad.nombre: '' }}
+        </mat-cell>
+      </ng-container> 
+
+      <ng-container matColumnDef="usuario">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.usuario }} </mat-header-cell>
+        <mat-cell *matCellDef="let gestion" [attr.data-label]="constants.usuario">
+          {{ (gestion.usuarioAsignado) ? gestion.usuarioAsignado.usuario ? gestion.usuarioAsignado.usuario: '' : ''}} 
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="estado">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.estado }} </mat-header-cell>
+        <mat-cell *matCellDef="let gestion" [attr.data-label]="constants.estado">
+          {{ gestion.estadoGestion ? gestion.estadoGestion.descripcion: ''}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fechaAsignacion">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaAsignacion }} </mat-header-cell>
+        <mat-cell *matCellDef="let gestion" [attr.data-label]="constants.fechaAsignacion">
+          {{ gestion.fechaAsignacion | date: 'dd/MM/yyy' }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fechaInicio">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaInicio }} </mat-header-cell>
+        <mat-cell *matCellDef="let gestion" [attr.data-label]="constants.fechaInicio">
+          {{ gestion.fechaInicio | date: 'dd/MM/yyy' }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fechaFin">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaFin }} </mat-header-cell>
+        <mat-cell *matCellDef="let gestion" [attr.data-label]="constants.fechaFin">
+          {{ gestion.fechaFin | date: 'dd/MM/yyy'}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="observaciones">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.observaciones }} </mat-header-cell>
+        <mat-cell *matCellDef="let gestion" [attr.data-label]="constants.observaciones">
+          {{gestion.observaciones}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fechaVencimiento">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaVencimiento}} </mat-header-cell>
+          <mat-cell *matCellDef="let gestion" [attr.data-label]="constants.fechaVencimiento">
+            {{ gestion.fechaVencimiento | date: 'dd/MM/yyy'}}
+          </mat-cell>
+        </ng-container>
+
+      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+    </mat-table>
+    <mat-paginator #paginator [length]="lengthList" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
+    </mat-paginator>
+  </div>
+</div>

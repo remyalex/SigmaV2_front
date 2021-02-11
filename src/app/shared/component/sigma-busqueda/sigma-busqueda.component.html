@@ -1,0 +1,55 @@
+<div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+  <div fxFlex>
+    <mat-form-field class="w-100">
+      <input matInput placeholder="{{ titulo }}"
+        autocomplete="off" type="text" 
+        required pattern="^(?!\s*$).+"  
+        [(ngModel)]="value" fxFlex="98%">
+      <mat-icon class="green" *ngIf="vinculado">
+        done
+      </mat-icon>
+      <mat-icon class="hover-element-pointer" color="warn"  
+        matTooltip="{{ constants.noRadicado }}"
+        matTooltipPosition="above"
+        *ngIf="error" >
+        error
+      </mat-icon>
+    </mat-form-field>
+  </div>
+  <div fxFlex="15" fxFlex.md="25" fxFlex.sm="30" fxFlex.xs="50">
+    <button mat-raised-button class="m-1" color="primary" 
+      [disabled]="value.length <= 0 || cargando"
+      (click)="buscar()">
+        <mat-icon class="m-1">search</mat-icon>
+        {{ constants.buscar }}
+        <mat-icon class="m-1">
+          <mat-spinner *ngIf="cargando" class="m-1" [diameter]="20"></mat-spinner>
+        </mat-icon> 
+    </button>
+  </div>
+</div>
+
+<table class="or-mat-table w-100 mat-elevation-z8 mt-10" *ngIf="datos.length > 0">
+  <thead class="or-mat-header-row w-100">
+    <tr>
+      <th class="or-mat-header-cell" *ngFor="let item of titulos" align='start'>
+        {{ item }}
+      </th>
+    </tr>
+  </thead>
+  <tbody style="display:inline;" class="w-100">
+    <tr class="or-mat-row">
+      <td class="or-mat-cell" *ngFor="let item of datos" align='start'>
+        {{ item }}
+      </td>
+      <td align='start' class="or-mat-cell">
+        <button mat-raised-button class="m-1" color="primary" (click)="vincular()" *ngIf="vincularRadicado">
+          <mat-icon 
+            matTooltip="{{ constants.vincular.titulo }}" 
+            matTooltipPosition="above"
+            class="m-1">link</mat-icon>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>

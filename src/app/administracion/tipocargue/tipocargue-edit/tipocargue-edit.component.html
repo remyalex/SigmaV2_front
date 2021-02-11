@@ -1,0 +1,80 @@
+<h2 mat-dialog-title>{{ constants.editar }} Tipo de cargue</h2>
+
+<mat-dialog-content [formGroup]="form" *sigmaIsGranted="constants.permiso_administracion_tipocargue_update">
+
+  <div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+    <h5>{{ constants.informacionCampoObligatorio }}</h5>
+  </div>
+
+  <input type="hidden" formControlName="id" [(ngModel)]="tipoCargue.id">
+
+  <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+    <div class="item" fxFlex="50%">
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="{{ constants.nombre }}" formControlName="nombre" [(ngModel)]="tipoCargue.nombre"
+            autocomplete="off" type="text" required pattern="^(?!\s*$).+">
+          <mat-error *ngIf="form.get('nombre').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+          <mat-error *ngIf="form.get('nombre').hasError('pattern')"> {{ constants.campoNoVacio }} </mat-error>
+          <mat-error *ngIf="form.get('nombre').hasError('maxlength')">Campo debe tener una longitud máxima de 100 caracteres.</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="item" fxFlex="50%">
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="{{ constants.descripcion }}" formControlName="descripcion"
+            [(ngModel)]="tipoCargue.descripcion" autocomplete="off" type="text" required pattern="^(?!\s*$).+">
+          <mat-error *ngIf="form.get('descripcion').hasError('required')"> {{ constants.campoRequerido }}
+          </mat-error>
+          <mat-error *ngIf="form.get('descripcion').hasError('maxlength')">Campo debe tener una longitud máxima de 300 caracteres.</mat-error>
+          <mat-error *ngIf="form.get('descripcion').hasError('pattern')"> {{ constants.campoNoVacio }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+    <div class="item" fxFlex="50%">
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="{{ constants.programaSql }}" formControlName="programaSql"
+            [(ngModel)]="tipoCargue.programaSql" autocomplete="off" type="text" pattern="^(?!\s*$).+">
+          <mat-error *ngIf="form.get('programaSql').hasError('required')"> {{ constants.campoRequerido }}
+          </mat-error>
+          <mat-error *ngIf="form.get('programaSql').hasError('pattern')"> {{ constants.campoNoVacio }}
+          </mat-error>
+          <mat-error *ngIf="form.get('programaSql').hasError('maxlength')">Campo debe tener una longitud máxima de 30 caracteres.</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="item" fxFlex="50%">
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+        <mat-checkbox formControlName="activo" [(ngModel)]="tipoCargue.activo" name="activo" id="activo">
+          {{ constants.activo }}
+        </mat-checkbox>
+      </div>
+    </div>
+  </div>
+
+  <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+  <mat-tab-group>
+    <mat-tab label="Estructura">
+      <sigma-administracion-tipocargueestructura-admin></sigma-administracion-tipocargueestructura-admin>
+    </mat-tab>
+  </mat-tab-group>
+
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button type="button" (click)="close()" mat-button color="warn" class="m-1">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+  </button>
+  <button type="button" class="m-1" mat-raised-button color="primary" (click)="onSubmit()"
+    [disabled]="disabledBtn_Login" *sigmaIsGranted="constants.permiso_administracion_tipocargue_update">
+    <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+  </button>
+</mat-dialog-actions>

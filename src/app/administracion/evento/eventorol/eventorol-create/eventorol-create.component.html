@@ -1,0 +1,86 @@
+<h2 mat-dialog-title>{{ constants.crear }} Rol de evento</h2>   
+
+<div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+  <h5>{{ constants.informacionCampoObligatorio }}</h5>
+</div>
+
+<mat-card-content class="p-16 m-0" [hidden]="submitted" [formGroup]="form"
+  *sigmaIsGranted="constants.permiso_administracion_eventorol_create">
+
+  <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+    <div fxFlex>
+      <div class="w-100">
+        <app-sigma-autocomplete [label]="'Autocomplete rol'" [labelparametro1]="'Rol'"
+          (selectItem)="setRolEventorol($event)" [path]="constants.path_administracion_eventorol_rolId"
+          [searchBy]="'nombre'" [value]="''">
+        </app-sigma-autocomplete>
+        <input matInput type="text" placeholder="" formControlName="rolId" [(ngModel)]="eventorol.rol"
+          autocomplete="off" hidden>
+        <mat-error *ngIf="enviada && form.get('rolId').hasError('required')"> {{ constants.campoRequerido }}
+        </mat-error>
+      </div>
+    </div>
+    <div fxFlex>
+      <!-- <mat-form-field class="w-100">
+        <input matInput formControlName="fechaDesde" [(ngModel)]="eventorol.fechaDesde" hidden>
+        <mat-error *ngIf="enviada && form.get('fechaDesde').hasError('required')">
+          {{ constants.campoRequerido }} </mat-error>
+        <label class="dev-color-grey mat-form-field-label-wrapper">{{ constants.fechaDesde }} *</label>
+        <input class="hover-element-pointer" matInput readonly [owlDateTimeTrigger]="fechaDesdeDate"
+          [owlDateTime]="fechaDesdeDate" [formControl]="fechaDesdeControl"
+          (dateTimeChange)="changeDate('fechaDesde', $event, 'max')" [max]="maxDate">
+        <mat-icon matSuffix [owlDateTimeTrigger]="fechaDesdeDate" class="hover-element-pointer">
+          calendar_today
+        </mat-icon>
+        <owl-date-time [pickerType]="this.constants.datepicker.types.calendar" #fechaDesdeDate="owlDateTime"></owl-date-time>
+      </mat-form-field> -->
+      
+      <sigma-form-calendar formControlName="fechaDesde" [maxTarget]="'fechaHasta'" [(ngModel)]="eventorol.fechaDesde"
+        [type]="this.constants.datepicker.types.calendar" [objeto]="eventorol" [placeholder]="constants.fechaDesde" >
+      </sigma-form-calendar>
+    </div>
+  </div>
+
+  <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+    <div fxFlex>
+      <!-- <mat-form-field class="w-100">
+        <input matInput formControlName="fechaHasta" [(ngModel)]="eventorol.fechaHasta" hidden>
+        <mat-error *ngIf="enviada && form.get('fechaHasta').hasError('required')">
+          {{ constants.campoRequerido }} </mat-error>
+        <label class="dev-color-grey mat-form-field-label-wrapper">{{ constants.fechaHasta }} *</label>
+        <input class="hover-element-pointer" matInput readonly [owlDateTimeTrigger]="fechaHastaDate"
+          [owlDateTime]="fechaHastaDate" [formControl]="fechaHastaControl"
+          (dateTimeChange)="changeDate('fechaHasta', $event, 'min')" [min]="minDate">
+        <mat-icon matSuffix [owlDateTimeTrigger]="fechaHastaDate" class="hover-element-pointer">calendar_today
+        </mat-icon>
+        <owl-date-time [pickerType]="'calendar'" #fechaHastaDate="owlDateTime"></owl-date-time>
+      </mat-form-field> -->
+      <sigma-form-calendar formControlName="fechaHasta"   [minTarget]="'fechaDesde'" [(ngModel)]="eventorol.fechaHasta"
+        [type]="this.constants.datepicker.types.calendar" [objeto]="eventorol" [placeholder]="constants.fechaHasta">
+      </sigma-form-calendar>
+    </div>
+
+    <div fxFlex>
+      <div class="w-100">
+        <sigma-form-select [path]="constants.path_administracion_eventorol_valorPermitidoId"
+          formControlName="valorPermitidoId" [(ngModel)]="eventorol.valorPermitido"
+          placeholder="{{ constants.valorPermitidoId }}">
+        </sigma-form-select>
+      </div>
+    </div>
+  </div>
+</mat-card-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+  <button mat-button color="warn" class="m-1" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon>
+    {{ constants.cancelar }}
+  </button>
+  <button mat-raised-button color="primary" class="m-1" [disabled]="disableSubmit" (click)="onSubmit()"
+    *sigmaIsGranted="constants.permiso_administracion_eventorol_create">
+    <mat-icon class="m-1">save</mat-icon>
+    {{ constants.guardar }}
+  </button>
+</div>

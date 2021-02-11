@@ -1,0 +1,325 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="processing">
+
+  <div [hidden]="currentAction !== 'list'">
+    <div fxLayout="row" fxLayout.lt-md="column">
+      <div fxFlex="100" class="flex-p">
+        <mat-tab-group [selectedIndex]="tabSeleccionado.value" (selectedIndexChange)="seleccionarGrid($event)" *ngIf="condicion">
+          <mat-tab label="Todos" >
+            <sigma-grid-mantenimientos #grid [data]="data" [columns]="columns" [filters]="filters"
+              [singleActions]="acciones" [defaultFilters]="defaultFilters"
+              (executeOnSingle)="executeSingleAction($event)" (columnsToExport)="columnsToExport"
+              [condicion]="condicion">
+            </sigma-grid-mantenimientos>
+          </mat-tab>
+          <mat-tab *ngFor="let transicion of transicionesMasivas" label="{{transicion.nombre}}">
+            <sigma-grid-mantenimientos #grid [data]="data" [transicion]="transicion" [data]="data" [columns]="columns"
+              [filters]="filters" [singleActions]="acciones">
+            </sigma-grid-mantenimientos>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="currentAction === 'formSolicitudPmt'">
+    <mat-card-content class="m-0">
+      <div class="mt-10 mb-10" fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px">
+
+        <div fxFlex="60">
+          <mat-card class="custom-card c-mod-w">
+            <mat-card-header color="primary" fxLayoutAlign="space-between center">
+              <mat-card-subtitle>
+                <h3>{{ titleForm }}</h3>
+              </mat-card-subtitle>
+            </mat-card-header>
+
+            <mat-card-content [formGroup]="form" class="mt-10">
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+                <div fxFlex>
+                  <sigma-form-select formControlName="tipoPmt" [path]="'' + constants.path_lista_items_tipoPmt"
+                    [(ngModel)]="solicitudPmt.tipoPmt" name="tipoPmt" placeholder="{{constants.tipoPmt}}"
+                    (ngModelChange)="tipoPmtValid($event)" [listBy]="'descripcion'">
+                  </sigma-form-select>
+                </div>
+
+                <div fxFlex>
+                  <mat-form-field class="w-100">
+                    <input matInput formControlName="numeroRadicadoMovilidad"
+                      placeholder="{{constants.numeroRadicadoMovilidad}}" id="numeroRadicadoMovilidad"
+                      [(ngModel)]="solicitudPmt.numeroRadicadoMovilidad" name="numeroRadicadoMovilidad"
+                      [numericInput]="true" />
+                    <mat-error *ngIf="form.get('numeroRadicadoMovilidad').hasError('required')">
+                      {{ constants.campoRequerido }} </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div fxFlex>
+                  <sigma-form-select formControlName="tipoCierre" [path]="'' + constants.path_list_items_tipo_cierre"
+                    [(ngModel)]="solicitudPmt.tipoCierre" name="tipoCierre" placeholder="{{constants.tipoCierre}}"
+                    [listBy]="'descripcion'">
+                  </sigma-form-select>
+                </div>
+              </div>
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+
+                <div fxFlex>
+                  <sigma-form-calendar formControlName="fechaInicio" [objeto]="solicitudPmt"
+                    [(ngModel)]="solicitudPmt.fechaInicio" [type]="'calendar'"
+                    [placeholder]="'' + constants.fechaInicio">
+                  </sigma-form-calendar>
+                </div>
+
+                <div fxFlex>
+                  <sigma-form-calendar formControlName="fechaFin" [objeto]="solicitudPmt"
+                    [(ngModel)]="solicitudPmt.fechaFin" [type]="'calendar'" [placeholder]="'' + constants.fechaFin">
+                  </sigma-form-calendar>
+                </div>
+
+                <div fxFlex>
+                  <sigma-form-calendar formControlName="horaInicioTrabajo" [objeto]="solicitudPmt"
+                    [(ngModel)]="solicitudPmt.horaInicioTrabajo" [type]="'timer'"
+                    [placeholder]="'' + constants.horaInicioTrabajo">
+                  </sigma-form-calendar>
+                </div>
+              </div>
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+                <div fxFlex>
+                  <sigma-form-calendar formControlName="horaFinalTrabajo" [objeto]="solicitudPmt"
+                    [(ngModel)]="solicitudPmt.horaFinalTrabajo" [type]="'timer'"
+                    [placeholder]="'' + constants.horaFinalTrabajo">
+                  </sigma-form-calendar>
+                </div>
+
+                <div fxFlex>
+                  <sigma-form-calendar formControlName="horaInicioCierre" [objeto]="solicitudPmt"
+                    [(ngModel)]="solicitudPmt.horaInicioCierre" [type]="'timer'"
+                    [placeholder]="'' + constants.horaInicioCierre">
+                  </sigma-form-calendar>
+                </div>
+
+                <div fxFlex>
+                  <sigma-form-calendar formControlName="horaFinalCierre" [objeto]="solicitudPmt"
+                    [(ngModel)]="solicitudPmt.horaFinalCierre" [type]="'timer'"
+                    [placeholder]="'' + constants.horaFinalCierre">
+                  </sigma-form-calendar>
+                </div>
+              </div>
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+                <div fxFlex>
+                  <mat-form-field class="w-100">
+                    <input matInput formControlName="coi" placeholder="{{constants.coi}}" id="coi"
+                      [(ngModel)]="solicitudPmt.coi" name="coi" [numericInput]="true" />
+                    <mat-error *ngIf="form.get('coi').hasError('required')">
+                      {{ constants.campoRequerido }} </mat-error>
+                  </mat-form-field>
+                </div>
+                <div fxFlex>
+                  <sigma-form-select formControlName="estadoPmt" [path]="'' + constants.path_list_items_estado_pmt"
+                    [(ngModel)]="solicitudPmt.estadoPmt" name="estadoPmt" placeholder="{{constants.estadoPmt}}"
+                    [listBy]="'descripcion'" (ngModelChange)="onChangeEstadoPmt()">
+                  </sigma-form-select>
+                </div>
+              </div>  
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+                <div fxFlex class="w-100">
+                    <sigma-form-upload-file formControlName="adjuntarPmt" placeholder="{{constants.adjuntarPmt}}"
+                    [(ngModel)]="archivosSolicitudPMT" [accept]="'application/pdf,application/vnd.ms-excel'"
+                    (ngModelChange)="setArchivoSolicitud($event)" [multiple]="true">
+                  </sigma-form-upload-file> 
+                </div>
+              </div>
+
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+                <div fxFlex>
+                  <mat-form-field class="w-100">
+                    <textarea matInput rows="5" formControlName="observaciones" placeholder="{{constants.observaciones}}"
+                      [(ngModel)]="solicitudPmt.observaciones">
+                  </textarea>
+                  <mat-error *ngIf="form.get('observaciones').hasError('required')">
+                      {{ constants.campoRequerido }} </mat-error>
+                  </mat-form-field> 
+                </div>
+              </div>  
+            </mat-card-content>
+          </mat-card>
+
+        </div>
+
+        <div fxFlex="40">
+          <mat-card class="custom-card c-mod-w" [formGroup]="formRadicado">
+            <mat-card-header color="primary" fxLayoutAlign="space-between center">
+              <mat-card-subtitle>
+                <h3>Información radicado</h3>
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <div fxLayout="column" class="mt-10">
+                <div *ngIf="!soloLecturaRadicado" class="w-100" fxLayout="row" fxLayout.lt-md="column"
+                  fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+                  <div fxFlex="70" fxFlex.lg="60" fxFlex.md="100">
+                    <sigma-form-number placeholder="Radicado de entrada" formControlName="entradaConsultaRadicado"
+                      [(ngModel)]="entradaConsultaRadicado" [maxlength]=20></sigma-form-number>
+                  </div>
+                  <div fxFlex="30" fxFlex.lg="40" fxFlex.md="100">
+                    <button mat-raised-button color="primary" (click)="buscarRadicado()">
+                      <mat-icon class="m-1">search</mat-icon>
+                      Buscar Radicado
+                    </button>
+                  </div>
+                </div>
+
+                <div *ngIf="showRadicadoForm" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px"
+                  fxLayoutGap.lt-md="0" class="mt-10">
+                  <div fxFlex="100">
+                    <mat-form-field class="w-100">
+                      <input matInput formControlName="numeroRadicadoPmt" placeholder="{{constants.numeroRadicadoPmt}}"
+                        id="numeroRadicadoPmt" [(ngModel)]="solicitudPmt.numeroRadicadoPmt" name="numeroRadicadoPmt"
+                        [numericInput]="true" />
+                    </mat-form-field>
+                  </div>
+
+                  <div fxFlex>
+                    <sigma-form-calendar formControlName="fechaRadicadoMovilidad" [objeto]="solicitudPmt"
+                      [(ngModel)]="solicitudPmt.fechaRadicadoMovilidad" [type]="'calendar'"
+                      [placeholder]="'' + constants.fechaRadicadoMovilidad">
+                    </sigma-form-calendar>
+                  </div>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <div *ngIf="formReadOnlyResumePMT" class="mat-elevation-z8 mt-10 mb-10">
+      <div *ngIf="loader" fxLayout="column" fxLayoutAlign="center center">
+        <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+      </div>
+      <div *ngIf="noInfoToShow" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+        <mat-icon class="m-1">sms_failed</mat-icon>
+        <h4> {{ constants.noResultados}}</h4>
+      </div>
+      <mat-table #table [dataSource]="dataSource" [hidden]="!noInfoToShow || !loader" matSort>
+
+        <ng-container matColumnDef="pk">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> PK </mat-header-cell>
+          <mat-cell *matCellDef="let pmt" data-label="PK">
+            {{pmt.pk}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="civ">
+          <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> CIV </mat-header-cell>
+          <mat-cell *matCellDef="let pmt" data-label="CIV">
+            {{ pmt.civ }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaRadicadoMovilidad">
+          <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> Fecha Radicado Movilidad
+          </mat-header-cell>
+          <mat-cell *matCellDef="let pmt" data-label="Fecha Radicado Movilidad">
+            {{ pmt.fechaRadicadoMovilidad }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="numeroRadicado">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Número Radicado Movilidad </mat-header-cell>
+          <mat-cell *matCellDef="let pmt" data-label="Número Radicado Movilidad">
+            {{ pmt.numeroRadicadoMovilidad }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="pmt">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Número Radicado PMT </mat-header-cell>
+          <mat-cell *matCellDef="let pmt" data-label="Número Radicado PMT">
+            {{pmt.numeroRadicadoPmt}}
+          </mat-cell>
+        </ng-container>
+
+
+        <ng-container matColumnDef="acciones">
+          <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+          <mat-cell *matCellDef="let pmt; let i = index;" [attr.data-label]="constants.acciones">
+            <button mat-raised-button color="primary" (click)="viewForm(pmt)" class="m-1">
+              <mat-icon>remove_red_eye</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="columnsPMT"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: columnsPMT;"></mat-row>
+      </mat-table>
+      <mat-paginator #paginator [length]="lengthList" [pageSize]="criteria.size" [pageSizeOptions]="[5, 10, 20]">
+      </mat-paginator>
+    </div>
+
+    <div *ngIf="formReadOnlyMaVial" class="mt-10 mb-10">
+      <ng-template matStepLabel>Detalle de Gestión del Mantenimiento Vial </ng-template>
+      <mat-card-content class="m-0">
+        <sigma-mantenimiento-records [mantId]="mantenimiento.id"></sigma-mantenimiento-records>
+      </mat-card-content>
+    </div>
+
+    <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+    
+    <div fxLayout="row" fxLayoutAlign="end" class="pt-16">
+      <button mat-button color="warn" class="m-1" (click)="toBack()">
+        <mat-icon class="m-1">close</mat-icon>
+        <!--{{labelButtonCancel}}-->Cancelar
+      </button>
+      <button *ngIf="!formReadOnly" [disabled]="processingSelectPk || processing || !form.valid || numeroRadicadoPmtFlag || readMode"
+        mat-raised-button color="primary" class="m-1" (click)="save()">
+        <mat-icon class="m-1">save</mat-icon>
+        <!--{{labelButtonSave}}--> Guardar
+      </button>
+      <button *ngIf="formReadOnly" [disabled]="processingSelectPk" mat-raised-button color="primary" class="m-1" (click)="saveReadOnly()">
+        <mat-icon class="m-1">save</mat-icon>
+        <!--{{labelButtonSave}}--> Guardar
+      </button>
+    </div>
+
+  </div>
+
+  <div *ngIf="currentAction === 'selectSolicitudPmt'" class="mt-10">
+    <h3>Seleccionar Solicitud PMT </h3>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0" class="mt-10 mb-10">
+      <div fxFlex>
+        <mat-form-field class="w-100">
+          <mat-select placeholder="{{ constants.numeroRadicadoPmt }}" [(ngModel)]="numeroRadicadoPmt">
+            <mat-option>Seleccione</mat-option>
+            <mat-option *ngFor="let solicitudPmt of listSolicitudesPMT"
+              [value]="solicitudPmt.numeroRadicadoPmt">
+              {{solicitudPmt.numeroRadicadoPmt}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div fxFlex="30">
+        <button mat-raised-button color="primary" (click)="buscarSolicitudPmt()">
+          <mat-icon class="m-1">search</mat-icon>
+          Buscar
+        </button>
+      </div>
+    </div>
+
+    <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+          
+    <div fxLayout="row" fxLayoutAlign="end" class="pt-16">
+      <button mat-button color="warn" class="m-1" (click)="toBack()">
+        <mat-icon class="m-1">close</mat-icon>
+        Cancelar
+      </button>
+      <button mat-raised-button color="primary" class="m-1" (click)="registrar()">
+        <mat-icon class="m-1">note_add</mat-icon>
+        Nueva Solicitud
+      </button>
+    </div>
+  </div>
+
+</div>

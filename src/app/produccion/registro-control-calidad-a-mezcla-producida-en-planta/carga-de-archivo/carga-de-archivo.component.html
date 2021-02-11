@@ -1,0 +1,20 @@
+<h2 mat-dialog-title>Carga de Archivo</h2>
+
+<!-- <h3 mat-dialog-content>{{ mensaje }}</h3> -->
+<div [formGroup]="form" class="mb-10">
+  <sigma-form-upload-file [sizeFile]=20 formControlName="archivoId" placeholder="Adjuntar Archivo" [(ngModel)]="archivosCargados"
+    [accept]="'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'" [multiple]="true" >
+  </sigma-form-upload-file>
+</div>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions fxLayoutAlign="end" fxLayout="row" fxLayout.lt-sm="column">
+  <button mat-button color="warn" (click)="cancelar()">
+    <mat-icon class="m-1">clear</mat-icon> Cancelar
+  </button>
+  <button mat-raised-button color="primary" (click)="guardar()"
+    [disabled]="!form.valid">
+    <mat-icon class="m-1">save</mat-icon> Guardar
+  </button>
+</mat-dialog-actions>

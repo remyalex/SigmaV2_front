@@ -1,0 +1,104 @@
+<div>
+
+    <div fxLayout="row" fxLayout.lt-md="column" *ngIf="mostrarButtonsBackCancelar">
+        <div fxLayoutAlign="start" fxFlex>
+          <button mat-stroked-button color="primary" class="m-1 mb-10" (click)="onBack()">
+            <mat-icon>arrow_back_ios</mat-icon>
+            {{ constants.atras }}
+          </button>
+        </div>
+    </div>
+         
+      <div class="row">
+          <mat-card class="p-0 c-mod">
+              <mat-card-header fxLayoutAlign="center" class="mb-10">
+                  <mat-card-subtitle>
+                      <h3>Definición</h3>
+                  </mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                    
+                  <div fxLayoutAlign="start">
+                        <div class="m-10">
+                          <label>{{ constants.requiereActualizacionDiagnostico }} </label>
+                          <mat-radio-group [(ngModel)]="request" (ngModelChange)="answer($event)" [disabled]="true">
+                              <mat-radio-button value="1" class="m-1"> Si </mat-radio-button>
+                              <mat-radio-button value="0" class="m-1"> No </mat-radio-button>
+                          </mat-radio-group>                     
+                        </div>
+                    </div>
+              </mat-card-content>
+          </mat-card>
+      </div>
+
+      <mat-vertical-stepper [linear]="true" #stepper  
+      [selectedIndex]="currentStep" (animationDone)="setFocus()"
+      (selectionChange)="selectionChangeStepper($event)" >
+
+          <mat-step [stepControl]="formularioDatosBasicos" >
+              <ng-template matStepLabel>Datos Basicos de la Visita</ng-template>
+              <input matInput id="DatosBasicosMat" readonly>
+              <mat-card-content class="m-0" [formGroup]="formularioDatosBasicos" >  
+                  <input type="hidden" [value]="getStatusSave()"  formControlName="ctrlDatosBasicos">                          
+                  <sigma-visita-verificacion-basicos [(mantenimiento)]="mantenimiento"  
+                      (saveBasico)="saveRegistro($event)" [isEditable]="false"> 
+                  </sigma-visita-verificacion-basicos>
+              </mat-card-content>
+          </mat-step>
+          
+
+          <mat-step [stepControl]="formularioRegistroFallas" >
+              <ng-template matStepLabel>Registro de la Visita </ng-template>
+              <input matInput id="RegistroVisitaFallasMat" readonly>
+              <mat-card-content class="m-0" [formGroup]="formularioRegistroFallas"> 
+                  <input type="hidden" formControlName="ctrlRegistroFallas">                
+                  <sigma-visita-verificacion-fallas [(mantenimiento)]="mantenimiento"
+                      (saveRegistro)="saveRegistro($event)" [isEditable]="false">
+                  </sigma-visita-verificacion-fallas>
+              </mat-card-content>
+          </mat-step>
+
+           <mat-step  *ngIf="!showOnYes" [stepControl]="formularioFotografias" >
+              <ng-template matStepLabel>Fotografia de la Visita </ng-template>
+              <input matInput id="RegistroVisitaFotosMat" readonly>
+              <mat-card-content class="m-0" [formGroup]="formularioFotografias">
+                  <input type="hidden" formControlName="ctrlFotografias">
+                  <sigma-visita-verificacion-fotografias [(mantenimiento)]="mantenimiento"
+                      (saveRegistro)="saveRegistro($event)" [isEditable]="false">
+                  </sigma-visita-verificacion-fotografias>
+              </mat-card-content>
+          </mat-step>
+
+          <mat-step  *ngIf="showOnYes" [stepControl]="formularioObservacionesFotografias">
+              <ng-template matStepLabel>Observaciones Y Fotografía de la Visita </ng-template>
+              <input matInput id="ObservacionesFotografiasMat" readonly>
+              <mat-card-content class="m-0" [formGroup]="formularioObservacionesFotografias">
+                  <input type="hidden" formControlName="ctrlObservacionesFotografias">
+                  <sigma-visita-verificacion-obs-foto [(mantenimiento)]="mantenimiento"
+                   (saveRegistro)="saveRegistro($event)" [isEditable]="false"></sigma-visita-verificacion-obs-foto>
+              </mat-card-content>
+          </mat-step>
+
+          <mat-step *ngIf="!showOnYes" [stepControl]="formularioObservaciones">
+              <ng-template matStepLabel>Observaciones de la Visita </ng-template>
+              <input matInput id="observacionesMat" readonly>
+              <mat-card-content class="m-0" [formGroup]="formularioObservaciones">
+                  <input type="hidden" formControlName="ctrlObservaciones">
+                  <sigma-visita-verificacion-observaciones [(mantenimiento)]="mantenimiento"
+                   (saveRegistro)="saveRegistro($event)" [isEditable]="false">
+                </sigma-visita-verificacion-observaciones>
+              </mat-card-content>
+          </mat-step> 
+
+          <mat-step [stepControl]="formularioDetalleGestion">
+              <ng-template matStepLabel>Detalle de Gestión del Mantenimiento Vial </ng-template>
+              <input matInput id="DetalleGestionMat" readonly>
+              <mat-card-content class="m-0" [formGroup]="formularioDetalleGestion">
+                  <input type="hidden" formControlName="ctrlDetalleGestion">
+                  <sigma-mantenimiento-records [mantId]="mantenimiento.id"></sigma-mantenimiento-records>
+              </mat-card-content>
+          </mat-step>
+      </mat-vertical-stepper>
+
+
+</div>

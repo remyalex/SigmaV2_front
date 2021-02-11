@@ -1,0 +1,131 @@
+<div>
+  <div>
+    <mat-card-header fxLayoutAlign="center">
+      <mat-card-subtitle><h2>{{ constants.consultar }}</h2></mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxLayoutWrap fxLayoutGap="0.5%" fxLayoutAlign="center">
+      <div fxFlex="50%">
+        <form fxLayout="column" (ngSubmit)="search()">
+          
+          <div fxFlex="100">
+            <sigma-general-list value="{{ criteria.equipoDisponibilidadId }}"
+              [path]="constants.path_administracion_equipocalendario_equipoDisponibilidadId" etiqueta="{{ constants.equipoDisponibilidadId }}" [listBy]="'valor'"
+              (optionIdSelected)="setEquipoDisponibilidadEquipocalendario($event)" 
+              required="true">
+            </sigma-general-list>
+          </div>
+        </form>
+      </div>
+      <div fxFlex="50%">
+        <button type="submit"  mat-raised-button color="primary"  class="m-1"(click)="search()" >
+          <mat-icon>search</mat-icon> {{ constants.buscar }}
+        </button>
+        <button (click)="clear()"  mat-raised-button color="warn" class="m-1">
+          <mat-icon>clear</mat-icon> {{ constants.limpiar }}
+        </button>
+        <button [disabled]="dataSource.totalElements$.source['_value'] <= 0" 
+        layout="row" mat-raised-button color="primary" class="m-1" (click)="exportAsXLSX()"
+        *sigmaIsGranted="constants.permiso_administracion_equipocalendario_export">
+          <mat-icon>get_app</mat-icon>
+          {{ constants.exportar }}
+          <mat-icon *ngIf="cargandoExcel"><mat-spinner color="accent" [diameter]="20"></mat-spinner></mat-icon>
+        </button>
+      </div>
+    </mat-card-content>
+  </div>
+</div>
+
+<div class="mat-elevation-z8">
+  <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center" >
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+
+  <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center" >
+    <mat-icon class="m-1">sms_failed</mat-icon>  <h4> {{dataSource.errorMessage$ | async}}</h4>
+  </div>
+
+  <mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort>
+    
+    <ng-container matColumnDef="activo">
+      <mat-header-cell *matHeaderCellDef mat-sort-header > {{ constants.activo }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipocalendario" [attr.data-label]="constants.activo">
+        <span class="dev-color-red" [hidden]="equipocalendario.activo">{{ constants.no }}</span>
+        <span class="dev-color-green" [hidden]="!equipocalendario.activo">{{ constants.si }}</span>
+        
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="disponibleId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.disponibleId }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipocalendario" [attr.data-label]="constants.disponibleId">
+        {{ equipocalendario.disponibleValor }}
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="equipoDisponibilidadId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.equipoDisponibilidadId }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipocalendario" [attr.data-label]="constants.equipoDisponibilidadId">
+        {{ equipocalendario.equipoDisponibilidadValor }}
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="fechaFin">
+      <mat-header-cell *matHeaderCellDef mat-sort-header > {{ constants.fechaFin }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipocalendario" [attr.data-label]="constants.fechaFin">
+        {{equipocalendario.fechaFin}}
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="fechaInicio">
+      <mat-header-cell *matHeaderCellDef mat-sort-header > {{ constants.fechaInicio }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipocalendario" [attr.data-label]="constants.fechaInicio">
+        {{equipocalendario.fechaInicio}}
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header > {{ constants.id }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipocalendario" [attr.data-label]="constants.id">
+        {{equipocalendario.id}}
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="select">
+      <mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? masterToggle(dataSource, $event) : null"
+          [checked]="selection.hasValue()"
+          [indeterminate]="selection.hasValue()">
+        </mat-checkbox>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let equipocalendario">
+        <mat-checkbox #listCheckboxes
+          (click)="$event.stopPropagation()"
+          (change)="$event ? toggleChecks(equipocalendario, $event) : null"
+          [checked]="equipocalendario.select">
+        </mat-checkbox>
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipocalendario" [attr.data-label]="constants.acciones">
+        <button mat-raised-button  color="primary" (click)="detail(equipocalendario)" class="m-1"
+          *sigmaIsGranted="constants.permiso_administracion_equipocalendario_view">
+          <mat-icon matTooltip="Detalles" matTooltipPosition="above">open_in_new</mat-icon>
+        </button>
+        <button mat-raised-button color="primary" (click)="edit(equipocalendario)" class="m-1"
+          *sigmaIsGranted="constants.permiso_administracion_equipocalendario_update">
+          <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+        </button>
+        <button mat-raised-button color="warn" (click)="delete(equipocalendario)" class="m-1"
+          *sigmaIsGranted="constants.permiso_administracion_equipocalendario_delete">
+          <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [length]= "dataSource.totalElements$ | async" [pageSize]="criteria.size" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+</div>

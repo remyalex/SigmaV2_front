@@ -1,0 +1,119 @@
+<div fxLayout="column" *sigmaIsGranted="constants.permiso_produccion_programar_personal_planta_list">
+  <div>
+    <div>
+      <mat-card-header fxLayoutAlign="center" class="mb-10">
+        <mat-card-subtitle>
+          <h2>{{ constants.programarPersonal }}</h2>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form>
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="0.8%" fxLayoutGap.lt-md="0" fxLayoutAlign="start">
+            <div fxFlex>
+              <sigma-form-calendar [(ngModel)]="personal.fechaDesde" [objeto]="personal"
+                [placeholder]="constants.fechaDesde" name="fechaDesde" [type]="constants.datepicker.types.calendar">
+              </sigma-form-calendar>
+            </div>
+
+            <div fxFlex>
+              <sigma-form-calendar [(ngModel)]="personal.fechaHasta" [objeto]="personal"
+                [placeholder]="constants.fechaHasta" name="fechaHasta" [type]="constants.datepicker.types.calendar">
+              </sigma-form-calendar>
+            </div>
+
+            <div fxFlex>
+              <sigma-form-select [path]="constants.path_produccion_turno" [(ngModel)]="personal.turno" name="turno"
+                placeholder="{{ constants.turno }}" [listBy]="'descripcion'">
+              </sigma-form-select>
+            </div>
+
+            <div fxFlex>
+              <sigma-form-select [path]="constants.path_produccion_tipo_material" [(ngModel)]="personal.tipoMaterial"
+                name="tipoMaterial" placeholder="{{ constants.tipoMaterial }}" [listBy]="'descripcion'">
+              </sigma-form-select>
+            </div>
+          </div>
+
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="0.8%" fxLayoutGap.lt-md="0" fxLayoutAlign="start">
+            <div fxFlex>
+              <button type="submit" mat-raised-button color="primary" class="m-1" (click)="loadData()">
+                <mat-icon>search</mat-icon> {{ constants.buscar }}
+              </button>
+              <button (click)="clear()" mat-raised-button color="warn" class="m-1">
+                <mat-icon>clear</mat-icon> {{ constants.limpiar }}
+              </button>
+              <button layout="row" *sigmaIsGranted="constants.permiso_produccion_programar_personal_planta_export"
+                mat-raised-button color="primary" class="m-1" (click)="exportAsXLSX()" [disabled]="lengthList <= 0">
+                <mat-icon>get_app</mat-icon>
+                {{ constants.exportar }}
+                <mat-icon *ngIf="cargandoExcel">
+                  <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+                </mat-icon>
+              </button>
+
+            </div>
+          </div>
+
+        </form>
+      </mat-card-content>
+    </div>
+  </div>
+
+
+  <div class="mat-elevation-z8">
+    <div *ngIf="loader" fxLayout="column" fxLayoutAlign="center center">
+      <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+    </div>
+
+    <div *ngIf="noInfoToShow" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+      <mat-icon class="m-1">sms_failed</mat-icon>
+      <h4> {{ constants.noResultados}}</h4>
+    </div>
+
+    <mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort>
+
+
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.numeroSolicitud }} </mat-header-cell>
+        <mat-cell *matCellDef="let personal" [attr.data-label]="constants.numeroSolicitud">
+          {{personal.id}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fechaRetiro">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaEntrega }} </mat-header-cell>
+        <mat-cell *matCellDef="let personal" [attr.data-label]="constants.fechaEntrega">
+          {{personal.fechaRetiro}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="turnoObj.descripcion">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.turno }} </mat-header-cell>
+        <mat-cell *matCellDef="let personal" [attr.data-label]="constants.turno">
+          {{personal.turnoObj ? personal.turnoObj.descripcion : ''}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="tipoMaterialObj.descripcion">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.tipoMaterial }} </mat-header-cell>
+        <mat-cell *matCellDef="let personal" [attr.data-label]="constants.tipoMaterial">
+          {{personal.tipoMaterialObj ? personal.tipoMaterialObj.descripcion : ''}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="acciones">
+        <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+        <mat-cell *matCellDef="let personal" [attr.data-label]="constants.acciones">
+          <button mat-raised-button color="primary" (click)="edit(personal)" class="m-1"
+            *sigmaIsGranted="constants.permiso_produccion_programar_personal_planta_create">
+            <mat-icon matTooltip="Trabajar" matTooltipPosition="above">work</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columns; let i = index"></mat-row>
+    </mat-table>
+    <mat-paginator #paginator [length]="lengthList" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+  </div>
+</div>

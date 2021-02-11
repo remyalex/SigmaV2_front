@@ -1,0 +1,198 @@
+<h2 mat-dialog-title>{{ constants.detalle }}</h2>
+
+<mat-dialog-content *sigmaIsGranted="constants.permiso_administracion_orfeo_view">
+  <mat-list>
+    <mat-list-item>
+      <div class="item item-1" fxFlex="50%">
+        <b>{{ constants.tipo }}</b>:
+      </div>
+      <div class="item item-1" fxFlex="50%">
+        {{ orfeo.radicacion.tipo }}
+      </div>
+    </mat-list-item> 
+
+    <mat-list-item>
+      <div class="item item-1" fxFlex="50%">
+        <b>{{ constants.fechaRadicado }}</b>:
+      </div>
+      <div class="item item-1" fxFlex="50%">
+        {{ constants.fechaRadicado }}
+      </div>
+    </mat-list-item>
+
+    <mat-list-item>
+      <div class="item item-1" fxFlex="50%">
+        <b>{{ constants.fechaVencimiento }}</b>:
+      </div>
+      <div class="item item-1" fxFlex="50%">
+        {{ constants.fechaRadicado }}
+      </div>
+    </mat-list-item>
+ 
+  <!--
+    <mat-list-item>
+      <div fxFlex>
+        <b>{{ constants.fechaGeneracionDocumento }}</b>:
+      </div>
+      <div fxFlex="60">
+        {{ orfeo.radicacion.fechaGeneracionDocumento }}
+      </div>
+    </mat-list-item>
+-->
+
+    <mat-list-item>
+      <div class="item item-1" fxFlex="50%">
+        <b>{{ constants.requiereRespuesta }}</b>:
+      </div>
+      <div class="item item-1" fxFlex="50%">
+        <span class="dev-color-green" [hidden]="orfeo.radicacion.requiereRespuesta">No</span>
+        <span class="dev-color-red" [hidden]="!orfeo.radicacion.requiereRespuesta">Si</span>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item>
+      <div class="item item-1" fxFlex="50%">
+        <b>{{ constants.numeroRadicado }}</b>:
+      </div>
+      <div class="item item-1" fxFlex="50%">
+        {{ constants.numeroRadicado }}
+      </div>
+    </mat-list-item>
+
+    <mat-list-item>
+      <div class="item item-1" fxFlex="50%">
+        <b>{{ constants.entidadRemitente }}</b>:
+      </div>
+      <div class="item item-1" fxFlex="50%">
+        {{ constants.numeroRadicado }}
+      </div>
+    </mat-list-item>
+
+    <mat-list-item>
+      <div class="item item-1" fxFlex="50%">
+        <b>{{ constants.asunto }}</b>:
+      </div>
+      <div class="item item-1" fxFlex="50%">
+        {{ constants.numeroRadicado }}
+      </div>
+    </mat-list-item> 
+
+    <mat-list-item>
+      <div class="item item-1" fxFlex="50%">
+        <b>{{ constants.dependenciaAsignada }}</b>:
+      </div>
+      <div class="item item-1" fxFlex="50%">
+        {{ constants.numeroRadicado }}
+      </div>
+    </mat-list-item>
+
+    <mat-list-item>
+      <div class="item item-1" fxFlex="50%">
+        <b>{{ constants.resumen }}</b>:
+      </div>
+      <div class="item item-1" fxFlex="50%">
+        {{ constants.numeroRadicado }}
+      </div>
+    </mat-list-item>
+
+    <mat-list-item>
+      <div class="item item-1" fxFlex="50%">
+        <b>{{ constants.estado }}</b>:
+      </div>
+      <div class="item item-1" fxFlex="50%">
+        {{ constants.numeroRadicado}}
+      </div>
+    </mat-list-item>
+
+    <mat-list-item>
+      <div class="item item-1" fxFlex="50%">
+        <b>{{ constants.nombresUsuario }}</b>:
+      </div>
+      <div class="item item-1" fxFlex="50%">
+        {{ constants.numeroRadicado }}
+      </div>
+    </mat-list-item>
+
+    <mat-list-item>
+      <div class="item item-1" fxFlex="50%">
+        <b>{{ constants.apellidosUsuario }}</b>:
+      </div>
+      <div class="item item-1" fxFlex="50%">
+        {{ constants.numeroRadicado }}
+      </div>
+    </mat-list-item>
+
+    <mat-list-item>
+      <div class="item item-1" fxFlex="50%">
+        <b>{{ constants.tipoDocumentoIdentidad }}</b>:
+      </div>
+      <div class="item item-1" fxFlex="50%">
+        {{ constants.numeroRadicado }}
+      </div>
+    </mat-list-item> 
+
+    <mat-list-item>
+      <div class="item item-1" fxFlex="50%">
+        <b>{{ constants.numeroDocumentoIdentidad }}</b>:
+      </div>
+      <div class="item item-1" fxFlex="50%">
+        {{ constants.numeroRadicado }}
+      </div>
+    </mat-list-item>
+
+    <mat-list-item>
+      <div class="item item-1" fxFlex="50%">
+        <b>{{ constants.tipoPersona }}</b>:
+      </div>
+      <div class="item item-1" fxFlex="50%">
+        {{ constants.numeroRadicado }}
+      </div>
+    </mat-list-item>
+
+    <mat-list-item>
+      <div class="item item-1" fxFlex="50%">
+        <b>{{ constants.nombres }}</b>:
+      </div>
+      <div class="item item-1" fxFlex="50%">
+        {{ orfeo.fechaRadicado }}
+      </div>
+    </mat-list-item> 
+
+    <mat-list-item>
+      <div class="item item-1" fxFlex="50%">
+        <b>{{ constants.apellidos }}</b>:
+      </div>
+      <div class="item item-1" fxFlex="50%">
+        {{ orfeo.fechaRadicado }}
+      </div>
+    </mat-list-item>
+
+    <mat-list-item>
+      <div class="item item-1" fxFlex="50%">
+        <b>{{ constants.tipoDocumentoIdentidadRemitente }}</b>:
+      </div>
+      <div class="item item-1" fxFlex="50%">
+        {{ orfeo.fechaRadicado }}
+      </div>
+    </mat-list-item>
+
+    <mat-list-item>
+      <div class="item item-1" fxFlex="50%">
+        <b>{{ constants.numeroDocumentoIdentidadRemitente }}</b>:
+      </div>
+      <div class="item item-1" fxFlex="50%">
+      </div>
+    </mat-list-item>
+
+    
+    
+
+  </mat-list>
+
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()">{{ constants.cerrar }}</button>
+</mat-dialog-actions>

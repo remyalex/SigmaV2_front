@@ -1,0 +1,156 @@
+<div fxLayout="column">
+  <div class="flex-p">
+      <mat-card class="p-0 mat-card">
+          <mat-card-header fxLayoutAlign="center">
+              <mat-card-subtitle>
+                  <h2>{{ constants.registarTarjetaOperacion }}</h2>
+              </mat-card-subtitle>
+          </mat-card-header>
+
+          <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+              <h5>{{ constants.informacionCampoObligatorio }}</h5>
+          </div>
+
+          <mat-card-content class="p-16 m-0" [formGroup]="form" *sigmaIsGranted="constants.permiso_produccion_tarjeta_operacion_create">
+
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+
+                  <div fxFlex>
+                      <mat-form-field class="w-100">
+                          <input matInput placeholder="{{ constants.numeroTarjeta }}" formControlName="numeroTarjeta" [(ngModel)]="equipo.numeroTarjeta" autocomplete="off" [numericInput]="true" required pattern="[0-9]*">
+                          <mat-error *ngIf="form.get('numeroTarjeta').hasError('required')"> {{ constants.campoRequerido }}
+                          </mat-error>
+                          <mat-error *ngIf="form.get('numeroTarjeta').hasError('maxlength')"> {{ constants.longitud_maxima }} 10 caracteres.
+                          </mat-error>
+                      </mat-form-field>
+
+                  </div>
+
+                  <div fxFlex>
+                      <mat-form-field class="w-100">
+                          <input matInput placeholder="{{ constants.quienDespacha }}" formControlName="quienDespacha" [(ngModel)]="equipo.quienDespacha" autocomplete="off" type="text" required pattern="^(?!\s*$).+">
+                          <mat-error *ngIf="form.get('quienDespacha').hasError('required')"> {{ constants.campoRequerido }}
+                          </mat-error>
+                          <mat-error *ngIf="form.get('quienDespacha').hasError('maxlength')"> {{ constants.longitud_maxima }} 150 caracteres.
+                          </mat-error>
+                      </mat-form-field>
+                  </div>
+
+              </div>
+
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+
+                  <div fxFlex>
+                      <mat-form-field class="w-100">
+                          <input matInput placeholder="{{ constants.direccionSalida }}" formControlName="direccionSalida" [(ngModel)]="equipo.direccionSalida" autocomplete="off" type="text" required pattern="^(?!\s*$).+">
+                          <mat-error *ngIf="form.get('direccionSalida').hasError('required')"> {{ constants.campoRequerido }}
+                          </mat-error>
+                          <mat-error *ngIf="form.get('direccionSalida').hasError('maxlength')"> {{ constants.longitud_maxima }} 150 caracteres.
+                          </mat-error>
+                      </mat-form-field>
+                  </div>
+
+                  <div class="item" fxFlex>
+                      <sigma-form-calendar formControlName="horaSalida" [(ngModel)]="equipo.horaSalida" [placeholder]="constants.horaSalida" [type]="constants.datepicker.types.timer">
+                      </sigma-form-calendar>
+                  </div>
+
+                  <div fxFlex>
+                      <mat-form-field class="w-100">
+                          <input matInput placeholder="{{ constants.kilometrajeSalida }}" formControlName="kilometrajeSalida" [(ngModel)]="equipo.kilometrajeSalida" autocomplete="off" type="text" required [numericInput]="true" pattern="^(?!\s*$).+">
+                          <mat-error *ngIf="form.get('kilometrajeSalida').hasError('pattern')"> {{ constants.campoNoVacio }}
+                          </mat-error>
+                          <mat-error *ngIf="form.get('kilometrajeSalida').hasError('required')"> {{ constants.campoRequerido }}
+                          </mat-error>
+                          <mat-error *ngIf="form.get('kilometrajeSalida').hasError('maxlength')"> {{ constants.longitud_maxima }} 10 caracteres.
+                          </mat-error>
+                          <mat-error *ngIf="form.get('kilometrajeSalida').hasError('pattern')"> Solo se permiten valores numericos
+                          </mat-error>
+                      </mat-form-field>
+                  </div>
+              </div>
+
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+
+                  <div fxFlex>
+                      <mat-form-field class="w-100">
+                          <input matInput placeholder="{{ constants.tipoCarga }}" formControlName="tipoCarga" [(ngModel)]="equipo.tipoCarga" autocomplete="off" type="text" required pattern="^(?!\s*$).+">
+                          <mat-error *ngIf="form.get('tipoCarga').hasError('required')"> {{ constants.campoRequerido }}
+                          </mat-error>
+                          <mat-error *ngIf="form.get('tipoCarga').hasError('maxlength')"> {{ constants.longitud_maxima }} 300 caracteres.
+                          </mat-error>
+                      </mat-form-field>
+                  </div>
+
+                  <div fxFlex>
+                      <mat-form-field class="w-100">
+                          <input matInput placeholder="{{ constants.cantidad }}" formControlName="cantidad" [(ngModel)]="equipo.cantidad" autocomplete="off" type="text" required [numericInput]="true" pattern="^(?!\s*$).+">
+                          <mat-error *ngIf="form.get('cantidad').hasError('pattern')"> {{ constants.campoNoVacio }}
+                          </mat-error>
+                          <mat-error *ngIf="form.get('cantidad').hasError('required')"> {{ constants.campoRequerido }}
+                          </mat-error>
+                          <mat-error *ngIf="form.get('cantidad').hasError('maxlength')"> {{ constants.longitud_maxima }} 10 caracteres. </mat-error>
+                          <mat-error *ngIf="form.get('cantidad').hasError('pattern')"> Solo se permiten valores numericos
+                          </mat-error>
+                      </mat-form-field>
+                  </div>
+
+              </div>
+
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+
+                  <div fxFlex>
+                      <mat-form-field class="w-100">
+                          <input matInput placeholder="{{ constants.direccionLlegada }}" formControlName="direccionLlegada" [(ngModel)]="equipo.direccionLlegada" autocomplete="off" type="text" required pattern="^(?!\s*$).+">
+                          <mat-error *ngIf="form.get('direccionLlegada').hasError('required')"> {{ constants.campoRequerido }}
+                          </mat-error>
+                          <mat-error *ngIf="form.get('direccionLlegada').hasError('maxlength')"> {{ constants.longitud_maxima }} 150 caracteres.
+                          </mat-error>
+                      </mat-form-field>
+                  </div>
+
+                  <div class="item" fxFlex>
+                      <sigma-form-calendar formControlName="horaLlegada" [(ngModel)]="equipo.horaLlegada" [placeholder]="constants.horaLlegada" [type]="constants.datepicker.types.timer">
+                      </sigma-form-calendar>
+                  </div>
+
+                  <div fxFlex>
+                      <mat-form-field class="w-100">
+                          <input matInput placeholder="{{ constants.kilometrajeLlegada }}" formControlName="kilometrajeLlegada" [(ngModel)]="equipo.kilometrajeLlegada" autocomplete="off" type="text" required [numericInput]="true" pattern="^(?!\s*$).+">
+                          <mat-error *ngIf="form.get('kilometrajeLlegada').hasError('pattern')"> {{ constants.campoNoVacio }}
+                          </mat-error>
+                          <mat-error *ngIf="form.get('kilometrajeLlegada').hasError('required')"> {{ constants.campoRequerido }}
+                          </mat-error>
+                          <mat-error *ngIf="form.get('kilometrajeLlegada').hasError('maxlength')"> {{ constants.longitud_maxima }} 10 caracteres. </mat-error>
+                          <mat-error *ngIf="form.get('kilometrajeLlegada').hasError('pattern')"> Solo se permiten valores numericos
+                          </mat-error>
+                      </mat-form-field>
+                  </div>
+              </div>
+
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                  <div fxFlex>
+                      <mat-form-field class="w-100">
+                          <input matInput placeholder="{{ constants.quienRecibe }}" formControlName="quienRecibe" [(ngModel)]="equipo.quienRecibe" autocomplete="off" type="text" required pattern="^(?!\s*$).+">
+                          <mat-error *ngIf="form.get('quienRecibe').hasError('required')"> {{ constants.campoRequerido }}
+                          </mat-error>
+                          <mat-error *ngIf="form.get('quienRecibe').hasError('maxlength')"> {{ constants.longitud_maxima }} 150 caracteres. </mat-error>
+                      </mat-form-field>
+                  </div>
+              </div>
+
+          </mat-card-content>
+
+          <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+          <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+              <button mat-button color="warn" class="m-1" (click)="onBack()">
+                  <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+              </button>
+              <button mat-raised-button color="primary" class="m-1" [disabled]="disableSubmit" (click)="onSubmit()" *sigmaIsGranted="constants.permiso_produccion_tarjeta_operacion_create">
+                  <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+              </button>
+          </div>
+      </mat-card>
+  </div>
+</div>

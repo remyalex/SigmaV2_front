@@ -1,0 +1,127 @@
+<div fxLayoutAlign="end">
+  <button mat-raised-button [disabled]="!componentVisible"
+    *sigmaIsGranted="constants.registro_diario_cuadrilla_petreos_nuevo" color="primary" class="m-1 mb-10"
+    (click)="add()">
+    <mat-icon class="m-1">note_add</mat-icon>Crear nuevo
+  </button>
+</div>
+<div class="mat-elevation-z8">
+  <mat-table #table class="col-x" [dataSource]="dataCuadrillaMaterial" matSort>
+
+    <ng-container matColumnDef="claseMaterial">
+      <mat-header-cell *matHeaderCellDef> {{ constants.claseMaterial }} </mat-header-cell>
+      <mat-cell *matCellDef="let material" [attr.data-label]="constants.claseMaterial">
+        {{ material.claseMaterial ? material.claseMaterial.descripcion : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="origenMezcla">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.origenMezcla }} </mat-header-cell>
+      <mat-cell *matCellDef="let material" [attr.data-label]=" constants.origenMezcla">
+        {{ material.origenMezcla ? material.origenMezcla.descripcion : ''}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="valeEntrada">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.valeEntrada }} </mat-header-cell>
+      <mat-cell *matCellDef="let material" [attr.data-label]="constants.valeEntrada">
+        {{ material.valeEntrada ? material.valeEntrada : ''}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="valeSalida">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.valeSalida }} </mat-header-cell>
+      <mat-cell *matCellDef="let material" [attr.data-label]="constants.valeSalida">
+        {{ material.valeSalida ? material.valeSalida : ''}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="placa">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.placa }} </mat-header-cell>
+      <mat-cell *matCellDef="let material" [attr.data-label]="constants.placa">
+        {{ material.placa ? material.placa : ''}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="horaEntrada">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.horaEntrada }} </mat-header-cell>
+      <mat-cell *matCellDef="let material" [attr.data-label]="constants.horaEntrada">
+        {{utilitiesServices.getHoraClientFormat(material.horaEntrada)}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="volumenEntrada">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.volumenEntrada }} </mat-header-cell>
+      <mat-cell *matCellDef="let material" [attr.data-label]="constants.volumenEntrada">
+        {{material.volumenEntrada}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="volumenSalida">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.volumenSalida }} </mat-header-cell>
+      <mat-cell *matCellDef="let material" [attr.data-label]="constants.volumenSalida">
+        {{material.volumenSalida}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="volumenAcopio">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.volumenAcopio }} </mat-header-cell>
+      <mat-cell *matCellDef="let material" [attr.data-label]="constants.volumenAcopio">
+        {{material.volumenAcopio}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="volumenUtilizado">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.volumenUtilizado }} </mat-header-cell>
+      <mat-cell *matCellDef="let material" [attr.data-label]="constants.volumenUtilizado">
+        {{material.volumenUtilizado}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="destino">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.destino }} </mat-header-cell>
+      <mat-cell *matCellDef="let material" [attr.data-label]="constants.destino">
+        {{material.destino}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="nombreDocumento">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.nombreDocumento }} </mat-header-cell>
+      <mat-cell *matCellDef="let material" [attr.data-label]="constants.nombreDocumento">
+        <div *ngIf="material?.archivosPetreos?.length > 0">
+          <sigma-show-file id="{{ material.archivosPetreos[0].archivo?.id }}"></sigma-show-file>
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+      <mat-cell *matCellDef="let personal ; let i = index;" [attr.data-label]="constants.acciones">
+        <button mat-raised-button [disabled]="!componentVisible"
+          *sigmaIsGranted="constants.registro_diario_cuadrilla_petreos_editar" color="primary"
+          (click)="edit(personal, i)" class="m-1">
+          <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+        </button>
+        <button mat-raised-button [disabled]="!componentVisible"
+          *sigmaIsGranted="constants.registro_diario_cuadrilla_petreos_delete" color="warn"
+          (click)="delete(personal, i)" class="m-1">
+          <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [length]="lengthList" [pageSize]="criteria.size" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>
+
+<div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+  <button type="button" [disabled]="!componentVisible"
+    *sigmaIsGranted="constants.registro_diario_cuadrilla_petreos_save_seccion" class="m-1" mat-raised-button
+    color="primary" (click)="onSubmit()">
+    <mat-icon class="m-1">save</mat-icon> {{ constants.guardarSeccion }}
+  </button>
+</div>
+<div [formGroup]="fifthFormGroup">
+  <input type="hidden" formControlName="successForm" [(ngModel)]="successInput">
+</div>

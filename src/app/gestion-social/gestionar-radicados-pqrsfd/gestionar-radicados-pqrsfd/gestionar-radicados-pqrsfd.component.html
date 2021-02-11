@@ -1,0 +1,160 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="processing">
+
+  <div *ngIf="currentAction == 'list'">
+    <div fxLayout="row" fxLayout.lt-md="column">
+      <div fxFlex="100" class="flex-p">
+        <mat-tab-group [selectedIndex]="tabSeleccionado.value" (selectedIndexChange)="seleccionarGrid($event)">
+          <mat-tab *ngIf="condicion" label="Gestion Radicados PQRSFD">
+            <sigma-grid-mantenimientos #grid [data]="data" [condicion]="condicion" [columns]="columns"
+            [defaultFilters]="defaulFilters" 
+            [filters]="filters" [singleActions]="actions" (executeOnSingle)="ejecutar($event)">
+            </sigma-grid-mantenimientos>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+
+
+  <div *ngIf="currentAction === constants.vincularRadicado">
+
+    <div class="p-16" [formGroup]="formularioConsultaRadicadoEntrada">
+      <h3>{{constants.informacionRadicado}}</h3>
+        
+      <div fxLayout="column" class="mt-10">
+        <div fxFlex="100" class="mb-10">
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <div fxFlex="70" fxFlex.lg="60" fxFlex.md="100">
+              <sigma-form-number placeholder="Nro. Radicado" formControlName="entradaConsultaRadicadoEntrada"
+                [(ngModel)]="entradaConsultaRadicadoEntrada" [maxlength]=20></sigma-form-number>
+            </div>
+            <div fxFlex="30" fxFlex.lg="40" fxFlex.md="100">
+              <button mat-raised-button color="primary" (click)="buscarRadicado()">
+                <mat-icon class="m-1">search</mat-icon>
+                {{ constants.btnBuscarRadicado }}
+                <mat-icon *ngIf="processingSelectPk">
+                  <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+                </mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div fxFlex="100">
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+            <div fxFlex="50">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="Nro. Radicado" formControlName="solicitudRadicadoEntrada"
+                  [ngModel]="data.mantenimiento.solicitudRadicadoEntrada" readonly>
+              </mat-form-field>
+            </div>
+            <div fxFlex="50">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="Fecha Radicado de Orfeo" formControlName="fechaRadicacion"
+                  [ngModel]="data.mantenimiento.solicitudFecha" readonly>
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+            <div fxFlex="50">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="Remitente" formControlName="remitente"
+                  [ngModel]="data.mantenimiento.solicitudRemitente" readonly>
+              </mat-form-field>
+            </div>
+            <div fxFlex="50">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="Estado radicado" formControlName="estadoRadicado"
+                  [ngModel]="data.mantenimiento.estadoRadicado" readonly>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div fxLayout="row" fxLayoutAlign="end center" class="mt-10">
+      <button class="m-1" mat-button color="warn" (click)="onBack()">
+        <mat-icon class="m-1">close</mat-icon>
+        {{ constants.cancelar}}
+      </button>
+      <button class="m-1" [disabled]="data.mantenimiento.solicitudRadicadoEntrada == null" mat-raised-button
+        color="primary" (click)="asignarRadicado()" *sigmaIsGranted="constants.permiso_social_radicados_prqsfd_edit">
+        <mat-icon class="m-1">save</mat-icon>
+        {{ constants.vincular.titulo }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Table RADICADOS -->
+  <div *ngIf="currentAction === constants.eliminarRadicado">
+
+    <div class="p-16">
+
+      <h3>{{constants.informacionRadicado}}</h3>
+
+      <div class="mat-elevation-z8 mt-10">
+        <!--
+          <div *ngIf="loader" fxLayout="column" fxLayoutAlign="center center">
+            <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+          </div>
+        -->
+        <div *ngIf="noInfoToShow" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+          <mat-icon class="m-1">sms_failed</mat-icon>
+          <h4>{{ constants.noResultados }}</h4>
+        </div>
+        <mat-table #tableEl [dataSource]="dataSourceRadicadosVinculados" [hidden]="!noInfoToShow" matSort>
+
+          <ng-container matColumnDef="codigoRadicado">
+            <mat-header-cell *matHeaderCellDef>
+              {{ constants.nroRadicado }}</mat-header-cell>
+            <mat-cell *matCellDef="let radicado" [attr.data-label]="'codigoRadicado'">
+              {{ radicado.numeroRadicado }}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="fecharadicado">
+            <mat-header-cell *matHeaderCellDef>
+              {{ constants.fechaRadicadoOrfeo }}</mat-header-cell>
+            <mat-cell *matCellDef="let radicado" [attr.data-label]="'fecharadicado'">
+              {{ radicado.fechaRadicadoOrfeo }}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="acciones">
+            <mat-header-cell *matHeaderCellDef>
+              {{ constants.acciones }}
+            </mat-header-cell>
+            <mat-cell *matCellDef="let radicado; let i = index" [attr.data-label]="constants.acciones">
+              <button mat-raised-button color="warn" (click)="deleteElement(i, radicado)" class="m-1" 
+              *sigmaIsGranted="constants.permiso_social_radicados_prqsfd_edit">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="columnsRadicados"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: columnsRadicados"></mat-row>
+        </mat-table>
+        <mat-paginator #paginatorEl [length]="lengthList" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div fxLayout="row" fxLayoutAlign="end center" class="mt-10">
+      <button class="m-1" mat-button color="warn" (click)="onBack()">
+        <mat-icon class="m-1">close</mat-icon>
+        {{ constants.cancelar}}
+      </button>
+    </div>
+  </div>
+  <!-- Fin Table RADICADOS -->
+</div>

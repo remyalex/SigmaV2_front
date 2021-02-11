@@ -1,0 +1,20 @@
+<mat-card-content class="p-16 m-0" [formGroup]="form">
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+
+    <div class="item" fxFlex="50%">
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="pk" formControlName="pk" [(ngModel)]="mantenimiento.pk" readonly>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="item" fxFlex="50%">
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="Radicado de entrada" formControlName="solicitudRadicadoEntrada"
+            [(ngModel)]="mantenimiento.solicitudRadicadoEntrada" readonly>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+</mat-card-content>

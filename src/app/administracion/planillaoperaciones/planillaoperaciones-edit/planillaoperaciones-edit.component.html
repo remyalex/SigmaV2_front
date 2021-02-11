@@ -1,0 +1,64 @@
+<div *sigmaIsGranted="constants.permiso_administracion_planillaoperaciones_update">
+  <h2 mat-dialog-title>{{ constants.editar }} Planilla operación</h2>
+
+  <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+    <h5>Todos los campos con * son obligatorios</h5>
+  </div>
+
+  <mat-dialog-content class="p-16 m-0" [formGroup]="formFilaPlanillaoperaciones"
+    *sigmaIsGranted="constants.permiso_administracion_planillaoperaciones_create">
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+      <div fxFlex>
+        <mat-form-field class="w-100">
+          <mat-label>Seleccione Item</mat-label>
+          <mat-select placeholder="Seleccione {{constants.itemName}}" [(value)]="itemToEdit.item.id"
+            (selectionChange)="seleccionarItemPlanillaoperaciones($event.value)" required>
+            <mat-option *ngFor="let option of listaItemsPlanillaoperaciones" [value]="option.id">
+              {{ option.valor }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <input matInput type="text" formControlName="itemPlanillaoperacion" autocomplete="off"
+          [(ngModel)]="itemToEdit.item.id" hidden>
+        <mat-error
+          *ngIf="this.enviada && formFilaPlanillaoperaciones.get('itemPlanillaoperacion').hasError('required')">
+          El campo es requerido. </mat-error>
+      </div>
+      <div fxFlex>
+        <mat-form-field class="w-100">
+          <input matInput placeholder="{{ constants.actividadName }}" formControlName="actividadPlanillaoperacion"
+            [(ngModel)]="itemToEdit.actividad" autocomplete="off" type="text" required pattern="^(?!\s*$).+">
+          <mat-error *ngIf="formFilaPlanillaoperaciones.get('actividadPlanillaoperacion').hasError('required')">
+            {{ constants.campoRequerido }} </mat-error>
+          <mat-error *ngIf="formFilaPlanillaoperaciones.get('actividadPlanillaoperacion').hasError('maxlength')">
+            {{ constants.longitud_maxima }} 150 caracteres. </mat-error>
+        </mat-form-field>
+      </div>
+      <div fxFlex>
+        <div class="w-100">
+          <sigma-form-select [path]="constants.path_administracion_unidades_medida"
+            formControlName="itemUnidadesMedida" placeholder="{{ constants.unidadMedida }}"
+            [(ngModel)]="itemToEdit.unidad">
+          </sigma-form-select>
+        </div>
+      </div>
+      <div fxFlex class="py-1">
+        <mat-checkbox formControlName="activo"
+            [(ngModel)]="itemToEdit.activo" name="activo" id="activo">{{ constants.activo }}
+        </mat-checkbox>
+    </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-divider></mat-divider>
+
+  <mat-dialog-actions align="end" [formGroup]="formFilaPlanillaoperaciones">
+    <button mat-button color="warn" (click)="close()" class="m-1">
+      <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+    </button>
+    <button mat-raised-button [disabled]="disableSubmit" color="primary" class="m-1" (click)="onSubmit()"
+      *sigmaIsGranted="constants.permiso_administracion_planillaoperaciones_update">
+      <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+    </button>
+  </mat-dialog-actions>
+</div>

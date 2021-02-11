@@ -1,0 +1,41 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="processing">
+
+  <div [hidden]="currentAction !== 'list'">
+    <div fxLayout=" column" fxLayout.gt-sm="row wrap">
+      <div class="w-100">
+        <mat-card-content>
+          <mat-tab-group [selectedIndex]="tabSeleccionado.value"
+            (selectedIndexChange)="seleccionarGrid($event)">
+            <mat-tab label="Revisar visita diseño">
+            <sigma-grid-mantenimientos #grid [data]="data" [condicion]="condicion"
+              [columns]="columns" [filters]="filters" [singleActions]="acciones"
+              (executeOnSingle)="ejecutar($event)">
+            </sigma-grid-mantenimientos>
+            </mat-tab>
+            <mat-tab *ngFor="let transicion of transicionesMasivas" label="{{transicion.nombre}}">
+              <sigma-grid-mantenimientos #grid [data]="data"
+              [transicion]="transicion" [columns]="columns" [filters]="filters" [singleActions]="acciones"
+              (executeOnSingle)="ejecutar($event)" (executeOnMasiveTransition)="executeMasiveTransition($event)">
+              </sigma-grid-mantenimientos>
+            </mat-tab>              
+          </mat-tab-group>
+        </mat-card-content>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="currentAction == 'work'">
+    <sigma-disenio-detail *ngIf="disenio" [(disenio)]="disenio" [mantenimiento]="mantenimiento" (back)="back($event)">
+    </sigma-disenio-detail>
+    <sigma-seleccion-transicion *ngIf="disenio" [(data)]="data" [transiciones]="transicionesIndividuales"
+      (executeTransition)="executeTransition()"></sigma-seleccion-transicion>
+  </div>
+  <div *ngIf="currentAction == 'formDisenioInformacion'">
+      <sigma-disenio-informacion-ver  [(disenio)]="disenio" [mantenimiento]="mantenimiento"
+         (back)="back($event)">
+      </sigma-disenio-informacion-ver>
+    </div>
+</div>

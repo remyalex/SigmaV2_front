@@ -1,0 +1,180 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="processing">
+
+  <div [hidden]="currentAction !== 'list'">
+    <div fxLayout="row" fxLayout.lt-md="column">
+      <div fxFlex="100" class="flex-p">
+        <mat-tab-group [selectedIndex]="tabSeleccionado.value" (selectedIndexChange)="seleccionarGrid($event)"
+        *ngIf="condicion">
+          <mat-tab label="PK con solicitud de Materiales Granulares">
+            <sigma-grid-mantenimientos #grid [data]="data" [condicion]="condicion" [columns]="columns"
+              [filters]="filters" [singleActions]="actions" (executeOnSingle)="ejecutar($event)">
+            </sigma-grid-mantenimientos>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+
+
+  <!--- Seccion adjuntar archivos  -->
+  <div *ngIf="currentAction=='adjuntarResultados'">
+    <div class="flex-p" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+      <div fxFlex class="mt-10 mb-10">
+        <mat-card-content t-card-content class="m-0" [formGroup]="form">
+          <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+            <mat-form-field class="w-100">
+              <input matInput placeholder="Solicitut Id"
+                [value]="solicitudLaboratorio.id  != null ? solicitudLaboratorio.id :''" autocomplete="off"
+                type="text" readonly />
+            </mat-form-field>
+          </div>
+
+          <h3 mat-subheader>Resultados</h3>
+          <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+            <div class="w-100">
+              <!--
+            <sigma-form-upload-file formControlName="archivo"
+            [(ngModel)]="archivos"
+            [placeholder]="'Archivo formato Excel (XLSX)'"
+            [showFile]="true" [multiple]="true"
+            (ngModelChange)="setArchivoSolicitud($event)"
+            [accept]="'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'">
+          </sigma-form-upload-file>
+          -->
+              <sigma-form-upload-file formControlName="archivo" [(ngModel)]="archivos" [showFile]="false"
+                [multiple]="true" [placeholder]="'Archivo formato Excel (XLSX)'" [maxUpload]="3" [sizeFile]="20"
+                (ngModelChange)="setArchivoSolicitud($event)"
+                [accept]="'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'">
+              </sigma-form-upload-file>
+            </div>
+          </div>
+        </mat-card-content>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>  
+
+    <div fxLayout="row" fxLayoutAlign="end" class="pt-16">
+      <button mat-button color="warn" class="m-1" (click)="onBackSolicitudes()">
+        <mat-icon class="m-1">close</mat-icon> Cancelar
+      </button>
+      <button mat-raised-button color="primary" class="m-1"  [disabled]="processing" (click)="saveLab()">
+        <mat-icon class="m-1">save</mat-icon>Guardar
+      </button>
+    </div>
+
+<!--    <div *ngIf="solicitudLaboratorio.solicitudLaboratorioArchivos !== undefined && solicitudLaboratorio.solicitudLaboratorioArchivos[0].id" class="w-100">
+-->
+      <div *ngIf="solicitudLaboratorio.solicitudLaboratorioArchivos[0] !== undefined && solicitudLaboratorio.solicitudLaboratorioArchivos[0].id" class="w-100">
+        <sigma-seleccion-transicion [data]="data" [transiciones]="transicionesIndividuales"
+        (executeTransition)="executeTransition()"></sigma-seleccion-transicion>
+    </div>
+
+
+  </div>
+
+  <!--- Seccion Listar Solicitudes de un PK  -->
+  <div *ngIf="currentAction=='listarSolicitudes'">
+
+    <div fxLayout="row" fxLayout.lt-md="column">
+      <div fxLayoutAlign="start" fxFlex>
+        <button mat-stroked-button color="primary" class="mt-10 mb-10" (click)="onBack()">
+          <mat-icon class="m-1">arrow_back_ios</mat-icon>
+          {{ constans.irAtras }}
+        </button>
+      </div>
+    </div>
+
+    <div class="mat-elevation-z8 mt-10">
+      <mat-table matSort #table [dataSource]="dataSourceSolicitudesLaboratorioLocal">
+
+        <ng-container matColumnDef="id">
+          <mat-header-cell *matHeaderCellDef> {{ 'Id' }}
+          </mat-header-cell>
+          <mat-cell *matCellDef="let solicitudes" [attr.data-label]="'Id'">
+            {{ solicitudes.id ? solicitudes.id  : '' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="pk">
+          <mat-header-cell *matHeaderCellDef> {{ 'Pk' }}
+          </mat-header-cell>
+          <mat-cell *matCellDef="let solicitudes" [attr.data-label]="'Pk'">
+            {{ solicitudes.mantenimiento.pk ? solicitudes.mantenimiento.pk  : '' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="Fechasolicitud">
+          <mat-header-cell *matHeaderCellDef> {{  'Fecha solicitud' }}
+          </mat-header-cell>
+          <mat-cell *matCellDef="let solicitudes" [attr.data-label]="'Fecha Solicitud'">
+            {{ solicitudes.fecha != null ? solicitudes.fecha:'' }}
+          </mat-cell>
+        </ng-container>
+
+
+        <ng-container matColumnDef="tipoMaterial">
+          <mat-header-cell *matHeaderCellDef> {{  'Tipo Material' }}
+          </mat-header-cell>
+          <mat-cell *matCellDef="let solicitudes" [attr.data-label]="'tipo Material'">
+            {{ solicitudes.tipoMaterial != null ? solicitudes.tipoMaterial.descripcion:'' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="espesor">
+          <mat-header-cell *matHeaderCellDef> {{  'Espesor Diseño' }}
+          </mat-header-cell>
+          <mat-cell *matCellDef="let solicitudes" [attr.data-label]="'espesor'">
+            {{ solicitudes.espesor != null ? solicitudes.espesor:'' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="UsuarioTramite">
+          <mat-header-cell *matHeaderCellDef> {{ 'Solicitante' }}
+          </mat-header-cell>
+          <mat-cell *matCellDef="let solicitudes" [attr.data-label]="'Solicitante'">
+            {{ solicitudes.usuarioTramite ? solicitudes.usuarioTramite.nombres + ' ' + solicitudes.usuarioTramite.apellidos  : '' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+          <mat-header-cell *matHeaderCellDef> {{ 'Acciones' }} </mat-header-cell>
+          <mat-cell *matCellDef="let solicitudes" [attr.data-label]="'Acciones'">
+            <div fxLayout.lt-md="row" fxLayout.lt-xl="column">
+              <div fxFlex>
+                <button mat-raised-button color="primary" (click)="subirArchivo(solicitudes)" class="m-1"
+                  matTooltip="{{ 'Adjuntar Resultados' }}" matTooltipPosition="above">
+                  <mat-icon>attach_file</mat-icon>
+                </button>
+              </div>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+
+        <mat-header-row *matHeaderRowDef="columnsSolicitud"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: columnsSolicitud"></mat-row>
+      </mat-table>
+
+      <mat-paginator #paginatorSolicitudLaboratorio [length]="this.getCantidadSolicitudes()" [pageSize]="10"
+        [pageSizeOptions]="[5, 10, 20]">
+      </mat-paginator>
+    </div>
+    <!--
+    <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+      <button mat-button color="warn" class="m-1" (click)="onBack()">
+        <mat-icon class="m-1">close</mat-icon> Cancelar
+      </button>
+      <button mat-raised-button color="primary" [disabled]="processing" (click)="saveLab()">
+        <mat-icon class="m-1">save</mat-icon>Guardar
+      </button>
+    </div>
+    -->
+  </div>
+
+
+</div>

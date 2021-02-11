@@ -1,0 +1,228 @@
+<div fxLayout="column" fxLayout.gt-sm="row wrap">
+    <div fxFlex="100" class="flex-p">
+        <mat-card>
+            <mat-card-content>
+                <div fxLayout="row" class="mb-10" fxLayoutAlign="space-between center">
+                    <div>
+                        <button mat-stroked-button color="primary" (click)="onBack()">
+                            <mat-icon class="m-1">arrow_back_ios</mat-icon>
+                            {{ constants.IrAtras }}
+                        </button>
+                    </div>
+                    <div>
+                        <button mat-raised-button color="primary" (click)="crearVale(dataSource.ensayosData)" *sigmaIsGranted="constants.permiso_produccion_registrar_mezcla_insumos_create">
+                            <mat-icon class="m-1">note_add</mat-icon> Crear vale
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <mat-card-header fxLayoutAlign="center" class="mb-10">
+                            <mat-card-subtitle>
+                                <h2>Información de la Solicitud Consultada</h2>
+                            </mat-card-subtitle>
+                        </mat-card-header>
+
+                        <mat-card-content>
+                            <form (ngSubmit)="search()">
+                                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+                                    <div fxFlex>
+                                        <mat-form-field class="w-100">
+                                            <input matInput placeholder="No Solicitud" name="nosolicitud" [(ngModel)]="nosolicitud" [disabled]="true">
+                                        </mat-form-field>
+                                    </div>
+                                    <div fxFlex>
+                                        <mat-form-field class="w-100">
+                                            <input matInput placeholder="Turno" name="turno" [(ngModel)]="turno" [disabled]="true">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+                                    <div fxFlex>
+                                        <button layout="row" mat-raised-button color="primary" class="m-1" (click)="exportAsXLSX()" *sigmaIsGranted="constants.permiso_produccion_registrar_mezcla_insumos_export" [disabled]="dataSource.totalElements$.source['_value'] <= 0">
+                                            <mat-icon>get_app</mat-icon>
+                                            {{ constants.exportar }}
+                                            <mat-icon *ngIf="cargandoExcel">
+                                                <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+                                            </mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </mat-card-content>
+                        <div class="mat-elevation-z8">
+                            <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center">
+                                <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+                            </div>
+                            <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+                                <mat-icon class="m-1">sms_failed</mat-icon>
+                                <h4> {{ dataSource.errorMessage$ | async }}</h4>
+                            </div>
+
+                            <mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort class="col-x">
+                                <ng-container matColumnDef="material">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Material </mat-header-cell>
+                                    <mat-cell *matCellDef="let item" data-label="Material">
+                                        {{ item.material }}
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="unidad">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Unidad (m3) </mat-header-cell>
+                                    <mat-cell *matCellDef="let item" data-label="Unidad (m3)">
+                                        {{ item.unidad }}
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="cantidad">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Cantidad </mat-header-cell>
+                                    <mat-cell *matCellDef="let item" data-label="Cantidad">
+                                        {{ item.cantidad }}
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="cantidadDespachada">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Cantidad Despachada </mat-header-cell>
+                                    <mat-cell *matCellDef="let item" data-label="Cantidad Despachada">
+                                        {{ item.cantidadDespachada }}
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="barrio">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Barrio </mat-header-cell>
+                                    <mat-cell *matCellDef="let item" data-label="Barrio">
+                                        {{ item.barrio }} </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="numeroInternoPlaca">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Placa / No Interno </mat-header-cell>
+                                    <mat-cell *matCellDef="let item" data-label="Placa / No Interno">
+                                        {{item.numeroInternoPlaca}}
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="localidad">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Localidad Destino </mat-header-cell>
+                                    <mat-cell *matCellDef="let item" data-label="Localidad Destino">
+                                        {{ item.localidad}}
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="pk">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> PK Destino </mat-header-cell>
+                                    <mat-cell *matCellDef="let item" data-label="PK Destino">
+                                        {{ item.pk}}
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="civ">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> CIV </mat-header-cell>
+                                    <mat-cell *matCellDef="let item" data-label="CIV">
+                                        {{ item.civ}}
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="via">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Via </mat-header-cell>
+                                    <mat-cell *matCellDef="let item" data-label="Via">
+                                        {{ item.via}}
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="ejeVialDesde">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Eje Vial Desde </mat-header-cell>
+                                    <mat-cell *matCellDef="let item" data-label="Eje Vial Desde">
+                                        {{ item.ejeVialDesde}}
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="ejeVialHasta">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Eje Vial Hasta </mat-header-cell>
+                                    <mat-cell *matCellDef="let item" data-label="Eje Vial Hasta">
+                                        {{ item.ejeVialHasta}}
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="personaContacto">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Persona(s) Contacto </mat-header-cell>
+                                    <mat-cell *matCellDef="let item" data-label="Persona(s) Contacto">
+                                        {{ item.personaContacto}}
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="horaRetiro">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Hora Retiro </mat-header-cell>
+                                    <mat-cell *matCellDef="let item" data-label="Hora Retiro">
+                                        {{ item.horaRetiro}}
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="fechaRetiro">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Retiro </mat-header-cell>
+                                    <mat-cell *matCellDef="let item" data-label="Fecha Retiro">
+                                        {{item.fechaRetiro ? getHumanDate(item.fechaRetiro) : ''}}
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="quienRecibe">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Inspector Quien Recibe </mat-header-cell>
+                                    <mat-cell *matCellDef="let item" data-label="Quien Recibe">
+                                        {{ item.quienRecibe}}
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!--<ng-container matColumnDef="formulario">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Selección </mat-header-cell>
+                                    <mat-cell *matCellDef="let item; let k = index" data-label="programado">
+                                        <div class="w-100">
+                                            <mat-checkbox name="activo-{{k}}" id="activo-{{k}}" #checkbox="matCheckbox" [(ngModel)]="item.formulario" [checked]="item.formulario"></mat-checkbox>
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>-->
+
+                                <ng-container matColumnDef="formulario">
+                                    <mat-header-cell *matHeaderCellDef>Selección </mat-header-cell>
+                                    <mat-cell *matCellDef="let item; let k = index">
+                                        <div class="w-100">
+                                            <mat-checkbox #listCheckboxes name="activo-{{k}}" id="activo-{{k}}" (click)="$event.stopPropagation()" (change)="$event ? toggleChecks(item, $event) : null" [checked]="item.formulario">
+                                            </mat-checkbox>
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <ng-container matColumnDef="acciones">
+                                    <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+                                    <mat-cell *matCellDef="let item" data-label="Acciones">
+                                        <button mat-raised-button color="primary" (click)="goToDetalles(item)" class="m-1" *sigmaIsGranted="constants.permiso_produccion_registrar_mezcla_insumos_view">
+                                            <mat-icon matTooltip="Detalle Vales" matTooltipPosition="above">pageview</mat-icon>
+                                        </button>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+                                <mat-row *matRowDef="let row; columns: columns"></mat-row>
+
+                            </mat-table>
+                            <mat-paginator #paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+                        </div>
+
+                        <div *ngIf="showCountItems" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+                            <div fxFlex class="w-100 sigma-sum" fxLayoutAlign="start center" [style.padding-left]="'20px'">
+                                SubTotal Material: <b> {{ calcularMaterial() | number : '.2-3' }}</b>
+                            </div>
+                        </div>
+                        <div *ngIf="showCountItems" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+                            <div fxFlex class="w-100 sigma-sum" fxLayoutAlign="start center" [style.padding-left]="'20px'">
+                                {{ listaPksSelect.length }} registro(s) seleccionado(s) para ser enviado(s)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </mat-card-content>
+            <div>
+                <sigma-seleccion-transicion [(data)]="data" (ngModelChange)="transitionData($event)" [transiciones]="transicionesIndividuales" (executeTransition)="executeTransition($event)"></sigma-seleccion-transicion>
+            </div>
+        </mat-card>
+    </div>
+</div>

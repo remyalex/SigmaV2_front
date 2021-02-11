@@ -1,0 +1,452 @@
+<div fxLayout="column">
+    <div fxLayout="row" class="mt-10 mb-10">
+        <div class="liner_top" fxFlex>
+            <h3>Editar Encuesta de satisfacción</h3>
+        </div>
+    </div>
+
+    <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+        <h5>{{ constants.informacionCampoObligatorio }}</h5>
+    </div>
+ 
+    <mat-card-content class="p-16" [formGroup]="form">
+        <input type="hidden" formControlName="id" [(ngModel)]="encuesta.id">
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <div fxFlex>
+                <mat-form-field class="w-100">
+                    <input matInput placeholder="Fecha" formControlName="fecha" [(ngModel)]="encuesta.fecha"
+                        readonly>
+                </mat-form-field>
+            </div>
+
+            <div fxFlex *ngIf="this.data.mantenimiento.intervenciones != null">
+                <mat-form-field class="w-100">
+                    <input matInput placeholder="Tipo intervención" formControlName="tipoIntervencion"
+                        [(ngModel)]="data.mantenimiento.intervenciones[0].tipoEjecucion.descripcion" readonly>
+                </mat-form-field>
+            </div>
+
+            <div fxFlex *ngIf="data.mantenimiento.intervenciones == null">
+                <mat-form-field class="w-100">
+                    <input matInput placeholder="Tipo intervención" formControlName="tipoIntervencion"
+                        [(ngModel)]="data.mantenimiento.intervenciones" readonly>
+                </mat-form-field>
+            </div>
+
+            <div fxFlex *ngIf="data.mantenimiento?.localidad != null">
+                <mat-form-field class="w-100">
+                    <input matInput placeholder="Localidad" formControlName="localidad"
+                        [(ngModel)]="data.mantenimiento.localidad.nombre" readonly>
+                </mat-form-field>
+            </div>
+
+            <div fxFlex *ngIf="data.mantenimiento?.localidad == null">
+                <mat-form-field class="w-100">
+                    <input matInput placeholder="Localidad" formControlName="localidad"
+                        [(ngModel)]="data.mantenimiento.localidad" readonly>
+                </mat-form-field>
+            </div>
+
+            <div fxFlex *ngIf="data.mantenimiento?.upla != null">
+                <mat-form-field class="w-100">
+                    <input matInput placeholder="UPZ" formControlName="upla"
+                        [(ngModel)]="data.mantenimiento.upla.nombre" readonly>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <div fxFlex *ngIf="data.mantenimiento?.upla == null">
+                <mat-form-field class="w-100">
+                    <input matInput placeholder="UPZ" formControlName="upla" [(ngModel)]="data.mantenimiento.upla"
+                        readonly>
+                </mat-form-field>
+            </div>
+
+            <div fxFlex *ngIf="data.mantenimiento?.barrio != null">
+                <mat-form-field class="w-100">
+                    <input matInput placeholder="Barrio" formControlName="barrio"
+                        [(ngModel)]="data.mantenimiento.barrio.nombre" readonly>
+                </mat-form-field>
+            </div>
+
+            <div fxFlex>
+                <mat-form-field class="w-100">
+                    <input matInput placeholder="CIV" formControlName="civ" [(ngModel)]="data.mantenimiento.civ"
+                        readonly>
+                </mat-form-field>
+            </div>
+
+            <div fxFlex *ngIf="data.mantenimiento?.barrio == null">
+                <mat-form-field class="w-100">
+                    <input matInput placeholder="Barrio" formControlName="barrio"
+                        [(ngModel)]="data.mantenimiento.barrio" readonly>
+                </mat-form-field>
+            </div>
+
+            <div fxFlex>
+                <mat-form-field class="w-100">
+                    <input matInput placeholder="Frente de Trabajo" formControlName="frenteTrabajo"
+                        [(ngModel)]="encuesta.frenteTrabajo" required>
+                    <mat-error *ngIf="form.get('frenteTrabajo').hasError('required')">
+                        {{ constants.campoRequerido }}
+                    </mat-error>
+                    <mat-error *ngIf="form.get('frenteTrabajo').hasError('maxLength')">
+                        {{ constants.longitud_maxima }}
+                        100 caracteres.</mat-error>
+                </mat-form-field>
+            </div>
+
+            <div fxFlex>
+                <mat-form-field class="w-100">
+                    <input matInput placeholder="Lugar" formControlName="lugar" [(ngModel)]="encuesta.lugar"
+                        required>
+                    <mat-error *ngIf="form.get('lugar').hasError('required')">
+                        {{ constants.campoRequerido }}
+                    </mat-error>
+                    <mat-error *ngIf="form.get('lugar').hasError('maxLength')">
+                        {{ constants.longitud_maxima }} 100 caracteres
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <!-- Campos desplegables -->
+        <div fxLayout="row wrap" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <div fxFlex fxLayout="column" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+                <div fxFlex>
+                    <sigma-form-select class="w-100" formControlName="entidadEjecucionPregunta" *ngIf="turno == constants.turnoDiurno"
+                        [(ngModel)]="encuesta.entidadEjecucionPregunta"
+                        [path]="constants.path_encuesta_satisfaccion_SiNo" [listBy]="'descripcion'"
+                        [placeholder]="'¿Sabe cual fue la entidad u organizmo que ejecutó la intervención?'"
+                        required>
+                    </sigma-form-select>
+                </div>
+
+                <div fxFlex>
+                    <mat-form-field class="w-100"
+                        *ngIf="turno == constants.turnoDiurno && encuesta.entidadEjecucionPregunta != null ? encuesta.entidadEjecucionPregunta.descripcion == 'SI' ? true : false : false">
+                        <input matInput placeholder="¿Cual entidad u organismo ejecutó la intervención?"
+                            formControlName="entidadEjecucionRespuesta"
+                            [(ngModel)]="encuesta.entidadEjecucionRespuesta">
+                        <mat-error *ngIf="form.get('entidadEjecucionRespuesta').hasError('required')">
+                            {{ constants.campoRequerido }}
+                        </mat-error>
+                        <mat-error *ngIf="form.get('entidadEjecucionRespuesta').hasError('maxLength')">
+                            {{ constants.longitud_maxima }}
+                            100 caracteres.</mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div fxFlex fxLayout="column" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+                <div fxFlex>
+                    <sigma-form-select class="w-100" *ngIf="turno == constants.turnoDiurno" formControlName="beneficioPregunta"
+                        [(ngModel)]="encuesta.beneficioPregunta" [path]="constants.path_encuesta_satisfaccion_SiNo"
+                        [listBy]="'descripcion'"
+                        [placeholder]="'¿Cree usted que la intervención trajo algun beneficio a la comunidad?'"
+                        required>
+                    </sigma-form-select>
+                </div>
+
+                <div fxFlex>
+                    <sigma-form-select class="w-100"
+                        *ngIf="turno == constants.turnoDiurno && encuesta.beneficioPregunta != null ? encuesta.beneficioPregunta.descripcion == 'SI' ? true : false : false"
+                        formControlName="beneficios" [(ngModel)]="encuesta.beneficios"
+                        [path]="constants.path_encuesta_satisfaccion_beneficios" [listBy]="'descripcion'"
+                        [placeholder]="'¿Cual de los siguientes beneficios  esta intervención  a la comunidad?'"
+                        [multiple]="true">
+                    </sigma-form-select>
+                </div>
+            </div>
+        </div>    
+        <!-- Campos desplegables -->
+
+        <!-- Campos turno DIURNO -->
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <div fxFlex>
+                <sigma-form-select *ngIf="turno == constants.turnoDiurno" formControlName="calificacionIntervencion"
+                    [(ngModel)]="encuesta.calificacionIntervencion"
+                    [path]="constants.path_encuesta_satisfaccion_calificacion" [listBy]="'descripcion'"
+                    [placeholder]="'¿Como califica usted la intervención ejecutada por la entidad?'" required>
+                </sigma-form-select>
+            </div>
+
+            <div fxFlex>
+                <sigma-form-select *ngIf="turno == constants.turnoDiurno" formControlName="umvInforma"
+                    [(ngModel)]="encuesta.umvInforma" [path]="constants.path_encuesta_satisfaccion_SiNo"
+                    [listBy]="'descripcion'"
+                    [placeholder]="'¿Fue informado previamente sobre la intervención realizada por la UMV?'"
+                    required>
+                </sigma-form-select>
+            </div>          
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <div fxFlex>
+                <sigma-form-select *ngIf="turno == constants.turnoDiurno" formControlName="umvAcompanamiento"
+                    [(ngModel)]="encuesta.umvAcompanamiento" [path]="constants.path_encuesta_satisfaccion_SiNo"
+                    [listBy]="'descripcion'" [placeholder]="'¿Contó con acompañamiento del personal de la UMV?'"
+                    required>
+                </sigma-form-select>
+            </div>
+        </div>
+        
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <div fxFlex>
+                <sigma-form-select formControlName="inconvenientePregunta"
+                    [(ngModel)]="encuesta.inconvenientePregunta"
+                    [path]="constants.path_encuesta_satisfaccion_SiNo" [listBy]="'descripcion'"
+                    [placeholder]="'¿Usted tuvo algún inconveniente que considere relevante mencionar sobre la intervención realizada?'"
+                    required>
+                </sigma-form-select>
+            </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <div fxFlex>
+                <mat-form-field class="w-100"
+                    *ngIf=" encuesta.inconvenientePregunta != null ? encuesta.inconvenientePregunta.descripcion == 'SI' ? true : false : false">
+                    <textarea matInput placeholder="Indique cual inconveniente" rows="5"
+                        formControlName="inconvenienteRespuesta" [(ngModel)]="encuesta.inconvenienteRespuesta">
+                        </textarea>
+                        
+                    <mat-error *ngIf="form.get('inconvenienteRespuesta').hasError('required')">
+                        {{ constants.campoRequerido }}
+                    </mat-error>
+                    <mat-error *ngIf="form.get('inconvenienteRespuesta').hasError('maxLength')">
+                        {{ constants.longitud_maxima }}
+                        300 caracteres.</mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            
+
+            <div fxFlex>
+                <mat-form-field class="w-100" *ngIf="turno == constants.turnoDiurno">
+                    <textarea matInput placeholder="Indique por qué mejoró las condiciones de la vía" rows="5"
+                        formControlName="mejoraRespuesta" [(ngModel)]="encuesta.mejoraRespuesta">
+                    </textarea>
+                    <mat-error *ngIf="form.get('mejoraRespuesta').hasError('required')">
+                        {{ constants.campoRequerido }}
+                    </mat-error>
+                    <mat-error *ngIf="form.get('mejoraRespuesta').hasError('maxLength')">
+                        {{ constants.longitud_maxima }}
+                        300 caracteres.</mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <!-- Campos turno NOCTURNO -->
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <div fxFlex>
+                <sigma-form-select *ngIf="turno == constants.turnoNocturno" formControlName="mejoraPregunta"
+                    [(ngModel)]="encuesta.mejoraPregunta" [path]="constants.path_encuesta_satisfaccion_SiNo"
+                    [listBy]="'descripcion'"
+                    [placeholder]="'¿La intervención realizada mejoró las condiciones de la vía?'" required>
+                </sigma-form-select>
+            </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <div fxFlex>
+                <mat-form-field class="w-100" *ngIf="turno == constants.turnoNocturno">
+                    <input matInput
+                        placeholder="¿Que cosas considera que podemos realizar para mejorar las intervenciones nocturnas?"
+                        formControlName="mejoraNocturna" [(ngModel)]="encuesta.mejoraNocturna" required>
+                    <mat-error *ngIf="form.get('mejoraNocturna').hasError('required')">
+                        {{ constants.campoRequerido }}
+                    </mat-error>
+                    <mat-error *ngIf="form.get('mejoraNocturna').hasError('maxLength')">
+                        {{ constants.longitud_maxima }}
+                        300 caracteres.</mat-error>
+                </mat-form-field>
+            </div>
+
+            <div fxFlex>
+                <mat-form-field class="w-100" *ngIf="turno == constants.turnoNocturno">
+                    <input matInput
+                        placeholder="¿Considera usted que existen ventajas o desventajas de realizar las intervenciones en horarios nocturnos?"
+                        formControlName="ventajasNocturna" [(ngModel)]="encuesta.ventajasNocturna">
+                    <mat-error *ngIf="form.get('ventajasNocturna').hasError('maxLength')">
+                        {{ constants.longitud_maxima }}
+                        300 caracteres.</mat-error>
+                </mat-form-field>
+            </div>
+        </div>  
+        <!-- /Campos turno NOCTURNO -->
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <div fxFlex>
+                <mat-form-field class="w-100">
+                    <input matInput
+                        placeholder="¿Como califica su nivel de satisfacción con la intervención? Siendo 1 lo más bajo y 5 lo más alto"
+                        formControlName="satisfaccion" [(ngModel)]="encuesta.satisfaccion" required>
+                    <mat-error *ngIf="form.get('satisfaccion').hasError('required')">
+                        {{ constants.campoRequerido }}
+                    </mat-error>
+                    <mat-error *ngIf="form.get('satisfaccion').hasError('max')">
+                        Valor no permitido</mat-error>
+                    <mat-error *ngIf="form.get('satisfaccion').hasError('min')">
+                        Valor no permitido</mat-error>
+                    <mat-error *ngIf="form.get('satisfaccion').hasError('pattern')">
+                        {{ constants.campoNumerico }}
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div fxFlex>
+                <sigma-form-select formControlName="satisfechoIntervencion"
+                    [(ngModel)]="encuesta.satisfechoIntervencion"
+                    [path]="constants.path_encuesta_satisfaccion_SiNo" [listBy]="'descripcion'"
+                    [placeholder]="'¿Esta satisfecho(a) con la intervención realizada?'" required>
+                </sigma-form-select>
+            </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <div fxFlex>
+                <sigma-form-select *ngIf="encuesta.pqrs == null" formControlName="felicitaciones"
+                    [(ngModel)]="encuesta.felicitaciones" [path]="constants.path_encuesta_satisfaccion_SiNo"
+                    [listBy]="'descripcion'"
+                    [placeholder]="'En el caso de estar satisfecho(a) con la intervención realizada, ¿desea dar felicitaciones?'">
+                </sigma-form-select>
+            </div>
+
+            <div fxFlex>
+                <sigma-form-select *ngIf="turno == constants.turnoDiurno && encuesta.felicitaciones == null"
+                    formControlName="pqrs" [(ngModel)]="encuesta.pqrs"
+                    [path]="constants.path_encuesta_satisfaccion_pqrs" [listBy]="'descripcion'"
+                    [placeholder]="'En el caso de estar insatisfecho(a) con la intervencion realizada, desea realizar:'">
+                </sigma-form-select>
+            </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="pt-16 mb-10">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+                <div fxFlex="15">
+                    <mat-form-field class="w-100">
+                        <input matInput placeholder="PK" formControlName="pk" [(ngModel)]="data.mantenimiento.pk"
+                            readonly>
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex>
+                    <mat-form-field class="w-100">
+                        <input matInput placeholder="Barrio del encuestado" formControlName="encuestadoBarrio"
+                            readonly>
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex>
+                    <mat-form-field class="w-100">
+                        <input matInput placeholder="Nombre del encuestado" formControlName="encuestadoNombre"
+                            [(ngModel)]="encuesta.encuestadoNombre">
+                        <mat-error *ngIf="form.get('encuestadoNombre').hasError('maxLength')">
+                            {{ constants.longitud_maxima }}
+                            80 caracteres.</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex="25">
+                    <sigma-form-select formControlName="encuestadoTipoId" [(ngModel)]="encuesta.encuestadoTipoId"
+                        [path]="constants.path_encuesta_satisfaccion_tipoId" [listBy]="'descripcion'"
+                        [placeholder]="'Tipo de identificación del encuestado'" required>
+                    </sigma-form-select>
+                </div>                  
+            </div>            
+
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+                <div fxFlex>
+                    <mat-form-field class="w-100">
+                        <input matInput placeholder="Número de identificación del encuestado"
+                            formControlName="encuestadoId" [(ngModel)]="encuesta.encuestadoId" required>
+                        <mat-error *ngIf="form.get('encuestadoId').hasError('maxLength')">
+                            {{ constants.longitud_maxima }}
+                            15 caracteres.</mat-error>
+                        <mat-error *ngIf="form.get('encuestadoId').hasError('required')">
+                            {{ constants.campoRequerido }}.</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex>
+                    <mat-form-field class="w-100">
+                        <input matInput placeholder="Dirección del encuestado" formControlName="encuestadoDireccion"
+                            [(ngModel)]="encuesta.encuestadoDireccion">
+                        <mat-error *ngIf="form.get('encuestadoDireccion').hasError('maxLength')">
+                            {{ constants.longitud_maxima }}
+                            300 caracteres.</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex>
+                    <mat-form-field class="w-100">
+                        <input matInput placeholder="Teléfono del encuestado" formControlName="encuestadoTelefono"
+                            [(ngModel)]="encuesta.encuestadoTelefono">
+                        <mat-error *ngIf="form.get('encuestadoTelefono').hasError('max')">
+                            {{ constants.longitud_maxima }}
+                            7 caracteres.</mat-error>
+                        <mat-error *ngIf="form.get('encuestadoTelefono').hasError('pattern')">
+                            {{ constants.campoNumerico }}.</mat-error>
+                    </mat-form-field>
+                </div>
+
+                
+            </div>
+
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+                <div fxFlex="50">
+                    <sigma-form-upload-file formControlName="encuestadoFirma" [(ngModel)]="encuesta.encuestadoFirma"
+                        [placeholder]="'Firma del encuestado'" [accept]="'image/*'" [sizeFile]="1" >
+                    </sigma-form-upload-file>
+                </div>
+            </div>
+        </div>
+
+        <mat-divider></mat-divider>
+        <div class="pt-16">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+                <div fxFlex>
+                    <mat-form-field class="w-100">
+                        <input matInput
+                            placeholder="Nombre del servidor público de la entidad que aplica la encuesta"
+                            formControlName="servidorNombre" [(ngModel)]="servidorNombre" readonly>
+                    </mat-form-field>
+                </div>
+
+                <div fxFlex>
+                    <mat-form-field class="w-100">
+                        <input matInput placeholder="Cargo del servidor público" formControlName="servidorCargo"
+                            [(ngModel)]="servidorCargo" readonly>
+                    </mat-form-field>
+                </div>
+            </div> 
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">   
+                <div fxFlex="50">
+                    <sigma-form-upload-file formControlName="servidorFirma" [(ngModel)]="encuesta.servidorFirma"
+                        [placeholder]="'Firma del servidor público'" [accept]="'image/*'" [sizeFile]="1" >
+                    </sigma-form-upload-file>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+
+    <div fxLayout="row" fxLayoutAlign="end">
+        <mat-divider></mat-divider>
+        <div class="pt-16">
+            <button type="button" class="m-1" (click)="onBack()" mat-button color="warn">
+                <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+            </button>
+            <button type="button" class="m-1" [disabled]="disableSubmit" mat-raised-button color="primary"
+                (click)="onSubmit()">
+                <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+            </button>
+        </div>    
+    </div>
+ 
+</div>

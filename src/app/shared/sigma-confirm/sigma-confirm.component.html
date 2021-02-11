@@ -1,0 +1,14 @@
+<h2 mat-dialog-title>{{ titulo }}</h2>
+
+<h3 mat-dialog-content>{{ mensaje }}</h3>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions fxLayoutAlign="end" fxLayout="row" fxLayout.lt-sm="column">
+    <button class="mb-10" fxFlex="25" fxFlex.lt-sm="100" mat-button color="warn" (click)="close()">
+        <mat-icon class="m-1">clear</mat-icon> {{ constants.no }}
+    </button>
+    <button class="mb-10" fxFlex="25" fxFlex.lt-sm="100" mat-raised-button color="primary" (click)="yes()">
+        <mat-icon class="m-1">check_circle_outline</mat-icon> {{ constants.si }}
+    </button>
+</mat-dialog-actions>

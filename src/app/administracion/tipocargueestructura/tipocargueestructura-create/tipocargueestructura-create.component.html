@@ -1,0 +1,195 @@
+<h2 mat-dialog-title>{{ constants.crear }} Estructura</h2>
+
+<div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+  <h5>{{ constants.informacionCampoObligatorio }}</h5>
+</div>
+
+<mat-dialog-content [formGroup]="form" *sigmaIsGranted="constants.permiso_administracion_tipocargueestructura_create">
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="{{ constants.campo }}" formControlName="campo"
+          [(ngModel)]="tipocargueestructura.campo" autocomplete="off" type="text" required pattern="^(?!\s*$).+">
+        <mat-error *ngIf="form.get('campo').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+        <mat-error *ngIf="form.get('campo').hasError('pattern')"> {{ constants.campoNoVacio }} </mat-error>
+        <mat-error *ngIf="form.get('campo').hasError('maxlength')">Campo debe tener una longitud máxima de 8 caracteres.</mat-error>
+      </mat-form-field>
+    </div>
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="{{ constants.descripcion }}" formControlName="descripcion"
+          [(ngModel)]="tipocargueestructura.descripcion" autocomplete="off" type="text" required pattern="^(?!\s*$).+">
+        <mat-error *ngIf="form.get('descripcion').hasError('required')"> {{ constants.campoRequerido }}
+        </mat-error>
+        <mat-error *ngIf="form.get('descripcion').hasError('pattern')"> {{ constants.campoNoVacio }}
+        </mat-error>
+        <mat-error *ngIf="form.get('descripcion').hasError('maxlength')">Campo debe tener una longitud máxima de 100 caracteres.</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <div class="w-100">
+        <mat-form-field class="w-100">
+          <mat-select matNativeControl [placeholder]="constants.requeridoId" formControlName="requeridoId"
+            [(ngModel)]="tipocargueestructura.requerido" required="true" [value]="">
+            <mat-option value="">{{ constants.seleccionar }}</mat-option>
+            <mat-option [value]="true">{{ constants.si }}</mat-option>
+            <mat-option [value]="false">{{ constants.no }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="enviada && form.get('requeridoId').hasError('required')">{{ constants.campoRequerido }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxFlex>
+      <div class="w-100">
+        <sigma-form-select formControlName="tipoDatoId" [(ngModel)]="tipocargueestructura.tipoDato"
+          [path]="constants.path_administracion_tipocargueestructura_tipoDatoId" [placeholder]="constants.tipoDatoId">
+        </sigma-form-select>
+        <!-- <sigma-general-list [path]="constants.path_administracion_tipocargueestructura_tipoDatoId"
+          [responseType]="constants.objeto" etiqueta="{{ constants.tipoDatoId }}" [listBy]="'valor'"
+          (optionIdSelected)="setTipoDatoTipocargueestructura($event)" required="true">
+        </sigma-general-list>
+        <input matInput type="text" placeholder="" formControlName="tipoDatoId"
+          [(ngModel)]="tipocargueestructura.tipoDato" autocomplete="off" hidden>
+        <mat-error *ngIf="enviada && form.get('tipoDatoId').hasError('required')"> {{ constants.campoRequerido }}
+        </mat-error> -->
+      </div>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="{{ constants.longitudMaxima }}" formControlName="longitudMaxima"
+          [(ngModel)]="tipocargueestructura.longitudMaxima" autocomplete="off" type="number" min="0"
+          pattern="^(?!\s*$).+" numericInput="true" onKeyPress="if(this.value.length==4) return false;">
+        <mat-error *ngIf="form.get('longitudMaxima').hasError('required')"> {{ constants.campoRequerido }}
+        </mat-error>
+        <mat-error *ngIf="form.get('longitudMaxima').hasError('min')"> {{ constants.valorMinimo }}
+        </mat-error>
+        <!-- <mat-error *ngIf="form.get('longitudMaxima').hasError('max')"> {{ constants.valorMaximo }}
+        </mat-error> -->
+        <mat-error *ngIf="form.get('longitudMaxima').hasError('pattern')"> {{ constants.campoNoVacio }}
+        </mat-error>
+        <mat-error *ngIf="form.get('longitudMaxima').hasError('maxlength')">Campo debe tener una longitud máxima de 4 caracteres.</mat-error>
+      </mat-form-field>
+    </div>
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="{{ constants.numeroMinimo }}" formControlName="numeroMinimo"
+          [min]="tipocargueestructura.numeroMinimo" [(ngModel)]="tipocargueestructura.numeroMinimo" autocomplete="off"
+          type="number" pattern="^(?!\s*$).+" numericInput="true" onKeyPress="if(this.value.length==18) return false;">
+        <mat-error *ngIf="form.get('numeroMinimo').hasError('required')"> {{ constants.campoRequerido }}</mat-error>
+        <!-- <mat-error *ngIf="form.get('numeroMinimo').hasError('max')"> {{ constants.valorMaximo }}
+      </mat-error> -->
+        <!-- <mat-error *ngIf="form.get('numeroMinimo').hasError('errorNumberMinMayor')">
+        {{ constants.campoMaximo }}
+      </mat-error> -->
+        <mat-error *ngIf="form.get('numeroMinimo').hasError('maxlength')">Campo debe tener una longitud máxima de 18. caracteres</mat-error>
+        <mat-error *ngIf="enviada && (validateNumerosMayorMenor(tipocargueestructura.numeroMinimo, tipocargueestructura.numeroMaximo ) == false)">El número mínimo debe ser menor que número máximo</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="{{ constants.numeroMaximo }}" formControlName="numeroMaximo"
+          [min]="tipocargueestructura.numeroMaximo" [(ngModel)]="tipocargueestructura.numeroMaximo" autocomplete="off"
+          type="number" pattern="^(?!\s*$).+" numericInput="true" onKeyPress="if(this.value.length==18) return false;">
+        <mat-error *ngIf="form.get('numeroMaximo').hasError('required')"> {{ constants.campoRequerido }}
+        </mat-error>
+        <!-- <mat-error *ngIf="form.get('numeroMaximo').hasError('max')"> {{ constants.valorMaximo }}
+        </mat-error> -->
+        <mat-error *ngIf="form.get('numeroMaximo').hasError('pattern')"> {{ constants.campoNoVacio }}
+        </mat-error>
+        <mat-error *ngIf="form.get('numeroMaximo').hasError('maxlength')">Campo debe tener una longitud máxima de 18 caracteres.</mat-error>
+      </mat-form-field>
+    </div>
+    <div fxFlex>
+      <!-- <mat-form-field class="w-100">
+        <input [placeholder]="constants.fechaMinimaLabel" class="hover-element-pointer" matInput
+          [owlDateTimeTrigger]="fechaMinimaDate" [owlDateTime]="fechaMinimaDate" [formControl]="fechaMinimaControl"
+          (dateTimeChange)="changeDate('fechaMinima', $event, 'min')" [max]="maxDate">
+        <mat-icon matSuffix [owlDateTimeTrigger]="fechaMinimaDate" class="hover-element-pointer">
+          calendar_today1
+        </mat-icon>
+        <owl-date-time [pickerType]="'calendar'" #fechaMinimaDate="owlDateTime"></owl-date-time>
+        <input matInput type="text" placeholder="" formControlName="fechaMinima"
+          [(ngModel)]="tipocargueestructura.fechaMinima" autocomplete="off" hidden>
+        <mat-error *ngIf="enviada && form.get('fechaMinima').hasError('required')">
+          {{ constants.campoRequerido }}
+        </mat-error>
+      </mat-form-field> -->
+      <mat-form-field class="w-100">
+        <input matInput formControlName="fechaMinima" [(ngModel)]="tipocargueestructura.fechaMinima" hidden>
+        <mat-error *ngIf="enviada && form.get('fechaMinima').hasError('required')"> {{ constants.campoRequerido }}
+        </mat-error>
+        <label class="dev-color-grey mat-form-field-label-wrapper">{{ constants.fechaMinimaLabel }}</label>
+        <input class="hover-element-pointer" matInput readonly [owlDateTimeTrigger]="fechaMinimaDate"
+          [owlDateTime]="fechaMinimaDate" [formControl]="fechaMinimaControl"
+          (dateTimeChange)="changeDate('fechaMinima', $event, 'max')" [max]="maxDate">
+        <mat-icon matSuffix [owlDateTimeTrigger]="fechaMinimaDate" class="hover-element-pointer">calendar_today
+        </mat-icon>
+        <owl-date-time [pickerType]="'calendar'" #fechaMinimaDate="owlDateTime"></owl-date-time>
+      </mat-form-field>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <!-- <mat-form-field class="w-100">
+        <input [placeholder]="constants.fechaMaximaLabel" class="hover-element-pointer" matInput
+          [owlDateTimeTrigger]="fechaMaximaDate" [owlDateTime]="fechaMaximaDate" [formControl]="fechaMaximaControl"
+          (dateTimeChange)="changeDate('fechaMaxima', $event, 'max')" [min]="minDate">
+        <mat-icon matSuffix [owlDateTimeTrigger]="fechaMaximaDate" class="hover-element-pointer">
+          calendar_today1
+        </mat-icon>
+        <owl-date-time [pickerType]="'calendar'" #fechaMaximaDate="owlDateTime"></owl-date-time>
+        <input matInput type="text" placeholder="" formControlName="fechaMaxima"
+          [(ngModel)]="tipocargueestructura.fechaMaxima" autocomplete="off" hidden>
+        <mat-error *ngIf="enviada && form.get('fechaMaxima').hasError('required')">
+          {{ constants.campoRequerido }}
+        </mat-error>
+      </mat-form-field> -->
+      <mat-form-field class="w-100">
+        <input matInput formControlName="fechaMaxima" [(ngModel)]="tipocargueestructura.fechaMaxima" hidden>
+        <mat-error *ngIf="enviada && form.get('fechaMaxima').hasError('required')"> {{ constants.campoRequerido }}
+        </mat-error>
+        <label class="dev-color-grey mat-form-field-label-wrapper">{{ constants.fechaMaximaLabel }}</label>
+        <input class="hover-element-pointer" matInput readonly [owlDateTimeTrigger]="fechaMaximaDate"
+          [owlDateTime]="fechaMaximaDate" [formControl]="fechaMaximaControl"
+          (dateTimeChange)="changeDate('fechaMaxima', $event, 'min')" [min]="minDate">
+        <mat-icon matSuffix [owlDateTimeTrigger]="fechaMaximaDate" class="hover-element-pointer">calendar_today
+        </mat-icon>
+        <owl-date-time [pickerType]="'calendar'" #fechaMaximaDate="owlDateTime"></owl-date-time>
+      </mat-form-field>
+    </div>
+    <div fxFlex>
+      <div class="w-100">
+        <sigma-form-select formControlName="listaId" [(ngModel)]="tipocargueestructura.lista"
+          [path]="constants.path_administracion_tipocargueestructura_listaId" [placeholder]="constants.listaId"
+          [listBy]="'nombre'">
+        </sigma-form-select>
+        <!-- <sigma-general-list [path]="constants.path_administracion_tipocargueestructura_listaId"
+          [responseType]="constants.objeto" etiqueta="{{ constants.listaId }}" [listBy]="'nombre'"
+          (optionIdSelected)="setListaTipocargueestructura($event)">
+        </sigma-general-list>
+        <input matInput type="text" placeholder="" formControlName="listaId"
+          [(ngModel)]="tipocargueestructura.lista" autocomplete="off" hidden> -->
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions fxLayoutAlign="end" class="flex-p">
+  <button type="button" (click)="close()" mat-button color="warn">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+  </button>
+  <button type="button" [disabled]="disableSubmit" mat-raised-button color="primary" (click)="onSubmit()"
+    *sigmaIsGranted="constants.permiso_administracion_tipocargueestructura_create">
+    <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,35 @@
+<div fxLayout="column" [formGroup]="form">
+  <div class="flex-p">
+
+      <div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+        <h5>{{ constants.informacionCampoObligatorio }}</h5>
+      </div>
+
+      <mat-card-content class="m-0" *ngIf="mantenimientoInternal.intervenciones !== undefined && mantenimientoInternal.intervenciones.length > 0" >
+
+        <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+          <div class="item" fxFlex="100%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <textarea matInput formControlName="observaciones" rows="5" placeholder="{{ constants.observaciones }}"
+                  [(ngModel)]="mantenimientoInternal.intervenciones[0].observaciones"></textarea>
+                <mat-error *ngIf="form.get('observaciones').hasError('maxlength')"> {{ constants.longitud_maxima }} 600
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+      </mat-card-content>
+
+      <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+      <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+        <button type="button" [disabled]="enviada || !isEditable || loading" class="m-1" mat-raised-button color="primary"
+          (click)="onSubmit()">
+          <mat-icon class="m-1">save</mat-icon> {{ constants.guardarSeccion }}
+        </button>
+      </div>
+      
+  </div>
+</div>

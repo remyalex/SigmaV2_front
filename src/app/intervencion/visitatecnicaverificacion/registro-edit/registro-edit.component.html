@@ -1,0 +1,100 @@
+<h2 mat-dialog-title>{{ constants.editar }} Registro de la Visita</h2>
+
+<div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+  <h5>Todos los campos con * son obligatorios</h5>
+</div>
+
+<mat-dialog-content [formGroup]="form">
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+        <sigma-form-number formControlName="numero" [(ngModel)]="intervencionFalla.numero" 
+        placeholder="Número" [readonly]="true">
+      </sigma-form-number>
+    </div>
+
+    <div fxFlex>
+        <sigma-form-number formControlName="distancia" [(ngModel)]="intervencionFalla.distancia" 
+        placeholder="Distancia" [numericInput]="true" pattern="[0-9]*">
+      </sigma-form-number>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+        <sigma-form-number formControlName="longitud" [(ngModel)]="intervencionFalla.longitud" 
+        placeholder="Longitud" (ngModelChange)="calcularTodo()">
+      </sigma-form-number>
+    </div>
+
+    <div fxFlex>
+      <sigma-form-number formControlName="ancho" [(ngModel)]="intervencionFalla.ancho" 
+        placeholder="Ancho" (ngModelChange)="calcularTodo()">
+      </sigma-form-number>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+
+    <div fxFlex>
+        <sigma-form-number formControlName="areaFalla" [(ngModel)]="intervencionFalla.areaFalla" 
+        placeholder="Área de Falla">
+      </sigma-form-number>
+    </div>
+
+    <div fxFlex>
+      <sigma-form-number formControlName="espesor" [(ngModel)]="intervencionFalla.espesor"  
+        placeholder="Espesor" (ngModelChange)="onChangeEspesor(); calcularTodo()">
+      </sigma-form-number>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+       <sigma-form-number formControlName="volumen" [(ngModel)]="intervencionFalla.volumen" 
+        placeholder="Volumen">
+      </sigma-form-number>
+    </div>
+
+    <div fxFlex *ngIf="presentarTipoFalla">
+      <sigma-form-select #selectFallas [path]="path_tipo_falla" placeholder="{{ constants.tipoFalla }}"
+        formControlName="tipoFalla" [(ngModel)]="intervencionFalla.tipoFalla" [listBy]="'descripcion'">
+      </sigma-form-select>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <sigma-form-select [path]="constants.path_intervencion_tipoSuperficie"
+        placeholder="{{ constants.tipoSuperficie }}" formControlName="tipoSuperficie"
+        [(ngModel)]="intervencionFalla.tipoSuperficie"
+        (ngModelChange)='cambioTipoSuperficie(intervencionFalla.tipoSuperficie)'
+        [listBy]="'descripcion'">
+      </sigma-form-select>
+    </div>
+
+    
+    <div fxFlex *ngIf="presentarTipoIntervencion">
+      <sigma-form-select #selectTipoIntervencion [path]="path_tipo_intervencion" 
+        placeholder="{{ constants.tipoIntervencion }}" formControlName="tipoIntervencion"
+        [(ngModel)]="intervencionFalla.tipoIntervencion" [listBy]="'descripcion'">
+      </sigma-form-select>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    
+  </div>
+
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions fxLayout="row" fxLayoutAlign="end" [formGroup]="form">
+  <button mat-button color="warn" class="m-1" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+  </button>
+  <button mat-raised-button color="primary" [disabled]="disableSubmit" class="m-1" (click)="onSubmit()">
+    <mat-icon>save</mat-icon> {{ constants.guardar }}
+  </button>
+</mat-dialog-actions>

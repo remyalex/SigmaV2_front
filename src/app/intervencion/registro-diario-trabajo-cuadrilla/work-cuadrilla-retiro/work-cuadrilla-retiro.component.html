@@ -1,0 +1,87 @@
+<div fxLayoutAlign="end">
+  <button tton mat-raised-button [disabled]="!componentVisible"
+    *sigmaIsGranted="constants.registro_diario_cuadrilla_retiro_nuevo" color="primary" class="m-1 mb-10"
+    (click)="add()">
+    <mat-icon class="m-1">note_add</mat-icon> Crear nuevo
+  </button>
+</div>
+<div class="mat-elevation-z8">
+  <mat-table #table [dataSource]="dataCuadrillaMaterial" matSort>
+
+    <ng-container matColumnDef="tipoMaterial">
+      <mat-header-cell *matHeaderCellDef> {{ constants.tipoMaterial }} </mat-header-cell>
+      <mat-cell *matCellDef="let retiro" [attr.data-label]="constants.tipoMaterial">
+        {{ retiro.tipoMaterial ? retiro.tipoMaterial.descripcion : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="claseMaterial">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.claseMaterial }} </mat-header-cell>
+      <mat-cell *matCellDef="let retiro" [attr.data-label]=" constants.claseMaterial">
+        {{ retiro.claseMaterial ? retiro.claseMaterial.descripcion : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="volumen">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.volumen }} </mat-header-cell>
+      <mat-cell *matCellDef="let retiro" [attr.data-label]="constants.volumen">
+        {{ retiro.volumen }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="destino">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.destino }} </mat-header-cell>
+      <mat-cell *matCellDef="let retiro" [attr.data-label]="constants.destino">
+        {{ retiro.destino ? retiro.destino.descripcion : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="archivoId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.nombreDocumento }} </mat-header-cell>
+      <mat-cell *matCellDef="let retiro" [attr.data-label]="constants.nombreDocumento">
+        <div *ngIf="retiro?.retiroArchivos?.length > 0">
+          <sigma-show-file id="{{ retiro.retiroArchivos[0].archivo?.id }}"></sigma-show-file>
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="nombreDocumento">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.archivoId }} </mat-header-cell>
+      <mat-cell *matCellDef="let retiro" [attr.data-label]="constants.archivoId">
+        <div *ngIf="retiro?.retiroArchivos?.length > 0">
+          {{ retiro.retiroArchivos[0].archivo?.nombre }}
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+      <mat-cell *matCellDef="let retiro ; let i = index;" [attr.data-label]="constants.acciones">
+        <button mat-raised-button [disabled]="!componentVisible"
+          *sigmaIsGranted="constants.registro_diario_cuadrilla_retiro_editar" color="primary" (click)="edit(retiro, i)"
+          class="m-1">
+          <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+        </button>
+        <button mat-raised-button [disabled]="!componentVisible"
+          *sigmaIsGranted="constants.registro_diario_cuadrilla_retiro_delete" color="warn" (click)="delete(retiro, i)"
+          class="m-1">
+          <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [length]="lengthList" [pageSize]="criteria.size" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>
+
+<div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+  <button type="button" [disabled]="!componentVisible"
+    *sigmaIsGranted="constants.registro_diario_cuadrilla_retiro_save_seccion" class="m-1" mat-raised-button
+    color="primary" (click)="onSubmit()">
+    <mat-icon class="m-1">save</mat-icon> {{ constants.guardarSeccion }}
+  </button>
+</div>
+<div [formGroup]="twelfthFormGroup">
+  <input type="hidden" formControlName="successForm" [(ngModel)]="successInput">
+</div>

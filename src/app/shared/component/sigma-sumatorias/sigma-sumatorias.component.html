@@ -1,0 +1,43 @@
+<div *ngIf="showKmCarril" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+  <div fxFlex class="w-100 sigma-sum" fxLayoutAlign="end center">
+    Total Km. Carril Impacto: <b> {{ calcularKmsCarril() | number : '.2-3' }}</b>
+  </div>
+</div>
+
+<div *ngIf="showKmLineal" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+  <div fxFlex class="w-100 sigma-sum" fxLayoutAlign="end center">
+    Total Km. Carril Lineal: <b> {{ calcularKms('kmCarrilLineal') | number : '.2-3' }}</b>
+  </div>
+</div>
+
+<div *ngIf="showKmObra" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+  <div fxFlex class="w-100 sigma-sum" fxLayoutAlign="end center">
+    Total Km. Carril Obra: <b> {{ calcularKms('kmCarrilObra') | number : '.2-3' }}</b>
+  </div>
+</div>
+
+<div *ngIf="showTotalDiasDuracionPlaneada" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+  <div fxFlex class="w-100 sigma-sum" fxLayoutAlign="end center">
+    Total Dias Duración Planeada: <b> {{ calcularKms('duracionPlaneada') | number : '.2-3' }}</b>
+  </div>
+</div>
+
+<div *ngIf="showTotalNoCuadrilla" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+  <div fxFlex class="w-100 sigma-sum" fxLayoutAlign="end center">
+    Total No. Cuadrilla: <b> {{ calcularCuadrilla() }}</b>
+  </div>
+</div>
+
+<div *ngIf="showActividadAgrupada" fxLayout="row"  fxLayout.lt-md="column" fxLayoutGap="10px"
+  fxLayoutGap.lt-md="0">
+  <div fxFlex class="w-100 sigma-sum" fxLayoutAlign="end center">
+    Total Km Carril. Act. Agrupada: <b>{{ calcularItemsAgrupados(listaPksSelect) }}</b>
+  </div>
+</div>
+
+<div *ngIf="showCountItems" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px"
+  fxLayoutGap.lt-md="0">
+  <div fxFlex class="w-100 sigma-sum" fxLayoutAlign="end center">
+    {{ listaPksSelect.length }} registro(s) seleccionado(s) para ser enviado(s)
+  </div>
+</div>

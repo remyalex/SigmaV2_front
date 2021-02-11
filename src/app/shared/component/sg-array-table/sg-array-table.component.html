@@ -1,0 +1,65 @@
+<div *ngIf="showNew" fxLayout="row" fxLayout.lt-md="column">
+    <div fxLayoutAlign="end" fxFlex>
+        <button mat-raised-button color="primary" class="m-1 mb-10" (click)="onNew()">
+            <mat-icon>note_add</mat-icon>
+            Crear nuevo
+        </button>
+    </div>
+</div>
+<div class="mt-10 p-8">
+    <div class="mat-elevation-z8">
+        
+        <div *ngIf="showLoader === true" fxLayout="column" fxLayoutAlign="center center">
+            <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+        </div>
+
+        <div *ngIf="showLoader === false && model.length === 0" class="msj_no_results"
+            fxLayout="row" fxLayoutAlign="center center">
+            <mat-icon class="m-1">sms_failed</mat-icon>
+            <h4> {{ constants.noResultados }}</h4>
+        </div>
+
+        <div [hidden]="showLoader === true">
+            <mat-table  [dataSource]="dataSource" matSort class="col-x" matSort>
+        
+                <mat-header-row *matHeaderRowDef="displayColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; let rowIndex = index; columns: displayColumns"></mat-row>
+        
+                <ng-container matColumnDef="index">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+                    <mat-cell *matCellDef="let x; let rowIndex = index" attr.data-label="#"> {{ rowIndex }} </mat-cell>
+                </ng-container>
+        
+                <ng-container *ngFor="let col of def.columns">
+                    <ng-container [matColumnDef]="col.name">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>
+                            {{col.label}}
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let x" [attr.data-label]="col.label">
+                            {{ col.valueFn ? col.valueFn(x, col.name) : defaultValueFn(x, col.name, col.property) }}
+                        </mat-cell>
+                    </ng-container>
+                </ng-container>
+        
+                <ng-container *ngIf="def.showActions" matColumnDef="actions">
+                    <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+                    <mat-cell *matCellDef="let x; let rowIndex = index" class="action-link">
+                        <button *ngIf="showEdit" mat-raised-button color="primary" class="m-1" (click)="onEdit(rowIndex)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button *ngIf="showDelete" mat-raised-button color="warn" class="m-1" (click)="onDelete(rowIndex)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </mat-cell>
+                </ng-container>
+        
+            </mat-table>
+
+            <mat-paginator #paginator
+                [length]="def.length"
+                [pageSize]="def.pageSize"
+                [pageSizeOptions]="def.pageSizeOptions" showFirstLastButtons></mat-paginator>
+
+        </div>
+    </div>
+</div>

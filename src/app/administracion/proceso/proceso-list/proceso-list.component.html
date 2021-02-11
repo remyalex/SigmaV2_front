@@ -1,0 +1,118 @@
+<div>
+  <div>
+    <mat-card-header fxLayoutAlign="center" class="mb-10">
+      <mat-card-subtitle>
+        <h2>Administración de procesos</h2>
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form (ngSubmit)="search()" class="mb-10" fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px"
+        fxLayoutGap.lt-lg="0">
+        <div fxFlex>
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.nombre }}" id="nombre" [(ngModel)]="criteria.nombre" name="nombre"
+              type="text" />
+          </mat-form-field>
+        </div>
+        <div fxFlex>
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.descripcion }}" id="descripcion"
+              [(ngModel)]="criteria.descripcion" name="descripcion" type="text" />
+          </mat-form-field>
+        </div>
+
+        <div fxFlex>
+          <button type="submit" mat-raised-button color="primary" class="m-1" (click)="search()">
+            <mat-icon>search</mat-icon> {{ constants.buscar }}
+          </button>
+          <button (click)="clear()" mat-raised-button color="warn" class="m-1">
+            <mat-icon>clear</mat-icon> {{ constants.limpiar }}
+          </button>
+          <button layout="row" mat-raised-button color="primary" [disabled]="listaProcesos?.length <= 0" class="m-1"
+            (click)="exportAsXLSX()" *sigmaIsGranted="constants.permiso_administracion_proceso_export">
+            <mat-icon>get_app</mat-icon>
+            {{ constants.exportar }}
+            <mat-spinner *ngIf="cargandoExcel" color="accent" [diameter]="20"></mat-spinner>
+          </button>
+        </div>
+      </form>
+
+    </mat-card-content>
+
+    <!-- <div class="mt-10 mb-10" fxLayoutAlign="end center">
+      <button mat-raised-button color="primary" (click)="graphicAllProcess()" class="m-1"
+        *sigmaIsGranted="constants.permiso_administracion_proceso_export">
+        <mat-icon>photo</mat-icon>
+      </button>
+    </div> -->
+  </div>
+</div>
+
+<div class="mat-elevation-z8">
+  <div *ngIf="loader" fxLayout="column" fxLayoutAlign="center center">
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div> 
+  <div *ngIf="noInfoToShow" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center" >
+    <mat-icon class="m-1">sms_failed</mat-icon>  <h4>{{ errorMessage }}</h4>
+  </div>
+
+  <mat-table #table [dataSource]="listaProcesos" [hidden]="noInfoToShow && !loader" matSort>
+    <ng-container matColumnDef="activo">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.activo }} </mat-header-cell>
+      <mat-cell *matCellDef="let proceso" [attr.data-label]="constants.activo">
+        <span class="dev-color-red" [hidden]="proceso.activo">{{ constants.no }}</span>
+        <span class="dev-color-green" [hidden]="!proceso.activo">{{ constants.si }}</span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="descripcion">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.descripcion }} </mat-header-cell>
+      <mat-cell *matCellDef="let proceso" [attr.data-label]="constants.descripcion">{{proceso.descripcion}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.id }} </mat-header-cell>
+      <mat-cell *matCellDef="let proceso" [attr.data-label]="constants.id">{{proceso.id}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="nombre">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.nombre }} </mat-header-cell>
+      <mat-cell *matCellDef="let proceso" [attr.data-label]="constants.nombre">{{proceso.nombre}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+      <mat-cell *matCellDef="let proceso" [attr.data-label]="constants.acciones">
+        <div fxLayout.lt-md="row" fxLayout.lt-xl="column">
+          <div fxFlex>
+            <button mat-raised-button color="primary" (click)="graphic(proceso)" class="m-1"
+              *sigmaIsGranted="constants.permiso_administracion_proceso_view">
+              <mat-icon matTooltip="Diagrama" matTooltipPosition="above">photo</mat-icon>
+            </button>
+            <button mat-raised-button color="primary" (click)="detail(proceso)" class="m-1"
+              *sigmaIsGranted="constants.permiso_administracion_proceso_view">
+              <mat-icon matTooltip="Detalles" matTooltipPosition="above">open_in_new</mat-icon>
+            </button>
+          </div>
+          <div fxFlex fxLayoutAlign="start">
+            <button mat-raised-button color="primary" (click)="edit(proceso)" class="m-1"
+              *sigmaIsGranted="constants.permiso_administracion_proceso_update">
+              <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+            </button>
+            <button mat-raised-button color="warn" (click)="delete(proceso)" class="m-1"
+              *sigmaIsGranted="constants.permiso_administracion_proceso_delete">
+              <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [length]="lengthList" [pageSize]="criteria.size" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>

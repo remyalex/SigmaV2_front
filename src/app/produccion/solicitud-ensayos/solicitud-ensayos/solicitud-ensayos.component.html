@@ -1,0 +1,35 @@
+<div class="flex-p">
+  <mat-card>
+    <mat-card-header fxLayoutAlign="center">
+      <mat-card-subtitle>
+        <h2>Solicitar Ensayos de Laboratorio</h2>
+      </mat-card-subtitle>
+    </mat-card-header>
+    <div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+      <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+    </div>
+
+    <div [hidden]="processing">
+
+      <div [hidden]="currentAction !== 'list'">
+        <div fxLayout="row" fxLayout.lt-md="column">
+          <div fxFlex="100" class="flex-p">
+            <mat-tab-group [selectedIndex]="tabSeleccionado.value" (selectedIndexChange)="seleccionarGrid($event)">
+              <mat-tab *ngIf="condicion" [disabled]='disabledTabEnsayoLabPK' label="Solicitar Ensayos de Laboratorio con PK">
+                <sigma-grid-mantenimientos #grid [data]="data" [columns]="columns" [filters]="filters" [showExport]="true" [columnsToExport]="columnsToExport"
+                [condicion]="condicion" (executeOnSingle)="ejecutar($event)" [singleActions]="acciones"
+                  [defaultFilters]="defaulFilters">
+                </sigma-grid-mantenimientos>
+              </mat-tab> 
+              <mat-tab *ngIf="condicion" label="Solicitar Ensayos de Laboratorio Genéricos">
+                <sigma-prod-solicitud-ensayos-list [generico]="true"
+                  (cambiarEstadoTabEnsayoLabPK)="cambiarEstadoTabEnsayoLabPK($event)" >
+                </sigma-prod-solicitud-ensayos-list>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>

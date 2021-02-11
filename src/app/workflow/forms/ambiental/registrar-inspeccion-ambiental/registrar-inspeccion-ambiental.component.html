@@ -1,0 +1,53 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="processing">
+
+  <div *ngIf="currentAction === 'list'">
+    <div fxLayout="row" fxLayout.lt-md="column">
+      <div fxFlex="100" class="flex-p">
+
+        <div>
+          <mat-tab-group [selectedIndex]="tabSeleccionado.value" (selectedIndexChange)="seleccionarGrid($event)">
+            <mat-tab *ngIf="condicion" label="Inspección ambiental">
+              <sigma-grid-mantenimientos #grid [data]="data" [columns]="columns"
+                [filters]="filters" [condicion]="condicion" [singleActions]="acciones"
+                (executeOnSingle)="executeSingleAction($event)" [defaultFilters]="defaulFilters" >
+              </sigma-grid-mantenimientos>
+            </mat-tab>
+            <mat-tab *ngFor="let transicion of transicionesMasivas" label="{{transicion.nombre}}">
+              <sigma-grid-mantenimientos #grid [data]="data" [transicion]="transicion" [columns]="columns"
+                [filters]="filters" [singleActions]="acciones" (executeOnSingle)="executeSingleAction($event)"
+                (executeOnMasiveTransition)="executeMasiveTransition($event)" [defaultFilters]="defaulFilters" >
+              </sigma-grid-mantenimientos>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="currentAction === 'registrarInspeccion'">
+    <sigma-registrar-inspeccion-amb [mantenimiento]="mantenimiento" (back)="back($event)" (saveAllForm)="saveAllForm($event)">
+    </sigma-registrar-inspeccion-amb>
+    <div *ngIf="nextTransition">
+      <sigma-mantenimiento-records [mantId]="mantenimiento.id"></sigma-mantenimiento-records>
+      <sigma-seleccion-transicion [(data)]="data" [transiciones]="transicionesIndividuales"
+        (executeTransition)="executeTransition()"></sigma-seleccion-transicion>
+    </div>
+  </div>
+  <div *ngIf="currentAction === 'consultarInspeccion'">
+    <sigma-consultar-inspeccion-ambiental [mantenimiento]="mantenimiento" (actionEvent)="actionEvent($event)" (back)="back($event)">
+    </sigma-consultar-inspeccion-ambiental>
+  </div>
+  <div *ngIf="currentAction === 'editarInspeccion'">
+    <sigma-editar-inspeccion-ambiental [mantenimiento]="mantenimiento" [elementoInspeccion]="elementoInspeccion" (actionEvent)="actionEvent($event)" (back)="back($event)" (saveAllForm)="saveAllForm($event)"></sigma-editar-inspeccion-ambiental>
+    <div *ngIf="nextTransition">
+        <sigma-mantenimiento-records [mantId]="mantenimiento.id"></sigma-mantenimiento-records>
+        <sigma-seleccion-transicion [(data)]="data" [transiciones]="transicionesIndividuales"
+          (executeTransition)="executeTransition()"></sigma-seleccion-transicion>
+    </div>
+  </div>
+</div>

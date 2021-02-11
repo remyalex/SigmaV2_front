@@ -1,0 +1,35 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="processing" *ngIf="showView">
+
+  <div *ngIf="currentAction === 'list'">
+    <div fxLayout="row" fxLayout.lt-md="column">
+      <div fxFlex="100" class="flex-p">
+        <div>
+          <mat-tab-group [selectedIndex]="tabSeleccionado.value" (selectedIndexChange)="seleccionarGrid($event)">
+            <mat-tab *ngFor="let transicion of transicionesIndividuales" label="{{transicion.nombre}}">
+              <sigma-grid-mantenimientos #grid [data]="data" [transicion]="transicion" [columns]="columns"
+                [filters]="filters" [singleActions]="acciones" (executeOnSingle)="executeSingleAction($event)"
+                (executeOnMasiveTransition)="executeSingleAction($event)" [defaultFilters]="defaulFilters">
+              </sigma-grid-mantenimientos>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="currentAction === constants.currentAction.registrarCierreAmbiental">
+    <sigma-registrar-cierre [mantenimiento]="mantenimiento" [data]="data"
+      [transicionesIndividuales]="transicionesIndividuales" [cierre]="cierre" (closeRegistro)="closeRegistro($event)">
+    </sigma-registrar-cierre>
+  </div>
+
+  <div *ngIf="currentAction === constants.currentAction.consultarCierreAmbiental">
+    <sigma-consultar-cierre [mantenimiento]="mantenimiento" [data]="data"
+      [transicionesIndividuales]="transicionesIndividuales" (closeRegistro)="closeRegistro($event)">
+    </sigma-consultar-cierre>
+  </div>
+</div>

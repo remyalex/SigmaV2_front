@@ -1,0 +1,19 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="processing">
+  <div *ngIf="currentAction == 'list'">
+    <div fxLayout=" column">
+      <div fxFlex="100" class="flex-p">
+        <mat-tab-group [selectedIndex]="tabSeleccionado.value" (selectedIndexChange)="seleccionarGrid($event)" *ngIf="condicion">
+          <mat-tab label="Registro Control De Calidad A Mezcla Producida En Planta">
+            <sigma-grid-mantenimientos  #grid [data]="data" [tipoGrid]="'Invisible'" [columns]="columns" [filters]="filters"
+            [singleActions]="singleAccions" (executeOnSingle)="executeOnSingle($event)"   [condicion]="condicion"  >
+            </sigma-grid-mantenimientos>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+</div>

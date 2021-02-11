@@ -1,0 +1,32 @@
+.mat-drawer-container {
+    background-image: url("../../../assets/img/app/login-bg.jpg");
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.box-header{
+    background-color: #004064;
+}
+.logo-sigma{
+    width: 226px;
+    height: auto;
+    position: relative;
+    top: -18px;
+}
+
+.box {
+    .box-content {
+        height: 206px;
+        .box-content-inner{
+            height: 206px;
+        }
+    }
+}
+
+.btn-olvido-clave{
+    color: #B95219;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: right;
+}

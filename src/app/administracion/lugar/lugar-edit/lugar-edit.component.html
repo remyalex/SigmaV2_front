@@ -1,0 +1,149 @@
+<h2 mat-dialog-title>{{ constants.editar }} Lugar</h2>
+
+<div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+  <h5>{{ constants.informacionCampoObligatorio }}</h5>
+</div>
+
+<mat-dialog-content [formGroup]="form">
+  <input type="hidden" formControlName="id" [(ngModel)]="lugar.id">
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <sigma-form-select [path]="constants.path_administracion_lugar_tipoLugarId"
+        placeholder="{{ constants.tipoLugarId }}" required="true" formControlName="tipoLugarId"
+        [(ngModel)]="lugar.tipoLugar">
+      </sigma-form-select>
+    </div>
+
+    <div fxFlex>
+      <sigma-form-select [path]="constants.path_administracion_lugar_origenLugarId"
+        placeholder="{{ constants.origenLugarId }}" required="true" formControlName="origenLugarId"
+        [(ngModel)]="lugar.origenLugar">
+      </sigma-form-select>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <sigma-form-select [path]="constants.path_administracion_lugar_estadoLugarId"
+        placeholder="{{ constants.estadoLugarId }}" required="true" formControlName="estadoLugarId"
+        [(ngModel)]="lugar.estadoLugar">
+      </sigma-form-select>
+    </div>
+
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="{{ constants.nombre }}" formControlName="nombre" [(ngModel)]="lugar.nombre"
+          autocomplete="off" type="text" appUpper required>
+        <mat-error *ngIf="form.get('nombre').hasError('required')"> {{ constants.campoRequerido }}. </mat-error>
+        <mat-error *ngIf="form.get('nombre').hasError('maxlength')">{{ constants.longitud_maxima }} 300 caracteres.
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+        <mat-form-field class="w-100">
+          <input matInput placeholder="{{ constants.descripcion }}" formControlName="descripcion"
+            [(ngModel)]="lugar.descripcion" autocomplete="off" type="text" required>
+          <mat-error *ngIf="form.get('descripcion').hasError('required')"> {{ constants.campoRequerido }}. </mat-error>
+          <mat-error *ngIf="form.get('descripcion').hasError('maxlength')">{{ constants.longitud_maxima }} 600
+            caracteres. </mat-error>
+        </mat-form-field>
+    </div>
+    <div fxFlex>
+        <mat-form-field class="w-100">
+          <input matInput placeholder="{{ constants.contactoNombre }}" formControlName="contactoNombre"
+            [(ngModel)]="lugar.contactoNombre" autocomplete="off" type="text">
+          <mat-error *ngIf="form.get('contactoNombre').hasError('maxlength')">{{ constants.longitud_maxima }} 100
+            caracteres. </mat-error>
+        </mat-form-field>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="{{ constants.contactoTelefono }}" formControlName="contactoTelefono"
+          [(ngModel)]="lugar.contactoTelefono" autocomplete="off" type="text">
+        <mat-error *ngIf="form.get('contactoTelefono').hasError('maxlength')">{{ constants.longitud_maxima }} 20
+          caracteres. </mat-error>
+      </mat-form-field>
+    </div>
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="{{ constants.contactoCorreo }}" formControlName="contactoCorreo"
+          [(ngModel)]="lugar.contactoCorreo" autocomplete="off" type="text">
+        <mat-error *ngIf="form.get('contactoCorreo').hasError('maxlength')">{{ constants.longitud_maxima }} 100
+          caracteres. </mat-error>
+        <mat-error *ngIf="form.get('contactoCorreo').hasError('email')"> {{ constants.formato_correo }}. </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="{{ constants.direccion }}" formControlName="direccion"
+          [(ngModel)]="lugar.direccion" autocomplete="off" type="text">
+        <mat-error *ngIf="form.get('direccion').hasError('maxlength')">{{ constants.longitud_maxima }} 100 caracteres.
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <sigma-form-calendar formControlName="fechaDesde"
+        [(ngModel)]="lugar.fechaDesde" [objeto]="lugar"
+        [minTarget]="'fechaDesde'"  [placeholder]="constants.fechaDesde"
+        [type]="constants.datepicker.types.calendar" required>
+      </sigma-form-calendar>
+    </div>
+
+    <div fxFlex>
+      <sigma-form-calendar formControlName="fechaHasta"
+        [(ngModel)]="lugar.fechaHasta" [objeto]="lugar"
+        [maxTarget]="'fechaHasta'" [placeholder]="constants.fechaHasta"
+        [type]="constants.datepicker.types.calendar" required>
+      </sigma-form-calendar>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <sigma-form-calendar formControlName="horaInicio" [(ngModel)]="lugar.horaInicio"
+        [type]="this.constants.datepicker.types.timer" [placeholder]="constants.horaInicio">
+      </sigma-form-calendar>
+    </div>
+    <div fxFlex>
+      <sigma-form-calendar formControlName="horaFin" [(ngModel)]="lugar.horaFin"
+        [type]="this.constants.datepicker.types.timer" [placeholder]="constants.horaFin">
+      </sigma-form-calendar>
+    </div>
+
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex="50">
+      <mat-checkbox formControlName="activo" [(ngModel)]="lugar.activo" name="activo" id="activo">
+        {{ constants.activo }}
+      </mat-checkbox>
+    </div>
+  </div>
+
+
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button type="button" (click)="close()" mat-button color="warn" class="m-1">
+    <mat-icon class="m-1">close</mat-icon> Cancelar
+  </button>
+  <button type="button" class="m-1" mat-raised-button color="primary" (click)="onSubmit()"
+    [disabled]="disabledBtn_Login">
+    <mat-icon class="m-1">save</mat-icon> Guardar
+  </button>
+</mat-dialog-actions>

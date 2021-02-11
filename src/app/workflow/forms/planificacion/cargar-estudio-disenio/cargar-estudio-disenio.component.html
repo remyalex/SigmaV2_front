@@ -1,0 +1,171 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="processing">
+
+  <div [hidden]="currentAction != 'list'">
+    <div fxLayout=" column" class="w-100">
+      <div fxFlex="100" class="flex-p">
+        <!-- <mat-card> -->
+          <mat-card-content>
+            <form fxLayout="column" (ngSubmit)="search()" class="mb-10">
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap.lt-md="0" fxLayoutGap="10px">
+                <div fxFlex>
+                  <mat-form-field class="w-100">
+                    <input matInput placeholder="PK" id="pk" [(ngModel)]="criteria.pk" name="pk" />
+                  </mat-form-field>
+                </div>
+
+                <div fxFlex>
+                  <sigma-form-select [path]="'/api/administracion/lista/UMV_ZONAS/items'" [(ngModel)]="criteria.zona"
+                    name="zona" placeholder="Zona" [listBy]="'descripcion'">
+                  </sigma-form-select>
+                </div>
+
+                <div fxFlex>
+                  <sigma-form-select [path]="'/api/administracion/lista/UMV_LOCALIDADES/items'"
+                    [(ngModel)]="criteria.localidad" name="localidad" placeholder="Localidad"
+                    [listBy]="'descripcion'">
+                  </sigma-form-select>
+                </div>
+              </div>
+
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap.lt-md="0" fxLayoutGap="10px">
+                <div fxFlex>
+                  <sigma-form-select [path]="'/api/administracion/lista/UMV_BARRIOS/items'"
+                    [(ngModel)]="criteria.barrio" name="barrio" placeholder="Barrio" [listBy]="'descripcion'">
+                  </sigma-form-select>
+                </div>
+
+                <div fxFlex>
+                  <button type="submit" mat-raised-button color="primary" class="m-1" (click)="search()">
+                    <mat-icon>search</mat-icon> Buscar
+                  </button>
+                  <button (click)="clear()" mat-raised-button color="warn" class="m-1">
+                    <mat-icon>clear</mat-icon> Limpiar
+                  </button>
+                  <button layout="row" [disabled]="dataSource.totalElements$.source['_value'] <= 0" mat-raised-button
+                    color="primary" class="m-1" (click)="export()">
+                    <mat-icon>get_app</mat-icon>
+                    Exportar
+                    <mat-icon *ngIf="cargandoExcel">
+                      <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+                    </mat-icon>
+                  </button>
+                </div>
+              </div>
+            </form>
+
+            <div class="mat-elevation-z8"> 
+              <div *ngIf="(dataSource.loading$ | async)" fxLayout="column" fxLayoutAlign="center center">
+                <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+              </div>
+
+              <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+                <mat-icon class="m-1">sms_failed</mat-icon>
+                <h4> {{dataSource.errorMessage$ | async}}</h4>
+              </div>
+              <mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$ || processing" matSort>
+
+                <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+
+                <ng-container matColumnDef="pk">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> PK </mat-header-cell>
+                  <mat-cell *matCellDef="let mantenimiento" data-label="PK"> 
+                    {{ mantenimiento.pk }} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="origen">
+                  <mat-header-cell *matHeaderCellDef> Origen </mat-header-cell>
+                  <mat-cell *matCellDef="let mantenimiento" data-label="Origen">
+                    {{ mantenimiento.origen != null ? mantenimiento.origen.descripcion:'' }} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="zonaNombre">
+                  <mat-header-cell *matHeaderCellDef> Zona </mat-header-cell>
+                  <mat-cell *matCellDef="let mantenimiento" data-label="Zona">
+                    {{ mantenimiento.zona != null ? mantenimiento.zona.nombre:'' }}
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="localidadNombre">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Localidad </mat-header-cell>
+                  <mat-cell *matCellDef="let mantenimiento" data-label="Localidad">
+                    {{ mantenimiento.localidad != null ? mantenimiento.localidad.nombre:'' }} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="barrioNombre">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Zona </mat-header-cell>
+                  <mat-cell *matCellDef="let mantenimiento" data-label="Zona"> 
+                    {{ mantenimiento.zona?.nombre  }} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="cuadranteNombre">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Cuadrante </mat-header-cell>
+                  <mat-cell *matCellDef="let mantenimiento" data-label="Cuadrante">
+                    {{ mantenimiento.cuadrante != null ? mantenimiento.cuadrante.nombre:'' }} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="calzadaArea">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Área </mat-header-cell>
+                  <mat-cell *matCellDef="let mantenimiento" data-label="Área"> 
+                    {{ mantenimiento.area | number : '.2-3'}}
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="calzadaLongitud">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Longitud </mat-header-cell>
+                  <mat-cell *matCellDef="let mantenimiento" data-label="Longitud"> 
+                    {{ mantenimiento.longitud | number : '.2-3'}}
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="select">
+                  <mat-header-cell *matHeaderCellDef>
+                    &nbsp;&nbsp;&nbsp;
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let mantenimiento">
+                    &nbsp;&nbsp;&nbsp;
+                    <mat-checkbox #listCheckboxes (click)="$event.stopPropagation()"
+                      (change)="$event ? toggleChecks(mantenimiento, $event) : null"
+                      [checked]="mantenimientoIsSelected (mantenimiento.id)">
+                    </mat-checkbox>
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="acciones">
+                  <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+                  <mat-cell *matCellDef="let mantenimiento" data-label="Acciones">
+                    <button mat-raised-button color="primary" class="m-1">
+                      <mat-icon matTooltip="Detalle" matTooltipPosition="above">open_in_new</mat-icon>
+                    </button>
+                  </mat-cell>
+                </ng-container>
+
+                <mat-row *matRowDef="let row; columns: columns"></mat-row>
+              </mat-table>
+              <mat-paginator class="mb-10" #paginator [length]="dataSource.totalElements$ | async"
+                [pageSize]="criteria.size" [pageSizeOptions]="[5, 10, 20]">
+              </mat-paginator>
+            </div>
+
+            <div *ngIf="listaPksSelect.length > 0">
+              <sigma-seleccion-transicion #seleccionTransicion [transiciones]="transicionesMasivas"
+                [listaPksSelect]="listaPksSelect" [actividad]="data.actividad"></sigma-seleccion-transicion>
+            </div>           
+          </mat-card-content>
+        <!-- </mat-card> -->
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div fxLayout="row" fxLayoutAlign="end center" class="mt-10">
+      <button mat-raised-button color="primary" [disabled]="processing" class="m-1">
+        <mat-icon class="m-1">save</mat-icon> Enviar
+      </button>
+    </div>
+
+  </div>
+</div>

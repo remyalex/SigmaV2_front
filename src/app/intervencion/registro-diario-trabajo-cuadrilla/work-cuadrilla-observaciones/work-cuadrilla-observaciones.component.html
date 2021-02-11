@@ -1,0 +1,57 @@
+<div fxLayoutAlign="end">
+  <button tton mat-raised-button [disabled]="!componentVisible"
+    *sigmaIsGranted="constants.registro_diario_cuadrilla_observaciones_nuevo" color="primary" class="m-1 mb-10"
+    (click)="add()">
+    <mat-icon class="m-1">note_add</mat-icon> Crear nuevo
+  </button>
+</div>
+<div class="mat-elevation-z8">
+  <mat-table #table [dataSource]="dataCuadrillaMaterial" matSort>
+
+    <ng-container matColumnDef="observaciones">
+      <mat-header-cell *matHeaderCellDef> {{ constants.observaciones }} </mat-header-cell>
+      <mat-cell *matCellDef="let observacion" [attr.data-label]="constants.observaciones">
+        {{ observacion.observaciones }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="nombreDocumento">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.nombreDocumento }} </mat-header-cell>
+      <mat-cell *matCellDef="let observacion" [attr.data-label]="constants.nombreDocumento">
+        <div *ngIf="observacion?.obsArchivos?.length > 0">
+          <sigma-show-file id="{{ observacion.obsArchivos[0].archivo?.id }}"></sigma-show-file>
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+      <mat-cell *matCellDef="let observacion ; let i = index;" [attr.data-label]="constants.acciones">
+        <button mat-raised-button [disabled]="!componentVisible"
+          *sigmaIsGranted="constants.registro_diario_cuadrilla_observaciones_editar" color="primary"
+          (click)="edit(observacion, i)" class="m-1">
+          <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+        </button>
+        <button mat-raised-button [disabled]="!componentVisible"
+          *sigmaIsGranted="constants.registro_diario_cuadrilla_observaciones_delete" color="warn"
+          (click)="delete(observacion, i)" class="m-1">
+          <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [length]="lengthList" [pageSize]="criteria.size" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>
+
+<div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+  <button type="button" [disabled]="!componentVisible"
+    *sigmaIsGranted="constants.registro_diario_cuadrilla_observaciones_save_seccion" class="m-1" mat-raised-button
+    color="primary" (click)="onSubmit()">
+    <mat-icon class="m-1">save</mat-icon> {{ constants.guardarSeccion }}
+  </button>
+</div>
+<div [formGroup]="fourteenthFormGroup">
+  <input type="hidden" formControlName="successForm" [(ngModel)]="successInput">
+</div>

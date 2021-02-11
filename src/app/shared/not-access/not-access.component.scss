@@ -1,0 +1,42 @@
+.background{
+  position: relative;
+  color: #fff;
+  height: 100%;
+  text-align: center;
+  text-shadow: black 1px 2px 4px;
+  &:before {
+      content: "";
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 100%;
+      background-color: #242424;
+      background-image: url('../../../assets/img/app/login-bg.jpg');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position-y: center;
+      z-index: -1;
+      filter: grayscale(100);
+  }
+  .title {
+    font-size: 15vh;
+  } 
+  .sub-title {
+    font-size: 8vh;
+    font-weight: 200;
+  }  
+  .mat-raised-button{
+      margin: 0 14px;
+  }
+}
+
+@media (max-width: 720px){
+  .title {
+    font-size: 10vh!important;
+  } 
+  .sub-title {
+    font-size: 5vh!important;
+  } 
+}

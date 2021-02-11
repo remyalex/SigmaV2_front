@@ -1,0 +1,347 @@
+<div fxLayout="column">
+  <div class="flex-p">
+    <mat-card class="p-0 mat-card">
+      <mat-card-header fxLayoutAlign="center">
+        <mat-card-subtitle>
+          <h2>{{ constants.crear }} Equipo</h2>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+        <h5>{{ constants.informacionCampoObligatorio }}</h5>
+      </div>
+
+      <mat-card-content class="p-16 m-0" [formGroup]="form"
+        *sigmaIsGranted="constants.permiso_administracion_equipo_create">
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.numeroInterno }}" formControlName="numeroInterno"
+                [(ngModel)]="equipo.numeroInterno" autocomplete="off" type="text" required pattern="^(?!\s*$).+">
+              <mat-error *ngIf="form.get('numeroInterno').hasError('required')"> {{ constants.campoRequerido }}
+              </mat-error>
+              <mat-error *ngIf="form.get('numeroInterno').hasError('maxlength')"> {{ constants.longitud_maxima }} 20
+                caracteres. </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.placaInventario }}" formControlName="placaInventario"
+                [(ngModel)]="equipo.placaInventario" autocomplete="off" type="text" required pattern="^(?!\s*$).+">
+              <mat-error *ngIf="form.get('placaInventario').hasError('required')"> {{ constants.campoRequerido }}
+              </mat-error>
+              <mat-error *ngIf="form.get('placaInventario').hasError('maxlength')"> {{ constants.longitud_maxima }} 20
+                caracteres. </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.placa }}" formControlName="placa" [(ngModel)]="equipo.placa"
+                autocomplete="off" type="text" pattern="^(?!\s*$).+">
+              <mat-error *ngIf="form.get('placa').hasError('maxlength')"> {{ constants.longitud_maxima }} 20
+                caracteres. </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.movil }}" formControlName="movil" [(ngModel)]="equipo.movil"
+                autocomplete="off" type="text" pattern="^(?!\s*$).+">
+              <mat-error *ngIf="form.get('movil').hasError('pattern')"> {{ constants.campoNoVacio }} </mat-error>
+              <mat-error *ngIf="form.get('movil').hasError('maxlength')"> {{ constants.longitud_maxima }} 10
+                caracteres. </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <div class="w-100">
+              <sigma-form-select [path]="constants.path_administracion_equipo_claseEquipoId"
+                [(ngModel)]="equipo.claseEquipo" formControlName="claseEquipoId" (ngModelChange)="changeClaseEquipo()"
+                placeholder="{{ constants.claseEquipoId }}">
+              </sigma-form-select>
+            </div>
+          </div>
+
+          <div fxFlex>
+            <div class="w-100">
+              <sigma-form-select [optionsList]="tiposOpciones" [(ngModel)]="equipo.equipoTipo" formControlName="tipoEquipoId"
+                placeholder="{{ constants.tipoEquipoId }}" [listBy]="'descripcion'" >
+              </sigma-form-select>
+            </div>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <mat-select formControlName="picoYPlaca" placeholder="{{ constants.picoYPlaca }}"
+                [(ngModel)]="equipo.picoYPlaca">
+                <mat-option value="true"> Si </mat-option>
+                <mat-option value="false"> No </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <div class="w-100">
+              <sigma-form-select [path]="constants.path_administracion_equipo_origenEquipoId"
+                formControlName="origenEquipoId" [(ngModel)]="equipo.origenEquipo"
+                placeholder="{{ constants.origenEquipoId }}">
+              </sigma-form-select>
+            </div>
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.plazoMantenimiento }}" formControlName="plazoMantenimiento"
+                [(ngModel)]="equipo.plazoMantenimiento" autocomplete="off" type="text" [numericInput]="true"
+                pattern="[0-9]*">
+              <mat-error *ngIf="form.get('plazoMantenimiento').hasError('pattern')"> Solo se permiten valores numericos
+              </mat-error>
+              <mat-error *ngIf="form.get('plazoMantenimiento').hasError('max')"> {{ constants.longitud_maxima }} 12
+                caracteres. </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput type="text" placeholder="{{ constants.horasMantenimiento }}"
+                formControlName="horasMantenimiento" [numericInput]="true" [(ngModel)]="equipo.horasMantenimiento"
+                autocomplete="off">
+              <mat-error *ngIf="form.get('horasMantenimiento').hasError('max')"> {{ constants.longitud_maxima }} 12
+                caracteres. </mat-error>
+              <mat-error *ngIf="form.get('horasMantenimiento').hasError('pattern')"> Solo se permiten valores numericos
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.kilometrosMantenimiento }}"
+                formControlName="kilometrosMantenimiento" [(ngModel)]="equipo.kilometrosMantenimiento"
+                autocomplete="off" type="text" [numericInput]="true" pattern="^(?!\s*$).+">
+              <mat-error *ngIf="form.get('kilometrosMantenimiento').hasError('pattern')"> {{ constants.campoNoVacio }}
+              </mat-error>
+              <mat-error *ngIf="form.get('kilometrosMantenimiento').hasError('max')"> {{ constants.longitud_maxima }}
+                12 caracteres. </mat-error>
+              <mat-error *ngIf="form.get('kilometrosMantenimiento').hasError('pattern')"> Solo se permiten valores
+                numericos
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <sigma-form-calendar formControlName="fechaUltimoMantenimiento"
+              [(ngModel)]="equipo.fechaSiguienteMantenimiento" [objeto]="equipo"
+              [maxTarget]="'fechaUltimoMantenimiento'" [placeholder]="constants.fechaUltimoMantenimiento"
+              [type]="constants.datepicker.types.calendar">
+            </sigma-form-calendar>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <sigma-form-calendar formControlName="fechaSiguienteMantenimiento"
+              [(ngModel)]="equipo.fechaUltimoMantenimiento" [objeto]="equipo"
+              [minTarget]="'fechaSiguienteMantenimiento'" [placeholder]="constants.fechaSiguienteMantenimiento"
+              [type]="constants.datepicker.types.calendar">
+            </sigma-form-calendar>
+          </div>
+
+          <div fxFlex>
+            <div class="w-100">
+              <sigma-form-select [path]="constants.path_administracion_equipo_estadoEquipoId"
+                formControlName="estadoEquipoId" [(ngModel)]="equipo.estadoEquipo"
+                placeholder="{{ constants.estadoEquipoId }}">
+              </sigma-form-select>
+            </div>
+          </div>
+
+          <div fxFlex>
+            <div class="w-100">
+              <sigma-form-select [path]="constants.path_administracion_equipo_marcaEquipoId"
+                formControlName="marcaEquipoId" [(ngModel)]="equipo.marcaEquipo"
+                placeholder="{{ constants.marcaEquipoId }}">
+              </sigma-form-select>
+            </div>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.linea }}" formControlName="linea" [(ngModel)]="equipo.linea"
+                autocomplete="off" type="text" pattern="^(?!\s*$).+">
+              <mat-error *ngIf="form.get('linea').hasError('pattern')"> {{ constants.campoNoVacio }} </mat-error>
+              <mat-error *ngIf="form.get('linea').hasError('maxlength')"> {{ constants.longitud_maxima }} 50
+                caracteres. </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.cilindraje }}" formControlName="cilindraje"
+                [(ngModel)]="equipo.cilindraje" autocomplete="off" type="text" [numericInput]="true"
+                pattern="^(?!\s*$).+">
+              <mat-error *ngIf="form.get('cilindraje').hasError('max')"> {{ constants.longitud_maxima }} 12
+                caracteres. </mat-error>
+              <mat-error *ngIf="form.get('cilindraje').hasError('pattern')"> Solo se permiten valores numericos
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.numeroMotor }}" formControlName="numeroMotor"
+                [(ngModel)]="equipo.numeroMotor" autocomplete="off" type="text" pattern="^(?!\s*$).+">
+              <mat-error *ngIf="form.get('numeroMotor').hasError('pattern')"> {{ constants.campoNoVacio }}</mat-error>
+              <mat-error *ngIf="form.get('numeroMotor').hasError('maxlength')"> {{ constants.longitud_maxima }} 20
+                caracteres. </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.numeroChasis }}" formControlName="numeroChasis"
+                [(ngModel)]="equipo.numeroChasis" autocomplete="off" type="text" pattern="^(?!\s*$).+">
+              <mat-error *ngIf="form.get('numeroChasis').hasError('pattern')"> {{ constants.campoNoVacio }}
+              </mat-error>
+              <mat-error *ngIf="form.get('numeroChasis').hasError('maxlength')"> {{ constants.longitud_maxima }} 20
+                caracteres. </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <div class="w-100">
+              <sigma-form-select [path]="constants.path_administracion_equipo_tipoCombustibleId"
+                formControlName="tipoCombustibleId" [(ngModel)]="equipo.tipoCombustible"
+                placeholder="{{ constants.tipoCombustibleId }}">
+              </sigma-form-select>
+            </div>
+          </div>
+
+          <div fxFlex>
+            <div class="w-100">
+              <sigma-form-select [path]="constants.path_administracion_equipo_anioModeloId"
+                formControlName="anioModeloId" [(ngModel)]="equipo.anioModelo"
+                placeholder="{{ constants.anioModeloId }}">
+              </sigma-form-select>
+            </div>
+          </div>
+
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.color }}" formControlName="color" [(ngModel)]="equipo.color"
+                autocomplete="off" type="text" pattern="^(?!\s*$).+">
+              <mat-error *ngIf="form.get('color').hasError('pattern')"> {{ constants.campoNoVacio }} </mat-error>
+              <mat-error *ngIf="form.get('color').hasError('maxlength')"> {{ constants.longitud_maxima }} 100
+                caracteres. </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput type="text" [numericInput]="true" placeholder="{{ constants.toneladas }}"
+                formControlName="toneladas" [(ngModel)]="equipo.toneladas" autocomplete="off"
+                pattern="^[+-]?[0-9]{1,12}(?:.[0-9]{1,2})?$">
+              <mat-error *ngIf="form.get('toneladas').hasError('pattern')"> {{ constants.longitud_maxima }} 12 dígitos y
+                2 decimales</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput type="text" [numericInput]="true" placeholder="{{ constants.cantidadPasajeros }}"
+                formControlName="cantidadPasajeros" [(ngModel)]="equipo.cantidadPasajeros" autocomplete="off">
+              <mat-error *ngIf="form.get('cantidadPasajeros').hasError('max')"> {{ constants.longitud_maxima }} 4
+                caracteres. </mat-error>
+              <mat-error *ngIf="form.get('cantidadPasajeros').hasError('pattern')"> Solo se permiten valores numericos
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+
+          <div fxFlex>
+            <div class="w-100">
+              <sigma-form-select [path]="constants.path_administracion_equipo_areaUmvId" formControlName="areaUmvId"
+                [(ngModel)]="equipo.area" placeholder="{{ constants.areaUmvId }}">
+              </sigma-form-select>
+            </div>
+          </div>
+
+          <div fxFlex>
+            <div class="w-100">
+              <sigma-form-select [path]="constants.path_administracion_equipo_lugarUmvId" formControlName="lugarUmvId"
+                [(ngModel)]="equipo.lugar" placeholder="{{ constants.lugarUmvId }}" [listBy]="'nombre'">
+              </sigma-form-select>
+            </div>
+          </div>
+
+          <div fxFlex>
+            <sigma-form-calendar formControlName="fechaDesde" [(ngModel)]="equipo.fechaDesde" [objeto]="equipo"
+              [maxTarget]="'fechaHasta'" [placeholder]="constants.fechaDesde"
+              [type]="constants.datepicker.types.calendar">
+            </sigma-form-calendar>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <sigma-form-calendar formControlName="fechaHasta" [(ngModel)]="equipo.fechaHasta" [objeto]="equipo"
+              [minTarget]="'fechaDesde'" [placeholder]="constants.fechaHasta"
+              [type]="constants.datepicker.types.calendar">
+            </sigma-form-calendar>
+          </div>
+
+          <div fxFlex>
+            <sigma-form-calendar formControlName="horaInicioProgramacion" [(ngModel)]="equipo.horaInicioProgramacion"
+              [placeholder]="constants.horaInicioProgramacion" [type]="constants.datepicker.types.timer">
+            </sigma-form-calendar>
+          </div>
+
+          <div fxFlex>
+            <sigma-form-calendar formControlName="horaFinProgramacion" [(ngModel)]="equipo.horaFinProgramacion"
+              [placeholder]="constants.horaFinProgramacion" [type]="constants.datepicker.types.timer">
+            </sigma-form-calendar>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <div class="w-100">
+              <mat-checkbox formControlName="activo" [(ngModel)]="equipo.activo" name="activo" id="activo" hidden>
+                {{ constants.activo }}
+              </mat-checkbox>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+      <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+        <button mat-button color="warn" class="m-1" (click)="onBack()">
+          <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+        </button>
+        <button mat-raised-button color="primary" class="m-1" [disabled]="disableSubmit" (click)="onSubmit()"
+          *sigmaIsGranted="constants.permiso_administracion_equipo_create">
+          <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</div>

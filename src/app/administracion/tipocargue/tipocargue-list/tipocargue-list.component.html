@@ -1,0 +1,107 @@
+<div>
+  <div>
+    <mat-card-header fxLayoutAlign="center">
+      <mat-card-subtitle><h2>Tipos de cargue</h2></mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxLayoutWrap fxLayoutGap="0.5%" fxLayoutAlign="center">
+      <div fxFlex="50%">
+        <form fxLayout="column" (ngSubmit)="search()">
+          
+          <div fxFlex="100">
+            <mat-form-field class="w-100" >
+              <input
+                matInput placeholder="{{ constants.nombre }}" id="nombre"
+                [(ngModel)]="criteria.nombre" name="nombre"
+                type="text"
+              />
+            </mat-form-field>
+          </div>
+        </form>
+      </div>
+      <div fxFlex="50%">
+        <button type="submit"  mat-raised-button color="primary"  class="m-1"(click)="search()" >
+          <mat-icon>search</mat-icon> {{ constants.buscar }}
+        </button>
+        <button (click)="clear()"  mat-raised-button color="warn" class="m-1">
+          <mat-icon>clear</mat-icon> {{ constants.limpiar }}
+        </button>
+        <button layout="row" mat-raised-button color="primary" class="m-1"  (click)="exportAsXLSX()"
+        *sigmaIsGranted="constants.permiso_administracion_tipocargue_export" [disabled]="dataSource.totalElements$.source['_value'] <= 0">
+          <mat-icon>get_app</mat-icon>
+          {{ constants.exportar }}
+          <mat-icon *ngIf="cargandoExcel"><mat-spinner color="accent" [diameter]="20"></mat-spinner></mat-icon>
+        </button>
+      </div>
+    </mat-card-content>
+  </div>
+</div>
+
+<div class="mat-elevation-z8">
+  <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center" >
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+  <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+    <mat-icon class="m-1">sms_failed</mat-icon>  <h4> {{dataSource.errorMessage$ | async}}</h4>
+  </div>
+
+  <mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort >
+    
+    <ng-container matColumnDef="activo">
+      <mat-header-cell *matHeaderCellDef mat-sort-header > {{ constants.activo }} </mat-header-cell>
+      <mat-cell *matCellDef="let tipocargue" [attr.data-label]="constants.activo">
+        <span class="dev-color-red" [hidden]="tipocargue.activo">{{ constants.no }}</span>
+        <span class="dev-color-green" [hidden]="!tipocargue.activo">{{ constants.si }}</span>      
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="descripcion">
+      <mat-header-cell *matHeaderCellDef mat-sort-header > {{ constants.descripcion }} </mat-header-cell>
+      <mat-cell *matCellDef="let tipocargue" [attr.data-label]="constants.descripcion">
+        {{tipocargue.descripcion}}
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header > {{ constants.id }} </mat-header-cell>
+      <mat-cell *matCellDef="let tipocargue" [attr.data-label]="constants.id">
+        {{tipocargue.id}}
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="nombre">
+      <mat-header-cell *matHeaderCellDef mat-sort-header > {{ constants.nombre }} </mat-header-cell>
+      <mat-cell *matCellDef="let tipocargue" [attr.data-label]="constants.nombre">
+        {{tipocargue.nombre}}
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="programaSql">
+      <mat-header-cell *matHeaderCellDef mat-sort-header > {{ constants.programaSql }} </mat-header-cell>
+      <mat-cell *matCellDef="let tipocargue" [attr.data-label]="constants.programaSql">
+        {{tipocargue.programaSql}}
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+      <mat-cell *matCellDef="let tipocargue" [attr.data-label]="constants.acciones">
+        <button mat-raised-button  color="primary" (click)="detail(tipocargue)" class="m-1"
+          *sigmaIsGranted="constants.permiso_administracion_tipocargue_view">
+          <mat-icon matTooltip="Detalles" matTooltipPosition="above">open_in_new</mat-icon>
+        </button>
+        <button mat-raised-button color="primary" (click)="edit(tipocargue)" class="m-1"
+          *sigmaIsGranted="constants.permiso_administracion_tipocargue_update">
+          <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+        </button>
+        <button mat-raised-button color="warn" (click)="delete(tipocargue)" class="m-1"
+          *sigmaIsGranted="constants.permiso_administracion_tipocargue_delete">
+          <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [length]= "dataSource.totalElements$ | async" [pageSize]="criteria.size" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+</div>

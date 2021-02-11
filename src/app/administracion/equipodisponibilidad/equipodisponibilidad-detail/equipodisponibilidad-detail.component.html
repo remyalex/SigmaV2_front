@@ -1,0 +1,169 @@
+<h2 mat-dialog-title>{{ constants.detalle }} Disponibilidad equipos</h2>
+
+<mat-dialog-content *sigmaIsGranted="constants.permiso_administracion_equipodisponibilidad_view">
+  <mat-list>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.claseEquipoId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipoDisponibilidad.equipo.claseEquipo?.valor }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.tipoEquipoId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipoDisponibilidad.equipo.equipoTipo?.valor }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.marcaEquipoId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipoDisponibilidad.equipo.marcaEquipo?.valor }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.lineaEquipo }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipoDisponibilidad.equipo.linea }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.placaEquipo }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipoDisponibilidad.equipo.placa }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.placaInventarioEquipo }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipoDisponibilidad.equipo.placaInventario }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item mb-10">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.picoYplacaEquipoId }}</b>:
+        </div>
+        <div fxFlex="60" class="p-tab">        
+          <span class="dev-color-red" [hidden]="equipoDisponibilidad.equipo.picoYPlaca == null || equipoDisponibilidad.equipo.picoYPlaca">{{ constants.no }}</span>
+          <span class="dev-color-green" [hidden]="!equipoDisponibilidad.equipo.picoYPlaca">{{ constants.si }}</span>
+        </div>
+      </div>  
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.tipoCombustibleEquipoId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipoDisponibilidad.equipo.tipoCombustible?.valor }}
+        </div>
+      </div>  
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.fechaDesde }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipoDisponibilidad.desde }}
+        </div>
+      </div>  
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.fechaHasta }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipoDisponibilidad.hasta }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.intervalo }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipoDisponibilidad.intervalo }}
+        </div>
+      </div>  
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.turnoId }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ equipoDisponibilidad.turno.valor }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="mb-10">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.activo }}</b>:
+        </div>
+        <div fxFlex="60" class="p-tab">
+          <span class="dev-color-red" [hidden]="equipoDisponibilidad.activo">{{ constants.no }}</span>
+          <span class="dev-color-green" [hidden]="!equipoDisponibilidad.activo">{{ constants.si }}</span>
+        </div>
+      </div>
+    </mat-list-item>
+  </mat-list>
+
+  <button type="button" [disabled]="!this.calendariocompletado" (click)="mostrar = !mostrar" mat-raised-button
+    color="primary" class="m-1">{{ mostrar ? 'Ocultar' : 'Disponibilidad' }}
+    <mat-icon *ngIf="this.cargandoDisponibilidad">
+      <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+    </mat-icon>
+  </button>
+
+  <sigma-schedule (viewDateChange)="getEventMonthChanged($event)" *ngIf="mostrar" [listaCalendario]="events" ></sigma-schedule>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions fxLayoutAlign="end">
+  <button mat-button class="m-1" color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon>
+    {{ constants.cerrar }}
+  </button>
+</mat-dialog-actions>

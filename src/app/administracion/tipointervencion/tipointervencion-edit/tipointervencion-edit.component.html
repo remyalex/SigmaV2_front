@@ -1,0 +1,77 @@
+<h2 mat-dialog-title>{{ constants.editar }} Tipo Intervención</h2>
+
+<mat-dialog-content [formGroup]="form" *sigmaIsGranted="constants.permiso_administracion_tipointervencion_update">
+  <input type="hidden" formControlName="id" [(ngModel)]="tipointervencion.id" value="tipointervencion.id">
+ 
+  <div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+      <h5>{{ constants.informacionCampoObligatorio }}</h5>
+  </div>
+
+  <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+    <div class="item" fxFlex="50%">
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+        <sigma-form-select
+          formControlName="referenciaIntervencionId" 
+          [path]="constants.path_administracion_tipointervencion_referenciaIntervencionId" 
+          placeholder="{{ constants.referenciaIntervencionId }}"
+          [listBy]="'descripcion'" [(ngModel)]="tipointervencion.referenciaIntervencion" >
+        </sigma-form-select>
+      </div>
+    </div>
+    <div class="item" fxFlex="50%">
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+        <sigma-form-select
+          formControlName="tipoSuperficieId" 
+          [path]="constants.path_administracion_tipointervencion_tipoSuperficieId" 
+          placeholder="{{ constants.tipoSuperficieId }}"
+          [listBy]="'descripcion'" [(ngModel)]="tipointervencion.tipoSuperficie" >
+        </sigma-form-select>
+      </div>
+    </div>   
+  </div>
+
+  <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+    <div class="item" fxFlex="50%">
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="{{ constants.descripcion }}" formControlName="descripcion"
+            [(ngModel)]="tipointervencion.descripcion" autocomplete="off" type="text" required pattern="^(?!\s*$).+">
+          <mat-error *ngIf="form.get('descripcion').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+          <mat-error *ngIf="form.get('descripcion').hasError('pattern')"> {{ constants.campoNoVacio }} </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="item" fxFlex="50%">
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="{{ constants.valor }}" formControlName="valor" [(ngModel)]="tipointervencion.valor"
+            autocomplete="off">
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+
+  <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+    <div class="item" fxFlex="50%">
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+        <mat-checkbox formControlName="activo" [(ngModel)]="tipointervencion.activo" name="activo" id="activo">
+          {{ constants.activo }}
+        </mat-checkbox>
+      </div>
+    </div>
+  </div>
+
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+    <button type="button" (click)="close()" mat-button color="warn" class="m-1">
+      <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+    </button>
+    <button type="button" class="m-1" mat-raised-button color="primary" (click)="onSubmit()" 
+      *sigmaIsGranted="constants.permiso_administracion_tipointervencion_update">
+      <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+    </button>
+  </mat-dialog-actions>
+  

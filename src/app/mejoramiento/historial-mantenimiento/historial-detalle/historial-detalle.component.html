@@ -1,0 +1,13 @@
+<h2 mat-dialog-title>{{ constants.mantenimiento }}</h2>
+
+<mat-dialog-content>
+  <sigma-ver-diagnostico [mantenimiento]="mantenimiento" [mostrarButtonsBackCancelar]="false"></sigma-ver-diagnostico>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon>{{ constants.cerrar }}
+  </button>
+</mat-dialog-actions>

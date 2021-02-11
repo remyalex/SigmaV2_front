@@ -1,0 +1,127 @@
+<div [hidden]="currentAction !== 'formulas'">
+  <div>
+    <div>
+      <mat-card-header fxLayoutAlign="center" class="mb-10">
+        <mat-card-subtitle>
+          <h2>{{ constants.consultarFormula}}</h2>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form>
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <div fxFlex>
+              <sigma-form-select [path]="constants.path_lista_tipo_mezcla" [(ngModel)]="criteria.tipoMezcla"
+                name="tipoMezcla" placeholder="{{constants.tipoMezcla}}" [listBy]="'descripcion'">
+              </sigma-form-select>
+            </div>
+
+            <div fxFlex>
+              <button type="submit" mat-raised-button color="primary" class="m-1" (click)="search()">
+                <mat-icon>search</mat-icon> {{ constants.buscar }}
+              </button>
+              <button (click)="clear()" mat-raised-button color="warn" class="m-1">
+                <mat-icon>clear</mat-icon> {{ constants.limpiar }}
+              </button>
+              <button [disabled]="dataSource.totalElements$.source['_value'] <= 0" layout="row" mat-raised-button
+                color="primary" class="m-1" (click)="exportAsXLSX()">
+                <mat-icon>get_app</mat-icon>
+                {{ constants.exportar }}
+                <mat-icon *ngIf="cargandoExcel">
+                  <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+                </mat-icon>
+              </button>
+            </div>
+          </div>
+        </form>
+      </mat-card-content>
+    </div>
+  </div>
+
+  <div class="mat-elevation-z8">
+    <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center">
+      <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+    </div>
+    <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+      <mat-icon class="m-1">sms_failed</mat-icon>
+      <h4> {{dataSource.errorMessage$ | async}}</h4>
+    </div>
+
+    <mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort>
+
+      <ng-container matColumnDef="tipoMezcla">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.tipoMezcla }}. </mat-header-cell>
+        <mat-cell *matCellDef="let formula" [attr.data-label]="constants.tipoMezcla">
+          {{ formula.tipoMezcla?.descripcion }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fechaInicial">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaInicial }}. </mat-header-cell>
+        <mat-cell *matCellDef="let formula" [attr.data-label]="constants.fechaInicial">
+          {{ formula.fechaInicial }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="fechaFinal">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaFinal }}. </mat-header-cell>
+        <mat-cell *matCellDef="let formula" [attr.data-label]="constants.fechaFinal">
+          {{ formula.fechaFinal }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="soporte">
+        <mat-header-cell *matHeaderCellDef> {{ constants.soporte }}. </mat-header-cell>
+        <mat-cell *matCellDef="let formula" [attr.data-label]="constants.soporte">
+          <sigma-show-file id="{{ formula.soporte?.id }}"></sigma-show-file>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="acciones">
+        <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+        <mat-cell *matCellDef="let formula" [attr.data-label]="constants.acciones">
+          <div fxLayout.lt-md="row" fxLayout.lt-xl="column">
+            <div fxFlex>
+              <button *sigmaIsGranted="constants.permiso_produccion_registrar_formulas_update" mat-raised-button
+                color="primary" (click)="registrarInsumo(formula)" class="m-1">
+                <mat-icon matTooltip="{{constants.registrarInsumo}}" matTooltipPosition="above">assignment</mat-icon>
+              </button>
+              <button *sigmaIsGranted="constants.permiso_produccion_registrar_formulas_update" mat-raised-button
+                color="primary" (click)="detalleMateriaPrima(formula)" class="m-1">
+                <mat-icon matTooltip="{{constants.consultar}}" matTooltipPosition="above">search</mat-icon>
+              </button>
+              <button *sigmaIsGranted="constants.permiso_produccion_registrar_formulas_view" mat-raised-button
+                color="primary" (click)="detail(formula)" class="m-1">
+                <mat-icon matTooltip="Detalles" matTooltipPosition="above">open_in_new</mat-icon>
+              </button>
+            </div>
+            <div fxFlex fxLayoutAlign="start">
+              <button *sigmaIsGranted="constants.permiso_produccion_registrar_formulas_update" mat-raised-button
+                color="primary" (click)="edit(formula)" class="m-1">
+                <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+              </button>
+              <button *sigmaIsGranted="constants.permiso_produccion_registrar_formulas_delete" mat-raised-button
+                color="warn" (click)="delete(formula)" class="m-1">
+                <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+              </button>
+            </div>
+          </div>
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+    </mat-table>
+    <mat-paginator #paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size"
+      [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+  </div>
+</div>
+
+<div *ngIf="currentAction === 'insumos-edit'">
+  <app-produccion-registro-insumo-formula-mezcla-edit [formula]="formula" (atras)="ejecutar()">
+  </app-produccion-registro-insumo-formula-mezcla-edit>
+</div>
+
+<div *ngIf="currentAction === 'insumos-detail'">
+  <app-produccion-registro-insumo-formula-mezcla-detail [formula]="formula" (atras)="ejecutar()">
+  </app-produccion-registro-insumo-formula-mezcla-detail>
+</div>

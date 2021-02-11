@@ -1,0 +1,62 @@
+<h2 mat-dialog-title>{{ constants.editar }} Evento</h2>
+
+<div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+  <h5>{{ constants.informacionCampoObligatorio }}</h5>
+</div>
+
+<mat-dialog-content [formGroup]="form" *sigmaIsGranted="constants.permiso_administracion_evento_update">
+  <input type="hidden" formControlName="id" [(ngModel)]="evento.id">
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+        <sigma-form-input [placeholder]="constants.nombre" formControlName="nombre" 
+        [(ngModel)]="evento.nombre" ></sigma-form-input>
+      </div>
+    </div>
+    <div fxFlex>
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+        <sigma-form-input [placeholder]="constants.descripcion" formControlName="descripcion" 
+              [(ngModel)]="evento.descripcion" ></sigma-form-input>
+      </div>
+    </div>
+    <div fxFlex="20">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <mat-checkbox formControlName="activo" [(ngModel)]="evento.activo" name="activo" id="activo">
+            {{ constants.activo }}
+          </mat-checkbox>
+        </div>
+      </div>
+  </div>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+  <mat-tab-group>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          Usuarios
+        </ng-template>
+        <sigma-administracion-eventousuario-admin [evento]="evento"></sigma-administracion-eventousuario-admin>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          Roles
+        </ng-template>
+        <sigma-administracion-eventorol-admin [eventoId] = "evento.id"></sigma-administracion-eventorol-admin>
+      </mat-tab>
+  </mat-tab-group>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions fxLayoutAlign="end">
+  <button mat-button class="m-1" color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon>
+    {{ constants.cancelar }}
+  </button>
+  <button mat-raised-button class="m-1" color="primary" [disabled]="disableSubmit" (click)="onSubmit()"
+    *sigmaIsGranted="constants.permiso_administracion_evento_update">
+    <mat-icon class="m-1">save</mat-icon>
+    {{ constants.guardar }}
+  </button>
+</mat-dialog-actions>

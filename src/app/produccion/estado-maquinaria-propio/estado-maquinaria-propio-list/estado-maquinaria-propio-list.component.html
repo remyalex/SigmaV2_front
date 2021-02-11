@@ -1,0 +1,99 @@
+<div>
+  <div>
+      <mat-card-header fxLayoutAlign="center" class="mb-10">
+          <mat-card-subtitle>
+              <h2>{{ constants.disponibilidad_myeq }}</h2>
+          </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+          <form (ngSubmit)="search()">
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="0.8%" fxLayoutGap.lt-md="0" fxLayoutAlign="start">
+                  <div fxFlex="100">
+                      <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fechaHasta" [type]="'calendar'" [placeholder]="'Fecha'" [minTarget]="'fechaDesde'" [ngModelOptions]="{standalone: true}">
+                      </sigma-form-calendar>
+                  </div>
+                  <div fxFlex="100">
+                      <sigma-form-select [path]="constants.path_administracion_equipo_tipoEquipoId" [(ngModel)]="criteria.estadoEquipoId" name="estadoEquipoId" placeholder="{{ constants.estado }}">
+                      </sigma-form-select>
+                  </div>
+              </div>
+
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="0.8%" fxLayoutGap.lt-md="0" fxLayoutAlign="start">
+                  <div fxFlex="50%">
+                      <button type="submit" mat-raised-button color="primary" class="m-1" (click)="search()">
+                          <mat-icon>search</mat-icon> {{ constants.buscar }}
+                      </button>
+                      <button (click)="clear()" mat-raised-button color="warn" class="m-1">
+                          <mat-icon>clear</mat-icon> {{ constants.limpiar }}
+                      </button>
+                      <button layout="row" *sigmaIsGranted="constants.permiso_produccion_estado_maquinaria_propio_export" mat-raised-button color="primary" class="m-1" (click)="exportAsXLSX()" [disabled]="dataSource.totalElements$.source['_value'] <= 0">
+                          <mat-icon>get_app</mat-icon>
+                          {{ constants.exportar }}
+                          <mat-icon *ngIf="cargandoExcel">
+                              <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+                          </mat-icon>
+                      </button>
+
+                  </div>
+              </div>
+          </form>
+      </mat-card-content>
+  </div>
+</div>
+
+<div class="mat-elevation-z8">
+  <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center">
+      <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+
+  <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+      <mat-icon class="m-1">sms_failed</mat-icon>
+      <h4> {{dataSource.errorMessage$ | async}}</h4>
+  </div>
+
+  <mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort>
+
+      <ng-container matColumnDef="numeroInterno">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.numeroInterno }} </mat-header-cell>
+          <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.numeroInterno">
+              {{equipo.numeroInterno}}
+          </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="placa">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.placa }} </mat-header-cell>
+          <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.placa">
+              {{equipo.placa}}
+          </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="claseEquipoId">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.claseEquipoId }}
+          </mat-header-cell>
+          <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.claseEquipoId">
+              {{ equipo.claseEquipo?.valor }}
+          </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="equipoTipoId">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.equipoTipoId }}
+          </mat-header-cell>
+          <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.equipoTipoId">
+              {{ equipo.equipoTipo?.valor }}
+          </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="origenEquipoId">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.propio }} </mat-header-cell>
+          <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.propio">
+              <span class="dev-color-red" [hidden]="equipo.origenEquipo.valor === 'PROPIO'">{{ constants.no }}</span>
+              <span class="dev-color-green" [hidden]="equipo.origenEquipo.valor !== 'PROPIO'">{{ constants.si }}</span>
+          </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+</div>

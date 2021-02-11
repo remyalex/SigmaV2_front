@@ -1,0 +1,124 @@
+<mat-card-content class="p-16 m-0" [formGroup]="formularioMantenimiento">
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <sigma-form-input formControlName="pk" [ngModel]="mantenimiento.pk" [placeholder]="constants.pkIdCalzadas">
+      </sigma-form-input>
+    </div>
+    <div fxFlex>
+      <sigma-form-input formControlName="civ" [ngModel]="mantenimiento.civ" [placeholder]="constants.civ">
+      </sigma-form-input>
+    </div>
+    <div fxFlex>
+      <sigma-form-input formControlName="idMantenimiento" [ngModel]="mantenimiento.id"
+        [placeholder]="constants.idMantenimiento">
+      </sigma-form-input>
+    </div>
+    <div fxFlex>
+      <sigma-form-input formControlName="localidad" [ngModel]="mantenimiento.localidad ? mantenimiento.localidad.valor : ''"
+        [placeholder]="constants.localidad">
+      </sigma-form-input>
+    </div> 
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <sigma-form-input formControlName="estadoPk" 
+        [ngModel]="mantenimiento.estadoPk ? mantenimiento.estadoPk.descripcion : ''"
+        [placeholder]="constants.estadoPk">
+      </sigma-form-input>
+    </div>
+    <div fxFlex>
+      <sigma-form-input formControlName="barrio" [ngModel]="mantenimiento.barrio ? mantenimiento.barrio.nombre : ''"
+        [placeholder]="constants.barrio">
+      </sigma-form-input>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">  
+    <div fxFlex>
+      <sigma-form-input formControlName="zona" [ngModel]="mantenimiento.zona ? mantenimiento.zona.valor : ''" [placeholder]="constants.zona">
+      </sigma-form-input>
+    </div>
+    <div fxFlex>
+      <sigma-form-input formControlName="ejeVial" [ngModel]="mantenimiento.ejeVial" [placeholder]="constants.ejeVial">
+      </sigma-form-input>
+    </div>
+    <div fxFlex>
+      <sigma-form-input formControlName="desde" [ngModel]="mantenimiento.desde" [placeholder]="constants.desde">
+      </sigma-form-input>
+    </div>
+    <div fxFlex>
+      <sigma-form-input formControlName="hasta" [ngModel]="mantenimiento.hasta" [placeholder]="constants.hasta">
+      </sigma-form-input>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <sigma-form-input formControlName="descripcionOrigen" [ngModel]="mantenimiento.origen ? mantenimiento.origen.valor: ''"
+        [placeholder]="constants.descripcionOrigen">
+      </sigma-form-input>
+    </div>
+    <div fxFlex>
+      <sigma-form-input formControlName="fechaVisita" [ngModel]="fechaVisitaTec"
+        [placeholder]="constants.fechaVisita">
+      </sigma-form-input>
+    </div>
+    <div fxFlex>
+      <sigma-form-input formControlName="responsable" 
+        [ngModel]="usuarioAsignado"
+        [placeholder]="constants.responsable">
+      </sigma-form-input>
+    </div>
+    <div fxFlex>
+      <sigma-form-input formControlName="actividadActual" [ngModel]="mantenimiento.actividadActual ? mantenimiento.actividadActual.descripcion : ''"
+        [placeholder]="constants.actividadActual">
+      </sigma-form-input>
+    </div>
+  </div>
+  
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <sigma-form-input formControlName="programa" [ngModel]="mantenimiento.programa ? mantenimiento.programa.valor : ''"
+        [placeholder]="constants.programa">
+      </sigma-form-input>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <sigma-form-input formControlName="estrategia" [ngModel]="mantenimiento.estrategia ? mantenimiento.estrategia.valor : ''"
+        [placeholder]="constants.estrategia">
+      </sigma-form-input>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <sigma-form-input formControlName="administracion" [ngModel]="mantenimiento.tipoAdministracion ? mantenimiento.tipoAdministracion.valor : ''"
+        [placeholder]="constants.administracion">
+      </sigma-form-input>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+    <div fxFlex='100'>
+      <mat-form-field fxFlex='100'>
+        <textarea matInput formControlName="diagnosticoObservaciones" rows="1" [placeholder]="constants.diagnosticoObservaciones"
+          [ngModel]="mantenimiento.diagnostico ? mantenimiento.diagnostico.observacion : ''">
+          </textarea>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+    <div fxFlex='100'>
+      <mat-form-field fxFlex='100'>
+        <textarea matInput formControlName="observacionesPriorizacion" rows="1"
+          [placeholder]="constants.observacionesPriorizacion" [ngModel]="mantenimiento.diagnostico ?mantenimiento.diagnostico.priorizacion ? mantenimiento.diagnostico.priorizacion.observaciones : '' : ''">
+        </textarea>
+      </mat-form-field>
+    </div>
+  </div>
+</mat-card-content>

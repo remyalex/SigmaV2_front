@@ -1,0 +1,10 @@
+<mat-toolbar color="primary" [fxLayoutAlign]="(settings.menuType != 'mini') ? 'space-between center' : 'center center'" class="sidenav-header">
+    <a routerLink="/administracion/dashboard/home">
+        <img alt="Logo SIGMA" class="logo-header" src="../../../assets/img/app/logo_header.png">
+    </a>
+</mat-toolbar>
+
+<perfect-scrollbar #sidenavPS class="sidenav-menu-outer" [class.user-block-show]="settings.sidenavUserBlock">   
+    <span *ngIf="!menuItems">loading....</span>
+    <app-vertical-menu [menuItems]="menuItems" [menuParentId]="0" (onClickMenuItem)="updatePS($event)"></app-vertical-menu> 
+</perfect-scrollbar>

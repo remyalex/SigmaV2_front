@@ -1,0 +1,74 @@
+<h2 mat-dialog-title>{{ constants.editar }} Registro formulas mezcla laboratorio</h2>
+
+<div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+  <h5>{{ constants.informacionCampoObligatorio }}</h5>
+</div>
+
+<mat-dialog-content [formGroup]="form">
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <div fxLayout.xs="column" fxLayout.sm="column">
+        <sigma-form-select [path]="constants.path_lista_tipo_mezcla"
+          placeholder="{{ constants.tipoMezcla }}" required="true" formControlName="tipoMezcla"
+          [(ngModel)]="formula.tipoMezcla">
+        </sigma-form-select>
+      </div>
+    </div>
+
+    <div fxFlex>
+      <div fxLayout.xs="column" fxLayout.sm="column">
+        <sigma-form-select [path]="constants.path_lista_especificacion"
+          placeholder="{{ constants.especificacion }}" required="true" formControlName="especificacion"
+          [(ngModel)]="formula.especificacion">
+        </sigma-form-select>
+      </div>
+    </div>
+    
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+    <div fxFlex>
+      <div class="w-100">
+        <sigma-form-input [placeholder]="constants.masaUnitaria" formControlName="masaUnitaria"
+          [(ngModel)]="formula.masaUnitaria" [readonly]="true" >
+          </sigma-form-input>
+      </div>
+    </div>
+
+    <div fxFlex="70">
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayout.lt-xs="column" fxLayoutGap="10px">
+        <div fxFlex>
+          <sigma-form-calendar [objeto]="formula" [(ngModel)]="formula.fechaInicial" [type]="'calendar'"
+            [placeholder]="constants.fechaInicial" [maxTarget]="'fechaFinal'" formControlName="fechaInicial" >
+          </sigma-form-calendar>
+        </div>
+
+        <div fxFlex>
+          <sigma-form-calendar [objeto]="formula" [(ngModel)]="formula.fechaFinal" [type]="'calendar'"
+            [placeholder]="constants.fechaFinal" [minTarget]="'fechaInicial'" formControlName="fechaFinal" >
+          </sigma-form-calendar>
+        </div>
+      </div>  
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" class="mt-10">
+    <div fxFlex="50">
+      <sigma-form-upload-file formControlName="soporte" placeholder="Cargar Soporte" [sizeFile]="20"
+        [(ngModel)]="formula.soporte" [accept]="'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'">
+      </sigma-form-upload-file>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button type="button" (click)="close()" mat-button color="warn" class="m-1">
+    <mat-icon class="m-1">close</mat-icon> Cancelar
+  </button>
+  <button type="button" class="m-1" mat-raised-button color="primary" (click)="onSubmit()"
+    [disabled]="!form.valid">
+    <mat-icon class="m-1">save</mat-icon> Guardar
+  </button>
+</mat-dialog-actions>

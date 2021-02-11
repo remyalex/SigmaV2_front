@@ -1,0 +1,68 @@
+<div fxLayout="column" *sigmaIsGranted="constants.permiso_produccion_ensayos_create">
+  <div class="flex-p">
+    <mat-card class="p-0 mat-card">
+      <mat-card-header fxLayoutAlign="center">
+        <mat-card-subtitle>
+          <h2>Crear Solicitud de ensayos</h2>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+        <h5>{{ constants.informacionCampoObligatorio }}</h5>
+      </div>
+
+      <mat-card-content class="p-16 m-0" [formGroup]="form">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="Fecha solicitud" formControlName="fecha" [ngModel]="ensayo.fecha" readonly>
+            </mat-form-field>
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="Usuario que solicita" formControlName="solicitante" [ngModel]="ensayoUsuario"
+                readonly>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <sigma-form-select formControlName="tipoEnsayo" [(ngModel)]="ensayo.tipoEnsayo"
+              [path]="constants.path_produccion_persona_tipoEnsayo" [placeholder]="'Tipo ensayo'"
+              [listBy]="'descripcion'">
+            </sigma-form-select>
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput type="text" placeholder="Observaciones" formControlName="observaciones" 
+              [(ngModel)]="ensayo.observaciones">
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex="50" *ngIf="!generico">
+            <mat-form-field class="w-100">
+              <input matInput placeholder="PK" formControlName="pk" [ngModel]="ensayo.mantenimiento.pk" readonly>
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+      <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+        <button id="buttonBackEnsayo" type="button" (click)="onBack()" mat-button color="warn" class="m-1">
+          <mat-icon class="m-1">close</mat-icon> Cancelar
+        </button>
+        <button type="button" class="m-1" mat-raised-button color="primary" (click)="onSubmit()"
+          [disabled]="disabledBtn_Login">
+          <mat-icon class="m-1">save</mat-icon> Guardar
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</div>

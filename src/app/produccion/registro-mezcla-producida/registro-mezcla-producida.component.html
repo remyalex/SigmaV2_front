@@ -1,0 +1,77 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div *ngIf="currentAction == 'list'">
+
+</div>
+
+<!--- Seccion Listar Programaciones de un PK  -->
+<div *ngIf="currentAction == 'buscar'">
+
+    <div fxLayout="row" fxLayout.lt-md="column">
+        <div fxLayoutAlign="start" fxFlex>
+            <button mat-stroked-button color="primary" class="m-1 mb-10" (click)="onBack()">
+                <mat-icon>arrow_back_ios</mat-icon>
+                Ir atrás
+            </button>
+        </div>
+    </div>
+
+    <sg-object-form #solicitudesCriteriaForm [def]="solicitudesCriteriaFormDef"
+        visibleFields="fechaProgramacionDesde,fechaProgramacionHasta,jornada,tipoMaterial" [showSave]="true"
+        [showCancel]="false" saveButtonLabel="Buscar" (onSave)="onBuscar()">
+    </sg-object-form>
+
+    <sg-array-table #solicitudesTable [def]="solicitudesTableDef" [model]="solicitudes"
+        visibleColumns="id,fechaSolicitud,jornada,tipoMaterial,cantidad" [showNew]="false" [showDelete]="false"
+        (onEdit)="onEditSolicitud($event)">
+    </sg-array-table>
+
+</div>
+
+<div *ngIf="currentAction == 'detalle'">
+
+    <div fxLayout="row" fxLayout.lt-md="column">
+        <div fxLayoutAlign="start" fxFlex>
+            <button mat-stroked-button color="primary" class="m-1 mb-10" (click)="onBackBuscar()">
+                <mat-icon>arrow_back_ios</mat-icon>
+                Ir atrás
+            </button>
+        </div>
+    </div>
+
+    <mat-card>
+        <mat-card-content>
+            <h2>Información de la solicitud consultada</h2>
+            <div>
+                <sg-object-form #solicitudDetalleForm [def]="solicitudDetalleFormDef" visibleFields="id,jornada"
+                    [showSave]="false" [showCancel]="false" disabledFields="id,jornada">
+                </sg-object-form>
+            </div>
+            <div>
+                <sg-array-table #solicitudDetalleTable [def]="solicitudDetalleTableDef" [model]="solicitud.materiales"
+                    visibleColumns="tipoMaterial,unidad,cantidad,cantidadDespachada,barrio,placa,localidad,pk,civ,eje,ejeDesde,ejeHasta,personaContacto,horaRetiro,fechaRetiro,inspector"
+                    [showNew]="false" [showDelete]="false" (onEdit)="onEditDetalle($event)">
+                </sg-array-table>
+            </div>
+            <div>
+                <button mat-stroked-button color="primary" class="m-1 mb-10" (click)="onRegistrarDespacho()">
+                    Registrar despacho
+                </button>
+                <button mat-stroked-button color="primary" class="m-1 mb-10" (click)="onEnviar()">
+                    Enviar
+                </button>
+                <button mat-stroked-button color="primary" class="m-1 mb-10" (click)="onCancelar()">
+                    Cancelar
+                </button>
+                <button mat-stroked-button color="primary" class="m-1 mb-10" (click)="onExportar()">
+                    Exportar
+                </button>
+                <button mat-stroked-button color="primary" class="m-1 mb-10" (click)="currentAction='buscar'">
+                    Ir atrás
+                </button>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

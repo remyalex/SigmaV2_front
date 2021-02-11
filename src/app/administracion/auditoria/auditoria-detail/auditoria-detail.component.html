@@ -1,0 +1,94 @@
+<h2 mat-dialog-title>Valores de Registro</h2>
+
+<mat-dialog-content *sigmaIsGranted="constants.permiso_administracion_auditoria_view">
+  <mat-list class="mb-10">
+      <mat-list-item class="detail-item" *ngFor="let item of objeto | keyvalue ">
+        <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+          <div fxFlex="40">
+            <b>{{ item.key }}</b>:
+          </div>
+
+          <div fxFlex="60" *ngIf="item.key !== 'mantenimiento' && item.key !== 'transicion'" >
+            {{ item.value === true ? "Si": item.value === false ? "No": item.value != "[object Object]" ? item.value : item.value.descripcion }}
+          </div>
+
+            
+          <div fxFlex="60" *ngIf="item.key === 'mantenimiento'" >
+            Id: {{item.value.id + '   '}}  PK = {{ item.value.pk }}  
+          </div>
+
+          <div fxFlex="60" *ngIf="item.key === 'transicion'" >
+            {{item.descripcion}}
+          </div>
+
+        </div>  
+      </mat-list-item>
+      
+  </mat-list>
+
+  <h2 mat-dialog-title>Datos de Auditoría</h2>
+  <mat-list>
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.accion }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ auditoria.accion }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.fecha }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ auditoria.fecha }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.id }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ auditoria.id }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.tabla }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ auditoria.tabla }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+    <mat-list-item class="mb-10">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.usuario }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ auditoria.usuario.apellidos }} {{ auditoria.usuario.nombres }}
+        </div>
+      </div>
+    </mat-list-item>
+    
+  </mat-list>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cerrar }}</button>
+</mat-dialog-actions>

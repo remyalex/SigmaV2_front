@@ -1,0 +1,140 @@
+<div>
+  <div>
+    <mat-card-header fxLayoutAlign="center">
+      <mat-card-subtitle><h2>Orfeo</h2></mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form (ngSubmit)="search()">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">  
+          <div fxFlex>
+
+            <sigma-form-calendar [objeto]="criteria" [(ngModel)]="criteria.fecha" [type]="'calendar'"
+              [placeholder]="constants.fechaRadicado + ' Desde'" 
+              [formatToModel]="constants.formatoDDMMYYYY" [ngModelOptions]="{standalone: true}">
+            </sigma-form-calendar>
+
+          </div>
+
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input
+                matInput placeholder="{{ constants.numeroRadicado }}" id="numeroRadicado"
+                [(ngModel)]="criteria.numeroRadicado" name="numeroRadicado"
+                type="text"
+              />
+            </mat-form-field>
+          </div>
+
+          
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">  
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input
+                matInput placeholder="{{ constants.identificacionSolicitante }}" id="solicitante"
+                [(ngModel)]="criteria.identificacionSolicitante" name="solicitante"
+                type="text"
+              />
+            </mat-form-field>
+          </div>
+
+
+          <div fxFlex>
+              <button type="submit"  mat-raised-button color="primary"  class="m-1"(click)="search()">
+                <mat-icon>search</mat-icon> {{ constants.buscar }}
+              </button>
+              <button (click)="clear()"  mat-raised-button color="warn" class="m-1">
+                <mat-icon>clear</mat-icon> {{ constants.limpiar }}
+              </button>
+              <button layout="row" mat-raised-button color="primary" class="m-1"  (click)="exportAsXLSX()"
+              *sigmaIsGranted="constants.permiso_administracion_orfeo_export" >
+                <mat-icon>get_app</mat-icon>
+                {{ constants.exportar }}
+                <mat-icon *ngIf="cargandoExcel"><mat-spinner color="accent" [diameter]="20"></mat-spinner></mat-icon>
+              </button>
+          </div>
+        </div>  
+      </form>  
+    </mat-card-content>
+  </div>
+</div>
+
+<div class="mat-elevation-z8">
+  <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center" >
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+  <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+    <mat-icon class="m-1">sms_failed</mat-icon>  <h4> {{dataSource.errorMessage$ | async}}</h4>
+  </div>
+
+  <mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort >
+
+    <ng-container matColumnDef="numeroRadicado" >
+      <mat-header-cell *matHeaderCellDef mat-sort-header >{{constants.numeroRadicado}}</mat-header-cell>
+      <mat-cell *matCellDef="let orfeo" [attr.data-label]="constants.numeroRadicado">
+        {{orfeo.numeroRadicado}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="fechaRadicado" >
+      <mat-header-cell *matHeaderCellDef mat-sort-header >{{ constants.fechaRadicado }}</mat-header-cell>
+      <mat-cell *matCellDef="let orfeo" [attr.data-label]="constants.fechaRadicado"> 
+        {{orfeo.fechaRadicado  }}</mat-cell>
+    </ng-container>
+
+
+
+    <ng-container matColumnDef="identificacionUsuario" >
+      <mat-header-cell *matHeaderCellDef  >{{constants.identificacionUsuario}}</mat-header-cell>
+      <mat-cell *matCellDef="let orfeo" [attr.data-label]="constants.identificacionUsuario">
+        {{orfeo.numeroIdentificacion  }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="nombresUsuario" >
+      <mat-header-cell *matHeaderCellDef  >{{constants.nombresUsuario}}</mat-header-cell>
+      <mat-cell *matCellDef="let orfeo" [attr.data-label]="constants.nombresUsuario">
+        {{orfeo.nombre  }} {{orfeo.primerApellido  }} {{orfeo.segundoApellido  }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="identificacionSolicitante" >
+      <mat-header-cell *matHeaderCellDef  >{{constants.asunto}}</mat-header-cell>
+      <mat-cell *matCellDef="let orfeo" [attr.data-label]="constants.asunto">
+        {{orfeo.asunto  }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="fechaVencimiento" >
+      <mat-header-cell *matHeaderCellDef mat-sort-header >{{constants.fechaVencimiento}}</mat-header-cell>
+      <mat-cell *matCellDef="let orfeo" [attr.data-label]="constants.fechaVencimiento">
+        {{ orfeo.fechaVencimiento }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="nombresFirmante" >
+      <mat-header-cell *matHeaderCellDef >{{constants.nombresFirmante}}</mat-header-cell>
+      <mat-cell *matCellDef="let orfeo" [attr.data-label]="constants.nombresFirmante">
+        {{ orfeo.nombreFirmarte }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="direccionFirmante" >
+      <mat-header-cell *matHeaderCellDef mat-sort-header >{{constants.direccionFirmante}}</mat-header-cell>
+      <mat-cell *matCellDef="let orfeo" [attr.data-label]="constants.direccionFirmante">
+        {{ orfeo.direccion }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="telefonoFirmante" >
+      <mat-header-cell *matHeaderCellDef mat-sort-header >{{constants.telefonoFirmante}}</mat-header-cell>
+      <mat-cell *matCellDef="let orfeo" [attr.data-label]="constants.telefonoFirmante">
+        {{ orfeo.telefono }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="emailFirmante" >
+      <mat-header-cell *matHeaderCellDef mat-sort-header >{{constants.emailFirmante}}</mat-header-cell>
+      <mat-cell *matCellDef="let orfeo" [attr.data-label]="constants.emailFirmante">
+        {{ orfeo.email }} </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size" [pageSizeOptions]="[5, 10, 20]"  showFirstLastButtons ></mat-paginator>
+</div>

@@ -1,0 +1,52 @@
+<h2 mat-dialog-title>Crear Control de Calidad</h2>
+
+<mat-dialog-content [formGroup]="form">
+  <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <sigma-form-select [path]="constants.path_lista_items_tipo_material" [(ngModel)]="CuadrillaCalidadModel.tipoMaterial"
+        formControlName="tipoMaterial" placeholder="{{ constants.tipoMaterial }}" [listBy]="'descripcion'">
+      </sigma-form-select>
+    </div>
+
+    <div fxFlex>
+      <sigma-form-select [path]="constants.path_lista_items_ensayo" [(ngModel)]="CuadrillaCalidadModel.tipoEnsayo"
+        formControlName="tipoEnsayo" placeholder="{{ constants.tipoEnsayo }}" [listBy]="'descripcion'">
+      </sigma-form-select>
+    </div>
+
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput formControlName="numeroMuestras" (keyup)="patternString('numeroMuestras', $event)"
+          (ngModelChange)="numeroMuestrasValidate($event)" [(ngModel)]="CuadrillaCalidadModel.numeroMuestras"
+          placeholder="{{constants.numeroMuestras}}" [numericInput]="true" />
+        <mat-hint *ngIf="numeroMuestrasValid" align="start"> <strong style="color:red;font-weight:normal">{{ constants.longitud_maxima }} 1 </strong></mat-hint>
+        <mat-error *ngIf="form.get('numeroMuestras').hasError('max')">
+          {{ constants.longitud_maxima }} 1 </mat-error>
+        <mat-error *ngIf="form.get('numeroMuestras').hasError('pattern')">
+          Solo se permiten valores númericos. </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <textarea matInput [(ngModel)]="CuadrillaCalidadModel.resultado" placeholder="{{ constants.resultado }}" rows="1" formControlName="resultado"></textarea>
+        <mat-error *ngIf="form.get('resultado').hasError('maxlength')"> {{ constants.longitud_maxima }}
+          100
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button type="button" (click)="onBack()" mat-button color="warn" class="m-1">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+  </button>
+  <button type="button" [disabled]="disabledSave || enviando" class="m-1" mat-raised-button color="primary" (click)="onSubmit()">
+    <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+  </button>
+</mat-dialog-actions>

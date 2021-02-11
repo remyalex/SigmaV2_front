@@ -1,0 +1,132 @@
+<div>
+  <div>
+    <mat-card-header fxLayoutAlign="center">
+      <mat-card-subtitle><h2>{{ constants.titulo }}</h2></mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div fxFlex="100">
+        <form (ngSubmit)="search()" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="0.5%" fxLayoutGap.lt-md="0"fxLayoutAlign="center">
+          <div fxFlex="35" fxFlex.lt-md="100">
+            <mat-form-field class="w-100" >
+              <input
+                matInput placeholder="{{ constants.nombre }}" id="nombre"
+                [(ngModel)]="criteria.nombre" name="nombre"
+                type="text"
+              />
+            </mat-form-field>
+          </div>
+
+          <div fxFlex="35" fxFlex.lt-md="100">
+            <mat-form-field class="w-100" >
+              <input
+                matInput placeholder="{{ constants.descripcion }}" id="descripcion"
+                [(ngModel)]="criteria.descripcion" name="descripcion"
+                type="text"
+              />
+            </mat-form-field>
+          </div>
+
+          <div fxFlex="30" fxFlex.lt-md="100">
+              <button type="submit" mat-raised-button color="primary"  class="m-1"(click)="search()" >
+                <mat-icon>search</mat-icon> {{ constants.buscar }}
+              </button>
+              <button (click)="clear()"  mat-raised-button color="warn" class="m-1">
+                <mat-icon>clear</mat-icon> {{ constants.limpiar }}
+              </button>
+              <!-- <button [disabled]="dataSource.totalElements$.source['_value'] <= 0" 
+              layout="row" mat-raised-button color="primary" class="m-1" (click)="exportAsXLSX()"
+              *sigmaIsGranted="constants.permiso_administracion_formatoseccioncampo_export">
+                <mat-icon>get_app</mat-icon>
+                {{ constants.exportar }}
+                <mat-icon *ngIf="cargandoExcel"><mat-spinner color="accent" [diameter]="20"></mat-spinner></mat-icon>
+              </button> -->
+            </div>
+        </form>
+      </div>
+    </mat-card-content>
+  </div>
+</div>
+
+<div class="mat-elevation-z8">
+  <div *ngIf="loader" fxLayout="column" fxLayoutAlign="center center" >
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+  <div *ngIf="noInfoToShow" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+    <mat-icon class="m-1">sms_failed</mat-icon>  <h4> {{ constants.noResultados}}</h4>
+  </div>
+
+  <mat-table #table [dataSource]="dataSource" [hidden]="!noInfoToShow || !loader" matSort >
+    
+    <ng-container matColumnDef="activo">
+      <mat-header-cell *matHeaderCellDef mat-sort-header > {{ constants.activo }} </mat-header-cell>
+      <mat-cell *matCellDef="let formatoseccioncampo" [attr.data-label]="constants.activo">
+        <span class="dev-color-red" [hidden]="formatoseccioncampo.activo">{{ constants.no }}</span>
+        <span class="dev-color-green" [hidden]="!formatoseccioncampo.activo">{{ constants.si }}</span>
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="descripcion">
+      <mat-header-cell *matHeaderCellDef mat-sort-header > {{ constants.descripcion }} </mat-header-cell>
+      <mat-cell *matCellDef="let formatoseccioncampo" [attr.data-label]="constants.descripcion">
+        {{formatoseccioncampo.descripcion}}
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="formatoSeccionId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.formatoSeccionId }} </mat-header-cell>
+      <mat-cell *matCellDef="let formatoseccioncampo" [attr.data-label]="constants.formatoSeccionId">
+        {{ seccionSelected }}
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="listaId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.listaId }} </mat-header-cell>
+      <mat-cell *matCellDef="let formatoseccioncampo" [attr.data-label]="constants.listaId">
+        {{ formatoseccioncampo.lista?.nombre }}
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="nombre">
+      <mat-header-cell *matHeaderCellDef mat-sort-header > {{ constants.nombre }} </mat-header-cell>
+      <mat-cell *matCellDef="let formatoseccioncampo" [attr.data-label]="constants.nombre">
+        {{formatoseccioncampo.nombre}}
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="orden">
+      <mat-header-cell *matHeaderCellDef mat-sort-header > {{ constants.orden }} </mat-header-cell>
+      <mat-cell *matCellDef="let formatoseccioncampo" [attr.data-label]="constants.orden">
+        {{formatoseccioncampo.orden}}
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="tipoCampoFormatoId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.tipoCampoFormatoId }} </mat-header-cell>
+      <mat-cell *matCellDef="let formatoseccioncampo" [attr.data-label]="constants.tipoCampoFormatoId">
+        {{ formatoseccioncampo.tipoCampoFormato.valor }}
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+      <mat-cell *matCellDef="let formatoseccioncampo" [attr.data-label]="constants.acciones">
+        <button mat-raised-button  color="primary" (click)="detail(formatoseccioncampo)" class="m-1"
+          *sigmaIsGranted="constants.permiso_administracion_formatoseccioncampo_view">
+          <mat-icon matTooltip="Detalles" matTooltipPosition="above">open_in_new</mat-icon>
+        </button>
+        <button mat-raised-button color="primary" (click)="edit(formatoseccioncampo)" class="m-1"
+          *sigmaIsGranted="constants.permiso_administracion_formatoseccioncampo_update">
+          <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+        </button>
+        <button mat-raised-button color="warn" (click)="delete(dataSource.filteredData.indexOf(formatoseccioncampo) ,formatoseccioncampo)" class="m-1"
+          *sigmaIsGranted="constants.permiso_administracion_formatoseccioncampo_delete">
+          <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [length]= "lengthList" [pageSize]="criteria.size" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+</div>

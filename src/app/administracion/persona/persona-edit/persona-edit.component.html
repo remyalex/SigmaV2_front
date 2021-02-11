@@ -1,0 +1,127 @@
+<h2 mat-dialog-title>{{ constants.editar }} Persona</h2>
+
+<div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+  <h5>{{ constants.informacionCampoObligatorio }}</h5>
+</div>
+
+<mat-dialog-content>
+  <mat-card-content [formGroup]="form">
+    <input type="hidden" formControlName="id" [(ngModel)]="persona.id">
+    <input type="hidden" formControlName="activo" [(ngModel)]="persona.activo">
+    <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+      <div class="item" fxFlex="50%">
+        <sigma-form-select [path]="constants.path_administracion_persona_tipoIdentificacionId"
+          formControlName="tipoIdentificacionId" [(ngModel)]="persona.tipoIdentificacion"
+          [placeholder]="constants.tipoIdentificacionId">
+        </sigma-form-select>
+      </div>
+      <div class="item" fxFlex="50%">
+        <sigma-form-input [placeholder]="constants.identificacion" formControlName="identificacion"
+          [(ngModel)]="persona.identificacion" [maxlength]="20" pattern="^[a-zA-Z0-9]*$" min="0">
+        </sigma-form-input>
+      </div>
+    </div>
+    <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+      <div class="item" fxFlex="50%">
+        <sigma-form-input [placeholder]="constants.nombres" formControlName="nombres" [(ngModel)]="persona.nombres"
+          [maxlength]="60">
+        </sigma-form-input>
+      </div>
+      <div class="item" fxFlex="50%">
+        <sigma-form-input [placeholder]="constants.apellidos" formControlName="apellidos"
+          [(ngModel)]="persona.apellidos" [maxlength]="60">
+        </sigma-form-input>
+      </div>
+    </div>
+    <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">      
+      <div class="item" fxFlex="50%">
+        <sigma-form-email [placeholder]="constants.correo" formControlName="correo" [(ngModel)]="persona.correo"
+          [maxlength]="60">
+        </sigma-form-email>
+      </div>
+      <div class="item" fxFlex="50%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <sigma-form-select [path]="constants.path_administracion_persona_categoriaPersonaId"
+            formControlName="categoriaPersonaId" [(ngModel)]="persona.categoriaPersona"
+            [placeholder]="constants.categoriaPersonaId">
+          </sigma-form-select>
+        </div>
+      </div>
+    </div>
+    <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+      <div class="item" fxFlex="50%">
+        <sigma-form-select [path]="constants.path_administracion_persona_tipoRegimenId" formControlName="tipoRegimenId"
+          [(ngModel)]="persona.tipoRegimen" [placeholder]="constants.tipoRegimenId">
+        </sigma-form-select>
+      </div>
+      <div class="item" fxFlex="50%">
+        <sigma-form-select [path]="constants.path_administracion_persona_areaUmvId" formControlName="areaUmvId"
+          [(ngModel)]="persona.areaUmv" [placeholder]="constants.areaUmvId" [listBy]="'descripcion'">
+        </sigma-form-select>
+      </div>
+    </div>
+    <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+      <div class="item" fxFlex="50%">
+        <sigma-form-select [path]="constants.path_administracion_persona_cargoId" formControlName="cargoId"
+          [(ngModel)]="persona.cargo" [placeholder]="constants.cargoId" [listBy]="'descripcion'">
+        </sigma-form-select>
+      </div>
+      <div class="item" fxFlex="50%">
+        <sigma-form-select [path]="constants.path_administracion_persona_estadoPersonaId"
+          formControlName="estadoPersonaId" [(ngModel)]="persona.estado" [placeholder]="constants.estadoPersonaId">
+        </sigma-form-select>
+      </div>
+    </div>
+    <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+      <div class="item" fxFlex="50%">
+        <sigma-form-number [placeholder]="constants.telefono" formControlName="telefono" [(ngModel)]="persona.telefono"
+          [maxlength]="20">
+        </sigma-form-number>
+      </div>
+      <div fxFlex>
+        <sigma-form-calendar formControlName="horaInicial" [(ngModel)]="persona.horaInicioProgramacion"
+          [type]="this.constants.datepicker.types.timer" [placeholder]="constants.horaInicioProgramacion">
+        </sigma-form-calendar>
+      </div>
+    </div>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+      <div fxFlex>
+        <sigma-form-calendar formControlName="horaFinal" [(ngModel)]="persona.horaFinProgramacion"
+          [type]="this.constants.datepicker.types.timer" [placeholder]="constants.horaFinProgramacion">
+        </sigma-form-calendar>
+      </div>
+      <div fxFlex>
+        <sigma-form-autocomplete [placeholder]="constants.usuario" formControlName="usuario"
+          [(ngModel)]="persona.usuario" [path]="constants.path_administracion_usuario_autocompletar"
+          [searchBy]="'usuario'" [id]="'nombres'" [moreInfo]="personaInfo">
+        </sigma-form-autocomplete>
+      </div>
+    </div>
+
+    <!-- <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+      
+    </div> -->
+
+  </mat-card-content>
+
+  <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+  <mat-tab-group>
+    <mat-tab label="Novedades" class="mb-10">
+      <sigma-administracion-personanovedad-admin></sigma-administracion-personanovedad-admin>
+    </mat-tab>
+  </mat-tab-group>
+
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button class="m-1" color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> Cancelar
+  </button>
+  <button mat-raised-button class="m-1" color="primary" (click)="onSubmit()" [disabled]="disableSubmit">
+    <mat-icon class="m-1">save</mat-icon> Guardar
+  </button>
+</mat-dialog-actions>

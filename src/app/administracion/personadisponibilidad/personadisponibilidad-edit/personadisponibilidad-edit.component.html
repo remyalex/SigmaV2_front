@@ -1,0 +1,93 @@
+<h2 mat-dialog-title>{{ constants.editar }} Disponibilidad personas</h2>
+
+<div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+  <h5>{{ constants.informacionCampoObligatorio }}</h5>
+</div>
+
+<mat-dialog-content [formGroup]="form" *sigmaIsGranted="constants.permiso_administracion_personadisponibilidad_update">
+  <input type="hidden" formControlName="id" [(ngModel)]="personadisponibilidad.id">
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <div class="w-100">
+        <sigma-form-autocomplete [path]="constants.path_administracion_personadisponibilidad_personaId" (selectItem)="setPersonaPersonadisponibilidad($event)"  
+          [placeholder]="constants.personaId" [searchBy]="'nombres'" [moreInfo]="{nombres: 'Nombre', apellidos: 'Apellido'}"
+          formControlName="persona" [(ngModel)]="personadisponibilidad.persona" (ngModelChange)="onChangeAutocompleteForm($event)" >
+        </sigma-form-autocomplete>
+      </div>
+    </div>
+
+    <div fxFlex>
+        <div class="w-100">
+            <sigma-form-calendar formControlName="fechaDesde"   [maxTarget]="'fechaHasta'" [(ngModel)]="personadisponibilidad.fechaDesde"
+              [type]="this.constants.datepicker.types.calendar" [objeto]="personadisponibilidad" [placeholder]="constants.fechaDesde">
+            </sigma-form-calendar>             
+          </div>
+    </div>
+
+    <div fxFlex>
+        <sigma-form-calendar formControlName="fechaHasta"   [minTarget]="'fechaDesde'" [(ngModel)]="personadisponibilidad.fechaHasta"
+          [type]="this.constants.datepicker.types.calendar" [objeto]="personadisponibilidad" [placeholder]="constants.fechaHasta">
+        </sigma-form-calendar>             
+      </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+      <div fxFlex>              
+          <div class="w-100">
+            <sigma-form-calendar formControlName="intervalo" [(ngModel)]="personadisponibilidad.intervalo"
+              [placeholder]="constants.intervalo" [type]="constants.datepicker.types.timer" 
+              [errors]="errorsInterval">
+            </sigma-form-calendar>
+          </div>
+        </div>
+
+    <div fxFlex>
+      <div class="w-100">
+          <sigma-form-select 
+          formControlName="turnoId"
+          [(ngModel)]="personadisponibilidad.turno"
+          [path]="constants.path_administracion_personadisponibilidad_turnoId"
+          [placeholder]="constants.placeHolderTurno">
+        </sigma-form-select>
+      </div>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    
+    <div fxFlex>
+      <div class="w-100">
+        <mat-checkbox formControlName="activo" [(ngModel)]="personadisponibilidad.activo" name="activo" id="activo">
+          {{ constants.activo }}
+        </mat-checkbox>
+      </div>
+    </div>
+
+    <div fxFlex></div>
+  </div>
+
+  <button type="button" [disabled]="!this.calendariocompletado" (click)="mostrar = !mostrar" mat-raised-button
+    color="primary" class="m-1">{{ mostrar ? 'Ocultar' : 'Disponibilidad' }}
+    <mat-icon *ngIf="this.cargandoDisponibilidad">
+      <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+    </mat-icon>
+  </button>
+
+  <sigma-schedule (viewDateChange)="getEventMonthChanged($event)" *ngIf="mostrar" [listaCalendario]="events" ></sigma-schedule>
+
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions fxLayoutAlign="end">
+  <button mat-button class="m-1" color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon>
+    {{ constants.cancelar }}
+  </button>
+  <button mat-raised-button class="m-1" color="primary" [disabled]="disableSubmit" (click)="onSubmit()"
+    *sigmaIsGranted="constants.permiso_administracion_personadisponibilidad_update">
+    <mat-icon class="m-1">save</mat-icon>
+    {{ constants.guardar }}
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,346 @@
+<mat-vertical-stepper [linear]="true">     
+  <mat-step >
+    <ng-template matStepLabel>Datos generales </ng-template>
+      <mat-card-content class="m-0" >    
+
+        <mat-list>
+          <mat-list-item class="detail-item">
+            <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+              <div fxFlex>
+                <b>{{ constants.estrategia }}</b>:
+              </div>
+              <div fxFlex="60">
+                {{ mantenimiento.estrategia !== null ? mantenimiento.estrategia.descripcion : '' }}
+              </div>
+            </div>
+          </mat-list-item>
+        
+          <mat-list-item class="detail-item">
+            <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+              <div fxFlex>
+                <b>{{ constants.programa }}</b>:
+              </div>
+              <div fxFlex="60">
+                {{ mantenimiento.programa !== null ? mantenimiento.programa.descripcion : 'NO REGISTRA' }}
+              </div>
+            </div>
+          </mat-list-item>
+        
+          <mat-list-item class="detail-item">
+            <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+              <div fxFlex>
+                <b>{{ constants.localidad }}</b>:
+              </div>
+              <div fxFlex="60">
+                {{ mantenimiento.localidad !== null ? mantenimiento.localidad.nombre : 'NO REGISTRA' }}
+              </div>
+            </div>
+          </mat-list-item>
+        
+          <mat-list-item class="detail-item">
+            <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+              <div fxFlex>
+                <b>{{ constants.barrio }}</b>:
+              </div>
+              <div fxFlex="60">
+                {{ mantenimiento.barrio !== null ? mantenimiento.barrio.nombre : 'NO REGISTRA' }}
+              </div>
+            </div>
+          </mat-list-item>
+        
+          <mat-list-item class="detail-item">
+            <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+              <div fxFlex>
+                <b>{{ constants.direccion }}</b>:
+              </div>
+              <div fxFlex="60">
+                {{ mantenimiento.desde + ' ' + mantenimiento.hasta}}
+              </div>
+            </div>
+          </mat-list-item>
+        
+          <mat-list-item class="detail-item">
+            <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+              <div fxFlex>
+                <b>{{ constants.civEjecutado }}</b>:
+              </div>
+              <div fxFlex="60">
+                {{  mantenimiento.civ  }}
+              </div>
+            </div>
+          </mat-list-item>
+        
+          <mat-list-item class="detail-item">
+            <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+              <div fxFlex>
+                <b>{{ constants.longitudTotalIntervenida }}</b>:
+              </div>
+              <div fxFlex="60">
+                <!-- {{  mantenimiento.longitud  }} -->
+              </div>
+            </div>
+          </mat-list-item>
+        
+          <mat-list-item class="detail-item">
+            <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+              <div fxFlex>
+                <b>{{ constants.areaTotalIntervenida }}</b>:
+              </div>
+              <div fxFlex="60">
+                <!-- {{  mantenimiento.area  }} -->
+              </div>
+            </div>
+          </mat-list-item>
+        
+          <mat-list-item class="detail-item">
+            <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+              <div fxFlex>
+                <b>{{ constants.pk }}</b>:
+              </div>
+              <div fxFlex="60">
+                {{  mantenimiento.pk  }}
+              </div>
+            </div>
+          </mat-list-item>
+        
+          <mat-list-item class="detail-item">
+            <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+              <div fxFlex>
+                <b>{{ constants.longitudSegmentoVial }}</b>:
+              </div>
+              <div fxFlex="60">
+                {{  mantenimiento.longitud  }}
+              </div>
+            </div>
+          </mat-list-item>
+        
+          <mat-list-item class="detail-item">
+            <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+              <div fxFlex>
+                <b>{{ constants.anchoSegmentoVial }}</b>:
+              </div>
+              <div fxFlex="60">
+                {{  mantenimiento.ancho  }}
+              </div>
+            </div>
+          </mat-list-item>
+        
+          <mat-list-item class="detail-item" *ngIf="numeroLosas>0">
+            <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+              <div fxFlex>
+                <b>{{ constants.numHuecosLosas }}</b>:
+              </div>
+              <div fxFlex="60">
+                {{  numeroHuecos  }} / {{ numeroLosas }}
+              </div>
+            </div>
+          </mat-list-item>
+        
+          <!-- <mat-list-item class="detail-item">
+            <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+              <div fxFlex>
+                <b>{{ constants.tipoMaterial }}</b>:
+              </div>
+              <div fxFlex="60">
+                {{  tipoMaterial  }} {{ cantidadMaterial }}
+              </div>
+            </div>
+          </mat-list-item> -->
+        
+          <mat-list-item class="detail-item">
+            <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+              <div fxFlex>
+                <b>{{ constants.tipoMaterial }}</b>:
+              </div>
+              <div fxFlex="60">
+                {{  tipoMaterial  }} 
+              </div>
+            </div>
+          </mat-list-item>
+        
+          <mat-list-item class="detail-item">
+            <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+              <div fxFlex>
+                <b>{{ constants.cantidadMaterial }}</b>:
+              </div>
+              <div fxFlex="60">
+                {{ cantidadMaterial }}
+              </div>
+            </div>
+          </mat-list-item>
+        
+          <mat-list-item class="detail-item">
+            <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+              <div fxFlex>
+                <b>{{ constants.kmCarrilImpacto }}</b>:
+              </div>
+              <div fxFlex="60">
+                {{ mantenimiento.kmCarrilImpacto }}
+              </div>
+            </div>
+          </mat-list-item>
+        
+          <mat-list-item class="detail-item">
+            <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+              <div fxFlex>
+                <b>{{ constants.kmCarrilIntervencion }}</b>:
+              </div>
+              <div fxFlex="60">
+                <!-- {{ mantenimiento.kmCarrilImpacto }} -->
+              </div>
+            </div>
+          </mat-list-item>
+        
+          <mat-list-item class="detail-item">
+            <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+              <div fxFlex>
+                <b>{{ constants.tipoMalla }}</b>:
+              </div>
+              <div fxFlex="60">
+                {{ mantenimiento.tipoMalla !== null ? mantenimiento.tipoMalla.descripcion : '' }}
+              </div>
+            </div>
+          </mat-list-item>
+        
+          <mat-list-item class="detail-item">
+            <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+              <div fxFlex>
+                <b>{{ constants.fechaInicioEjecucion }}</b>:
+              </div>
+              <div fxFlex="60">
+                <!-- pendiente -->
+                <!-- {{ mantenimiento.fechaInicioVisita }} -->
+              </div>
+            </div>
+          </mat-list-item>
+        
+          <mat-list-item class="detail-item">
+            <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+              <div fxFlex>
+                <b>{{ constants.fechaFinEjecucion }}</b>:
+              </div>
+              <div fxFlex="60">
+                <!-- pendiente -->
+                <!-- {{ mantenimiento.fechaFinVisita }} -->
+              </div>
+            </div>
+          </mat-list-item>
+        
+          <mat-list-item class="detail-item">
+            <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+              <div fxFlex>
+                <b>{{ constants.tipoIntervencion }}</b>:
+              </div>
+              <div fxFlex="60">
+                <!-- pendiente -->
+                {{ tipoIntervencion !== null ? tipoIntervencion : mantenimiento.actividad }}
+              </div>
+            </div>
+          </mat-list-item>
+        
+          <mat-list-item class="detail-item">
+            <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+              <div fxFlex>
+                <b>{{ constants.actividad }}</b>:
+              </div>
+              <div fxFlex="60">
+                <!-- pendiente -->
+                {{ mantenimiento.actividad }}
+              </div>
+            </div>
+          </mat-list-item>
+        
+          <mat-list-item class="detail-item">
+            <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+              <div fxFlex>
+                <b>{{ constants.responsable }}</b>:
+              </div>
+              <div fxFlex="60">
+                <!-- {{ mantenimiento.responsable.nombres + ' ' +  mantenimiento.responsable.apellidos }} -->
+              </div>
+            </div>
+          </mat-list-item>
+        
+          <mat-list-item class="detail-item">
+            <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+              <div fxFlex>
+                <b>{{ constants.cargo }}</b>:
+              </div>
+              <div fxFlex="60">
+                <!-- {{ mantenimiento.responsable.nombres + ' ' +  mantenimiento.responsable.apellidos }} -->
+              </div>
+            </div>
+          </mat-list-item>
+        
+          <mat-list-item class="detail-item">
+            <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+              <div fxFlex>
+                <b>{{ constants.observacionesCierre }}</b>:
+              </div>
+              <div fxFlex="60">
+                <!-- {{ mantenimiento.responsable.nombres + ' ' +  mantenimiento.responsable.apellidos }} -->
+              </div>
+            </div>
+          </mat-list-item>
+        
+        </mat-list>
+        
+      </mat-card-content>
+  </mat-step>         
+  <mat-step >
+    <ng-template matStepLabel>Evidencia fotográfica  </ng-template>
+      <mat-card-content class="m-0" >    
+        <div class="mat-elevation-z8"   *ngIf="this.mantenimiento.intervenciones[0].chequeos.length > 0">
+          <mat-table [dataSource]="fotosDatasourceAntesActDiagSi">
+            <ng-container matColumnDef="fotos">
+              <mat-header-cell *matHeaderCellDef> Evidencia fotográfica (Antes) </mat-header-cell>
+              <mat-cell *matCellDef="let foto" data-label="Imagen">
+                <sigma-show-file *ngIf="foto" [showFile]="true" [id]="foto.id"></sigma-show-file>
+              </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+          </mat-table>
+        </div>
+        
+        <div class="mat-elevation-z8" *ngIf="this.mantenimiento.intervenciones[0].chequeos.length == 0">
+          <mat-table [dataSource]="fotosDatasourceAntesActDiagNo">
+            
+            <ng-container matColumnDef="fotos">
+              <mat-header-cell *matHeaderCellDef> Evidencia fotográfica (Antes) </mat-header-cell>
+              <mat-cell *matCellDef="let foto" data-label="Imagen">
+                <sigma-show-file *ngIf="foto" [showFile]="true" [id]="foto.archivo.id"></sigma-show-file>
+              </mat-cell>
+            </ng-container>
+        
+            <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+          </mat-table>
+        </div>
+        
+        <div class="mat-elevation-z8">
+          <mat-table [dataSource]="fotosDatasourceDespues">
+            
+            <ng-container matColumnDef="fotos">
+              <mat-header-cell *matHeaderCellDef> Evidencia fotográfica (Después) </mat-header-cell>
+              <mat-cell *matCellDef="let foto" data-label="Imagen">
+                <sigma-show-file *ngIf="foto" [showFile]="true" [id]="foto.id"></sigma-show-file>
+              </mat-cell>
+            </ng-container>
+        
+            <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+          </mat-table>
+        </div>                  
+      </mat-card-content>
+  </mat-step>
+  <mat-step >
+    <ng-template matStepLabel>Detalle de Gestión del Mantenimiento Vial </ng-template>
+      <mat-card-content class="m-0" >    
+        <sigma-mantenimiento-records [mantId]="mantenimiento.id"></sigma-mantenimiento-records>                  
+      </mat-card-content>
+  </mat-step>
+</mat-vertical-stepper>
+
+
+

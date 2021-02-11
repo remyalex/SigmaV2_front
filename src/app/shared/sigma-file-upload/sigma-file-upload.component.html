@@ -1,0 +1,50 @@
+<div fxLayout="row" fxLayout.lt-md="column" flex="100" class="input-file-sigma mb-10">
+  <input id="fileInput-{{ nombreModelo }}" type="file" [hidden]="true" (change)="addFiles($event)"
+    accept="{{ accept ? accept : '*' }}" />
+
+  <div fxFlex="40">
+    <div fxLayout="row">
+      <div class="md-block" fxFlex fxFlex.lt-md="30">
+        <button id="uploadButton" mat-raised-button color="primary" (click)="selectFile()" [disabled]="!readOnlyComponent">
+          <mat-icon>attach_file</mat-icon>
+        </button>
+      </div>
+
+      <div class="md-block" fxFlex="80" fxFlex.lt-md="70">
+        <span class="input-file-text-sigma">Seleccionar archivo {{ required ? "* " : '' }} </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="md-block" fxFlex="60" fxFlex.md="50" fxFlex.sm="50" fxFlex.xs="40">
+    <div class="files" *ngFor="let file of files; let i = index">
+      <span fxFlex="85%">{{ file.name }}</span>
+      <span fxFlex="10%" fxLayoutAlign="end">
+        <span *ngIf="files[i].progress > 0 && files[i].progress < 100">
+          <span>{{ files[i].progress }}%</span>
+        </span>
+        <div>
+          <mat-icon matTooltip="Se presento un problema con la carga del archivo, por favor intentelo de nuevo"
+            *ngIf="files[i].progress == 100 && !files[i].success" color="warn">
+            error
+          </mat-icon>
+        </div>
+        <div>
+          <mat-icon fxFlex="5%" color="warn" class="hover-element-pointer" (click)="eliminar(i)">delete</mat-icon>
+        </div>
+
+      </span>
+
+      <mat-icon matTooltip="Se cargo el archivo de forma correcta" *ngIf="files[i].progress == 100 && files[i].success"
+        class="dev-color-green">
+        done
+      </mat-icon>
+
+    </div>
+  </div>
+  <!-- </div> -->
+</div>
+<!--Como usar el componente de file-->
+<!-- 
+<sigma-file-upload model="modulo" required="true" multiple="false" (dataFile)="setFuncion($event)" ></sigma-file-upload>
+-->

@@ -1,0 +1,59 @@
+<h2 mat-dialog-title>{{ constants.capas }} </h2>
+
+<mat-dialog-content [formGroup]="form">
+    
+    <div *ngIf="mantenimiento.disenio == null || mantenimiento.disenio == undefined || mantenimiento.disenio.capas.length <= 0" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+        <mat-icon class="m-1">sms_failed</mat-icon>
+        <h4> No se encontró información de diseño</h4>
+    </div>
+
+    <div *ngIf="mantenimiento.disenio != null && mantenimiento.disenio != undefined && mantenimiento.disenio.capas.length > 0" class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+        <div fxFlex="40" *ngFor="let capa of mantenimiento.disenio.capas; let i = index">
+            <mat-card class="p-0 c-mod">
+                <mat-card-header fxLayoutAlign="center">
+                    <mat-card-subtitle>
+                        <h3>CAPA {{(i + 1)}}</h3>
+                    </mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content class="p-16 m-0">
+                    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                        <div fxFlex>
+                            <mat-form-field class="w-100">
+                                <input matInput placeholder="{{ constants.tipo }}"
+                                [value]="capa.tipo != null ? capa.tipo.descripcion:  '' " 
+                                name = "tipoIntervencion" readonly>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                        <div fxFlex>
+                            <mat-form-field class="w-100">
+                                <input matInput placeholder="{{ constants.espesor }}" [value]="capa.espesor"
+                                name = "espesor" readonly>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                        <div fxFlex>
+                            <mat-form-field class="w-100">
+                                <input matInput placeholder="{{ constants.volumen }}" [value]="(capa.espesor * mantenimiento.area)"
+                                name = "volumen" readonly>
+                            </mat-form-field>                            
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+
+    </div>
+
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions fxLayout="row" fxLayoutAlign="end" class="flex-p" [formGroup]="form">
+    <button mat-button color="warn" class="m-1" (click)="close()">
+        <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+    </button>
+</mat-dialog-actions>

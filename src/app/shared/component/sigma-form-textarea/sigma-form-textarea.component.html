@@ -1,0 +1,38 @@
+<mat-form-field class="w-100">
+  <textarea 
+  #input
+  matInput 
+  [formControl]="control"  
+  [placeholder]="placeholder" autocomplete="off" 
+  [required]="required" 
+  pattern="^(?!\s*$).+"
+  (input)="inputValue($event.target.value)"
+  [appUpper]="upper" 
+  [ngClass]="class ? class : ''" 
+  [readonly]="readonly" 
+  [rows]="rows"></textarea>
+  
+  <mat-error *ngFor="let error of basicErrors">
+    <mat-error *ngIf="control.hasError(error.name)">
+      {{ error.message }}
+    </mat-error>
+  </mat-error>
+  <mat-error *ngIf="control.hasError('minlength')">
+    {{ constants.longitud_mimina }} {{ control?.getError('minlength').requiredLength }} 
+    {{ constants.caracteres }}.
+  </mat-error>
+  <mat-error *ngIf="control.hasError('maxlength')">
+    {{ constants.longitud_maxima }} {{ control?.getError('maxlength').requiredLength }} 
+    {{ constants.caracteres }}.
+  </mat-error>
+</mat-form-field>
+
+
+<!--<sigma-form-textarea 
+  formControlName="control" -> (Obligatorio, hereda el control del input )
+  [(ngModel)]="modelo" -> (Oblugatorio, permite shacer el blinding con los datos)
+  [placeholder]="texto" -> (Opcional, campo para el label)
+  [upper]="true|false" -> (Opcional, hace que una diractiva para que el texto quede en mayusculas)
+  [errors]="[{name: 'error', message: 'mensaje'}]" -> (Opcional, en caso de necesaitar agregar nuevos errores al control)
+>
+</sigma-form-textarea>-->

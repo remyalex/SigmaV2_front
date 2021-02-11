@@ -1,0 +1,196 @@
+<div fxLayout="column">
+  <div class="flex-p">
+    <mat-card class="p-0 mat-card">
+      <mat-card-header fxLayoutAlign="center">
+        <mat-card-subtitle>
+          <h2>{{ constants.crear }} Lugar</h2>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+        <h5>{{ constants.informacionCampoObligatorio }}</h5>
+      </div>
+
+      <mat-card-content class="p-16 m-0" [formGroup]="form">
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <sigma-form-select [path]="constants.path_administracion_lugar_tipoLugarId"
+                placeholder="{{ constants.tipoLugarId }}" required="true" formControlName="tipoLugarId"
+                [(ngModel)]="lugar.tipoLugar">
+              </sigma-form-select>
+            </div>
+          </div>
+
+          <div fxFlex>
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <sigma-form-select [path]="constants.path_administracion_lugar_origenLugarId"
+                placeholder="{{ constants.origenLugarId }}" required="true" formControlName="origenLugarId"
+                [(ngModel)]="lugar.origenLugar">
+              </sigma-form-select>
+            </div>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+
+          <div fxFlex>
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <sigma-form-select [path]="constants.path_administracion_lugar_estadoLugarId"
+                placeholder="{{ constants.estadoLugarId }}" required="true" formControlName="estadoLugarId" [(ngModel)]="lugar.estadoLugar">
+              </sigma-form-select>
+            </div>
+          </div>
+
+          <div fxFlex>
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.nombre }}" formControlName="nombre" [(ngModel)]="lugar.nombre"
+                  autocomplete="off" type="text" appUpper required>
+                <mat-error *ngIf="form.get('nombre').hasError('required')"> {{ constants.campoRequerido }}. </mat-error>
+                <mat-error *ngIf="form.get('nombre').hasError('maxlength')">{{ constants.longitud_maxima }} 300
+                  caracteres. </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.descripcion }}" formControlName="descripcion"
+                  [(ngModel)]="lugar.descripcion" autocomplete="off" type="text" required>
+                <mat-error *ngIf="form.get('descripcion').hasError('required')"> {{ constants.campoRequerido }}.
+                </mat-error>
+                <mat-error *ngIf="form.get('descripcion').hasError('maxlength')">{{ constants.longitud_maxima }} 600
+                  caracteres. </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div fxFlex>
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.contactoNombre }}" formControlName="contactoNombre"
+                  [(ngModel)]="lugar.contactoNombre" autocomplete="off" type="text">
+                <mat-error *ngIf="form.get('contactoNombre').hasError('maxlength')">{{ constants.longitud_maxima }} 100
+                  caracteres. </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.contactoTelefono }}" formControlName="contactoTelefono"
+                  [(ngModel)]="lugar.contactoTelefono" autocomplete="off" type="text">
+                <mat-error *ngIf="form.get('contactoTelefono').hasError('maxlength')">{{ constants.longitud_maxima }} 20
+                  caracteres. </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div fxFlex>
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.contactoCorreo }}" formControlName="contactoCorreo"
+                  [(ngModel)]="lugar.contactoCorreo" autocomplete="off" type="text">
+                <mat-error *ngIf="form.get('contactoCorreo').hasError('maxlength')">{{ constants.longitud_maxima }} 100
+                  caracteres. </mat-error>
+                <mat-error *ngIf="form.get('contactoCorreo').hasError('email')"> {{ constants.formato_correo }}.
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div class="item" fxFlex="100%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.direccion }}" formControlName="direccion"
+                  [(ngModel)]="lugar.direccion" autocomplete="off" type="text">
+                <mat-error *ngIf="form.get('direccion').hasError('maxlength')">{{ constants.longitud_maxima }} 100
+                  caracteres. </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <sigma-form-calendar formControlName="fechaDesde"
+              [(ngModel)]="lugar.fechaDesde" [objeto]="lugar"
+              [minTarget]="'fechaDesde'"  [placeholder]="constants.fechaDesde"
+              [type]="constants.datepicker.types.calendar" required>
+            </sigma-form-calendar>
+          </div>
+
+          <div fxFlex>
+            <sigma-form-calendar formControlName="fechaHasta"
+              [(ngModel)]="lugar.fechaHasta" [objeto]="lugar"
+              [maxTarget]="'fechaHasta'" [placeholder]="constants.fechaHasta"
+              [type]="constants.datepicker.types.calendar" required>
+            </sigma-form-calendar>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <div class="item" fxFlex="100%" fxLayout="column" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field fxFlex="100%">
+                <input [placeholder]="constants.horaInicio" class="hover-element-pointer" matInput readonly
+                  [owlDateTime]="horaInicioTime" [owlDateTimeTrigger]="horaInicioTime" [formControl]="horaInicioControl"
+                  (dateTimeChange)="changeTime('horaInicio', $event)">
+                <mat-icon matSuffix [owlDateTimeTrigger]="horaInicioTime" class="hover-element-pointer">
+                  access_time
+                </mat-icon>
+                <owl-date-time [pickerType]="'timer'" #horaInicioTime="owlDateTime"></owl-date-time>
+              </mat-form-field>
+              <div fxFlex="100%">
+                <input matInput type="text" placeholder="" formControlName="horaInicio" [(ngModel)]="lugar.horaInicio"
+                  autocomplete="off" hidden>
+                <mat-error *ngIf="form.invalid && form.get('horaInicio').hasError('errorHoraMinMayor')">
+                  {{ constants.horaInicioMayor }}.
+                </mat-error>
+              </div>
+            </div>
+          </div>
+
+          <div fxFlex>
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field fxFlex="100%">
+                <input [placeholder]="constants.horaFin" class="hover-element-pointer" matInput
+                  [owlDateTimeTrigger]="horaFinTime" [owlDateTime]="horaFinTime" [formControl]="horaFinControl"
+                  (dateTimeChange)="changeTime('horaFin', $event)">
+                <mat-icon matSuffix [owlDateTimeTrigger]="horaFinTime" class="hover-element-pointer">
+                  access_time
+                </mat-icon>
+                <owl-date-time [pickerType]="'timer'" #horaFinTime="owlDateTime"></owl-date-time>
+                <input matInput type="text" placeholder="" formControlName="horaFin" [(ngModel)]="lugar.horaFin"
+                  autocomplete="off" hidden>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+      <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+        <button type="button" (click)="onBack()" mat-button color="warn" class="m-1">
+          <mat-icon class="m-1">close</mat-icon> Cancelar
+        </button>
+        <button type="button" class="m-1" mat-raised-button color="primary" (click)="onSubmit()"
+          [disabled]="disabledBtn_Login">
+          <mat-icon class="m-1">save</mat-icon> Guardar
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</div>

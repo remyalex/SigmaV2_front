@@ -1,0 +1,755 @@
+<div fxLayout="column">
+    <div class="flex-p">
+        <mat-card class="p-0 mat-card">
+            <mat-card-header fxLayoutAlign="center">
+                <mat-card-subtitle>
+                    <h2>{{ constants.crear }} Acta de Vecindad</h2>
+                </mat-card-subtitle>
+            </mat-card-header>
+
+            <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+                <h5>{{ constants.informacionCampoObligatorio }}</h5>
+            </div>
+
+            <mat-card-content class="m-0" [formGroup]="form">
+                <input type="hidden" formControlName="id" [(ngModel)]="acta.id">
+                <!-- <input type="hidden" formControlName="numeralAscendente"
+                  [(ngModel)]="acta.numeralAscendente"> -->
+
+                <mat-vertical-stepper [linear]="true" #stepper>
+                    <mat-step>
+                        <ng-template matStepLabel>Información general</ng-template>   
+                        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                            <div fxFlex>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Número de acta de vecindad" formControlName="noActaVecindad"
+                                        [(ngModel)]="acta.noActaVecindad" readonly>
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex>
+                                <sigma-form-select formControlName="volanteEntregado" [(ngModel)]="acta.volanteEntregado"
+                                    [path]="constants.path_actas_vecindad_SiNo" [placeholder]="'Volante informativo entregado'">
+                                </sigma-form-select>
+                            </div>
+
+                            <div fxFlex>
+                                <sigma-form-select formControlName="tipoIntervencion" [(ngModel)]="acta.tipoIntervencion"
+                                    [path]="constants.path_actas_vecindad_tipoIntervencion" [listBy]="'descripcion'"
+                                    [placeholder]="'Tipo de intervención'">
+                                </sigma-form-select>
+                            </div>
+
+                            <div fxFlex>
+                                <mat-form-field class="w-100" *ngIf="acta.tipoIntervencion?.descripcion == 'OTRO TIPO'">
+                                    <input matInput placeholder="Otro tipo de intervención"
+                                        formControlName="otroTipoIntervencion" [(ngModel)]="acta.otroTipoIntervencion">
+                                    <mat-error *ngIf="form.get('otroTipoIntervencion').hasError('required')">
+                                        {{ constants.campoRequerido }}
+                                    </mat-error>
+                                    <mat-error *ngIf="form.get('otroTipoIntervencion').hasError('maxLength')">
+                                        {{ constants.longitud_maxima }}
+                                        100 caracteres.</mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                            <div fxFlex>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Fecha" formControlName="fecha" [(ngModel)]="acta.fecha"
+                                        readonly>
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex *ngIf="data.mantenimiento?.localidad != null">
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Localidad" formControlName="localidad"
+                                        [(ngModel)]="data.mantenimiento.localidad.nombre" readonly>
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex *ngIf="data.mantenimiento?.localidad == null">
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Localidad" formControlName="localidad"
+                                        [(ngModel)]="data.mantenimiento.localidad" readonly>
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex *ngIf="data.mantenimiento?.upla != null">
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="UPZ" formControlName="upla"
+                                        [(ngModel)]="data.mantenimiento.upla.nombre" readonly>
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex *ngIf="data.mantenimiento?.upla == null">
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="UPZ" formControlName="upla" [(ngModel)]="data.mantenimiento.upla"
+                                        readonly>
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex *ngIf="data.mantenimiento?.barrio != null">
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Barrio" formControlName="barrio"
+                                        [(ngModel)]="data.mantenimiento.barrio.nombre" readonly>
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex *ngIf="data.mantenimiento?.barrio == null">
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Barrio" formControlName="barrio"
+                                        [(ngModel)]="data.mantenimiento.barrio" readonly>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                            <div fxFlex>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="CIV" formControlName="civ" [(ngModel)]="data.mantenimiento.civ"
+                                        readonly>
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="PK" formControlName="pk" [(ngModel)]="data.mantenimiento.pk"
+                                        readonly>
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Nombre del propietario o habitante"
+                                        formControlName="propietario" [(ngModel)]="acta.propietario" autocomplete="off"
+                                        type="text" required>
+                                    <mat-error *ngIf="form.get('propietario').hasError('required')">
+                                        {{ constants.campoRequerido }}
+                                    </mat-error>
+                                    <mat-error *ngIf="form.get('propietario').hasError('maxLength')">
+                                        {{ constants.longitud_maxima }}
+                                        50 caracteres.</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Teléfono" formControlName="telefono"
+                                        [(ngModel)]="acta.telefono">
+                                    <mat-error *ngIf="form.get('telefono').hasError('pattern')">
+                                        {{ constants.campoNumerico }}
+                                    </mat-error>
+                                    <mat-error *ngIf="form.get('telefono').hasError('max')">
+                                        {{ constants.longitud_maxima }} 7 caracteres.
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                            <div fxFlex>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Movil" formControlName="movil" [(ngModel)]="acta.movil">
+                                    <mat-error *ngIf="form.get('movil').hasError('pattern')">
+                                        {{ constants.campoNumerico }}
+                                    </mat-error>
+                                    <mat-error *ngIf="form.get('movil').hasError('max')">
+                                        {{ constants.longitud_maxima }} 10 caracteres.
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Dirección" formControlName="direccion"
+                                        [(ngModel)]="acta.direccion" required>
+                                    <mat-error *ngIf="form.get('direccion').hasError('required')">
+                                        {{ constants.campoRequerido }}
+                                    </mat-error>
+                                    <mat-error *ngIf="form.get('direccion').hasError('maxLength')">
+                                        {{ constants.longitud_maxima }}
+                                        300 caracteres.</mat-error>
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Número de pisos del predio" formControlName="noPisosPredio"
+                                        [(ngModel)]="acta.noPisosPredio" pattern="^[0-9]*$" required>
+                                    <mat-error *ngIf="form.get('noPisosPredio').hasError('required')">
+                                        {{ constants.campoRequerido }}
+                                    </mat-error>
+                                    <mat-error *ngIf="form.get('noPisosPredio').hasError('pattern')">
+                                        {{ constants.campoNumerico }}
+                                    </mat-error>
+                                    <mat-error *ngIf="form.get('noPisosPredio').hasError('max')">
+                                        {{ constants.longitud_maxima }} 3 caracteres.
+                                    </mat-error>
+
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex>
+                                <sigma-form-select formControlName="estratoPredio" [(ngModel)]="acta.estratoPredio"
+                                    [path]="constants.path_actas_vecindad_estrato" [placeholder]="'Estrato del predio'">
+                                </sigma-form-select>
+                            </div>
+                        </div>
+
+                        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                            <div fxFlex>
+                                <div fxFlex>
+                                    <sigma-form-select formControlName="servicios" [(ngModel)]="acta.servicios"
+                                        [path]="constants.path_actas_vecindad_serviciosPublicos"
+                                        [placeholder]="'Servicios Publicos'" [multiple]="true">
+                                    </sigma-form-select>
+                                </div>
+                            </div>
+
+                            <div fxFlex>
+                                <div fxFlex>
+                                    <sigma-form-select formControlName="usos" [(ngModel)]="acta.usos"
+                                        [path]="constants.path_actas_vecindad_usoActual" [placeholder]="'Uso actual'"
+                                        [multiple]="true">
+                                    </sigma-form-select>
+                                </div>
+                            </div>
+
+                            <div fxFlex>
+                                <div fxFlex>
+                                    <sigma-form-select formControlName="personasConDiscapacidad"
+                                        [(ngModel)]="acta.personasConDiscapacidad" [path]="constants.path_actas_vecindad_SiNo"
+                                        [placeholder]="'¿Habitan personas en condición de discapacidad?'">
+                                    </sigma-form-select>
+                                </div>
+                            </div>
+
+                            <div fxFlex>
+                                <sigma-form-select formControlName="tieneGaraje" [(ngModel)]="acta.tieneGaraje"
+                                    [path]="constants.path_actas_vecindad_SiNo"
+                                    [placeholder]="'¿El inmueble cuenta con garaje vehicular?'">
+                                </sigma-form-select>
+                            </div>
+                        </div>
+
+                        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                            <div fxFlex>
+                                <div fxFlex>
+                                    <sigma-form-select formControlName="fachadaEstructurada"
+                                        [(ngModel)]="acta.fachadaEstructurada" [path]="constants.path_actas_vecindad_afectacion"
+                                        [placeholder]="'Fachada - Estructurada (columnas y vigas)'">
+                                    </sigma-form-select>
+                                </div>
+                            </div>
+
+                            <div fxFlex>
+                                <div fxFlex>
+                                    <sigma-form-select formControlName="fachadaParedes" [(ngModel)]="acta.fachadaParedes"
+                                        [path]="constants.path_actas_vecindad_afectacion" [placeholder]="'Fachada - Paredes'">
+                                    </sigma-form-select>
+                                </div>
+                            </div>
+
+                            <div fxFlex>
+                                <div fxFlex>
+                                    <sigma-form-select formControlName="fachadaVentanaPuertas"
+                                        [(ngModel)]="acta.fachadaVentanaPuertas"
+                                        [path]="constants.path_actas_vecindad_afectacion"
+                                        [placeholder]="'Fachada - Ventana y puertas'">
+                                    </sigma-form-select>
+                                </div>
+                            </div>
+
+                            <div fxFlex>
+                                <sigma-form-select formControlName="fachadaCerramiento" [(ngModel)]="acta.fachadaCerramiento"
+                                    [path]="constants.path_actas_vecindad_afectacion" [placeholder]="'Fachada - cerramiento'">
+                                </sigma-form-select>
+                            </div>
+                        </div>
+
+                        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                            <div fxFlex>
+                                <div fxFlex>
+                                    <sigma-form-select formControlName="publicoConfinamiento"
+                                        [(ngModel)]="acta.publicoConfinamiento"
+                                        [path]="constants.path_actas_vecindad_afectacion"
+                                        [placeholder]="'Espacio público - Confinamiento (bordillo o sardinel)'">
+                                    </sigma-form-select>
+                                </div>
+                            </div>
+
+                            <div fxFlex>
+                                <div fxFlex>
+                                    <sigma-form-select formControlName="publicoRecubrimiento"
+                                        [(ngModel)]="acta.publicoRecubrimiento"
+                                        [path]="constants.path_actas_vecindad_afectacion"
+                                        [placeholder]="'Espacio público - Recubrimientos'">
+                                    </sigma-form-select>
+                                </div>
+                            </div>
+
+                            <div fxFlex>
+                                <div fxFlex>
+                                    <sigma-form-select formControlName="publicoRampaAcceso"
+                                        [(ngModel)]="acta.publicoRampaAcceso" [path]="constants.path_actas_vecindad_afectacion"
+                                        [placeholder]="'Espacio público - Rampas de acceso'">
+                                    </sigma-form-select>
+                                </div>
+                            </div>
+                        </div>    
+
+                        <!-- Inicio Seccion Descripciones Afectaciones -->
+
+                        <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                            <div fxFlex *ngIf="acta.fachadaEstructurada?.descripcion == 'CON AFECTACIÓN'">
+                                <sigma-form-textarea 
+                                    formControlName="descripcionAfectacionfachadaEstructurada" 
+                                    [(ngModel)]="acta.descripcionAfectacionfachadaEstructurada" 
+                                    placeholder="Descripción de la afectación Fachada - Estructurada (columnas y vigas)" 
+                                    [rows]="5">
+                                </sigma-form-textarea>
+                            </div>
+                        </div>
+
+                        <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                            <div fxFlex *ngIf="acta.fachadaParedes?.descripcion == 'CON AFECTACIÓN'">
+                                <sigma-form-textarea 
+                                    formControlName="descripcionAfectacionfachadaParedes" 
+                                    [(ngModel)]="acta.descripcionAfectacionfachadaParedes" 
+                                    placeholder="Descripción de la afectación Fachada - Paredes" 
+                                    [rows]="5">
+                                </sigma-form-textarea>
+                            </div>
+                        </div>
+
+                        <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                            <div fxFlex *ngIf="acta.fachadaVentanaPuertas?.descripcion == 'CON AFECTACIÓN'">
+                                <sigma-form-textarea 
+                                    formControlName="descripcionAfectacionfachadaVentanaPuertas" 
+                                    [(ngModel)]="acta.descripcionAfectacionfachadaVentanaPuertas" 
+                                    placeholder="Descripción de la afectación Fachada - Ventana y puertas" 
+                                    [rows]="5">
+                                </sigma-form-textarea>
+                            </div>
+                        </div>
+
+                        <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                            <div fxFlex *ngIf="acta.fachadaCerramiento?.descripcion == 'CON AFECTACIÓN'">
+                                <sigma-form-textarea 
+                                    formControlName="descripcionAfectacionfachadaCerramiento" 
+                                    [(ngModel)]="acta.descripcionAfectacionfachadaCerramiento" 
+                                    placeholder="Descripción de la afectación Fachada - cerramiento" 
+                                    [rows]="5">
+                                </sigma-form-textarea>
+                            </div>
+                        </div>
+
+                        <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                            <div fxFlex *ngIf="acta.publicoConfinamiento?.descripcion == 'CON AFECTACIÓN'">
+                                <sigma-form-textarea 
+                                    formControlName="descripcionAfectacionpublicoConfinamiento" 
+                                    [(ngModel)]="acta.descripcionAfectacionpublicoConfinamiento" 
+                                    placeholder="Descripción de la afectación Espacio público - Confinamiento (bordillo o sardinel)" 
+                                    [rows]="5">
+                                </sigma-form-textarea>
+                            </div>
+                        </div>
+
+                        <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                            <div fxFlex *ngIf="acta.publicoRecubrimiento?.descripcion == 'CON AFECTACIÓN'">
+                                <sigma-form-textarea 
+                                    formControlName="descripcionAfectacionpublicoRecubrimiento" 
+                                    [(ngModel)]="acta.descripcionAfectacionpublicoRecubrimiento" 
+                                    placeholder="Descripción de la afectación Espacio público - Recubrimientos" 
+                                    [rows]="5">
+                                </sigma-form-textarea>
+                            </div>
+                        </div>
+
+                        <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                            <div fxFlex *ngIf="acta.publicoRampaAcceso?.descripcion == 'CON AFECTACIÓN'">
+                                <sigma-form-textarea 
+                                    formControlName="descripcionAfectacionpublicoRampaAcceso" 
+                                    [(ngModel)]="acta.descripcionAfectacionpublicoRampaAcceso" 
+                                    placeholder="Descripción de la afectación Espacio público - Rampas de acceso" 
+                                    [rows]="5">
+                                </sigma-form-textarea>
+                            </div>
+                        </div>
+
+                        <!-- Fin Seccion Descripciones Afectaciones -->
+
+                        <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                            <div fxFlex>
+                                <!-- <mat-form-field class="w-100 mb-10">
+                                    <textarea matInput rows="5" placeholder="Descripción del predio" formControlName="descripcionPredio"
+                                        [(ngModel)]="acta.descripcionPredio" required>
+                                    </textarea>
+                                    <mat-error *ngIf="form.get('descripcionPredio').hasError('required')">
+                                        {{ constants.campoRequerido }}
+                                    </mat-error>
+                                    <mat-error *ngIf="form.get('descripcionPredio').hasError('maxLength')">
+                                        {{ constants.longitud_maxima }}
+                                        5000 caracteres.</mat-error>
+                                </mat-form-field> -->
+                                <sigma-form-textarea formControlName="descripcionPredio" [(ngModel)]="acta.descripcionPredio" 
+                                placeholder="Descripción del predio" [rows]="5">
+                                </sigma-form-textarea>
+                            </div>
+                        </div>
+
+                        <div class="mt-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                            <div fxFlex>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Nombre residente social" formControlName="socialNombre"
+                                        [(ngModel)]="acta.socialNombre">
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Identificación residente social"
+                                        formControlName="socialIdentificacion" [(ngModel)]="acta.socialIdentificacion">
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex class="mt-13">
+                                <sigma-form-upload-file formControlName="socialFirma" [(ngModel)]="acta.socialFirma"
+                                    [placeholder]="'Firma residente social'" [accept]="'image/*'" [sizeFile]="1"
+                                    [errors]="[{name: 'error', message: 'mensaje'}]">
+                                </sigma-form-upload-file>
+                            </div>
+                        </div>
+
+                        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                            <div fxFlex>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Nombre propietario/habitante" formControlName="habitanteNombre"
+                                        [(ngModel)]="acta.habitanteNombre">
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Identificación propietario/habitante"
+                                        formControlName="habitantelIdentificacion" [(ngModel)]="acta.habitantelIdentificacion">
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex class="mt-13">
+                                <sigma-form-upload-file formControlName="habitantelFirma" [(ngModel)]="acta.habitantelFirma"
+                                    [placeholder]="'Firma propietario/habitante'" [accept]="'image/*'" [sizeFile]="1"
+                                    [errors]="[{name: 'error', message: 'mensaje'}]">
+                                </sigma-form-upload-file>
+                            </div>
+                        </div>
+
+                        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                            <div fxFlex>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Nombre residente técnico" formControlName="tecnicoNombre"
+                                        [(ngModel)]="acta.tecnicoNombre">
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Identificación residente técnico"
+                                        formControlName="tecnicoIdentificacion" [(ngModel)]="acta.tecnicoIdentificacion">
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex class="mt-13">
+                                <sigma-form-upload-file formControlName="tecnicoFirma" [(ngModel)]="acta.tecnicoFirma"
+                                    [placeholder]="'Firma residente técnico'" [accept]="'image/*'" [sizeFile]="1"
+                                    [errors]="[{name: 'error', message: 'mensaje'}]">
+                                </sigma-form-upload-file>
+                            </div>
+                        </div>
+
+                        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                            <div fxFlex>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Nombre residente social interventoría"
+                                        formControlName="interventoriaNombre" [(ngModel)]="acta.interventoriaNombre">
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex>
+                                <mat-form-field class="w-100">
+                                    <input matInput placeholder="Identificación residente social interventoría"
+                                        formControlName="interventoriaIdentificacion"
+                                        [(ngModel)]="acta.interventoriaIdentificacion">
+                                </mat-form-field>
+                            </div>
+
+                            <div fxFlex class="mt-13">
+                                <sigma-form-upload-file formControlName="interventoriaFirma"
+                                    [(ngModel)]="acta.interventoriaFirma" [placeholder]="'Firma residente social interventoría'"
+                                    [accept]="'image/*'" [sizeFile]="1" [errors]="[{name: 'error', message: 'mensaje'}]">
+                                </sigma-form-upload-file>
+                            </div>
+                        </div>
+                    </mat-step> 
+
+                    <mat-step>
+                        <ng-template matStepLabel>Registro fotográfico - Nomenclatura*</ng-template>    
+                        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                            <div fxFlex>
+                                <ng-template matStepLabel>Fotos </ng-template>
+
+                                <div *ngIf="acta.registroNomenclatura.length < maxFotosNomenclatura" fxLayoutAlign="end">
+                                    <button mat-raised-button color="primary" (click)="addFotos('registroNomenclatura')">
+                                        <mat-icon class="m-1">add</mat-icon>
+                                        Registro fotográfico - Nomenclatura
+                                    </button>
+                                </div>
+
+                                <mat-form-field class="w-100 mb-10">
+                                    <input matInput type="text" formControlName="registroNomenclatura"
+                                        [(ngModel)]="acta.registroNomenclatura" class="hidden" />
+                                    <mat-error *ngIf="form.get('registroNomenclatura').hasError('maxElements')">
+                                        {{ constants.maxFiles }}
+                                        {{ form.get('registroNomenclatura') == null ? '' : form.get('registroNomenclatura').getError('maxElements').max }}
+                                        {{ constants.total | lowercase }}
+                                        ({{ form.get('registroNomenclatura') == null ? '' : form.get('registroNomenclatura').getError('maxElements').actual }})
+                                    </mat-error>
+                                    <mat-error *ngIf="form.get('registroNomenclatura').hasError('minElements')">
+                                        {{ constants.minFiles }}
+                                        {{ form.get('registroNomenclatura') == null ? '' : form.get('registroNomenclatura').getError('minElements').min }}
+                                        {{ constants.total | lowercase }}
+                                        ({{ form.get('registroNomenclatura') == null ? '' : form.get('registroNomenclatura').getError('minElements').actual }})
+                                    </mat-error>
+                                </mat-form-field>
+
+                                <mat-card-content class="m-0">
+                                    <div class="mat-elevation-z8">
+                                        <mat-table [dataSource]="registroNomenclaturaDatasource">
+                                            <ng-container matColumnDef="consecutivoFoto">
+                                                <mat-header-cell *matHeaderCellDef> Nombre</mat-header-cell>
+                                                <mat-cell *matCellDef="let i = index;" data-label="Nombre">
+                                                    Foto {{ i + 1 }}
+                                                </mat-cell>
+                                            </ng-container>
+
+                                            <ng-container matColumnDef="nombreFoto">
+                                                <mat-header-cell *matHeaderCellDef> Archivo</mat-header-cell>
+                                                <mat-cell *matCellDef="let foto" data-label="Archivo">
+                                                    {{ foto.archivo.ruta.substring(foto.archivo.ruta.lastIndexOf('\\') + 1) }}
+                                                </mat-cell>
+                                            </ng-container>
+
+                                            <ng-container matColumnDef="fotos">
+                                                <mat-header-cell *matHeaderCellDef> Imagen </mat-header-cell>
+                                                <mat-cell *matCellDef="let foto" data-label="Imagen">
+                                                    <sigma-show-file *ngIf="foto.archivo" [showFile]="true"
+                                                        [id]="foto.archivo.id">
+                                                    </sigma-show-file>
+                                                </mat-cell>
+                                            </ng-container>
+
+                                            <ng-container matColumnDef="acciones">
+                                                <mat-header-cell *matHeaderCellDef> {{ constants.acciones }}
+                                                </mat-header-cell>
+                                                <mat-cell *matCellDef="let foto; let i = index;"
+                                                    [attr.data-label]="constants.acciones">
+                                                    <button mat-raised-button color="warn"
+                                                        (click)="removeFoto(i,'registroNomenclatura')" class="m-1">
+                                                        <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete
+                                                        </mat-icon>
+                                                    </button>
+                                                </mat-cell>
+                                            </ng-container>
+
+                                            <mat-header-row *matHeaderRowDef="columnasTablaFotos"></mat-header-row>
+                                            <mat-row *matRowDef="let row; columns: columnasTablaFotos;"></mat-row>
+                                        </mat-table>
+                                    </div>
+                                </mat-card-content>
+                            </div>
+                        </div>
+                    </mat-step>
+
+                    <mat-step>
+                        <ng-template matStepLabel>Registro fotográfico - Fachada*</ng-template>
+                        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                            <div fxFlex>
+                                <ng-template matStepLabel>Fotos </ng-template>
+
+                                <div *ngIf="acta.registroFachada.length < maxFotosFachada" fxLayoutAlign="end">
+                                    <button mat-raised-button color="primary" (click)="addFotos('registroFachada')">
+                                        <mat-icon class="m-1">add</mat-icon>
+                                        Registro fotográfico - Fachada
+                                    </button>
+                                </div>
+
+                                <mat-form-field class="w-100 mb-10">
+                                    <input matInput type="text" formControlName="registroFachada"
+                                        [(ngModel)]="acta.registroFachada" class="hidden" />
+                                    <mat-error *ngIf="form.get('registroFachada').hasError('maxElements')">
+                                        {{ constants.maxFiles }}
+                                        {{ form.get('registroFachada') == null ? '' : form.get('registroFachada').getError('maxElements').max }}
+                                        {{ constants.total | lowercase }}
+                                        ({{ form.get('registroFachada') == null ? '' : form.get('registroFachada').getError('maxElements').actual }})
+                                    </mat-error>
+                                    <mat-error *ngIf="form.get('registroFachada').hasError('minElements')">
+                                        {{ constants.minFiles }}
+                                        {{ form.get('registroFachada') == null ? '' : form.get('registroFachada').getError('minElements').min }}
+                                        {{ constants.total | lowercase }}
+                                        ({{ form.get('registroFachada') == null ? '' : form.get('registroFachada').getError('minElements').actual }})
+                                    </mat-error>
+                                </mat-form-field>
+
+                                <mat-card-content class="m-0">
+                                    <div class="mat-elevation-z8">
+                                        <mat-table [dataSource]="registroFachadaDatasource">
+                                            <ng-container matColumnDef="consecutivoFoto">
+                                                <mat-header-cell *matHeaderCellDef> Nombre</mat-header-cell>
+                                                <mat-cell *matCellDef="let i = index;" data-label="Nombre">
+                                                    Foto {{ i + 1 }}
+                                                </mat-cell>
+                                            </ng-container>
+
+                                            <ng-container matColumnDef="nombreFoto">
+                                                <mat-header-cell *matHeaderCellDef> Archivo</mat-header-cell>
+                                                <mat-cell *matCellDef="let foto" data-label="Archivo">
+                                                    {{ foto.archivo.ruta.substring(foto.archivo.ruta.lastIndexOf('\\') + 1) }}
+                                                </mat-cell>
+                                            </ng-container>
+
+                                            <ng-container matColumnDef="fotos">
+                                                <mat-header-cell *matHeaderCellDef> Imagen </mat-header-cell>
+                                                <mat-cell *matCellDef="let foto" data-label="Imagen">
+                                                    <sigma-show-file *ngIf="foto.archivo" [showFile]="true"
+                                                        [id]="foto.archivo.id">
+                                                    </sigma-show-file>
+                                                </mat-cell>
+                                            </ng-container>
+
+                                            <ng-container matColumnDef="acciones">
+                                                <mat-header-cell *matHeaderCellDef> {{ constants.acciones }}
+                                                </mat-header-cell>
+                                                <mat-cell *matCellDef="let foto; let i = index;"
+                                                    [attr.data-label]="constants.acciones">
+                                                    <button mat-raised-button color="warn"
+                                                        (click)="removeFoto(i,'registroFachada')" class="m-1">
+                                                        <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete
+                                                        </mat-icon>
+                                                    </button>
+                                                </mat-cell>
+                                            </ng-container>
+
+                                            <mat-header-row *matHeaderRowDef="columnasTablaFotos"></mat-header-row>
+                                            <mat-row *matRowDef="let row; columns: columnasTablaFotos;"></mat-row>
+                                        </mat-table>
+                                    </div>
+                                </mat-card-content>
+                            </div>
+                        </div>
+                    </mat-step>
+
+                    <mat-step>
+                        <ng-template matStepLabel>Registro fotográfico*</ng-template>  
+                        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                            <div fxFlex>
+                                <ng-template matStepLabel>Fotos </ng-template>
+
+                                <div *ngIf="acta.registroFotografico.length < maxFotosRegistro" fxLayoutAlign="end">
+                                    <button mat-raised-button color="primary" (click)="addFotos('registroFotografico')">
+                                        <mat-icon class="m-1">add</mat-icon>
+                                        Registro fotográfico
+                                    </button>
+                                </div>
+
+                                <mat-form-field class="w-100 mb-10">
+                                    <input matInput type="text" formControlName="registroFotografico"
+                                        [(ngModel)]="acta.registroFotografico" class="hidden" />
+                                    <mat-error *ngIf="form.get('registroFotografico').hasError('maxElements')">
+                                        {{ constants.maxFiles }}
+                                        {{ form.get('registroFotografico') == null ? '' : form.get('registroFotografico').getError('maxElements').max }}
+                                        {{ constants.total | lowercase }}
+                                        ({{ form.get('registroFotografico') == null ? '' : form.get('registroFotografico').getError('maxElements').actual }})
+                                    </mat-error>
+                                    <mat-error *ngIf="form.get('registroFotografico').hasError('minElements')">
+                                        {{ constants.minFiles }}
+                                        {{ form.get('registroFotografico') == null ? '' : form.get('registroFotografico').getError('minElements').min }}
+                                        {{ constants.total | lowercase }}
+                                        ({{ form.get('registroFotografico') == null ? '' : form.get('registroFotografico').getError('minElements').actual }})
+                                    </mat-error>
+                                </mat-form-field>
+
+                                <mat-card-content class="m-0">
+                                    <div class="mat-elevation-z8">
+                                        <mat-table [dataSource]="registroFotograficoDatasource">
+                                            <ng-container matColumnDef="consecutivoFoto">
+                                                <mat-header-cell *matHeaderCellDef> Nombre</mat-header-cell>
+                                                <mat-cell *matCellDef="let i = index;" data-label="Nombre">
+                                                    Foto {{ i + 1 }}
+                                                </mat-cell>
+                                            </ng-container>
+
+                                            <ng-container matColumnDef="nombreFoto">
+                                                <mat-header-cell *matHeaderCellDef> Archivo</mat-header-cell>
+                                                <mat-cell *matCellDef="let foto" data-label="Archivo">
+                                                    {{ foto.archivo.ruta.substring(foto.archivo.ruta.lastIndexOf('\\') + 1) }}
+                                                </mat-cell>
+                                            </ng-container>
+
+                                            <ng-container matColumnDef="fotos">
+                                                <mat-header-cell *matHeaderCellDef> Imagen </mat-header-cell>
+                                                <mat-cell *matCellDef="let foto" data-label="Imagen">
+                                                    <sigma-show-file *ngIf="foto.archivo" [showFile]="true"
+                                                        [id]="foto.archivo.id">
+                                                    </sigma-show-file>
+                                                </mat-cell>
+                                            </ng-container>
+
+                                            <ng-container matColumnDef="acciones">
+                                                <mat-header-cell *matHeaderCellDef> {{ constants.acciones }}
+                                                </mat-header-cell>
+                                                <mat-cell *matCellDef="let foto; let i = index;"
+                                                    [attr.data-label]="constants.acciones">
+                                                    <button mat-raised-button color="warn"
+                                                        (click)="removeFoto(i,'registroFotografico')" class="m-1">
+                                                        <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete
+                                                        </mat-icon>
+                                                    </button>
+                                                </mat-cell>
+                                            </ng-container>
+
+                                            <mat-header-row *matHeaderRowDef="columnasTablaFotos"></mat-header-row>
+                                            <mat-row *matRowDef="let row; columns: columnasTablaFotos;"></mat-row>
+                                        </mat-table>
+                                    </div>
+                                </mat-card-content>
+                            </div>
+                        </div>
+                    </mat-step> 
+                </mat-vertical-stepper>        
+            </mat-card-content>
+
+            <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+            <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+                <button type="button" class="m-1" (click)="onBack()" mat-button color="warn">
+                    <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+                </button>
+                <button type="button" class="m-1" [disabled]="disableSubmit" mat-raised-button color="primary"
+                    (click)="onSubmit()">
+                    <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+                </button>
+                <button type="button" class="m-1" [disabled]="disableSaveAll" mat-raised-button color="primary"
+                    (click)="gestionarSeleccion()">
+                    <mat-icon class="m-1">save</mat-icon> {{ constants.guardarTodo }}
+                </button>
+            </div>
+
+            <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+            <sigma-seleccion-transicion *ngIf="showGestion" [(data)]="data" [transiciones]="actividad.transiciones"
+                (executeTransition)="guardarTodo()"  ></sigma-seleccion-transicion>
+        </mat-card>
+    </div>
+</div>

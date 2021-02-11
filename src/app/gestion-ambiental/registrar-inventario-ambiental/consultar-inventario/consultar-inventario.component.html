@@ -1,0 +1,214 @@
+<div fxLayout="row" fxLayoutAlign="start" class="mt-10">
+  <button mat-stroked-button color="primary" (click)="onBack()">
+    <mat-icon class="m-1">arrow_back</mat-icon>
+    {{ constants.irAtras }}
+  </button>
+</div>
+
+<!-- Table PK -->
+<div class="mat-elevation-z8 mt-10 mb-20">
+  <div *ngIf="loader" fxLayout="column" fxLayoutAlign="center center">
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+  <mat-table #table [dataSource]="dataSourcePk" [hidden]="!noInfoToShow || !loader" matSort>
+
+
+    <ng-container matColumnDef="pk">
+      <mat-header-cell *matHeaderCellDef>
+        {{ constants.pk }}</mat-header-cell>
+      <mat-cell *matCellDef="let inventario" [attr.data-label]="'pk'">
+        {{ inventario.pk }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="fechaRegistroInventario">
+      <mat-header-cell *matHeaderCellDef>
+        {{ constants.fechaRegistroInventario }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let inventario" [attr.data-label]="'fechaRegistroInventario'">
+        {{ inventario.fechaRegistroInventario }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="localidad">
+      <mat-header-cell *matHeaderCellDef>
+        {{ constants.localidad }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let inventario" [attr.data-label]="'localidad'">
+        {{ inventario.localidad?.descripcion }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="upla">
+      <mat-header-cell *matHeaderCellDef> {{ constants.upla }} </mat-header-cell>
+      <mat-cell *matCellDef="let inventario" [attr.data-label]="'upla'">
+        {{ inventario.upla?.descripcion }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="barrio">
+      <mat-header-cell *matHeaderCellDef> {{ constants.barrio }} </mat-header-cell>
+      <mat-cell *matCellDef="let inventario" [attr.data-label]="'barrio'">
+        {{ inventario.barrio?.descripcion }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="civ">
+      <mat-header-cell *matHeaderCellDef> {{ constants.civ }} </mat-header-cell>
+      <mat-cell *matCellDef="let inventario" [attr.data-label]="'civ'">
+        {{ inventario.civ }}
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="columnsPk"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columnsPk"></mat-row>
+  </mat-table>
+</div>
+<!-- Fin Table PK -->
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<div class="pt-16">
+  <div class="mat-elevation-z8 mb-10">
+    <div *ngIf="loader" fxLayout="column" fxLayoutAlign="center center">
+      <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+    </div>
+    <div *ngIf="noInfoToShow" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+      <mat-icon class="m-1">sms_failed</mat-icon>
+      <h4>{{ constants.noResultados }}</h4>
+    </div>
+    <mat-table #table class="col-x" [dataSource]="dataSource" [hidden]="!noInfoToShow || !loader" matSort>
+      <ng-container matColumnDef="numeral">
+        <mat-header-cell *matHeaderCellDef> No. </mat-header-cell>
+        <mat-cell *matCellDef="let inventario; let i = index" [attr.data-label]="'No'">
+          {{ i + 1 }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="individuosArboreos">
+        <mat-header-cell *matHeaderCellDef>
+          Individuos arboreos</mat-header-cell>
+        <mat-cell *matCellDef="let inventario" [attr.data-label]="'individuosArboreos'">
+          {{ inventario.cantidadArboles }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="individuosArbObs">
+        <mat-header-cell *matHeaderCellDef>
+          Individuos arboreos observaciones 
+        </mat-header-cell>
+        <mat-cell *matCellDef="let inventario" [attr.data-label]="'individuosArbObs'">
+          {{ inventario.observacionesArboles }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="sumideros">
+        <mat-header-cell *matHeaderCellDef>
+          Sumideros
+        </mat-header-cell>
+        <mat-cell *matCellDef="let inventario" [attr.data-label]="'sumideros'">
+          {{ inventario.cantidadSumideros }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="sumiderosObs">
+        <mat-header-cell *matHeaderCellDef> Sumideros observaciones </mat-header-cell>
+        <mat-cell *matCellDef="let inventario" [attr.data-label]="'sumiderosObs'">
+          {{ inventario.observacionesSumideros }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="sumiderosPluv">
+        <mat-header-cell *matHeaderCellDef>
+          Sumideros Pluvial
+        </mat-header-cell>
+        <mat-cell *matCellDef="let inventario" [attr.data-label]="'sumiderosPluv'">
+          {{ inventario.cantidadSumiderosPluvial }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="sumiderosObsPluv">
+        <mat-header-cell *matHeaderCellDef> Sumideros obs. Pluvial </mat-header-cell>
+        <mat-cell *matCellDef="let inventario" [attr.data-label]="'sumiderosObsPluv'">
+          {{ inventario.observacionesSumiderosPluv }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="plazas">
+        <mat-header-cell *matHeaderCellDef>
+          Plazas
+        </mat-header-cell>
+        <mat-cell *matCellDef="let inventario" [attr.data-label]="'plazas'">
+          {{ inventario.cantidadPlazas }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="plazasObs">
+        <mat-header-cell *matHeaderCellDef> Plazas observaciones </mat-header-cell>
+        <mat-cell *matCellDef="let inventario" [attr.data-label]="'plazasObs'">
+          {{ inventario.observacionesPlazas }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="pompeyano">
+        <mat-header-cell *matHeaderCellDef>
+          Pompeyanos
+        </mat-header-cell>
+        <mat-cell *matCellDef="let inventario" [attr.data-label]="'pompeyano'">
+          {{ inventario.cantidadPompeyano }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="pompeyanoObs">
+        <mat-header-cell *matHeaderCellDef> Pompeyanos observaciones </mat-header-cell>
+        <mat-cell *matCellDef="let inventario" [attr.data-label]="'pompeyanoObs'">
+          {{ inventario.observacionesPompeyano }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="ePublico">
+        <mat-header-cell *matHeaderCellDef> Espacio publico </mat-header-cell>
+        <mat-cell *matCellDef="let inventario" [attr.data-label]="'ePublico'">
+          {{ inventario.cantidadEspacioPublico }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="ePublicoObs">
+        <mat-header-cell *matHeaderCellDef> Espacio publico observaciones </mat-header-cell>
+        <mat-cell *matCellDef="let inventario" [attr.data-label]="'ePublicoObs'">
+          {{ inventario.observacionesEspacioP }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="banios">
+        <mat-header-cell *matHeaderCellDef> Baños </mat-header-cell>
+        <mat-cell *matCellDef="let inventario" [attr.data-label]="'banios'">
+          {{ inventario.cantidadBanos }}
+        </mat-cell>
+      </ng-container>
+      
+      <ng-container matColumnDef="baniosObs">
+        <mat-header-cell *matHeaderCellDef> Baños observaciones </mat-header-cell>
+        <mat-cell *matCellDef="let inventario" [attr.data-label]="'baniosObs'">
+          {{ inventario.observacionesBanos }}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="acciones">
+        <mat-header-cell *matHeaderCellDef>
+          {{ constants.acciones }}
+        </mat-header-cell>
+        <mat-cell *matCellDef="let inventario; let i = index" [attr.data-label]="constants.acciones">
+          <button type="button" class="m-1" mat-raised-button color="primary" (click)="exportAsXLSX(inventario)">
+            <mat-icon>get_app</mat-icon>
+            {{ constants.exportar }}
+          </button>
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columns"></mat-row>
+    </mat-table>
+    <mat-paginator #paginator [length]="lengthList" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]">
+    </mat-paginator>
+  </div>
+</div>

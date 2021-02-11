@@ -1,0 +1,24 @@
+<h2 mat-dialog-title>Adicionar Factor</h2>
+
+<div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+  <h5>{{ constants.informacionCampoObligatorio }}</h5>
+</div>
+
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <sigma-form-select-desc-valor formControlName="tipoFactor" [(ngModel)]="factor.tipoFactor" name="tipoFactor"
+      [path]="constants.path_workflow_diagnostico_factores_tipo_factor" [placeholder]="constants.tipo_factor">
+    </sigma-form-select-desc-valor>
+  </form>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> Cancelar
+  </button>
+  <button mat-raised-button color="primary" appPrevenirMultiplesClicks (clearClick)="save()">
+    <mat-icon class="m-1">save</mat-icon> Guardar
+  </button>
+</mat-dialog-actions>

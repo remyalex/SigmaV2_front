@@ -1,0 +1,218 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="processing">
+  <div [hidden]="currentAction !== 'list'">
+    <div fxLayout="column" fxLayout.gt-sm="row wrap">
+      <div fxFlex="100" class="flex-p">
+        <mat-tab-group [selectedIndex]="tabSeleccionado.value" (selectedIndexChange)="seleccionarGrid($event)">
+          <mat-tab label="Registrar radicado salida">
+            <sigma-grid-mantenimientos #grid *ngIf="condicionRadSalida" [data]="data" [columns]="columns"
+              [filters]="filtersRadicadoSalida" [condicion]="condicionRadSalida" [masiveActions]="asignarRadicadoSalida"
+              (executeOnMasiveAction)="ejecutar($event)" [showCheckMasive]="true" [mapaInicial]="false">
+            </sigma-grid-mantenimientos>
+          </mat-tab>
+          <mat-tab label="Registrar radicado entrada">
+            <sigma-grid-mantenimientos #grid *ngIf="condicionRadEntrada" [data]="data" [columns]="columns"
+              [filters]="filtersRadicadoEntrada" [condicion]="condicionRadEntrada"
+              [masiveActions]="asignarRadicadoEntrada" (executeOnMasiveAction)="ejecutar($event)"
+              [showCheckMasive]="true" [mapaInicial]="false">
+            </sigma-grid-mantenimientos>
+          </mat-tab>
+          <mat-tab *ngFor="let transicion of transicionesMasivas" label="{{transicion.nombre}}">
+            <sigma-grid-mantenimientos #grid [data]="data" [transicion]="transicion" [columns]="columns"
+              [filters]="filtersTransiciones" (executeOnMasiveTransition)="executeMasiveTransition($event)"
+              [showCheckMasive]="true" [mapaInicial]="false"></sigma-grid-mantenimientos>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </div>
+
+  <!-- Seccion Radicado Salida -->
+  <div *ngIf="currentAction == 'radicadoSalida'">
+    <div class="p-16 m-0">
+      <mat-card class="p-0 c-mod">
+        <mat-card-header fxLayoutAlign="center">
+          <mat-card-subtitle>
+            <h3>Vincular Radicado de Salida Reserva</h3>
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content class="p-16 m-0" [formGroup]="formularioConsultaRadicadoSalida">
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0" class="mb-10">
+            <div fxFlex>
+              <mat-form-field class="w-100">
+                <input matInput placeholder="Buscar radicado" [(ngModel)]="entradaConsultaRadicadoSalida"
+                  formControlName="entradaConsultaRadicadoSalida" [required]="true">
+              </mat-form-field>
+            </div>
+            <div fxFlex="30">
+              <button mat-button mat-raised-button color="primary" (click)="buscarRadicadoSalida()">
+                <mat-icon class="m-1">search</mat-icon>
+                Buscar Radicado
+              </button>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+            <div fxFlex>
+              <mat-form-field class="w-100">
+                <input matInput placeholder="Radicado de salida" formControlName="radicadoSolicitudReserva"
+                  [ngModel]="radicadoSolicitudReserva" readonly>
+              </mat-form-field>
+            </div>
+            <div fxFlex>
+              <mat-form-field class="w-100">
+                <input matInput placeholder="Fecha radicación" formControlName="fechaRadicacion"
+                  [ngModel]="fechaRadicacion" readonly>
+              </mat-form-field>
+            </div>
+            <div fxFlex>
+              <mat-form-field class="w-100">
+                <input matInput placeholder="Fecha vencimiento" formControlName="fechaVencimiento"
+                  [ngModel]="fechaVencimiento" readonly>
+              </mat-form-field>
+            </div>
+            <div fxFlex>
+              <mat-form-field class="w-100">
+                <input matInput placeholder="Remitente" formControlName="remitente" [ngModel]="remitente"
+                  readonly>
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+            <div fxFlex>
+              <mat-form-field class="w-100">
+                <input matInput placeholder="Asunto" formControlName="asunto" [(ngModel)]="asunto" readonly>
+              </mat-form-field>
+            </div>
+            <div fxFlex>
+              <mat-form-field class="w-100">
+                <input matInput placeholder="Fecha de generacion documento"
+                  formControlName="fechaGeneracionDocumento" [ngModel]="fechaGeneracionDocumento" readonly>
+              </mat-form-field>
+            </div>
+            <div fxFlex>
+              <mat-form-field class="w-100">
+                <input matInput placeholder="dependencia asignada" formControlName="dependenciaAsignada"
+                  [ngModel]="dependenciaAsignada" readonly>
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-card-content>
+
+        <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+          <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+            <mat-dialog-actions>
+              <button class="m-1" mat-button color="warn" (click)="cancelRadSalida()">
+                <mat-icon class="m-1">close</mat-icon>
+                Cancelar
+              </button>
+              <button mat-button mat-raised-button class="m-1" color="primary"
+                [disabled]="radicadoSolicitudReserva == null || processing" (click)="saveRadicadoSalida()">
+                <mat-icon class="m-1">save</mat-icon>
+                Guardar
+              </button>
+            </mat-dialog-actions>
+          </div>
+
+      </mat-card>
+      </div>
+  </div>
+
+  <!-- Seccion Radicado Entrada -->
+  <div *ngIf="currentAction == 'radicadoEntrada'">
+    <div class="p-16 m-0">
+      <mat-card class="p-0 c-mod">
+        <mat-card-header fxLayoutAlign="center">
+          <mat-card-subtitle>
+            <h3>Vincular Radicado de Entrada Reserva</h3>
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content class="p-16 m-0" [formGroup]="formularioConsultaRadicadoEntrada">
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+            <div fxFlex>
+              <mat-form-field class="w-100">
+                <input matInput placeholder="Buscar radicado" [(ngModel)]="entradaConsultaRadicadoEntrada"
+                  formControlName="entradaConsultaRadicadoEntrada" [required]="true">
+              </mat-form-field>
+            </div>
+            <div fxFlex="30">
+              <button mat-button mat-raised-button color="primary" (click)="buscarRadicadoEntrada()">
+                <mat-icon class="m-1">search</mat-icon>
+                Buscar Radicado
+              </button>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+            <div fxFlex>
+              <mat-form-field class="w-100">
+                <input matInput placeholder="Radicado de salida" formControlName="solicitudRadicadoEntrada"
+                  [ngModel]="radicadoRespuestaReserva" readonly>
+              </mat-form-field>
+            </div>
+            <div fxFlex>
+              <mat-form-field class="w-100">
+                <input matInput placeholder="Fecha radicación" formControlName="fechaRadicacion"
+                  [ngModel]="fechaRadicacion" readonly>
+              </mat-form-field>
+            </div>
+            <div fxFlex>
+              <mat-form-field class="w-100">
+                <input matInput placeholder="Fecha vencimiento" formControlName="fechaVencimiento"
+                  [ngModel]="fechaVencimiento" readonly>
+              </mat-form-field>
+            </div>
+            <div fxFlex>
+              <mat-form-field class="w-100">
+                <input matInput placeholder="Remitente" formControlName="remitente" [ngModel]="remitente"
+                  readonly>
+              </mat-form-field>
+            </div>
+          </div>
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+            <div fxFlex>
+              <mat-form-field class="w-100">
+                <input matInput placeholder="Asunto" formControlName="asunto" [(ngModel)]="asunto" readonly>
+              </mat-form-field>
+            </div>
+            <div fxFlex>
+              <mat-form-field class="w-100">
+                <input matInput placeholder="Fecha de generacion documento"
+                  formControlName="fechaGeneracionDocumento" [ngModel]="fechaGeneracionDocumento" readonly>
+              </mat-form-field>
+            </div>
+            <div fxFlex>
+              <mat-form-field class="w-100">
+                <input matInput placeholder="dependencia asignada" formControlName="dependenciaAsignada"
+                  [ngModel]="dependenciaAsignada" readonly>
+              </mat-form-field>
+            </div>
+            <div fxFlex>
+              <sigma-form-select [path]="constants.path_workflow_gestionar_reserva_respuesta_reserva"
+                [(ngModel)]="tipoRadicadoRespuestaReserva " formControlName="tipoRadicadoRespuestaReserva"
+                (ngModelChange)="onChangeTipoRespuesta($event)" name="tipoRtaRadSalida "
+                placeholder="Tipo Respuesta" [listBy]="'descripcion'">
+              </sigma-form-select>
+            </div>
+          </div>
+        </mat-card-content>
+        <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+          <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+            <mat-dialog-actions>
+              <button class="m-1" mat-button color="warn" (click)="cancelRadEntrada()">
+                <mat-icon class="m-1">close</mat-icon>
+                Cancelar
+              </button>
+              <button mat-button mat-raised-button class="m-1" color="primary"
+                [disabled]="radicadoRespuestaReserva == null || processing || !tipoRadicadoRespuestaReserva"
+                (click)="saveRadicadoEntrada()">
+                <mat-icon class="m-1">save</mat-icon>
+                Guardar
+              </button>
+            </mat-dialog-actions>
+          </div>
+      </mat-card>
+    </div>
+  </div>
+</div>

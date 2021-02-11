@@ -1,0 +1,65 @@
+<div fxLayout="column">
+  <div class="flex-p">
+    <mat-card class="p-0 mat-card">
+      <mat-card-header fxLayoutAlign="center">
+        <mat-card-subtitle><h2>{{ constants.crear }} Formato</h2></mat-card-subtitle>
+      </mat-card-header>
+
+      <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+        <h5>{{ constants.informacionCampoObligatorio }}</h5>
+      </div>
+
+      <mat-card-content class="p-16 m-0" [formGroup]="form" 
+      *sigmaIsGranted="constants.permiso_administracion_formato_create">
+        
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.codigo }}" formControlName="codigo" [(ngModel)]="formato.codigo" autocomplete="off" 
+                type="text" required pattern="^(?!\s*$).+" >
+              <mat-error *ngIf="form.get('codigo').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+              <mat-error *ngIf="form.get('codigo').hasError('maxlength')">  {{ constants.longitud_maxima }} 20</mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.plantilla }}" formControlName="plantilla" [(ngModel)]="formato.plantilla" autocomplete="off" 
+                type="text" required pattern="^(?!\s*$).+">
+              <mat-error *ngIf="form.get('plantilla').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+              <mat-error *ngIf="form.get('plantilla').hasError('maxlength')"> {{ constants.longitud_maxima }} 20</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <div class="w-100">
+              <sigma-form-select [path]="constants.path_administracion_formato_tipoDocumentoId" placeholder="{{ constants.tipoDocumentoId }}"
+                required="true" formControlName="tipoDocumentoId" [(ngModel)]="formato.tipoDocumento" [listBy]="'descripcion'">
+              </sigma-form-select>
+            </div>
+          </div>
+          <div fxFlex>
+            <div class="w-100">
+              <sigma-file-upload model="archivoId" required="true" (dataFile)="setDataFormato('archivo', $event)" (loadFile)="validateUploadFile($event)" [responseType]="constants.objeto"></sigma-file-upload>
+              <input matInput  type="text" placeholder="" formControlName="archivoId" [(ngModel)]="formato.archivo" autocomplete="off" hidden>
+              <mat-error *ngIf="requerido && enviada && form.get('archivoId').hasError('required')"> El archivo es requerido </mat-error>
+              <mat-error *ngIf="!requerido && enviada && form.get('archivoId').hasError('required')"> El archivo excede el tamaño permitido </mat-error>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+      <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+        <button type="button" (click)="onBack()" mat-button color="warn" class="m-1">
+          <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+        </button>
+        <button type="button" class="m-1" mat-raised-button color="primary" (click)="onSubmit()" [disabled]="disabledBtn_Login"
+          *sigmaIsGranted="constants.permiso_administracion_formato_create">
+            <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</div>

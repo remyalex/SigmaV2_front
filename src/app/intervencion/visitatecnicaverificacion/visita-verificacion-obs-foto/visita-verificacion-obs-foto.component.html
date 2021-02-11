@@ -1,0 +1,102 @@
+<div fxLayout="column">
+  <div class="flex-p" *ngIf="mantenimientoTabla !== undefined && mantenimientoTabla.intervenciones.length > 0 && mantenimientoTabla.intervenciones[0].chequeos !== undefined">
+      <mat-card-content>
+        <div *ngIf="this.mantenimiento.intervenciones[0].chequeos.length < maxFotos" fxLayoutAlign="end" class="mb-10">
+          <button mat-raised-button color="primary" (click)="adicionar()" [disabled]= "!isEditable || loading">
+            <mat-icon class="m-1">note_add</mat-icon>
+            Adicionar
+          </button>
+        </div>
+
+        <form [formGroup]="formularioFotos">
+          <mat-form-field class="w-100">
+            <input matInput type="text" formControlName="fotos"
+              class="hidden" />
+            <mat-error *ngIf="formularioFotos.get('fotos').hasError('maxElements')">
+              {{ constants.maxFiles }}
+              {{ formularioFotos.get('fotos') == null ? '' : formularioFotos.get('fotos').getError('maxElements').max }}
+              {{ constants.total | lowercase }}
+              ({{ formularioFotos.get('fotos') == null ? '' : formularioFotos.get('fotos').getError('maxElements').actual }})
+            </mat-error>
+          </mat-form-field>
+        </form>
+
+      </mat-card-content>
+
+      <div class="table-responsive mat-elevation-z8 mb-10">
+        <mat-table #table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
+          <!-- Position Column -->
+          <ng-container matColumnDef="chequeo">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Lista de Chequeo </mat-header-cell>
+            <mat-cell *matCellDef="let intervencionChequeo" data-label="Lista de Chequeo"> 
+              {{intervencionChequeo.listaChequeo? intervencionChequeo.listaChequeo.descripcion: ''}} 
+            </mat-cell>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="observaciones">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Observaciones </mat-header-cell>
+            <mat-cell *matCellDef="let intervencionChequeo" data-label="Observaciones">
+              {{intervencionChequeo.observaciones}} 
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="imagen">
+            <mat-header-cell *matHeaderCellDef> Imagen 1</mat-header-cell>
+            <mat-cell *matCellDef="let intervencionChequeo" data-label="Imagen 1">
+              <sigma-show-file *ngIf="intervencionChequeo.fotos !== undefined  && intervencionChequeo.fotos.length>0" [showFile]="true" [id]="intervencionChequeo.fotos[0].id"></sigma-show-file>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="imagen2">
+            <mat-header-cell *matHeaderCellDef> Imagen 2</mat-header-cell>
+            <mat-cell *matCellDef="let intervencionChequeo" data-label="Imagen 2">
+              <sigma-show-file *ngIf="intervencionChequeo.fotos !== undefined  && intervencionChequeo.fotos.length>1" [showFile]="true" [id]="intervencionChequeo.fotos[1].id"></sigma-show-file>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="imagen3">
+            <mat-header-cell *matHeaderCellDef> Imagen 3</mat-header-cell>
+            <mat-cell *matCellDef="let intervencionChequeo" data-label="Imagen 3">
+              <sigma-show-file *ngIf="intervencionChequeo.fotos !== undefined  && intervencionChequeo.fotos.length>2" [showFile]="true" [id]="intervencionChequeo.fotos[2].id"></sigma-show-file>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="imagen4">
+            <mat-header-cell *matHeaderCellDef> Imagen 4</mat-header-cell>
+            <mat-cell *matCellDef="let intervencionChequeo" data-label="Imagen 4">
+              <sigma-show-file *ngIf="intervencionChequeo.fotos !== undefined  && intervencionChequeo.fotos.length>3" [showFile]="true" [id]="intervencionChequeo.fotos[3].id"></sigma-show-file>
+            </mat-cell>
+          </ng-container>
+
+          <!-- Symbol Column -->
+          <ng-container matColumnDef="acciones">
+            <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+            <mat-cell *matCellDef="let intervencionChequeo; let i = index;" data-label="Acciones">
+              <button mat-raised-button color="primary" class="m-1" (click)="edit(intervencionChequeo)" [disabled]= "!isEditable || loading">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-raised-button color="warn" class="m-1"   (click)="delete(i)" [disabled]= "!isEditable || loading">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+      </div>
+
+      <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+      <div fxLayout="row" fxLayoutAlign="end" class="p-8">
+        <button type="button" [disabled]="enviada || (mantenimientoTabla.intervenciones[0].chequeos !== undefined &&
+         mantenimientoTabla.intervenciones[0].chequeos.length < 1) || (!isEditable) || loading" class="m-1" mat-raised-button color="primary" 
+        (click)="saveSeccion()">
+          <mat-icon class="m-1">save</mat-icon> {{ constants.guardarSeccion }} 
+        </button>
+      </div>
+  </div>
+</div>

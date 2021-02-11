@@ -1,0 +1,103 @@
+<h2 mat-dialog-title>{{ constants.editar }} Actividad</h2>
+
+<div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+  <h5>Todos los campos con * son obligatorios</h5>
+</div>
+
+<mat-dialog-content [formGroup]="form">
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input type="hidden" formControlName="id" [(ngModel)]="actividadToEdit.id">
+        <input matInput placeholder="{{ constants.nombre }}" formControlName="nombre"
+          [(ngModel)]="actividadToEdit.nombre" autocomplete="off" type="text" required pattern="^(?!\s*$).+" required>
+        <mat-error *ngIf="form.get('nombre').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+        <mat-error *ngIf="form.get('nombre').hasError('maxlength')"> {{ constants.longitud_maxima }} 255
+          caracteres. </mat-error>
+      </mat-form-field>
+    </div>
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <textarea matInput placeholder="{{ constants.descripcion }}" rows="1" [(ngModel)]="actividadToEdit.descripcion"
+          formControlName="descripcion" matTooltip="Descripción del proceso" matTooltipPosition="above"
+          required></textarea>
+        <mat-error *ngIf="form.get('descripcion').hasError('required')"> {{ constants.campoRequerido }}
+        </mat-error>
+        <mat-error *ngIf="form.get('descripcion').hasError('maxlength')"> {{ constants.longitud_maxima }} 255
+          caracteres. </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <sigma-form-select placeholder="Área UMV" formControlName="area" [(ngModel)]="actividadToEdit.area"
+        [path]="constants.path_administracion_procesoactividad_area" [listBy]="'descripcion'">
+      </sigma-form-select>
+    </div>
+    <div fxFlex>
+      <sigma-form-select placeholder="Cargo UMV" formControlName="cargo" [(ngModel)]="actividadToEdit.cargo"
+        [path]="constants.path_administracion_procesoactividad_cargo" [listBy]="'descripcion'">
+      </sigma-form-select>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="URL" rows="1" [(ngModel)]="actividadToEdit.url" formControlName="url"
+          matTooltip="URL Actividad" matTooltipPosition="above" required>
+        <mat-error *ngIf="form.get('url').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+        <mat-error *ngIf="form.get('url').hasError('maxlength')"> {{ constants.longitud_maxima }} 255 caracteres.
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div fxFlex>
+      <sigma-form-select placeholder="ComponenteUI" formControlName="componenteUI"
+        [(ngModel)]="actividadToEdit.componenteUI" [path]="constants.path_administracion_procesoactividad_componenteUI"
+        [listBy]="'nombre'">
+      </sigma-form-select>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <sigma-form-select placeholder="{{constants.permisoId}}" formControlName="permiso"
+        [(ngModel)]="actividadToEdit.permiso" [path]="constants.path_administracion_procesoactividad_permisos"
+        [listBy]="'nombre'">
+      </sigma-form-select>
+    </div>
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="{{ constants.duracion }}" formControlName="duracion"
+          [(ngModel)]="actividadToEdit.duracion" autocomplete="off" type="text" required pattern="[0-9]*">
+        <mat-error *ngIf="form.get('duracion').hasError('required')"> {{ constants.campoRequerido }}
+        </mat-error>
+        <mat-error *ngIf="form.get('duracion').hasError('maxlength')"> {{ constants.longitud_maxima }} 255
+          caracteres. </mat-error>
+        <mat-error *ngIf="form.get('duracion').hasError('pattern')"> Solo se permiten valores numericos
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex="100">
+      <mat-checkbox formControlName="activoProcesoActividad" [(ngModel)]="actividadToEdit.activo"
+        name="activoProcesoActividad" id="activoProcesoActividad">{{ constants.activo }}
+      </mat-checkbox>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions fxLayout="row" fxLayoutAlign="end" class="flex-p">
+  <button mat-button color="warn" class="m-1" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+  </button>
+  <button mat-raised-button class="m-1" [disabled]="disableSubmit" color="primary" (click)="onSubmit()"
+    *sigmaIsGranted="constants.permiso_administracion_procesoactividad_update">
+    <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+  </button>
+</mat-dialog-actions>

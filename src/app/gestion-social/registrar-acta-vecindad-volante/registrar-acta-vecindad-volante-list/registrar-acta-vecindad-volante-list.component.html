@@ -1,0 +1,155 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="currentAction != 'listVolantes'">
+
+  <div>
+    <div class="mt-10 mb-10">
+      <h3>Registro de Volantes Pk {{mantenimiento.pk}}</h3>
+    </div>
+
+    <mat-card-content>
+
+      <div fxLayout="row" fxLayout.lt-md="column" class="mt-10 mb-10">
+        <div fxLayoutAlign="end" fxFlex>
+          <button *sigmaIsGranted="constants.permiso_social_actas_create" class="m-1" mat-raised-button color="primary"
+            class="m-1" (click)="create();">
+            <mat-icon class="m-1">note_add</mat-icon>{{ constants.crearNuevo }}
+          </button>
+          <!-- <button mat-stroked-button color="primary" class="m-1 mb-10" (click)="onBack()">
+              <mat-icon>arrow_back_ios</mat-icon>
+              {{ constants.irAtras }}
+            </button> -->
+        </div>
+      </div>
+
+      <div class="mat-elevation-z8">
+        <div *ngIf="dataSourceVol.loading$ | async" fxLayout="column" fxLayoutAlign="center center">
+          <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+        </div>
+        <div *ngIf="dataSourceVol.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+          <mat-icon class="m-1">sms_failed</mat-icon>
+          <h4> {{ dataSourceVol.errorMessage$ | async }}</h4>
+        </div>
+        <mat-table #table [dataSource]="dataSourceVol" [hidden]="dataSourceVol.loading$" matSort>
+
+          <!-- NUEVO -->
+          <ng-container matColumnDef="select">
+            <mat-header-cell *matHeaderCellDef>
+              <mat-checkbox (change)="$event ? masterToggle(dataSource, $event) : null" [checked]="selection.hasValue()"
+                [indeterminate]="selection.hasValue()">
+              </mat-checkbox>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let actaVolante">
+              <mat-checkbox #listCheckboxes (click)="$event.stopPropagation()"
+                (change)="$event ? toggleChecks(actaVolante, $event) : null" [checked]="actaVolante.select">
+              </mat-checkbox>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="propietario">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.propietario }} </mat-header-cell>
+            <mat-cell *matCellDef="let actaVolante" [attr.data-label]="constants.propietario">
+              {{ actaVolante.actaVolanteResidente.propietario != null ? actaVolante.actaVolanteResidente.propietario : '' }}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="direccion">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.direccion }} </mat-header-cell>
+            <mat-cell *matCellDef="let actaVolante" [attr.data-label]="constants.direccion">
+              {{ actaVolante.actaVolanteResidente.direccion != null ? actaVolante.actaVolanteResidente.direccion : '' }}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="telefono">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.telefono }} </mat-header-cell>
+            <mat-cell *matCellDef="let actaVolante" [attr.data-label]="constants.telefono">
+              {{ actaVolante.actaVolanteResidente.telefono }}
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="fechaRegistro">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaRegistro }} </mat-header-cell>
+            <mat-cell *matCellDef="let actaVolante" [attr.data-label]="constants.fechaRegistro">
+              {{ actaVolante.actaVolanteResidente.fechaRegistro != null ? actaVolante.actaVolanteResidente.fechaRegistro : '' }}
+            </mat-cell>
+          </ng-container>
+
+          <!--<ng-container matColumnDef="volanteEntregado">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.volanteEntregado }} </mat-header-cell>
+              <mat-cell *matCellDef="let actaVolante"> {{ actaVolante.actaVolanteResidente.volanteEntregado }} </mat-cell>
+            </ng-container>-->
+
+          <ng-container matColumnDef="volanteEntregado">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.volanteEntregado }} </mat-header-cell>
+            <mat-cell *matCellDef="let actaVolante" [attr.data-label]="constants.volanteEntregado">
+              <span class="dev-color-red"
+                [hidden]="actaVolante.actaVolanteResidente.volanteEntregado">{{ constants.no }}</span>
+              <span class="dev-color-green"
+                [hidden]="!actaVolante.actaVolanteResidente.volanteEntregado">{{ constants.si }}</span>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="acciones">
+            <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+            <mat-cell *matCellDef="let actaVolante" [attr.data-label]="constants.volanteEntregado">
+              <button mat-raised-button color="primary" (click)="edit(actaVolante)" class="m-1"
+                title="editar acta volante">
+                <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+              </button>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: columns"></mat-row>
+
+        </mat-table>
+        <mat-paginator #paginator [length]="dataSourceVol.totalElements$ | async" [pageSize]="criteria.size"
+          [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+      </div>
+      <sigma-seleccion-transicion *ngIf="verEnvio" [(data)]="data" [transiciones]="transiciones"
+        (executeTransition)="executeTransition()">
+      </sigma-seleccion-transicion>
+    </mat-card-content>
+
+    
+
+    <div fxLayout="row" fxLayoutAlign="end">
+      <mat-divider></mat-divider>
+        <div class="pt-16">
+        <button mat-button color="warn" class="m-1" (click)="onBack()">
+          <mat-icon class="m-1">close</mat-icon>{{ constants.cancelar }}
+        </button>
+        <!--<button *sigmaIsGranted="constants.permiso_social_actas_create" mat-raised-button color="primary"
+            class="m-1" (click)="create();">
+            <mat-icon class="m-1">note_add</mat-icon>{{ constants.crearNuevo }}
+          </button>-->
+        <button *sigmaIsGranted="constants.permiso_social_actas_create" mat-raised-button color="primary" class="m-1"
+          (click)="prepararEnvio();">
+          <mat-icon class="m-1">save</mat-icon> Guardar Todo
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="currentAction == 'createActa'">
+  <app-registrar-acta-vecindad-volante-create [mantenimiento]="mantenimiento" (back)="backEvent($event)">    
+  </app-registrar-acta-vecindad-volante-create>
+</div>
+
+<div *ngIf="currentAction == 'editarVolante'">
+  <app-registrar-acta-vecindad-volante-edit [pk]="pk" [actaVolanteId]="actaVolanteId" (back)="backEvent($event)">
+  </app-registrar-acta-vecindad-volante-edit>
+</div>
+
+<!--<div [hidden]="creaVolante">
+  <app-registrar-acta-vecindad-volante-create [mantenimiento]="mantenimiento" (back)="list($event)">
+  </app-registrar-acta-vecindad-volante-create>
+</div>
+
+<div [hidden]="editarVolante">
+    <app-registrar-acta-vecindad-volante-edit [mantenimiento]="mantenimiento" [actaVolante] = "actaVolante">
+    </app-registrar-acta-vecindad-volante-edit>
+  </div>-->

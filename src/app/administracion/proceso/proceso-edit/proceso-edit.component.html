@@ -1,0 +1,94 @@
+<div *ngIf="generalLoad" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+<div fxLayout="column" *ngIf="!generalLoad">
+  <div class="flex-p">
+    <mat-card class="p-0 mat-card">
+      <mat-card-header fxLayoutAlign="center">
+        <mat-card-subtitle>
+          <h2>{{ constants.editar }} Proceso</h2>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+        <h5>{{ constants.informacionCampoObligatorio }}</h5>
+      </div>
+
+      <mat-card-content class="p-16 m-0" [formGroup]="form"
+        *sigmaIsGranted="constants.permiso_administracion_proceso_update">
+        <input type="hidden" formControlName="id" [(ngModel)]="proceso.id">
+
+        <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+          <div fxFlex="40">
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.nombre }}" formControlName="nombre"
+                [(ngModel)]="proceso.nombre" autocomplete="off" type="text" required pattern="^(?!\s*$).+">
+              <mat-error *ngIf="form.get('nombre').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+              <mat-error *ngIf="form.get('nombre').hasError('maxlength')"> {{ constants.longitud_maxima }} 255
+                caracteres. </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <textarea matInput placeholder="{{ constants.descripcion }}" rows="1" [(ngModel)]="proceso.descripcion"
+                formControlName="descripcion" matTooltip="Descripción de el proceso" matTooltipPosition="above"
+                required></textarea>
+              <mat-error *ngIf="form.get('descripcion').hasError('required')"> {{ constants.campoRequerido }}.
+              </mat-error>
+              <mat-error *ngIf="form.get('descripcion').hasError('maxlength')"> {{ constants.longitud_maxima }} 255
+                caracteres. </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+          <div fxFlex="100">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.url }}" formControlName="url" [(ngModel)]="proceso.url"
+                  autocomplete="off" type="text" required>
+                <mat-error *ngIf="form.get('url').hasError('required')"> {{ constants.campoRequerido }}.
+                </mat-error>
+                <mat-error *ngIf="form.get('url').hasError('maxlength')"> {{ constants.longitud_maxima }} 255
+                  caracteres. </mat-error>
+              </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+          <div class="item" fxFlex="50%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-checkbox formControlName="activo" [(ngModel)]="proceso.activo" name="activo" id="activo">
+                {{ constants.activo }}
+              </mat-checkbox>
+            </div>
+          </div>
+        </div>
+
+      </mat-card-content>
+
+      <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+      <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+        <button type="button" (click)="onBack()" mat-button color="warn" class="m-1">
+          <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+        </button>
+        <button type="button" [disabled]="disableSubmit" class="m-1" mat-raised-button color="primary"
+          (click)="onSubmit()" *sigmaIsGranted="constants.permiso_administracion_proceso_create">
+          <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+        </button>
+      </div>
+      <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+      <mat-tab-group>
+        <mat-tab label="Actividades">
+          <sigma-administracion-procesoactividad-admin [proceso]="proceso">
+          </sigma-administracion-procesoactividad-admin>
+        </mat-tab>
+        <mat-tab label="Transiciones" [disabled]="transitionDisabled">
+          <sigma-administracion-procesotransicion-admin [proceso]="proceso">
+          </sigma-administracion-procesotransicion-admin>
+        </mat-tab>
+      </mat-tab-group>
+
+    </mat-card>
+
+  </div>
+</div>

@@ -1,0 +1,39 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0" fxLayoutAlign="end">
+  <div fxFlex="30" fxFlex.md="50">
+  <input #inputFile type="file" hidden (change)="uploadSelectPk($event)" [accept]="accept">
+  <mat-form-field class="mt-10 w-100">
+    <input #input matInput [placeholder]="constants.cargarPk" autocomplete="off" type="text"
+    readonly (click)="selectFile()" [value]="getValue()" class="hover-element-pointer"
+      class="hidden" />
+
+    <mat-icon matSuffix color="primary" class="hover-element-pointer" (click)="selectFile()">
+      attach_file</mat-icon>
+  </mat-form-field>
+  <!-- <button layout="row" mat-raised-button color="primary" class="m-1"  (click)="uploadSelectPk($event)">
+    <mat-icon>publish</mat-icon>
+    {{ constants.cargarPk }}
+  </button> -->
+  </div>
+</div>
+
+<mat-divider></mat-divider>
+
+<div [hidden]="processing">
+  <div fxLayout="column">
+    <div class="w-100">     
+      <mat-tab-group [selectedIndex]="tabSeleccionado.value" (selectedIndexChange)="seleccionarGrid($event)">
+        <mat-tab label="Consultar" *ngIf="condicion">
+          <sigma-grid-mantenimientos #grid [data]="data" [masiveActions]="accionesMasivas" [condicion]="condicion"
+          [columns]="columns" [filters]="filters" [showActividadAgrupada]="false" [showExport]="false"
+          [defaultFilters]="defaulFilters" 
+          [defaultSortGrid]="defaultSortGrid" (executeOnMasiveAction)="ejecutar($event)" [tipoGrid]="'Todos'">
+          </sigma-grid-mantenimientos>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</div>

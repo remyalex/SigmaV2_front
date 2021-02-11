@@ -1,0 +1,113 @@
+<div fxLayout="column">
+  <div class="flex-p">
+    <mat-card class="p-0 mat-card">
+      <mat-card-header fxLayoutAlign="center">
+        <mat-card-subtitle>
+          <h2>{{constants.crearNuevo}}</h2>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+        <h5>Todos los campos con * son obligatorios</h5>
+      </div>
+
+      <mat-card-content class="p-16 m-0" [formGroup]="form">
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div class="item" fxFlex="50%">
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{constants.numeroContrato}}" formControlName="numeroContrato"
+                autocomplete="off" type="text" required />
+              <mat-error *ngIf="!form.get('numeroContrato').valid"> {{getErrorMessage('numeroContrato')}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="item" fxFlex="50%">
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{constants.contratista}}" formControlName="contratista" autocomplete="off"
+                type="text" required />
+              <mat-error *ngIf="!form.get('contratista').valid"> {{getErrorMessage('contratista')}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+
+          <div class="item" fxFlex="50%">
+            <sigma-form-select [path]="constants.path_administracion_tipoMaquinaria"
+              [(ngModel)]="newMaquinaria.equipoTipo" formControlName="tipo"
+              placeholder="{{ constants.tipoMaquinaria }}">
+            </sigma-form-select>
+          </div>
+
+          <div class="item" fxFlex="50%">
+            <sigma-form-select [path]="constants.path_administracion_claseEquipo"
+              [(ngModel)]="newMaquinaria.claseEquipo" formControlName="clase" placeholder="{{ constants.claseEquipo }}"
+              listBy="descripcion">
+            </sigma-form-select>
+          </div>
+
+        </div>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div class="item" fxFlex="50%">
+
+            <sigma-form-select [path]="constants.path_administracion_marcaEquipo"
+              [(ngModel)]="newMaquinaria.marcaEquipo" formControlName="marca" placeholder="{{ constants.marca }}">
+            </sigma-form-select>
+          </div>
+
+          <div class="item" fxFlex="50%">
+
+            <sigma-form-select [path]="constants.path_administracion_equipo_lugarUmvId"
+              [(ngModel)]="newMaquinaria.lugar" formControlName="lugar" placeholder="{{ constants.lugar }}"
+              [listBy]="'nombre'">
+            </sigma-form-select>
+          </div>
+
+        </div>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div class="item" fxFlex="50%">
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{constants.placaInventario}}" formControlName="placaInventario"
+                autocomplete="off" type="text" required appUpper (input)="updatePlacaInventario($event)" />
+              <mat-error *ngIf="!form.get('placaInventario').valid"> {{getErrorMessage('placaInventario')}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="item" fxFlex="50%">
+            <sigma-form-select [path]="constants.path_administracion_lineaMaquinaria" [(ngModel)]="newMaquinaria.lineaMaquinaria"
+              formControlName="linea" placeholder="{{ constants.linea }}" listBy="descripcion">
+            </sigma-form-select>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+
+
+          <div class="item" fxFlex="50%">
+            <sigma-form-select [path]="constants.path_administracion_equipo_anioModeloId" formControlName="anio"
+              [(ngModel)]="newMaquinaria.anioModelo" placeholder="{{ constants.modelo }}">
+            </sigma-form-select>
+          </div>
+        </div>
+
+      </mat-card-content>
+
+      <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+      <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+        <button type="button" (click)="onBack()" class="m-1" mat-button color="warn" [disabled]="disableSubmit">
+          <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+        </button>
+        <button type="button" class="m-1" mat-raised-button color="primary" (click)="onSubmit()"
+          [disabled]="disableSubmit">
+          <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</div>

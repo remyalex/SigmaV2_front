@@ -1,0 +1,18 @@
+<button mat-icon-button [matMenuTriggerFor]="userMenu" #userMenuTrigger="matMenuTrigger" >
+    <mat-icon>account_circle</mat-icon>
+</button>
+
+<mat-menu #userMenu="matMenu" [overlapTrigger]="false" class="toolbar-dropdown-menu user-menu">
+    <!--<span (mouseleave)="userMenuTrigger.closeMenu()">-->
+        <mat-toolbar color="primary">
+            <div fxLayout="row" fxLayoutAlign="start" class="flex-p user-info">
+                <h4>{{usuario}}</h4>
+            </div>  
+        </mat-toolbar>
+        <div class="divider"></div>
+        <a mat-menu-item routerLink="/seguridad/logout"> 
+            <mat-icon>power_settings_new</mat-icon>
+            <span>Cerrar Sesión</span> 
+        </a>
+    <!--</span>-->
+</mat-menu>

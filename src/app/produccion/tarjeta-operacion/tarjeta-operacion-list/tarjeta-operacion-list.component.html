@@ -1,0 +1,94 @@
+<div>
+  <div>
+    <mat-card-header fxLayoutAlign="center" class="mb-10">
+      <mat-card-subtitle>
+        <h2>{{ constants.listarTarjetaOperacion }}</h2>
+      </mat-card-subtitle>
+    </mat-card-header>
+
+
+  </div>
+</div>
+
+<div class="mat-elevation-z8">
+  <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center">
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+
+  <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+    <mat-icon class="m-1">sms_failed</mat-icon>
+    <h4> {{dataSource.errorMessage$ | async}}</h4>
+  </div>
+
+  <mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort>
+
+    <ng-container matColumnDef="numeroTarjeta">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.numeroTarjeta }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.numeroTarjeta">
+        {{equipo.numeroTarjeta}}
+      </mat-cell>
+    </ng-container>
+
+
+    <ng-container matColumnDef="quienDespacha">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.quienDespacha }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.quienDespacha ">
+        {{equipo.quienDespacha}}
+      </mat-cell>
+    </ng-container>
+
+
+    <ng-container matColumnDef="direccionSalida">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.direccionSalida }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.direccionSalida">
+        {{equipo.direccionSalida}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="quienRecibe">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.quienRecibe }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.quienRecibe">
+        {{equipo.quienRecibe}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="direccionLlegada">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.direccionLlegada }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.direccionLlegada">
+        {{equipo.direccionLlegada}}
+      </mat-cell>
+    </ng-container>
+
+   <!-- <ng-container matColumnDef="horaSalida">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.horaSalida }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.horaSalida">
+        {{ equipo.horaSalida }}
+      </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="horaLlegada">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.horaLlegada }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.horaLlegada">
+        {{ equipo.horaLlegada }}
+      </mat-cell>
+    </ng-container>-->
+
+
+    <ng-container matColumnDef="cantidad">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.cantidad }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.cantidad">
+        {{ equipo.cantidad }}
+      </mat-cell>
+    </ng-container>
+
+
+
+
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size"
+    [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+</div>

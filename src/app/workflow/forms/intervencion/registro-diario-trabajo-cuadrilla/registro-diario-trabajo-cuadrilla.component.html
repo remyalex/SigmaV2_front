@@ -1,0 +1,43 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="processing">
+
+  <div [hidden]="currentAction !== 'list'">
+    <div fxLayout="row" fxLayout.lt-md="column">
+      <div fxFlex="100" class="flex-p">
+
+        <div>
+          <mat-tab-group [selectedIndex]="tabSeleccionado.value" (selectedIndexChange)="seleccionarGrid($event)"
+            *ngIf="condicion">
+            <mat-tab label="Trabajo por cuadrilla">
+              <sigma-grid-mantenimientos #grid [data]="data" [columns]="columns" [filters]="filters"
+                [condicion]="condicion" [excludeEstadoPk]="excludeEstadoPk" [singleActions]="acciones"
+                (executeOnSingle)="executeSingleAction($event)">
+              </sigma-grid-mantenimientos>
+            </mat-tab>
+            <mat-tab *ngFor="let transicion of transicionesMasivas" label="{{transicion.nombre}}">
+              <sigma-grid-mantenimientos #grid [data]="data" [transicion]="transicion" [columns]="columns"
+                [filters]="filters" [singleActions]="acciones" (executeOnSingle)="executeSingleAction($event)"
+                (executeOnMasiveTransition)="executeMasiveTransition($event)">
+              </sigma-grid-mantenimientos>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="currentAction === 'trabajar'">
+    <sigma-work-cuadrilla-admin [mantenimiento]="mantenimiento" [componentVisible]="componentVisible"
+      [onlyRead]="onlyRead" (saveAllForm)="saveAllForm($event)" (vieMap)="viewMap($event)" (back)="back($event)">
+    </sigma-work-cuadrilla-admin>
+    <div *ngIf="nextTransition">
+      <sigma-mantenimiento-records [mantId]="mantenimiento.id"></sigma-mantenimiento-records>
+      <sigma-seleccion-transicion [(data)]="data" [transiciones]="transicionesIndividuales"
+        (executeTransition)="executeTransition()"></sigma-seleccion-transicion>
+    </div>
+  </div>
+</div>

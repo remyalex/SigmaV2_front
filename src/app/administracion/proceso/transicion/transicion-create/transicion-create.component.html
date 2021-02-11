@@ -1,0 +1,148 @@
+<h2 mat-dialog-title>{{ constants.crear }} Transición</h2>
+
+<div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+  <h5>Todos los campos con * son obligatorios</h5>
+</div>
+
+<mat-dialog-content [formGroup]="form">
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="{{ constants.nombre }}" formControlName="nombre" [(ngModel)]="transicion.nombre"
+          autocomplete="off" type="text" required pattern="^(?!\s*$).+">
+        <mat-error *ngIf="form.get('nombre').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+        <mat-error *ngIf="form.get('nombre').hasError('maxlength')"> {{ constants.longitud_maxima }} 255
+          caracteres. </mat-error>
+      </mat-form-field>
+    </div>
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <textarea matInput placeholder="{{ constants.descripcion }}" [(ngModel)]="transicion.descripcion" rows="1"
+          formControlName="descripcion" matTooltip="Descripción del proceso" matTooltipPosition="above"
+          required></textarea>
+        <mat-error *ngIf="form.get('descripcion').hasError('required')"> {{ constants.campoRequerido }}
+        </mat-error>
+        <mat-error *ngIf="form.get('descripcion').hasError('maxlength')"> {{ constants.longitud_maxima }} 255
+          caracteres. </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <sigma-form-select placeholder="{{constants.permisoId}}" formControlName="permiso"
+        [(ngModel)]="transicion.permiso" [path]="constants.path_administracion_procesotransicion_permisos"
+        [listBy]="'nombre'">
+      </sigma-form-select>
+    </div>
+    <div fxFlex>
+      <sigma-form-select placeholder="Estado PK" formControlName="estadopk" [(ngModel)]="transicion.estadoPk"
+        [path]="constants.path_administracion_procesotransicion_estadoPk" [listBy]="'descripcion'">
+      </sigma-form-select>
+    </div>
+    <div fxFlex>
+      <sigma-form-select placeholder="Tipo Asignación" formControlName="tipoasignacion"
+        [(ngModel)]="transicion.tipoAsignacion" [path]="constants.path_administracion_procesotransicion_tipoasignacion"
+        [listBy]="'descripcion'">
+      </sigma-form-select>
+    </div>
+  </div>
+
+  <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <sigma-form-select placeholder="Estado Mantenimiento" formControlName="estadoMantenimiento"
+        [(ngModel)]="transicion.estadoMantenimiento"
+        [path]="constants.path_administracion_procesotransicion_estadoMantenimiento" [listBy]="'descripcion'"
+        [orderBy]="'descripcion'">
+      </sigma-form-select>
+    </div>
+    <div fxFlex>
+      <sigma-form-select placeholder="Condicion" formControlName="condicion"
+        [(ngModel)]="transicion.condicion" [path]="constants.path_administracion_procesotransicion_condicionList"
+        [listBy]="'nombre'">
+      </sigma-form-select>
+    </div>
+  </div>
+
+  <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+    <div fxFlex="40">
+      <mat-card class="p-0 c-mod">
+        <mat-card-header fxLayoutAlign="center">
+          <mat-card-subtitle>
+            <h3>Origen</h3>
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content class="p-16 m-0">
+          <div class="container" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+            <div class="item" fxFlex="100%">
+              <sigma-form-select [opciones]="procesoData?.actividades" placeholder="{{ constants.actividadInicioId }}"
+                [listBy]="'nombre'" required="true" formControlName="actividadInicioId"
+                [(ngModel)]="transicion.actividadInicial">
+              </sigma-form-select>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div fxFlex>
+      <mat-card class="p-0 c-mod">
+        <mat-card-header fxLayoutAlign="center">
+          <mat-card-subtitle>
+            <h3>Destino</h3>
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content class="p-16 m-0">
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+            <div fxFlex>
+              <sigma-form-select [path]="constants.path_administracion_procesotransicion_procesoinfolist"
+                placeholder="Proceso" [listBy]="'nombre'" [orderBy]="'nombre'" formControlName="proceso" >
+              </sigma-form-select>
+            </div>
+            <div fxFlex>
+              <sigma-form-select #actividadFinal placeholder="{{ constants.actividadFinId }}" [listBy]="'nombre'" [orderBy]="'nombre'"
+                formControlName="actividadFinId" [(ngModel)]="transicion.actividadFinal"  >
+              </sigma-form-select>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+    <div fxFlex="100" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+      <div fxFlex="25">
+        <mat-checkbox formControlName="requiereObservacion" [checked]="transicion.requiereObservacion"
+          [(ngModel)]="transicion.requiereObservacion">
+          {{constants.requiereObservacion}}
+        </mat-checkbox>
+      </div>
+
+      <div fxFlex="15">
+        <mat-checkbox formControlName="esMasiva" [checked]="transicion.esMasiva" [(ngModel)]="transicion.esMasiva">
+          {{constants.esMasiva}}</mat-checkbox>
+      </div>
+
+      <div fxFlex="15">
+        <mat-checkbox formControlName="esReasignable" [checked]="transicion.esReasignable"
+          [(ngModel)]="transicion.esReasignable">{{constants.reasignable}}</mat-checkbox>
+      </div>
+    </div>
+  </div>
+
+  <input type="hidden" formControlName="activo" [(ngModel)]="transicion.activo" type="checkbox" type="hidden">
+
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions fxLayout="row" fxLayoutAlign="end" class="flex-p" [formGroup]="form"
+  *sigmaIsGranted="constants.permiso_administracion_procesotransicion_create">
+  <button mat-button color="warn" class="m-1" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+  </button>
+  <button mat-raised-button color="primary" [disabled]="disableSubmit" class="m-1" (click)="onSubmit()"
+    *sigmaIsGranted="constants.permiso_administracion_procesotransicion_create">
+    <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,59 @@
+<div fxLayout="column" fxLayout.gt-sm="row wrap">
+    <div fxFlex="100" class="flex-p">
+        <mat-card>
+            <mat-card-header class="mb-10" fxLayoutAlign="center">
+                <mat-card-subtitle>
+                  <h2>Consolidado de programación diaria de trabajo</h2>
+                </mat-card-subtitle>
+            </mat-card-header>
+
+            <mat-card-content>
+                <div label="Consolidado de programación diaria de trabajo">
+                    <sg-object-form #criteriosForm [def]="criteriosFormDef"
+                        visibleFields="criterio,fechaProgramacion,jornada,zona,localidad,barrio,pk,civ,directorObra,ingenieroResidente,ingenieroApoyo,estrategia,tipoIntervencion,actividad,tipoMaquinaria,origenMezcla,tipoMaterial,claseMaterial,inspector"
+                        requiredFields="criterio,directorObra,ingenieroResidente,ingenieroApoyo,estrategia,tipoIntervencion,actividad,tipoMaquinaria,origenMezcla,tipoMaterial,claseMaterial,inspector" saveButtonLabel="Consultar" cancelButtonLabel="Limpiar" (onSave)="initConsulta()"
+                        (onCancel)="onCancelar()">
+                    </sg-object-form>
+                    <div *ngIf="loader" fxLayout="column" fxLayoutAlign="center center">
+                        <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+                    </div>
+                    <ng-container *ngIf="showResultados" >
+                        <mat-divider></mat-divider>
+                        <div align="start" class="pt-16">
+                            <button *ngIf="criterio.valor == '1'" mat-raised-button color="primary" class="m-1"
+                                (click)="onDescargarExcel()">
+                                <mat-icon class="m-1">get_app</mat-icon> Descargar Excel
+                            </button>
+                            <button *ngIf="criterio.valor == '1'" mat-raised-button color="primary" class="m-1"
+                                (click)="onDescargarPDF()">
+                                <mat-icon class="m-1">get_app</mat-icon> Descargar PDF
+                            </button>
+                        </div>
+                        <sg-array-table class="consolidado" #resultadosTable [def]="resultadosTableDef"
+                            visibleColumns="fechaProgramacion,jornada,zona,localidad,barrio,civ,pk,ejeVial,ejeVialDesde,ejeVialHasta,directorObra,directorObraTelefono,residenteObra,residenteObraTelefono,ingenieroApoyo,ingenieroApoyoTelefono,inspector,estrategia,tipoIntervencion,actividad"
+                            [model]="[]" [showDelete]="false" [showEdit]="false" [showNew]="false" (onChangePage)="onChangePage($event)">
+                        </sg-array-table>
+                        <div class="pt-16 pl-8">
+                            <h2>Totales por tipo de material</h2>
+                        </div>
+                        <sg-array-table #tipoMaterialTable [def]="tipoMaterialTableDef" [model]="[]"
+                            [showDelete]="false" [showEdit]="false" [showNew]="false"
+                            visibleColumns="tipoMaterial,claseMaterial,cantidad">
+                        </sg-array-table>
+                        <div *ngIf="readyMantenimientos" align="end">
+                            <button *ngIf="criterio.valor == '2'"
+                                mat-raised-button color="primary" class="m-1"
+                                (click)="validarEnvioProduccion()">
+                                <mat-icon class="m-1">send</mat-icon>Enviar a producción
+                            </button>
+                            <sigma-seleccion-transicion *ngIf="siguienteTransicion" [(data)]="data" 
+                                [transiciones]="transicionesIndividualAuto" [mostrarButtonCancelar] = "true"
+                                (executeTransition)="enviarAProduccion()" (executeBack)="back()">
+                            </sigma-seleccion-transicion>
+                        </div>
+                    </ng-container>
+                </div>       
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

@@ -1,0 +1,61 @@
+<h2 mat-dialog-title>Editar Rol</h2>
+  <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+    <h5>Todos los campos con * son obligatorios</h5>
+  </div>
+
+  <mat-dialog-content [formGroup]="form" class="mb-10">
+  <input type="hidden" formControlName="id" />
+
+  <div class="container" fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+    <div class="item" fxFlex="100%">
+      <section class="py-1">
+        <input matInput placeholder="Id" formControlName="id" required [(value)]="rol.id" autocomplete="off" type="number" hidden />        
+      </section>
+    </div>
+  </div>
+
+  <div class="container" fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+    <div class="item" fxFlex="50%">
+      <mat-form-field class="w-100">
+        <input matInput placeholder="Nombre" formControlName="nombre" required [(value)]="rol.nombre" autocomplete="off" type="text" appUpper />
+        <mat-error *ngIf="form.get('nombre').hasError('required')"> El campo es requerido. </mat-error>
+        <mat-error *ngIf="form.get('nombre').hasError('maxlength')">El campo debe tener una longitud máxima de 100 caracteres. </mat-error>
+      </mat-form-field>
+
+      <div>
+        Requiere asignación de zona
+        <mat-radio-group  [(ngModel)]="rol.usuarioRequiereAsignarZona" 
+          formControlName="usuarioRequiereAsignarZona">
+          <mat-radio-button [value]="true">Si</mat-radio-button>
+          <mat-radio-button [value]="false">No</mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </div>
+
+    <div class="item" fxFlex="50%">
+      <mat-form-field class="w-100">
+        <input matInput placeholder="Descripción" formControlName="descripcion" required [(value)]="rol.descripcion" autocomplete="off" type="text" />
+        <mat-error *ngIf="form.get('descripcion').hasError('required')"> El campo es requerido. </mat-error>
+        <mat-error *ngIf="form.get('descripcion').hasError('maxlength')">El campo debe tener una longitud máxima de 300 caracteres. </mat-error>
+      </mat-form-field>
+
+      <div>
+        <mat-checkbox class="mx-1" formControlName="activo" [(value)]="rol.activo" name="activo" id="activo">Activo </mat-checkbox>
+      </div>
+    </div>
+  </div>
+<br/>
+<sigma-dual-list [(available)]="available" [(confirmed)]="confirmed" ></sigma-dual-list>
+
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button type="button" (click)="close()" mat-button color="warn" class="m-1">
+    <mat-icon class="m-1">close</mat-icon> Cancelar
+  </button>
+  <button type="button" class="m-1" mat-raised-button color="primary" (click)="onSubmit()" [disabled]="disabledBtn_Login">
+    <mat-icon class="m-1">save</mat-icon> Guardar
+  </button>
+</mat-dialog-actions>

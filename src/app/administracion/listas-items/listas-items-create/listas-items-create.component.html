@@ -1,0 +1,42 @@
+<h2 mat-dialog-title>{{ constants.crear }} {{ constants.listaItem }}</h2>
+
+<div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+    <h5>{{ constants.informacionCampoObligatorio }}</h5>
+</div>
+
+<mat-dialog-content [formGroup]="form">
+  <input type="hidden" formControlName="listaId">
+  <input type="hidden" formControlName="activo">
+  <div class="container" fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+    <div class="item" fxFlex="100%">
+        <mat-form-field class="w-100">
+            <input matInput placeholder="Valor"  formControlName="valor" 
+            [(ngModel)]="listaItem.valor" appUpper
+            matTooltip="Valor del ítem de la lista" matTooltipPosition="above" required>
+            <mat-error *ngIf="form.get('valor').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+            <mat-error *ngIf="form.get('valor').hasError('maxlength')"> {{ constants.error.longitud100 }} </mat-error>
+        </mat-form-field>
+    </div>
+    <div class="item" fxFlex="100%">
+        <mat-form-field class="w-100">
+            <textarea matInput placeholder="Descripción" rows="1" formControlName="descripcion" 
+            [(ngModel)]="listaItem.descripcion"
+            matTooltip="Descripción del ítem la lista" matTooltipPosition="above" required appUpper></textarea>
+            <mat-error *ngIf="form.get('descripcion').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+            <mat-error *ngIf="form.get('descripcion').hasError('maxlength')"> {{ constants.error.longitud100 }} </mat-error>
+          </mat-form-field>
+    </div>
+</div>
+
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions fxLayout="row" fxLayoutAlign="end" class="flex-p">
+    <button mat-button color="warn" (click)="close()" class="m-1" >  
+        <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+    </button>
+    <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="disabledBtn_Login" class="m-1">
+        <mat-icon class="m-1">save</mat-icon>  {{ constants.guardar }}
+    </button> 
+</mat-dialog-actions>

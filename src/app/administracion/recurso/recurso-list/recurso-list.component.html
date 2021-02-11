@@ -1,0 +1,134 @@
+<div>
+  <div>
+    <mat-card-header fxLayoutAlign="center">
+      <mat-card-subtitle><h2>{{ constants.consultar }}</h2></mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxLayoutWrap fxLayoutGap="0.5%" fxLayoutAlign="center">
+      <div fxFlex>
+        <form fxLayout="column" (ngSubmit)="search()">
+          
+          <div fxFlex="100">
+            <sigma-general-list value="{{ criteria.equipoId }}"
+              [path]="constants.path_administracion_recurso_equipoId" etiqueta="{{ constants.equipoId }}" [listBy]="'valor'"
+              (optionIdSelected)="setEquipoEquipodisponibilidad($event)" 
+              required="true">
+            </sigma-general-list>
+          </div>
+        </form>
+      </div>
+      <div fxFlex>
+        <button type="submit"  mat-raised-button color="primary" class="m-1" (click)="search()" >
+          <mat-icon>search</mat-icon> {{ constants.buscar }}
+        </button>
+        <button (click)="clear()"  mat-raised-button color="warn" class="m-1">
+          <mat-icon>clear</mat-icon> {{ constants.limpiar }}
+        </button>
+        <button [disabled]="dataSource.totalElements$.source['_value'] <= 0" 
+        layout="row" mat-raised-button color="primary" class="m-1" (click)="exportAsXLSX()"
+        *sigmaIsGranted="constants.permiso_administracion_recurso_export">
+          <mat-icon>get_app</mat-icon>
+          {{ constants.exportar }}
+          <mat-icon *ngIf="cargandoExcel"><mat-spinner color="accent" [diameter]="20"></mat-spinner></mat-icon>
+        </button>
+      </div>
+    </mat-card-content>
+  </div>
+</div>
+
+<div class="mat-elevation-z8">
+  <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center" >
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+  <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+    <mat-icon class="m-1">sms_failed</mat-icon>  <h4> {{dataSource.errorMessage$ | async}}</h4>
+  </div>
+
+  <mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort >
+    
+    <ng-container matColumnDef="activo">
+      <mat-header-cell *matHeaderCellDef mat-sort-header > {{ constants.activo }} </mat-header-cell>
+      <mat-cell *matCellDef="let recurso" [attr.data-label]="constants.activo">
+        <span class="dev-color-red" [hidden]="recurso.activo">{{ constants.no }}</span>
+        <span class="dev-color-green" [hidden]="!recurso.activo">{{ constants.si }}</span>
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="equipoId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.equipoId }} </mat-header-cell>
+      <mat-cell *matCellDef="let recurso" [attr.data-label]="constants.equipoId">
+        {{ recurso.equipoValor }}
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="fechaDesde">
+      <mat-header-cell *matHeaderCellDef mat-sort-header > {{ constants.fechaDesde }} </mat-header-cell>
+      <mat-cell *matCellDef="let recurso" [attr.data-label]="constants.fechaDesde">
+        {{recurso.fechaDesde}}
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="fechaHasta">
+      <mat-header-cell *matHeaderCellDef mat-sort-header > {{ constants.fechaHasta }} </mat-header-cell>
+      <mat-cell *matCellDef="let recurso" [attr.data-label]="constants.fechaHasta">
+        {{recurso.fechaHasta}}
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header > {{ constants.id }} </mat-header-cell>
+      <mat-cell *matCellDef="let recurso" [attr.data-label]="constants.id">
+        {{recurso.id}}
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="intervalo">
+      <mat-header-cell *matHeaderCellDef mat-sort-header > {{ constants.intervalo }} </mat-header-cell>
+      <mat-cell *matCellDef="let recurso" [attr.data-label]="constants.intervalo">
+        {{recurso.intervalo}}
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="tipoAsignacionId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.tipoAsignacionId }} </mat-header-cell>
+      <mat-cell *matCellDef="let recurso" [attr.data-label]="constants.tipoAsignacionId">
+        {{ recurso.tipoAsignacionValor }}
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="tipoDisponibilidadId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.tipoDisponibilidadId }} </mat-header-cell>
+      <mat-cell *matCellDef="let recurso" [attr.data-label]="constants.tipoDisponibilidadId">
+        {{ recurso.tipoDisponibilidadValor }}
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="turnoId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.turnoId }} </mat-header-cell>
+      <mat-cell *matCellDef="let recurso" [attr.data-label]="constants.turnoId">
+        {{ recurso.turnoValor }}
+      </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+      <mat-cell *matCellDef="let recurso" [attr.data-label]="constants.acciones">
+        <button mat-raised-button  color="primary" (click)="detail(recurso)" class="m-1"
+          *sigmaIsGranted="constants.permiso_administracion_recurso_view">
+          <mat-icon matTooltip="Detalles" matTooltipPosition="above">open_in_new</mat-icon>
+        </button>
+        <button mat-raised-button color="primary" (click)="edit(recurso)" class="m-1"
+          *sigmaIsGranted="constants.permiso_administracion_recurso_update">
+          <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+        </button>
+        <button mat-raised-button color="warn" (click)="delete(recurso)" class="m-1"
+          *sigmaIsGranted="constants.permiso_administracion_recurso_delete">
+          <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [length]= "dataSource.totalElements$ | async" [pageSize]="criteria.size" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+</div>

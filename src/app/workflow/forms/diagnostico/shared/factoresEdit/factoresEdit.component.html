@@ -1,0 +1,20 @@
+<h2 mat-dialog-title>Editar Factor</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <sigma-form-select-desc-valor formControlName="tipoFactor" [(ngModel)]="factor.tipoFactor"
+      [path]="constants.path_workflow_diagnostico_factores_tipo_factor" [placeholder]="constants.tipo_factor">
+    </sigma-form-select-desc-valor>
+  </form>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> Cancelar
+  </button>
+  <button mat-raised-button color="primary" (click)="update()">
+    <mat-icon class="m-1">save</mat-icon> Guardar
+  </button>
+</mat-dialog-actions>

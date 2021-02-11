@@ -1,0 +1,95 @@
+<h2 mat-dialog-title>{{ constants.editar }} {{ constants.usuarioString }}</h2>
+
+<div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+  <h5>{{ constants.informacionCampoObligatorio }}</h5>
+</div>
+
+<div *ngIf="loading" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div *ngIf="!loading">
+  <mat-dialog-content [formGroup]="form" *sigmaIsGranted="constants.permiso_administracion_usuario_update">
+    <input type="hidden" formControlName="id" [(ngModel)]="usuario.id">
+
+    <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+      <div class="item" fxFlex="50%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <sigma-form-input [placeholder]="constants.nombres" [maxlength]="255" formControlName="nombres"
+            [(ngModel)]="usuario.nombres">
+          </sigma-form-input>
+        </div>
+      </div>
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+        <sigma-form-input [placeholder]="constants.apellidos" [maxlength]="255" formControlName="apellidos"
+          [(ngModel)]="usuario.apellidos">
+        </sigma-form-input>
+      </div>
+    </div>
+    <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+      <div class="item" fxFlex="50%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <sigma-form-email [maxlength]="255" [placeholder]="constants.correoElectronico"
+            formControlName="correoElectronico" [(ngModel)]="usuario.correoElectronico">
+          </sigma-form-email>
+        </div>
+      </div>
+      <div class="item" fxFlex="50%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <sigma-form-input [placeholder]="constants.identificacion" [maxlength]="255" formControlName="identificacion"
+            [(ngModel)]="usuario.identificacion" pattern="^[a-zA-Z0-9]*$" >
+          </sigma-form-input>
+        </div>
+      </div>
+    </div>
+    <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+      <div class="item" fxFlex="50%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <sigma-form-input [placeholder]="constants.login" [maxlength]="255" formControlName="usuario"
+            [(ngModel)]="usuario.usuario">
+          </sigma-form-input>
+        </div>
+      </div>
+      <div class="item" fxFlex="50%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <sigma-form-select [path]="constants.path_administracion_usuario_origenId" [placeholder]="constants.origenId"
+            formControlName="origenId" [(ngModel)]="usuario.origen">
+          </sigma-form-select>
+        </div>
+      </div>
+    </div>
+    <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+      <div class="item" fxFlex="50%">
+        <sigma-form-select [path]="pathUsuariosRolesIncluyendoAsigandos" [placeholder]="constants.roles" [filterInactives]="false"
+          formControlName="roles" [(ngModel)]="usuario.roles" [listBy]="'nombre'" [multiple]="true" [isForCache]="false"
+          (ngModelChange)="changeRol($event)">
+        </sigma-form-select>
+      </div>
+      <div class="item" fxFlex="50%">
+        <sigma-form-select [path]="constants.path_administracion_usuario_estadoId" [placeholder]="constants.estado"
+          formControlName="estado" [(ngModel)]="usuario.estado">
+        </sigma-form-select>
+      </div>
+    </div>
+    <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+      <div class="item" fxFlex="50%" *ngIf="enableZona">
+        <sigma-form-select id="cu-08-filtros-select-origen" formControlName="zona"
+        [path]="'/api/administracion/ubicaciones/zona'" 
+        [(ngModel)]="usuario.zona" name="zona" placeholder="{{constants.zonaAsociada}}" [listBy]="'nombre'">
+        </sigma-form-select>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+  <mat-dialog-actions align="end">
+    <button mat-button color="warn" (click)="close()">
+      <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+    </button>
+    <button mat-raised-button [disabled]="disableSubmit" color="primary" (click)="onSubmit()"
+      *sigmaIsGranted="constants.permiso_administracion_usuario_update">
+      <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+    </button>
+  </mat-dialog-actions>
+</div>

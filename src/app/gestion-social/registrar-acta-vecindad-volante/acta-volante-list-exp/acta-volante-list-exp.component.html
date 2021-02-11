@@ -1,0 +1,73 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+  
+<div [hidden]="listVolante">
+  
+  <div>
+    <div class="mt-10 mb-10">
+      <h3>Lista de Volante Pk {{mantenimiento.pk}}</h3>
+    </div>
+
+    <mat-card-content>
+
+      <div class="mat-elevation-z8">
+          <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center">
+            <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+          </div>
+          <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+            <mat-icon class="m-1">sms_failed</mat-icon>
+            <h4> {{ dataSource.errorMessage$ | async }}</h4>
+          </div>
+          <mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort>
+      
+            <ng-container matColumnDef="numero">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.numeral }} </mat-header-cell>
+              <mat-cell *matCellDef="let actaVolante; index as i" [attr.data-label]="constants.numeral">
+                  {{actaVolante.noVolante}}
+              </mat-cell>
+            </ng-container>
+      
+            <ng-container matColumnDef="fechaRegistro">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaRegistro }} </mat-header-cell>
+              <mat-cell *matCellDef="let actaVolante" [attr.data-label]="constants.fechaRegistro">
+                {{ actaVolante.actaVolanteResidente.fechaRegistro }}
+              </mat-cell>
+            </ng-container>
+      
+            <ng-container matColumnDef="acciones">
+              <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+              <mat-cell *matCellDef="let actaVolante" [attr.data-label]="constants.acciones">
+                  <button *sigmaIsGranted="constants.permiso_social_actas_export_pdf" [disabled]="disabledReport"
+                    mat-raised-button color="primary" (click)="exportHandler(actaVolante)" class="m-1">
+                    <mat-icon matTooltip="Exportar" matTooltipPosition="above">cloud_download</mat-icon>
+                  </button>
+                  <button mat-raised-button color="primary" (click)="adjuntar(actaVolante)" class="m-1" >
+                    <mat-icon matTooltip="Adjuntar" matTooltipPosition="above">attach_file</mat-icon>
+                  </button>
+              </mat-cell>
+            </ng-container>
+      
+            <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: columns"></mat-row>
+      
+          </mat-table>
+          <mat-paginator #paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size"
+            [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+        </div>
+    </mat-card-content>
+
+    
+
+    <div fxLayout="row" fxLayoutAlign="end">
+      <mat-divider></mat-divider>
+      <div class="pt-16">
+        <button mat-button color="warn" class="m-1" (click)="onBack()">
+          <mat-icon class="m-1">close</mat-icon>
+          {{ constants.cancelar }}
+        </button>
+      </div>
+    </div>  
+  </div>
+
+</div>

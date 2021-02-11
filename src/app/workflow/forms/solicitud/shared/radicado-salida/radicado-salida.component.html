@@ -1,0 +1,109 @@
+<h2 mat-dialog-title>Vincular Radicado de Salida</h2>
+
+<mat-dialog-content>
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div class="item" fxFlex="20%">
+      <mat-form-field class="w-100">
+        <input matInput placeholder="Pk" [(ngModel)]="mantenimiento.pk" readonly>
+      </mat-form-field>
+    </div>
+    <div class="item" fxFlex="20%">
+      <mat-form-field class="w-100">
+        <input matInput placeholder="Radicado de Entrada" [(ngModel)]="mantenimiento.solicitudRadicadoEntrada" readonly>
+      </mat-form-field>
+    </div>
+    <div class="item" fxFlex="20%">
+      <!-- <mat-form-field class="w-100">
+        <input matInput placeholder="Origen"  [(ngModel)]="origensolicitudRadicadoSalida" 
+          readonly>
+      </mat-form-field> -->
+      <mat-form-field class="w-100">
+        <input matInput placeholder="Origen" [(ngModel)]="mantenimiento.origen.descripcion" readonly>
+      </mat-form-field>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-content class="p-16 m-0" [formGroup]="form">
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div class="item" fxFlex="20%">
+      <mat-form-field class="w-100">
+        <input matInput placeholder="Buscar radicado" [(ngModel)]="searchRadicado"
+          formControlName="searchRadicado" type="text" name="radicadoABuscar" id="radicadoABuscar" [required]="true">
+      </mat-form-field>
+    </div>
+    <div class="item" fxFlex="20%">
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+        <button mat-button mat-raised-button color="primary" (click)="buscarRadicado()">
+          <mat-icon class="m-1">search</mat-icon>
+          Buscar Radicado
+        </button>
+      </div>
+    </div>
+  </div>
+  <div fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+
+      <div class="item" fxFlex="20%">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="Radicado de salida" formControlName="solicitudRadicadoSalida"
+            [(ngModel)]="mantenimiento.solicitudRadicadoSalida" readonly>
+        </mat-form-field>
+      </div>
+      <div class="item" fxFlex="20%">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="Fecha radicación" formControlName="fechaRadicacion"
+            [(ngModel)]="fechaRadicacion" readonly>
+        </mat-form-field>
+      </div>
+      <div class="item" fxFlex="20%">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="Fecha vencimiento" formControlName="fechaVencimiento"
+            [(ngModel)]="fechaVencimiento" readonly>
+        </mat-form-field>
+      </div>
+      <div class="item" fxFlex="20%">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="Remitente" formControlName="remitente" [(ngModel)]="remitente" readonly>
+        </mat-form-field>
+      </div>
+    </div>
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+      <div class="item" fxFlex="20%">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="Asunto" formControlName="asunto" [(ngModel)]="asunto" readonly>
+        </mat-form-field>
+      </div>
+      <div class="item" fxFlex="20%">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="Fecha de generacion documento" formControlName="fechaGeneracionDocumento"
+            [(ngModel)]="fechaGeneracionDocumento" readonly>
+        </mat-form-field>
+      </div>
+      <div class="item" fxFlex="20%">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="dependencia asignada" formControlName="dependenciaAsignada"
+            [(ngModel)]="dependenciaAsignada" readonly>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-raised-button color="primary" [disabled]="mantenimiento.solicitudRadicadoSalida == null || processing"
+    (click)="borrarRadicado()">
+    <mat-icon class="m-1">delete</mat-icon>
+    Borrar Radicado
+  </button>
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> Cancelar
+  </button>
+  <button [disabled]="processing" mat-raised-button color="primary" (click)="save()">
+    <mat-icon class="m-1">save</mat-icon> Guardar
+  </button>
+</mat-dialog-actions>

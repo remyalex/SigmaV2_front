@@ -1,0 +1,173 @@
+<h2 mat-dialog-title>{{ constants.solicitudPmt }}</h2>
+
+<mat-dialog-content>
+
+  <mat-card-content class="m-0">
+    <div align="end">
+      <button type="button" class="m-1" mat-raised-button color="primary" (click)="exportToFile()">
+        <mat-icon class="m-1">get_app</mat-icon>
+        {{ constants.exportar }}
+      </button>
+    </div>
+
+    <div class="mb-10 mt-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="10px"
+      fxLayoutAlign="left">
+
+      <div fxFlex="60">
+        <mat-card class="custom-card c-mod-w">
+          <mat-card-header fxLayoutAlign="space-between center">
+            <mat-card-subtitle>
+              <h3>{{ constants.tituloLectura }}</h3>
+            </mat-card-subtitle>
+          </mat-card-header>
+
+          <mat-card-content class="mt-10" [formGroup]="form">
+            <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+              <div fxFlex>
+                <sigma-form-select formControlName="tipoPmt" [path]="'' + constants.path_lista_items_tipoPmt"
+                  [(ngModel)]="solicitudPmt.tipoPmt" name="tipoPmt" placeholder="{{constants.tipoPmt}}"
+                  [listBy]="'descripcion'">
+                </sigma-form-select>
+              </div>
+
+              <div fxFlex>
+                <mat-form-field>
+                  <input matInput formControlName="numeroRadicadoMovilidad"
+                    placeholder="{{constants.numeroRadicadoMovilidad}}" id="numeroRadicadoMovilidad"
+                    [(ngModel)]="solicitudPmt.numeroRadicadoMovilidad" name="numeroRadicadoMovilidad"
+                    [numericInput]="true" />
+                </mat-form-field>
+              </div>
+
+              <div fxFlex>
+                <sigma-form-select formControlName="tipoCierre" [path]="'' + constants.path_list_items_tipo_cierre"
+                  [(ngModel)]="solicitudPmt.tipoCierre" name="tipoCierre" placeholder="{{constants.tipoCierre}}"
+                  [listBy]="'descripcion'">
+                </sigma-form-select>
+              </div>
+            </div>
+            <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+
+
+              <div fxFlex>
+                <sigma-form-calendar formControlName="fechaInicio" [objeto]="solicitudPmt"
+                  [(ngModel)]="solicitudPmt.fechaInicio" [type]="'calendar'" [placeholder]="'' + constants.fechaInicio">
+                </sigma-form-calendar>
+              </div>
+
+              <div fxFlex>
+                <sigma-form-calendar formControlName="fechaFin" [objeto]="solicitudPmt"
+                  [(ngModel)]="solicitudPmt.fechaFin" [type]="'calendar'" [placeholder]="'' + constants.fechaFin">
+                </sigma-form-calendar>
+              </div>
+
+              <div fxFlex>
+                <sigma-form-calendar formControlName="horaInicioTrabajo" [objeto]="solicitudPmt"
+                  [(ngModel)]="solicitudPmt.horaInicioTrabajo" [type]="'timer'"
+                  [placeholder]="'' + constants.horaInicioTrabajo">
+                </sigma-form-calendar>
+              </div>
+            </div>
+            <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+              <div fxFlex>
+                <sigma-form-calendar formControlName="horaFinalTrabajo" [objeto]="solicitudPmt"
+                  [(ngModel)]="solicitudPmt.horaFinalTrabajo" [type]="'timer'"
+                  [placeholder]="'' + constants.horaFinalTrabajo">
+                </sigma-form-calendar>
+              </div>
+
+              <div fxFlex>
+                <sigma-form-calendar formControlName="horaInicioCierre" [objeto]="solicitudPmt"
+                  [(ngModel)]="solicitudPmt.horaInicioCierre" [type]="'timer'"
+                  [placeholder]="'' + constants.horaInicioCierre">
+                </sigma-form-calendar>
+              </div>
+
+              <div fxFlex>
+                <sigma-form-calendar formControlName="horaFinalCierre" [objeto]="solicitudPmt"
+                  [(ngModel)]="solicitudPmt.horaFinalCierre" [type]="'timer'"
+                  [placeholder]="'' + constants.horaFinalCierre">
+                </sigma-form-calendar>
+              </div>
+            </div>
+
+            <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+              <div fxFlex>
+                <mat-form-field class="w-100">
+                  <input matInput formControlName="coi" placeholder="{{constants.coi}}" id="coi"
+                    [(ngModel)]="solicitudPmt.coi" name="coi" [numericInput]="true" />
+                </mat-form-field>
+              </div>
+              <div fxFlex>
+                <sigma-form-select formControlName="estadoPmt" [path]="'' + constants.path_list_items_estado_pmt"
+                  [(ngModel)]="solicitudPmt.estadoPmt" name="estadoPmt" placeholder="{{constants.estadoPmt}}"
+                  [listBy]="'descripcion'">
+                </sigma-form-select>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+              <div fxFlex class="w-100">
+                <sigma-form-upload-file formControlName="adjuntarPmt" placeholder="{{constants.adjuntarPmt}}"
+                  [(ngModel)]="archivosSolicitudPMT" [accept]="'application/pdf,application/vnd.ms-excel'"
+                  [multiple]="true">
+                </sigma-form-upload-file>
+              </div>
+            </div>
+
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+              <div fxFlex>
+                <mat-form-field class="w-100">
+                  <textarea matInput rows="5" formControlName="observaciones" placeholder="{{constants.observaciones}}"
+                    [(ngModel)]="solicitudPmt.observaciones">
+                </textarea>
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+      </div>
+
+      <div fxFlex="40">
+        <mat-card class="custom-card c-mod-w" [formGroup]="formRadicado">
+          <mat-card-header color="primary" fxLayoutAlign="space-between center">
+            <mat-card-subtitle>
+              <h3>Información radicado</h3>
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content class="p-16">
+            <div fxFlex="column">
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+                <div fxFlex="100">
+                  <mat-form-field class="w-100">
+                    <input matInput formControlName="numeroRadicadoPmt" placeholder="{{constants.numeroRadicadoPmt}}"
+                      id="numeroRadicadoPmt" [(ngModel)]="solicitudPmt.numeroRadicadoPmt" name="numeroRadicadoPmt"
+                      [numericInput]="true" />
+                  </mat-form-field>
+                </div>
+
+                <div fxFlex>
+                  <sigma-form-calendar formControlName="fechaRadicadoMovilidad" [objeto]="solicitudPmt"
+                    [(ngModel)]="solicitudPmt.fechaRadicadoMovilidad" [type]="'calendar'"
+                    [placeholder]="'' + constants.fechaRadicadoMovilidad">
+                  </sigma-form-calendar>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </mat-card-content>
+
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <div>
+    <button type="button" mat-button color="warn" class="m-1" (click)="close()">
+      <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+    </button>
+  </div>
+</mat-dialog-actions>

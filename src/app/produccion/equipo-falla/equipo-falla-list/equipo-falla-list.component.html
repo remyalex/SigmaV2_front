@@ -1,0 +1,164 @@
+<div>
+  <div>
+    <mat-card-header fxLayoutAlign="center" class="mb-10">
+      <mat-card-subtitle>
+        <h2>Registro de fallas de maquinaria y/o equipos</h2>
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form (ngSubmit)="search()">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <sigma-form-select [path]="constants.path_administracion_equipo_propio_list" [(ngModel)]="criteria.numeroInterno"
+              name="numeroInterno" id="numeroInterno" listBy="numeroInterno"
+              placeholder="{{ constants.numeroInterno }}">
+            </sigma-form-select>
+          </div>
+          <div fxFlex>
+            <sigma-form-select [path]="constantsEquipo.path_administracion_equipo_tipoEquipoId"
+              [(ngModel)]="criteria.tipoEquipoId" name="tipoEquipoId" placeholder="{{ constants.tipoEquipoId }}">
+            </sigma-form-select>
+          </div>
+          <div fxFlex>
+            <sigma-form-select [path]="constantsEquipo.path_administracion_equipo_claseEquipoId"
+              [(ngModel)]="criteria.claseEquipoId" name="claseEquipoId" placeholder="{{ constants.claseEquipoId }}">
+            </sigma-form-select>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <sigma-form-select [path]="constants.path_administracion_equipo_propio_list" [(ngModel)]="criteria.placaInventario"
+              name="placaInventario" id="placaInventario" listBy="placaInventario"
+              placeholder="{{ constants.placaInventario }}">
+            </sigma-form-select>
+          </div>
+          <div fxFlex>
+            <sigma-form-select [path]="constantsEquipo.path_administracion_equipo_marcaEquipoId"
+              [(ngModel)]="criteria.marcaEquipoId" name="marcaEquipoId" placeholder="{{ constants.marcaEquipoId }}">
+            </sigma-form-select>
+          </div>
+          <div fxFlex>
+            <sigma-form-select [path]="constantsEquipo.path_administracion_equipo_estadoEquipoId"
+              [(ngModel)]="criteria.estadoEquipoId" name="estadoEquipoId" placeholder="{{ constants.estadoEquipoId }}">
+            </sigma-form-select>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+          <div fxFlex="33">
+            <sigma-form-select [path]="constantsEquipo.path_administracion_equipo_lugarUmvId" [listBy]="'nombre'"
+              [(ngModel)]="criteria.lugarEquipoId" name="lugarEquipoId" placeholder="{{ constants.lugar }}">
+            </sigma-form-select>
+          </div>
+          <div fxFlex>
+            <button type="submit" mat-raised-button color="primary" class="m-1" (click)="search()">
+              <mat-icon>search</mat-icon> {{ constants.buscar }}
+            </button>
+            <button (click)="clear()" mat-raised-button color="warn" class="m-1">
+              <mat-icon>clear</mat-icon> {{ constants.limpiar }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </mat-card-content>
+  </div>
+</div>
+
+<div class="mat-elevation-z8">
+  <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center">
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+
+  <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+    <mat-icon class="m-1">sms_failed</mat-icon>
+    <h4> {{dataSource.errorMessage$ | async}}</h4>
+  </div>
+
+  <mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort>
+
+    <ng-container matColumnDef="numeroInterno">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.numeroInterno }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.numeroInterno">
+        {{equipo.numeroInterno}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="equipoTipo.valor">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.tipoEquipoId }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.tipoEquipoId">
+        {{ equipo.equipoTipo?.valor }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="claseEquipo.valor">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.claseEquipoId }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.claseEquipoId">
+        {{ equipo.claseEquipo?.valor }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="placaInventario">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.placaInventario }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.placaInventario">
+        {{equipo.placaInventario}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="marcaEquipo.valor">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.marcaEquipoId }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.marcaEquipoId">
+        {{ equipo.marcaEquipo?.valor }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="estadoEquipo.valor">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.estadoEquipoId }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.estadoEquipoId">
+        {{ equipo.estadoEquipo?.valor }}
+      </mat-cell>
+    </ng-container>
+
+
+    <ng-container matColumnDef="lugar.nombre">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.lugar }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.lugar">
+        {{ equipo.lugar?.nombre }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constants.acciones">
+
+        <ng-container *ngIf="mostrarBotonRegistrar(equipo)">
+          <button mat-raised-button color="primary" (click)="reportarFalla(equipo)" class="m-1"
+            *sigmaIsGranted="constants.permiso_produccion_equipo_falla_create" matTooltip="Registrar falla"
+            matTooltipPosition="above">
+            <mat-icon>report_problem</mat-icon>
+          </button>
+        </ng-container>
+
+        <ng-container *ngIf="mostrarBotonCancelar(equipo)">
+          <button mat-raised-button color="warn" (click)="cancelarMantenimiento(equipo)" class="m-1"
+            *sigmaIsGranted="constants.permiso_produccion_equipo_falla_delete" matTooltip="Cancelar mantenimiento"
+            matTooltipPosition="above">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </ng-container>
+
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size"
+    [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+</div>

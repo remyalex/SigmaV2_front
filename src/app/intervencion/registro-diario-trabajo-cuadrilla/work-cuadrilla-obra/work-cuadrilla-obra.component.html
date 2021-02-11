@@ -1,0 +1,126 @@
+<div fxLayout="column" [formGroup]="secondFormGroup">
+  <mat-card-content class="p-16 m-0">
+
+    <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.fechaCreacionInforme }}"
+              [(ngModel)]="cuadrillaAvanceModel.fechaCreacionInforme"
+              [value]="cuadrillaAvanceModel.fechaCreacionInforme | date:'dd/MM/yyyy'" name="fechaCreacionInforme"
+              formControlName="fechaCreacionInforme" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.fechaInforme }}"
+              [value]="mantenimiento.intervenciones[0].programacionesDiarias.length > 0 ? mantenimiento.intervenciones[0].programacionesDiarias[0].fechaCreacion : '' | date:'dd/MM/yyyy'"
+              name="fechaInforme" formControlName="fechaInforme" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.jornada }}"
+              [value]="mantenimiento.intervenciones[0].programacionesDiarias.length > 0 ? mantenimiento.intervenciones[0].programacionesDiarias[0].jornada.descripcion : ''"
+              name="jornada" formControlName="jornada" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.noInforme }}" name="noInforme"
+              [(ngModel)]="cuadrillaAvanceModel.numeroInforme" formControlName="noInforme" readonly>
+          </mat-form-field>
+        </div>
+      </div>
+
+    </div>
+
+    <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.avanceDiarioObra }}" [numericInput]="true"
+              (keyup)="patternString('avanceDiarioObra', $event)" [(ngModel)]="cuadrillaAvanceModel.porcentajeDiario"
+              name="avanceDiarioObra" formControlName="avanceDiarioObra" required>
+            <mat-error *ngIf="secondFormGroup.get('avanceDiarioObra').hasError('required')">
+              {{ constants.campoRequerido }} </mat-error>
+            <mat-error *ngIf="secondFormGroup.get('avanceDiarioObra').hasError('max')">
+              {{ constants.avanceDiarioErrorMsj }} . </mat-error>
+            <mat-error *ngIf="secondFormGroup.get('avanceDiarioObra').hasError('pattern')">
+              Solo se permiten valores númericos. </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.avanceAcumuladObra }}" [numericInput]="true"
+              (keyup)="patternString('avanceAcumuladoObra', $event)"
+              [(ngModel)]="porcentajeAcumulado" name="avanceAcumuladObra"
+              formControlName="avanceAcumuladoObra" required readonly>
+            <mat-error *ngIf="secondFormGroup.get('avanceAcumuladoObra').hasError('required')">
+              {{ constants.campoRequerido }} </mat-error>
+            <mat-error *ngIf="secondFormGroup.get('avanceAcumuladoObra').hasError('max')">
+              {{ constants.longitud_maxima }} 3. </mat-error>
+            <mat-error *ngIf="secondFormGroup.get('avanceAcumuladoObra').hasError('pattern')">
+              Solo se permiten valores númericos. </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <sigma-form-select [path]="constants.path_lista_items_estadoObra" placeholder="{{ constants.estadoObra }}"
+            [(ngModel)]="cuadrillaAvanceModel.estadoObra" formControlName="estadoObra" [listBy]="'descripcion'">
+          </sigma-form-select>
+        </div>
+      </div>
+
+      <div class="item" fxFlex="25%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <sigma-form-select [path]="constants.path_lista_items_registroDiarioCuadrilla"
+            placeholder="{{ constants.registroDiarioCuadrilla }}" formControlName="registroDiarioCuadrilla"
+            [(ngModel)]="cuadrillaAvanceModel.estadoRegistroDiario" [listBy]="'descripcion'">
+          </sigma-form-select>
+        </div>
+      </div>
+
+    </div>
+
+    <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+
+      <div class="item" fxFlex="50%">
+        <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+          <sigma-form-upload-file placeholder="{{ constants.fotoTerminacionObra }}"
+            [(ngModel)]="cuadrillaAvanceArchivos" (ngModelChange)="setArchivoSolicitud($event)"
+            formControlName="fotoTerminacionObra"></sigma-form-upload-file>
+        </div>
+      </div>
+
+    </div>
+
+
+    <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+    <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+      <button type="button" [disabled]="!componentVisible" *sigmaIsGranted="constants.registro_diario_cuadrilla_obra"
+        class="m-1" mat-raised-button color="primary" (click)="onSubmit()">
+        <mat-icon class="m-1">save</mat-icon> {{ constants.guardarSeccion }}
+      </button>
+    </div>
+
+  </mat-card-content>
+
+</div>

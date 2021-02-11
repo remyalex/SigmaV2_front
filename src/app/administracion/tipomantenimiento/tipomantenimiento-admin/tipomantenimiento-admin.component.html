@@ -1,0 +1,14 @@
+<div fxLayout="column" fxLayout.gt-sm="row wrap">
+  <div fxFlex="100" class="flex-p">
+    <mat-card>
+      <mat-card-content>
+          <div fxLayoutAlign="end">
+              <button *sigmaIsGranted="constants.permiso_administracion_tipomantenimiento_create" mat-raised-button color="primary" class="m-1 mb-10" (click)="create();">
+                  <mat-icon class="m-1">note_add</mat-icon> Crear Nuevo
+              </button>
+          </div>
+        <sigma-administracion-tipomantenimiento-list *sigmaIsGranted="constants.permiso_administracion_tipomantenimiento_list"></sigma-administracion-tipomantenimiento-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

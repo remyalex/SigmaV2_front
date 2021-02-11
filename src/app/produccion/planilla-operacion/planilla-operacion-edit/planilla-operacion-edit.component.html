@@ -1,0 +1,271 @@
+<h2 mat-dialog-title>{{ constants.editar }}</h2>
+
+<div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+  <h5>{{ constants.informacionCampoObligatorio }}</h5>
+</div>
+
+<mat-dialog-content [formGroup]="form"
+  *sigmaIsGranted="constants.permiso_produccion_registrar_planilla_operacion_update">
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <div class="w-100">
+        <sigma-form-select [path]="constants.path_administracion_operador_disponible" formControlName="operadorId"
+          required [(ngModel)]="equipoConductor" (ngModelChange)="changeOperador($event, equipo_enviar.equipoConductor)"
+          placeholder="{{ constants.operador }}">
+        </sigma-form-select>
+      </div>
+    </div>
+
+    <div fxFlex>
+      <div class="w-100">
+        <sigma-form-select [disabled]="true" [path]="constants.path_administracion_equipo_tipoEquipoId"
+          formControlName="tipoVehiculoId" [(ngModel)]="tipoVehiculo" placeholder="{{ constants.tipoVehiculo }}">
+        </sigma-form-select>
+      </div>
+    </div>
+
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="{{ constants.placa }}" formControlName="placa" [(ngModel)]="placa"
+          autocomplete="off" type="text" pattern="^(?!\s*$).+">
+        <mat-error *ngIf="form.get('placa').hasError('required')"> {{ constants.campoRequerido }}
+        </mat-error>
+        <mat-error *ngIf="form.get('placa').hasError('maxlength')"> {{ constants.longitud_maxima }} 10
+          caracteres. </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="{{ constants.numeroInterno }}" formControlName="numeroInterno"
+          [(ngModel)]="numeroInterno" autocomplete="off" type="text" [numericInput]="false" pattern="^(?!\s*$).+">
+        <mat-error *ngIf="form.get('numeroInterno').hasError('pattern')"> Solo se permiten valores numericos
+        </mat-error>
+        <mat-error *ngIf="form.get('numeroInterno').hasError('max')"> {{ constants.longitud_maxima }} 10
+          caracteres. </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div fxFlex>
+      <div class="w-100">
+        <sigma-form-select [path]="constants.path_administracion_tipo_tarjeta" formControlName="tipoTarjetaId" required
+          [(ngModel)]="equipo_enviar.tipoTarjeta" (ngModelChange)="changeTipoTarjeta($event, false)"
+          placeholder="{{ constants.tipoTarjeta }}">
+        </sigma-form-select>
+      </div>
+    </div>
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="{{ constants.numeroTarjeta }}" formControlName="numeroTarjeta"
+          [(ngModel)]="equipo_enviar.numeroTarjeta" autocomplete="off" type="text" [numericInput]="true"
+          pattern="[0-9]*" required>
+        <mat-error *ngIf="form.get('numeroTarjeta').hasError('pattern')"> Solo se permiten valores numericos
+        </mat-error>
+        <mat-error *ngIf="form.get('numeroTarjeta').hasError('max')"> {{ constants.longitud_maxima }} 10
+          caracteres. </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <sigma-form-calendar formControlName="fechaOperacion" [(ngModel)]="equipo_enviar.fechaOperacion"
+        [objeto]="equipo_enviar" required [placeholder]="constants.fechaOperacion"
+        [type]="constants.datepicker.types.calendar">
+      </sigma-form-calendar>
+    </div>
+
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="{{ constants.variableControl }}" formControlName="variableControl"
+          [(ngModel)]="equipo_enviar.variableControl" autocomplete="off" type="text">
+        <mat-error *ngIf="form.get('variableControl').hasError('pattern')"> Solo se permiten valores numericos
+        </mat-error>
+        <mat-error *ngIf="form.get('variableControl').hasError('max')"> {{ constants.longitud_maxima }} 20
+          caracteres. </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput type="text" placeholder="{{ constants.lecturaInicial }}" formControlName="lecturaInicial"
+          type="text" pattern="^(?!\s*$).+" [(ngModel)]="equipo_enviar.lecturaInicial" autocomplete="off"
+          pattern="^(?!\s*$).+">
+        <mat-error *ngIf="form.get('lecturaInicial').hasError('max')"> {{ constants.longitud_maxima }} 20
+          caracteres. </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput type="text" placeholder="{{ constants.lecturaFinal }}" formControlName="lecturaFinal"
+          type="text" pattern="^(?!\s*$).+" [(ngModel)]="equipo_enviar.lecturaFinal" autocomplete="off"
+          pattern="^(?!\s*$).+">
+        <mat-error *ngIf="form.get('lecturaFinal').hasError('max')"> {{ constants.longitud_maxima }} 20
+          caracteres. </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput type="text" [numericInput]="false" [required]="true" placeholder="{{constants.kmsInicial}}"
+          formControlName="kmsInicial" [(ngModel)]="equipo_enviar.kmsInicial" autocomplete="off">
+        <mat-error *ngIf="form.get('kmsInicial').hasError('pattern')">
+          Solo se permiten números con hasta 2 dígitos decimales.
+        </mat-error>
+        <mat-error *ngIf="form.get('kmsInicial').hasError('max')">
+          El valor máximo permitido es 2.
+        </mat-error>
+        <mat-error *ngIf="form.get('kmsInicial').hasError('min')">
+          El valor mínimo permitido es 0.
+        </mat-error>
+        <mat-error *ngIf="form.get('kmsInicial').hasError('required')">
+          {{ constants.campoRequerido }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput type="text" [numericInput]="false" [required]="true" placeholder="{{constants.kmsFinal}}"
+          formControlName="kmsFinal" [(ngModel)]="equipo_enviar.kmsFinal" autocomplete="off">
+        <mat-error *ngIf="form.get('kmsFinal').hasError('pattern')">
+          Solo se permiten números con hasta 2 dígitos decimales.
+        </mat-error>
+        <mat-error *ngIf="form.get('kmsFinal').hasError('max')">
+          El valor máximo permitido es 2.
+        </mat-error>
+        <mat-error *ngIf="form.get('kmsFinal').hasError('min')">
+          El valor mínimo permitido es 0.
+        </mat-error>
+        <mat-error *ngIf="form.get('kmsFinal').hasError('required')">
+          {{ constants.campoRequerido }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+
+    <div class="item" fxFlex>
+      <sigma-form-calendar formControlName="horaInicio" [(ngModel)]="equipo_enviar.horaInicial"
+        [placeholder]="constants.horaInicial" [type]="constants.datepicker.types.timer">
+      </sigma-form-calendar>
+    </div>
+
+    <div class="item" fxFlex>
+      <sigma-form-calendar formControlName="horaFin" [(ngModel)]="equipo_enviar.horaFinal"
+        [placeholder]="constants.horaFinal" [type]="constants.datepicker.types.timer">
+      </sigma-form-calendar>
+    </div>
+
+  </div>
+
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <div class="w-100">
+        <sigma-form-select [path]="constants.path_administracion_estado_maquinaria" formControlName="estadoMaquinaria"
+          [(ngModel)]="equipo_enviar.estadoMaquinaria" placeholder="{{ constants.estadoMaquinaria }}">
+        </sigma-form-select>
+      </div>
+    </div>
+
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput type="text" placeholder="{{ constants.totalHoras }}" formControlName="totalHoras"
+          [(ngModel)]="equipo_enviar.totalHoras" autocomplete="off" [numericInput]="true" pattern="[0-9]*">
+        <mat-error *ngIf="form.get('totalHoras').hasError('max')"> {{ constants.longitud_maxima }} 12
+          caracteres. </mat-error>
+        <mat-error *ngIf="form.get('totalHoras').hasError('pattern')"> Solo se permiten valores numericos
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<h3 class="p-16 m-0">{{ constants.listaActividades }}</h3>
+
+<mat-card-content class="p-16 m-0">
+  <div class="mat-elevation-z8">
+    <mat-table #table [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="item">
+        <mat-header-cell *matHeaderCellDef> {{ constants.item }} </mat-header-cell>
+        <mat-cell *matCellDef="let item" [attr.data-label]="constants.item">
+          {{item.nombreItem}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="descripcion">
+        <mat-header-cell *matHeaderCellDef> {{ constants.descripcion }} </mat-header-cell>
+        <mat-cell *matCellDef="let item" [attr.data-label]="constants.descripcion">
+          {{item.descripcion}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="calificacion">
+        <mat-header-cell *matHeaderCellDef> {{ constants.calificacion }} </mat-header-cell>
+        <mat-cell *matCellDef="let item" [attr.data-label]="constants.calificacion">
+          {{item.calificacion.valor}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="variableControl">
+        <mat-header-cell *matHeaderCellDef> {{ constants.variableControl }} </mat-header-cell>
+        <mat-cell *matCellDef="let item" [attr.data-label]="constants.variableControl">
+          {{item.variableControl}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="lecturaInicial">
+        <mat-header-cell *matHeaderCellDef> {{ constants.lecturaInicial }} </mat-header-cell>
+        <mat-cell *matCellDef="let item" [attr.data-label]="constants.lecturaInicial">
+          {{item.lecturaInicial}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="lecturaFinal">
+        <mat-header-cell *matHeaderCellDef> {{ constants.lecturaFinal }} </mat-header-cell>
+        <mat-cell *matCellDef="let item" [attr.data-label]="constants.lecturaFinal">
+          {{item.lecturaFinal}}
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="observacion">
+        <mat-header-cell *matHeaderCellDef> {{ constants.observacion }} </mat-header-cell>
+        <mat-cell *matCellDef="let item" [attr.data-label]="constants.observacion">
+          {{item.observacion}}
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columns; let i = index"></mat-row>
+    </mat-table>
+
+    <mat-paginator [style.display]="'none'" #paginator [pageSize]="criteria.size" [pageSizeOptions]="[5, 10, 20]"
+      showFirstLastButtons></mat-paginator>
+  </div>
+</mat-card-content>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon>{{ constants.cancelar }}
+  </button>
+  <button mat-raised-button [disabled]="disableSubmit" color="primary" (click)="onSubmit()"
+    *sigmaIsGranted="constants.permiso_produccion_registrar_planilla_operacion_update">
+    <mat-icon class="m-1">save</mat-icon>{{ constants.guardar }}
+  </button>
+</mat-dialog-actions>

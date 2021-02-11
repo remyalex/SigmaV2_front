@@ -1,0 +1,26 @@
+
+      <div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center" >
+        <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+      </div>
+
+      <div *ngIf="!processing" >
+          <mat-card-header fxLayoutAlign="center">
+              <mat-card-subtitle>
+                <h2>Estadísticas del Usuario</h2>
+              </mat-card-subtitle>
+            </mat-card-header>
+            
+        <div *ngIf="estadisticasUsuario.length > 0">
+          <div fxLayout="row wrap">
+            <div *ngFor="let estadistica of estadisticasUsuario;  let i = index" fxFlex.gt-xs="50" [fxFlex.gt-md]="100 / 2 + '%'" fxLayoutAlign="center center">  
+              <canvas class="estadisticas" id="canvas{{i}}" style="height:30vh;"></canvas>
+            </div>
+          </div>
+          <div *ngIf="estadisticasUsuario.length < 1" class="msj_no_results" fxLayout="row">
+              <mat-icon class="m-1">sms_failed</mat-icon>  <h4> No se encontraron resultados</h4>
+          </div>
+        </div>
+      </div>
+      <!-- <button (click)="loadData()" mat-raised-button color="warn" class="m-1" >Oprimir!!</button>  -->
+      
+

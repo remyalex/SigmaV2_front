@@ -1,0 +1,90 @@
+<div>
+  <div>
+    <mat-card-header fxLayoutAlign="center">
+      <mat-card-subtitle>
+        <h2>Actividades del usuario</h2>
+      </mat-card-subtitle>
+    </mat-card-header> 
+    <!-- <mat-card-content fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxLayoutWrap fxLayoutGap="0.5%"
+      fxLayoutAlign="center">
+      <div fxFlex="50%">
+        <form fxLayout="column" (ngSubmit)="search()">
+          <mat-form-field class="w-50">
+            <input matInput [placeholder]="constants.nombre" id="nombre" [(ngModel)]="criteria.nombre" name="nombre" />
+          </mat-form-field>
+        </form>
+      </div>
+
+      <div fxFlex="50%">
+        <div fxLayoutAlign="start">
+          <button type="submit" mat-raised-button color="primary" class="m-1" (click)="search()">
+            <mat-icon>search</mat-icon> {{ constants.buscar }}
+          </button>
+          <button (click)="Limpiar()" mat-raised-button color="warn" class="m-1">
+            <mat-icon>clear</mat-icon> {{ constants.limpiar }}
+          </button>
+          <button *sigmaIsGranted="constants.permisos_administracion_listas_export" type="submit" mat-raised-button
+            [disabled]="dataSource.totalElements$.source['_value'] <= 0" color="primary" class="m-1"
+            (click)="exportAsXLSX()">
+            <mat-icon>get_app</mat-icon> {{ constants.exportar }}
+            <mat-icon *ngIf="cargandoExcel">
+              <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+            </mat-icon>
+          </button>
+        </div>
+      </div>
+    </mat-card-content> -->
+  </div>
+</div>
+
+<div class="mat-elevation-z8">
+  <div *ngIf="(dataSource.loading$ | async)" fxLayout="column" fxLayoutAlign="center center">
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+
+  <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+    <mat-icon class="m-1">sms_failed</mat-icon>
+    <h4> {{dataSource.errorMessage$ | async}}</h4>
+  </div>
+
+  <mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort>
+
+    <!-- <ng-container matColumnDef="actividadNombre">
+      <mat-header-cell *matHeaderCellDef> {{ constants.actividad }} </mat-header-cell>>
+      <mat-cell *matCellDef="let actividades">
+         {{ actividades.procesoNombre + '/' + actividades.actividadNombre + ' (' + actividades.pendientes + ')' }}
+          <button mat-raised-button color="primary" (click)="redirect(actividades)" class="m-1">
+              <mat-icon>open_in_new</mat-icon>
+            </button> 
+          </mat-cell>
+    </ng-container> -->
+
+    <ng-container matColumnDef="actividadNombre">
+      <mat-header-cell *matHeaderCellDef> {{ constants.actividad }} </mat-header-cell>>
+      <mat-cell *matCellDef="let actividades" [attr.data-label]="constants.actividad"> 
+        {{ actividades.actividadNombre }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="pendientes">
+      <mat-header-cell *matHeaderCellDef> {{ constants.pendientes }} </mat-header-cell>>
+      <mat-cell *matCellDef="let actividades" [attr.data-label]="constants.pendientes"> 
+        {{actividades.pendientes}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>>
+      <mat-cell *matCellDef="let actividades" [attr.data-label]="constants.acciones">
+        <button mat-raised-button color="primary" (click)="redirect(actividades)" class="m-1">
+          <mat-icon matTooltip="Detalles" matTooltipPosition="above">open_in_new</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+
+    <mat-row *matRowDef="let row; columns: columns"></mat-row>
+  </mat-table>
+  <!-- <mat-paginator #paginator [length]="dataSource.totalElements$ | async" 
+  [pageSize]="criteria.size"
+    [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator> -->
+</div>

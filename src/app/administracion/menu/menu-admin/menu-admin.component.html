@@ -1,0 +1,17 @@
+<div fxLayout="column" fxLayout.gt-sm="row wrap">
+  <div fxFlex="100" class="flex-p">
+      <mat-card>
+            <mat-card-content>
+                    <div fxLayoutAlign="end"> 
+                        <button *sigmaIsGranted="constantes.permisos_administracion_menu_create" mat-raised-button class="m-1 mb-10" color="primary" (click)="create();">
+                            <mat-icon class="m-1">note_add</mat-icon>{{ constantes.crearNuevo }}
+                        </button>
+                    </div> 
+                    <sigma-administracion-menu-list *sigmaIsGranted="constantes.permisos_administracion_menu_list" ></sigma-administracion-menu-list>         
+            </mat-card-content>
+  
+      </mat-card>
+  </div>
+</div>
+
+

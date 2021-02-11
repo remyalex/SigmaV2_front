@@ -1,0 +1,52 @@
+<h2 mat-dialog-title>{{ constants.equipo }}</h2>
+
+<mat-dialog-content>
+  <mat-table #table [dataSource]="dataSource" matSort>
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+
+    <ng-container matColumnDef="conductor">
+      <mat-header-cell *matHeaderCellDef>
+        {{ constantsEquipo.conductor }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constantsEquipo.conductor">
+        {{ equipo.conductor }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="movil">
+      <mat-header-cell *matHeaderCellDef>
+        {{ constantsEquipo.movil }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constantsEquipo.movil">
+        {{ equipo.movil }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="placa">
+      <mat-header-cell *matHeaderCellDef>
+        {{ constantsEquipo.placa }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constantsEquipo.placa">
+        {{ equipo.placa }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="telefono">
+      <mat-header-cell *matHeaderCellDef>
+        {{ constantsEquipo.telefono }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let equipo" [attr.data-label]="constantsEquipo.telefono">
+          {{ equipo.telefono }}
+      </mat-cell>
+    </ng-container>
+    <mat-row *matRowDef="let row; columns: columns"></mat-row>
+  </mat-table>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon>{{ constants.cancelar }}
+  </button>
+</mat-dialog-actions>

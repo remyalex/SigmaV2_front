@@ -1,0 +1,134 @@
+<h2 mat-dialog-title>{{ constants.editar }} {{ constants.titulo }}</h2>
+
+<div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+  <h5>{{ constants.informacionCampoObligatorio }}</h5>
+</div>
+
+
+<mat-card-content class="p-16 m-0" [formGroup]="form"
+  *sigmaIsGranted="constants.permiso_administracion_equipoconductor_create">        
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.xs="0">
+    <div fxFlex>
+      <sigma-form-autocomplete [path]="constants.path_administracion_equipoconductor_equipoAutocomplete"
+        [placeholder]="constants.equipo" formControlName="equipoId" [(ngModel)]="equipoConductor.equipo" (ngModelChange)="onChangeEquipoSeleccionado($event)" [searchBy]="'query'"
+        [moreInfo]="equipoInfo" [id]="'numeroInterno'">
+      </sigma-form-autocomplete>
+    </div>
+
+    <div fxFlex>
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+        <mat-form-field class="w-100">
+          <input matInput placeholder="{{ constants.placa }}" formControlName="placa"
+            [(ngModel)]="equipoConductor.placa" autocomplete="off" type="text">
+        </mat-form-field>
+      </div>
+    </div>   
+
+    <div fxFlex>
+      <!-- <div class="w-100"> -->
+        <sigma-form-autocomplete [path]="constants.path_administracion_equipoconductor_conductorPersAutocomplete"   
+          [placeholder]="constants.conductor" [searchBy]="'nombres'" [searchDuo]="'apellidos'" [moreInfo]="{nombres: 'Nombre', apellidos: 'Apellido'}"
+          formControlName="conductorId" [(ngModel)]="equipoConductor.conductor"  (ngModelChange)="onChangeConductorSeleccionado($event)" >
+        </sigma-form-autocomplete>
+      <!-- </div> -->
+    </div>
+
+            
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.xs="0">
+    
+    <div fxFlex>
+      <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+        <sigma-form-input [placeholder]="constants.celular" formControlName="celular"
+        [(ngModel)]="equipoConductor.celular" [maxlength]="10" pattern="^[0-9]{10}?$">
+       </sigma-form-input>
+      </div>
+    </div>   
+
+    <div fxFlex>
+      <div class="w-100">
+        <sigma-form-select formControlName="diasSemana" [(ngModel)]="equipoConductor.diasSemana"
+          [path]="constants.path_administracion_equipoconductor_diaSemanaId" (ngModelChange)='cambioDiasSemana($event)'
+          [placeholder]="constants.dias" [orderBy]="ordenDias" [multiple]="true" [listBy]="'descripcion'" >
+        </sigma-form-select>
+      </div>
+    </div> 
+
+    <div fxFlex>
+      <div class="w-100">
+        <sigma-form-select formControlName="tipoVehiculoContratadoId" [(ngModel)]="equipoConductor.tipoVehiculoContratado"
+          [path]="constants.path_administracion_equipoconductor_tipoVehiculoContratacion"
+          [placeholder]="constants.tipoVehiculoContratado">
+        </sigma-form-select>
+      </div>
+    </div>
+      
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.xs="0">
+    <div fxFlex="67" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.xs="0">
+      <div fxFlex>
+        <sigma-form-calendar #fechaDesde
+          formControlName="fechaDesde" 
+          [(ngModel)]="equipoConductor.desde"
+          (ngModelChange)="onChangeFechaDesde($event)"
+          [type]="this.constants.datepicker.types.calendar" 
+          [placeholder]="constants.desdeColumn"
+          [objeto]="equipoConductor"
+          [diasHabiles]="diasHabiles"  
+          [minTarget]="'minHoy'"
+          >
+        </sigma-form-calendar>
+      </div>     
+      <div fxFlex>         
+          <sigma-form-calendar  #fechaHasta
+          formControlName="fechaHasta" 
+          [(ngModel)]="equipoConductor.hasta"
+          [type]="this.constants.datepicker.types.calendar" 
+          [placeholder]="constants.hastaColumn"
+          [diasHabiles]="diasHabiles"
+          [minTarget]="'desdeFinal'"
+          [maxTarget]="'maxFinSemana'"
+          [objeto]="equipoConductor">
+        </sigma-form-calendar>
+      </div>
+      
+      <div fxFlex hidden = "true">
+        <sigma-form-calendar 
+          formControlName="minHoy" 
+          [(ngModel)]="equipoConductor.minHoy"
+          [type]="this.constants.datepicker.types.calendar" 
+          [placeholder]="constants.hastaColumn"
+          [objeto]="equipoConductor">
+        </sigma-form-calendar>
+      </div>
+
+      <div fxFlex hidden = "true">
+        <sigma-form-calendar 
+          formControlName="desdeFinal" 
+          [(ngModel)]="equipoConductor.desdeFinal"
+          [type]="this.constants.datepicker.types.calendar" 
+          [placeholder]="constants.hastaColumn"
+          [objeto]="equipoConductor">
+        </sigma-form-calendar>
+      </div>
+
+    </div>  
+  </div>
+</mat-card-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal mb-10"></mat-divider>
+
+<mat-dialog-actions fxLayoutAlign="end">
+  <button mat-button class="m-1" color="warn" (click)="close()" [disabled]="disableSubmit" >
+    <mat-icon class="m-1">close</mat-icon>
+    {{ constants.cancelar }}
+  </button>
+  <button mat-raised-button class="m-1" color="primary" [disabled]="disableSubmit" (click)="onSubmit()"
+    *sigmaIsGranted="constants.permiso_administracion_equipoconductor_update">
+    <mat-icon class="m-1">save</mat-icon>
+    {{ constants.guardar }}
+  </button>
+</mat-dialog-actions>

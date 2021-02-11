@@ -1,0 +1,64 @@
+<div fxLayout="column" *sigmaIsGranted="constants.administracion_rol_create">
+  <div class="flex-p">
+    <mat-card class="p-0 mat-card">
+      <mat-card-header fxLayoutAlign="center">
+        <mat-card-subtitle><h2>Crear Rol</h2></mat-card-subtitle>
+      </mat-card-header>
+
+      <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+        <h5>{{ constants.informacionCampoObligatorio }}</h5>
+      </div>
+      
+      <mat-card-content class="p-16 m-0" [formGroup]="form" >
+        
+        <mat-checkbox class="mx-1" formControlName="activo" 
+          [(ngModel)]="rol.activo" hidden>Activo
+        </mat-checkbox>
+
+        <div class="container mb-10" fxLayout="row" fxLayout.md="column" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+          <div class="item" fxFlex="50">
+            <mat-form-field class="w-100">
+              <input matInput placeholder="Nombre" formControlName="nombre" required [(ngModel)]="rol.nombre" autocomplete="off" type="text"/>
+              <mat-error *ngIf="form.get('nombre').hasError('required')"> El campo es requerido. </mat-error>
+              <mat-error *ngIf="form.get('nombre').hasError('maxlength')">El campo debe tener una longitud máxima de 100 caracteres. </mat-error>
+            </mat-form-field>
+
+            <div>
+              Requiere asignación de zona
+              <mat-radio-group  [(ngModel)]="rol.usuarioRequiereAsignarZona" 
+                formControlName="usuarioRequiereAsignarZona">
+                <mat-radio-button [value]="true">Si</mat-radio-button>
+                <mat-radio-button [value]="false">No</mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+
+          
+
+          <div class="item" fxFlex="50">
+            <mat-form-field class="w-100">
+              <input matInput placeholder="Descripción" formControlName="descripcion" required [(ngModel)]="rol.descripcion" autocomplete="off" type="text" />
+              <mat-error *ngIf="form.get('descripcion').hasError('required')"> El campo es requerido. </mat-error>
+              <mat-error *ngIf="form.get('descripcion').hasError('maxlength')">El campo debe tener una longitud máxima de 300 caracteres. </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <br/>
+        <sigma-dual-list [(available)]="available" [(confirmed)]="confirmed" ></sigma-dual-list>
+
+      </mat-card-content>
+
+      <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+      <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+        <button type="button" (click)="onBack()" mat-button color="warn" class="m-1">
+            <mat-icon class="m-1">close</mat-icon> Cancelar
+        </button>
+        <button type="button" class="m-1" mat-raised-button color="primary" (click)="onSubmit()" [disabled]="disabledBtn_Login">
+            <mat-icon class="m-1">save</mat-icon> Guardar
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,35 @@
+<mat-form-field class="w-100">
+  <input 
+  #input
+  matInput 
+  [formControl]="control"  
+  [placeholder]="placeholder" autocomplete="off" 
+  type="email" 
+  [required]="required" 
+  pattern='^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,4}))$'
+  (input)="inputValue($event.target.value)"
+  [appUpper]="upper" />
+  
+  <mat-error *ngFor="let error of basicErrors">
+    <mat-error *ngIf="control.hasError(error.name)">
+      {{ error.message }}
+    </mat-error>
+  </mat-error>
+  <mat-error *ngIf="control.hasError('minlength')">
+    {{ constants.longitud_mimina }} {{ control?.getError('minlength').requiredLength }} 
+    {{ constants.caracteres }}.
+  </mat-error>
+  <mat-error *ngIf="control.hasError('maxlength')">
+    {{ constants.longitud_maxima }} {{ control?.getError('maxlength').requiredLength }} 
+    {{ constants.caracteres }}
+  </mat-error>
+</mat-form-field>
+
+<!--<sigma-form-email   
+  formControlName="control" -> (Obligatorio, hace la conexión con el controlador)
+  [(ngModel)]="modelo" -> (Obligatorio, el binding con el modelo)
+  [placeholder]="texto" -> (Opcional, campo para el label)
+  [upper]="true|false" -> (Opcional, hace que una diractiva para que el texto quede en mayusculas)
+  [errors]="[{name: 'error', message: 'mensaje'}]" -> (Opcional, en caso de necesaitar agregar nuevos errores al control)
+>
+</sigma-form-email>-->

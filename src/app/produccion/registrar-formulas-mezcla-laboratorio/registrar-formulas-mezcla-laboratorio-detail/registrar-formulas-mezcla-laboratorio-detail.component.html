@@ -1,0 +1,70 @@
+<h2 mat-dialog-title>{{ constants.detalle }} Registro formulas mezcla laboratorio</h2>
+
+<mat-dialog-content>
+  <mat-list>
+    
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.tipoMezcla }}:</b>
+        </div>
+        <div fxFlex="60">
+          {{ formula.tipoMezcla ? formula.tipoMezcla.descripcion :  '' }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.especificacion }}:</b>
+        </div>
+        <div fxFlex="60">
+          {{ formula.especificacion ? formula.especificacion.descripcion : '' }}
+        </div>
+      </div>  
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.masaUnitaria }}:</b>
+        </div>
+        <div fxFlex="60">
+          {{ formula.masaUnitaria }}
+        </div>
+      </div>  
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.fechaInicial }}:</b>
+        </div>
+        <div fxFlex="60">
+          {{ formula.fechaInicial }}
+        </div>
+      </div>  
+    </mat-list-item>
+
+    <mat-list-item>
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.fechaFinal }}:</b>
+        </div>
+        <div fxFlex="60">
+          {{ formula.fechaFinal }}
+        </div>
+      </div>  
+    </mat-list-item>
+
+  </mat-list>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cerrar }}
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,132 @@
+<mat-dialog-content>
+  <div [hidden]="currentAction != 'tableApiques'">
+    <div fxLayoutAlign="start">
+      <button mat-stroked-button color="primary" class="m-1 mb-10" (click)="onBack()">
+        <mat-icon>arrow_back_ios</mat-icon>
+        {{ constants.irAtras }}
+      </button>
+    </div>
+    
+    <mat-divider></mat-divider>
+
+    <h2 mat-dialog-title class="mt-10">{{ constants.ubicarApique }}</h2>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+      <div fxFlex>
+        <mat-form-field class="w-100">
+          <input matInput placeholder="{{ constants.nomenclatura }}" id="nomenclatura"
+            [(ngModel)]="criteria.nomenclatura" name="nomenclatura" type="text" />
+        </mat-form-field>
+      </div>
+
+      <div fxFlex>
+        <mat-form-field class="w-100">
+          <input matInput placeholder="{{ constants.observacion }}" id="observacion" [(ngModel)]="criteria.observacion"
+            name="observacion" type="text" />
+        </mat-form-field>
+      </div>
+
+      <div fxFlex>
+        <div fxLayout="row" fxLayoutGap="10px">
+          <div fxFlex=50>
+            <button type="submit" mat-raised-button color="primary" class="w-100" (click)="search()" (click)="search()">
+              <mat-icon>search</mat-icon> {{ constants.buscar }}
+            </button>
+          </div>
+          <div fxFlex=50>
+            <button (click)="clear()" mat-raised-button color="warn" class="w-100">
+              <mat-icon>clear</mat-icon> {{ constants.limpiar }}
+            </button>
+          </div>
+        </div>
+      </div>   
+    </div>
+
+    <div fxLayout="row" fxLayoutGap="10px" class="mt-10 mb-10">
+      <div fxFlex fxLayoutAlign="end">
+        <button tton mat-raised-button color="primary" *ngIf="!disabled" (click)="newApique()">
+          <mat-icon class="m-1">note_add</mat-icon> Nuevo Apique
+        </button>
+      </div>
+    </div> 
+
+    <div class="mat-elevation-z8">
+
+      <div *ngIf="noInfoToShow" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+        <mat-icon class="m-1">sms_failed</mat-icon>
+        <h4> {{ constants.noResultados}}</h4>
+      </div>
+
+      <mat-table #table [dataSource]="dataSolicitudApique" matSort>
+
+        <ng-container matColumnDef="nomenclatura">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.nomenclatura }} </mat-header-cell>
+          <mat-cell *matCellDef="let ubicarApique" [attr.data-label]="constants.nomenclatura">
+            {{ubicarApique.nomenclatura}}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="observacion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.observacion }} </mat-header-cell>
+          <mat-cell *matCellDef="let ubicarApique" [attr.data-label]="constants.observacion">
+            {{ubicarApique.observacion}}
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+      </mat-table>
+      <mat-paginator #paginator [length]="dataSolicitudApique?.filteredData.length" [pageSize]="criteria.size" [pageSizeOptions]="[5, 10, 20]">
+      </mat-paginator>
+    </div>
+  </div>
+
+  <mat-card-content [formGroup]="form">
+    <div [hidden]="currentAction != 'createApique'">
+      <h2 mat-dialog-title>Añadir apique</h2>
+
+      <div fxLayout="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+        <div fxFlex>
+          <mat-form-field class="w-100">
+            <input matInput [(ngModel)]="newSolicitudApique.nomenclatura" [placeholder]="constants.nomenclatura"  formControlName="nomenclaturaInput" type="text"
+              autocomplete="off" required pattern="^(?!\s*$).+">
+            <mat-error *ngIf="form.get('nomenclaturaInput').hasError('required')">
+              {{ constants.campoRequerido }} </mat-error>
+          </mat-form-field>
+        </div>
+        <div fxFlex>
+          <mat-form-field class="w-100">
+            <textarea matInput rows="1" [(ngModel)]="newSolicitudApique.observacion" [placeholder]="constants.observacion" 
+            formControlName="observacionInput"required></textarea>
+            <mat-error *ngIf="form.get('observacionInput').hasError('required')">
+              {{ constants.campoRequerido }} </mat-error>
+            <mat-error *ngIf="form.get('observacionInput').hasError('maxlength')">
+              {{ constants.longitud_maxima }} 200 caracteres. </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div fxLayoutAlign="end">
+          <button type="button" mat-button color="warn" class="m-1" (click)="back()">
+            <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+          </button>
+          <button mat-raised-button color="primary" class="m-1 mb-10" (click)="onSubmit()">
+            <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <div [hidden]="currentAction != 'tableApiques'">
+    <button type="button" mat-button color="warn" class="m-1" (click)="close()">
+      <mat-icon class="m-1">close</mat-icon> {{ constants.cerrar }}
+    </button>
+    <button type="button" class="m-1" mat-raised-button color="primary" *ngIf="!disabled" (click)="save()">
+      <mat-icon class="m-1">check_circle_outline</mat-icon> {{ constants.validar }}
+    </button>
+  </div>
+</mat-dialog-actions>

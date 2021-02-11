@@ -1,0 +1,22 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="processing">
+  <div [hidden]="currentAction !== 'list'">
+    <div fxLayout=" column" fxLayout.gt-sm="row wrap">
+      <div fxFlex="100" class="flex-p">
+        <!-- <mat-card> -->
+          <sigma-grid-mantenimientos  #grid [data]="data" [columns]="columns" [defaultSortGrid]="defaultSortGrid"
+             [filters]="filters" [singleActions]="acciones" [condicion]="condicion" *ngIf="condicion"
+            (executeOnSingle)="ejecutar($event)" [defaultFilters]="defaulFilters" [reponsableForViewGrid]="reponsableForViewGrid" (executeOnMasiveTransition)="executeMasiveTransition($event)">
+          </sigma-grid-mantenimientos>
+        <!-- </mat-card> -->
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="currentAction == 'recarga'">
+  </div>
+
+</div>

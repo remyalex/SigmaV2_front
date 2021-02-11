@@ -1,0 +1,201 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div [hidden]="currentAction !== 'list'">
+
+  <div fxLayout=" column" fxLayout.gt-sm="row wrap">
+    <div fxFlex="100" class="flex-p">
+      <mat-card-content>
+        <div>
+          <mat-tab-group [selectedIndex]="tabSeleccionado.value" (selectedIndexChange)="seleccionarGrid($event)" *ngIf="condicion">
+              <mat-tab label="Registro de Programación Diaria">
+                <sigma-grid-mantenimientos #grid [data]="data" [condicion]="condicion" 
+                [columns]="columns" [filters]="filters" [singleActions]="singleActions"
+                (executeOnSingle)="singleAccion($event)" [defaultFilters]="defaulFilters" 
+                [reponsableForViewGrid]="reponsableForViewGrid" >
+              </sigma-grid-mantenimientos>
+            </mat-tab>
+            <mat-tab *ngFor="let transicion of transicionesMasivas" label="{{transicion.descripcion}}">
+              <sigma-grid-mantenimientos #grid [data]="data" [transicion]="transicion" [columns]="columns"
+                [filters]="filters" [singleActions]="singleActions" (executeOnSingle)="singleAccion($event)"
+                (executeOnMasiveTransition)="executeMasiveTransition($event)" [defaultFilters]="defaulFilters" 
+                [reponsableForViewGrid]="reponsableForViewGrid" >
+              </sigma-grid-mantenimientos>
+            </mat-tab>
+            </mat-tab-group>
+        </div>
+      </mat-card-content>
+    </div>
+  </div>
+</div>
+
+<!--- Seccion Listar Programaciones de un PK  -->
+<div *ngIf="currentAction === constants.currentAction.listarProgramacionDiaria">
+
+  <div fxLayout="row" fxLayout.lt-md="column">
+    <div fxLayoutAlign="start" fxFlex>
+      <button mat-stroked-button color="primary" class="mb-10" (click)="onBack()">
+        <mat-icon class="m-1">arrow_back_ios</mat-icon>
+        {{ constants.irAtras }}
+      </button>
+    </div>
+  </div>
+
+  <sg-array-table #programacionesTable [def]="programacionTableDef" [model]="programaciones"
+    visibleColumns="id,fechaCreacion,nombreJornada,fechaProgramacion,fechaProgramacionDiaria,nombreEstado"
+    [showDelete]="false" [showLoader]="true"
+    (onEdit)="onEditProgramacion($event)" (onNew)="onNewProgramacion()" iconEdit="create"
+    labelEdit="Registrar programación" labelNew="Nueva" iconNew="note_add">
+  </sg-array-table>
+
+</div>
+
+<div *ngIf="currentAction === constants.currentAction.registrarProgramacionDiaria">
+
+  <div fxLayout="row" fxLayout.lt-md="column">
+    <div fxLayoutAlign="start" fxFlex>
+      <button mat-stroked-button color="primary" class="m-1 mb-10" (click)="onBackRegistro()">
+        <mat-icon>arrow_back_ios</mat-icon>
+        {{ constants.irAtras }}
+      </button>
+    </div>
+  </div>
+
+  <mat-vertical-stepper [linear]="true" #stepper>
+    <mat-step>
+      <ng-template matStepLabel>Programación diaria de trabajo</ng-template>
+      <sg-object-form #programacionForm [def]="programacionFormDef" (onStatusValid)="onStatusValidProgramacionDiaria($event)"
+        visibleFields="fechaCreacion,jornada,fechaProgramacion,estrategia,estado,localidad,barrio,ejeVial,ejeVialDesde,ejeVialHasta,actividad,civ,pk,tipoIntervencion,residenteObra,residenteObraTelefono,directorObra,directorObraTelefono"
+        disabledFields="fechaCreacion,estrategia,estado,localidad,barrio,ejeVial,ejeVialDesde,ejeVialHasta,actividad,civ,pk,tipoIntervencion,residenteObra,residenteObraTelefono,directorObra,directorObraTelefono"
+        requiredFields="jornada,fechaProgramacion" (onSave)="onSaveProgramacion()" [showCancel]="false"
+        saveButtonLabel="Guardar sección">
+      </sg-object-form>
+    </mat-step>
+  
+    <mat-step>
+      <ng-template matStepLabel>Personal</ng-template>
+      <ng-container *ngIf="!personalIsEditing">
+        <sg-array-table #personalTable [def]="personalTableDef" [model]="programacion.personal"
+          visibleColumns="nombrePersonal,nombreTipoCuadrilla,nombreInspector1,nombreInspector2,nombreInspector3,cantidadPersonalInspector"
+          (onEdit)="onEditPersonal($event)" (onNew)="onNewPersonal()" (onDelete)="onDeletePersonal($event)"
+          iconEdit="create" iconDelete="delete" labelNew="Agregar" iconNew="note_add">
+        </sg-array-table>
+        <div fxLayout="row" fxLayout.lt-md="column">
+          <div fxLayoutAlign="end" fxFlex>
+            <button [disabled]='loader' mat-raised-button color="primary" class="m-1 mb-10" (click)="onSaveProgramacion()">
+              <mat-icon>save</mat-icon>
+              Guardar sección
+            </button>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="personalIsEditing">
+        <sg-object-form #personalForm [def]="personalFormDef"
+          visibleFields="personal,tipoCuadrilla,inspector1,inspector2,inspector3,cantidadPersonalInspector"
+          requiredFields="personal,tipoCuadrilla,inspector1,cantidadPersonalInspector" (onSave)="onSavePersonal()"
+          (onCancel)="onCancelPersonal()">
+        </sg-object-form>
+      </ng-container>
+    </mat-step>
+
+    <mat-step>
+      <ng-template matStepLabel>Maquinaria</ng-template>
+      <ng-container *ngIf="!maquinariaIsEditing">
+        <sg-array-table #maquinariaTable [def]="maquinariaTableDef" [model]="programacion.maquinaria"
+          visibleColumns="numeroInterno,nombreTipoMaquinaria,hora" (onEdit)="onEditMaquinaria($event)"
+          (onNew)="onNewMaquinaria()" (onDelete)="onDeleteMaquinaria($event)" iconEdit="create" iconDelete="delete"
+          labelNew="Agregar" iconNew="note_add">
+        </sg-array-table>
+        <div fxLayout="row" fxLayout.lt-md="column">
+          <div fxLayoutAlign="end" fxFlex>
+            <button mat-raised-button color="primary" class="m-1 mb-10" (click)="onSaveProgramacion()">
+              <mat-icon>save</mat-icon>
+              Guardar sección
+            </button>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="maquinariaIsEditing">
+        <sg-object-form #maquinariaForm [def]="maquinariaFormDef" visibleFields="maquinaria,tipoMaquinaria,hora"
+          requiredFields="maquinaria,tipoMaquinaria,hora" (onSave)="onSaveMaquinaria()"
+          (onCancel)="onCancelMaquinaria()">
+        </sg-object-form>
+      </ng-container>
+    </mat-step>
+
+    <mat-step>
+      <ng-template matStepLabel>Material</ng-template>
+      <ng-container *ngIf="!materialIsEditing">
+        <sg-array-table #materialTable [def]="materialTableDef" [model]="programacion.material"
+          visibleColumns="nombreOrigenMezcla,nombreTipoMaterial,nombreClaseMaterial,cantidad" (onEdit)="onEditMaterial($event)"
+          (onNew)="onNewMaterial()" (onDelete)="onDeleteMaterial($event)" iconEdit="create" iconDelete="delete"
+          labelNew="Agregar" iconNew="note_add">
+        </sg-array-table>
+        <div fxLayout="row" fxLayout.lt-md="column">
+          <div fxLayoutAlign="end" fxFlex>
+            <button mat-raised-button color="primary" class="m-1 mb-10" (click)="onSaveProgramacion()">
+              <mat-icon>save</mat-icon>
+              Guardar sección
+            </button>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="materialIsEditing">
+        <sg-object-form #materialForm [def]="materialFormDef"
+          visibleFields="origenMezcla,tipoMaterial,claseMaterial,hora,cantidad"
+          requiredFields="claseMaterial,cantidad,hora" (onSave)="onSaveMaterial()"
+          (onCancel)="onCancelMaterial()">
+        </sg-object-form>
+      </ng-container>
+    </mat-step>
+    
+    <mat-step>
+      <ng-template matStepLabel>Equipo portátil</ng-template>
+      <ng-container *ngIf="!equipoIsEditing">
+        <sg-array-table #equipoTable [def]="equipoTableDef" [model]="programacion.equipo"
+          visibleColumns="nombreEquipo,cantidad,hora" (onEdit)="onEditEquipo($event)" (onNew)="onNewEquipo()"
+          (onDelete)="onDeleteEquipo($event)" iconEdit="create" iconDelete="delete" labelNew="Agregar"
+          iconNew="note_add">
+        </sg-array-table>
+        <div fxLayout="row" fxLayout.lt-md="column">
+          <div fxLayoutAlign="end" fxFlex>
+            <button mat-raised-button color="primary" class="m-1 mb-10" (click)="onSaveProgramacion()">
+              <mat-icon>save</mat-icon>
+              Guardar sección
+            </button>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="equipoIsEditing">
+        <sg-object-form #equipoForm [def]="equipoFormDef" visibleFields="equipo,cantidad,hora"
+          requiredFields="cantidad,hora" (onSave)="onSaveEquipo()" (onCancel)="onCancelEquipo()">
+        </sg-object-form>
+      </ng-container>
+    </mat-step>
+  </mat-vertical-stepper>
+
+  <mat-divider></mat-divider>
+
+  <div fxLayout="row" fxLayout.lt-md="column">
+    <div fxLayoutAlign="end" fxFlex class="pt-16">
+      <button [disabled]="isDisabledSaveAll()" 
+        mat-raised-button color="primary" class="m-1" (click)="onSaveProgramacionAll()">
+        <mat-icon class="m-1">save</mat-icon>
+        Guardar todo
+      </button>
+    </div>
+  </div>
+  <div *ngIf="showTransicion">
+    <sigma-seleccion-transicion [(data)]="data" [transiciones]="transicionesIndividualAuto"
+      (executeTransition)="executeTransition()">
+    </sigma-seleccion-transicion>
+  </div>
+</div>
+<!--
+<div *ngIf="currentAction == 'transicion'">
+  <sigma-seleccion-transicion [(data)]="data" [transiciones]="transicionesIndividuales"
+    (executeTransition)="executeTransition()">
+  </sigma-seleccion-transicion>
+</div>
+-->

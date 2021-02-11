@@ -1,0 +1,117 @@
+<div fxLayout="column">
+    <div [hidden]="currentAction != 'list'" class="flex-p">
+        <mat-card class="p-0">
+            <mat-card-header fxLayoutAlign="center">
+                <mat-card-subtitle>
+                    <h2>Consultar Actas de Vecindad</h2>
+                </mat-card-subtitle>
+            </mat-card-header>
+
+            <mat-card-content class="p-16">
+                <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxLayoutWrap fxLayoutGap="0.5%"
+                    fxLayoutAlign="center">
+                    <div fxFlex>
+                        <form fxLayout="column" (ngSubmit)="search()">
+                        </form>
+                    </div>
+
+                    <div fxFlex>
+                        <div fxLayoutAlign="start">
+                            <!-- <button type="submit" (click)=" search()" mat-raised-button color="primary" class="m-1">
+                            <mat-icon>search</mat-icon> {{ constants.buscar }}
+                        </button>
+                        <button (click)="Limpiar()" mat-raised-button color="warn" class="m-1">
+                            <mat-icon>clear</mat-icon> {{ constants.limpiar }}
+                        </button> -->
+                            <!-- <button *sigmaIsGranted="constants.actas_vecindad_export" mat-raised-button (click)="exportAsXLSX()"
+                            color="primary" class="m-1" [disabled]="disabledButton">
+                            <mat-icon>get_app</mat-icon> {{ constants.exportar }}
+                        </button> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="mat-elevation-z8">
+                    <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center">
+                        <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+                    </div>
+                    <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row"
+                        fxLayoutAlign="center center">
+                        <mat-icon class="m-1">sms_failed</mat-icon>
+                        <h4> {{ dataSource.errorMessage$ | async }}</h4>
+                    </div>
+                    <mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort>
+
+                        <ng-container matColumnDef="numeralAscendente">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Numeral ascendente </mat-header-cell>
+                            <mat-cell *matCellDef="let acta" data-label="Numeral ascendente">
+                                {{ acta.id }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="noActaVecindad">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Identificador del acta de vecindad
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let acta" data-label="Identificador">
+                                {{ acta.noActaVecindad }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="fecha">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de registro del acta
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let acta" data-label="Fecha Registro">
+                                {{ acta.fecha }} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="aprobado">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Acta de vecindad aprobado
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let acta" data-label="Aprobado">
+                                <span class="dev-color-red" [hidden]="acta.aprobado">{{ constants.no }}</span>
+                                <span class="dev-color-green" [hidden]="!acta.aprobado">{{ constants.si }}</span>
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="acciones">
+                            <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+                            <mat-cell *matCellDef="let acta" data-label="Acciones">
+                                <button *sigmaIsGranted="constants.actas_vecindad_update" mat-raised-button
+                                    color="primary" (click)="attach(acta)" class="m-1">
+                                    <mat-icon matTooltip="Adjuntar" matTooltipPosition="above">cloud_upload</mat-icon>
+                                </button>
+                                <button *sigmaIsGranted="constants.actas_vecindad_update" mat-raised-button
+                                    color="primary" (click)="edit(acta)" class="m-1">
+                                    <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+                                </button>
+                                <button *sigmaIsGranted="constants.actas_vecindad_export" [disabled]="disabledReport"
+                                    mat-raised-button color="primary" (click)="exportarPDF(acta)" class="m-1">
+                                    <mat-icon matTooltip="Exportar" matTooltipPosition="above">cloud_download</mat-icon>
+                                </button>
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: columns"></mat-row>
+
+                    </mat-table>
+                    <mat-paginator #paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size"
+                        [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+                </div>
+            </mat-card-content>
+
+            <mat-divider></mat-divider>
+
+            <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+                <button type="button" class="m-1" (click)="onBack()" mat-button color="warn">
+                    <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+                </button>
+            </div>
+        </mat-card>
+    </div>
+    <div *ngIf="currentAction === 'attach'">
+        <app-actas-vecindad-attach (irAtras)="accionIrAtras()" (goToHome)="goToHome()"></app-actas-vecindad-attach>
+    </div>
+    <div *ngIf="currentAction === 'edit'">
+        <app-actas-vecindad-edit (irAtras)="accionIrAtras()" (goToHome)="goToHome()"></app-actas-vecindad-edit>
+    </div>
+</div>

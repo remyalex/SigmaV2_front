@@ -1,0 +1,98 @@
+<div>
+  <div>
+      <mat-card-header fxLayoutAlign="center">
+        <mat-card-subtitle><h2>Menús</h2></mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxLayoutWrap fxLayoutGap="0.5%" fxLayoutAlign="center">
+        <div fxFlex="50%">  
+          <form fxLayout="column" (ngSubmit)="search()">
+            <mat-form-field class="w-50">
+              <input matInput placeholder="Titulo" id="titulo" [(ngModel)]="criteria.titulo" name="titulo" type="text" />
+            </mat-form-field>
+          </form>
+        </div>
+
+        <div fxFlex="50%">
+          <div fxLayoutAlign="start">
+            <button type="submit" (click)=" search()"  mat-raised-button color="primary" class="m-1">
+                <mat-icon>search</mat-icon> {{ constantes.buscar }}
+            </button>
+            <button (click)="Limpiar()" mat-raised-button color="warn" class="m-1">
+                <mat-icon>clear</mat-icon> {{ constantes.limpiar }}
+            </button>
+            <button *sigmaIsGranted="constantes.permisos_administracion_menu_export" mat-raised-button 
+            (click)="exportAsXLSX()" color="primary" class="m-1" [disabled]="disabledButton || (dataSource.error$ | async)">
+                <mat-icon>get_app</mat-icon> {{ constantes.exportar }}
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+  </div>
+</div>
+<!-- <app-sigma-autocomplete [label]="'Menús'" [path]="'/api/administracion/menu'" [searchBy]="'titulo'"></app-sigma-autocomplete> 
+ <sigma-general-list 
+  [path]="'/api/administracion/lista-item/nombre-lista/ORIGEN_EQUIPO/list'"
+  etiqueta="Listado de menús"
+  [listBy]="'valor'"
+  (optionIdSelected)="menuSelected($event)">
+</sigma-general-list> -->
+
+<div class="mat-elevation-z8">
+    <div *ngIf="(dataSource.loading$ | async)" fxLayout="column" fxLayoutAlign="center center">
+      <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+    </div>
+    
+    <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+      <mat-icon class="m-1">sms_failed</mat-icon>  <h4> {{dataSource.errorMessage$ | async}}</h4>
+    </div>
+
+    <mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort>
+      <ng-container matColumnDef="titulo">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constantes.titulo }} </mat-header-cell>
+        <mat-cell *matCellDef="let menu" [attr.data-label]="constantes.titulo"> {{ menu.titulo }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="descripcion">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constantes.descripcion }} </mat-header-cell>
+        <mat-cell *matCellDef="let menu" [attr.data-label]="constantes.descripcion"> {{ menu.descripcion }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="routerLink">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constantes.url }} </mat-header-cell>
+        <mat-cell *matCellDef="let menu" [attr.data-label]="constantes.url"> {{ menu.routerLink }} {{ menu.href }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="parentId">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>{{ constantes.padre }}</mat-header-cell>
+        <mat-cell *matCellDef="let menu" [attr.data-label]="constantes.padre"> {{ menu.parent?menu.parent.titulo:'' }} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="activo">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>{{ constantes.activo }}</mat-header-cell>
+        <!-- <mat-cell *matCellDef="let menu"> {{ menu.estadoNombre }} </mat-cell>  -->
+        <mat-cell *matCellDef="let menu" [attr.data-label]="constantes.activo">
+            <span class="dev-color-red" [hidden]="menu.activo">{{ constantes.no }}</span>
+            <span class="dev-color-green" [hidden]="!menu.activo">{{ constantes.si }}</span>   
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="acciones">
+        <mat-header-cell *matHeaderCellDef>{{ constantes.acciones }}</mat-header-cell>
+        <mat-cell *matCellDef="let menu" [attr.data-label]="constantes.acciones">
+          <button mat-raised-button *sigmaIsGranted="constantes.permisos_administracion_menu_view" (click)="detail(menu)" color="primary" class="m-1">
+            <mat-icon matTooltip="Detalles" matTooltipPosition="above">open_in_new</mat-icon>
+          </button>
+          <button mat-raised-button *sigmaIsGranted="constantes.permisos_administracion_menu_update" (click)="edit(menu)" color="primary" class="m-1">
+            <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+          </button>
+          <button mat-raised-button *sigmaIsGranted="constantes.permisos_administracion_menu_delete" (click)="delete(menu)" color="warn" class="m-1">
+            <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columns"></mat-row>
+    </mat-table>
+    <mat-paginator #paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+</div>

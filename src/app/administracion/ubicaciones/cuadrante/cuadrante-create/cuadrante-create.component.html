@@ -1,0 +1,63 @@
+<div fxLayout="column">
+  <div class="flex-p">
+    <mat-card class="p-0 mat-card">
+      <mat-card-header fxLayoutAlign="center">
+        <mat-card-subtitle><h2>{{ constants.crear }}</h2></mat-card-subtitle>
+      </mat-card-header>
+
+      <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+        <h5>{{ constants.informacionCampoObligatorio }}</h5>
+      </div>
+
+      <mat-card-content class="p-16 m-0"  [formGroup]="form" 
+      *sigmaIsGranted="constants.permiso_administracion_cuadrante_create">   
+        <div fxFlex="100">
+                
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+            <div fxFlex="50">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.id }}" formControlName="id" 
+                [(ngModel)]="cuadrante.id" autocomplete="off" type="number" [numericInput]="true"  >
+                <mat-error *ngIf="form.get('id').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+                <mat-error *ngIf="form.get('id').hasError('pattern')"> {{ constants.campoNoVacio }} </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div fxFlex="50">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.nombre }}" formControlName="nombre" 
+                [(ngModel)]="cuadrante.nombre" autocomplete="off" type="text" 
+                required pattern="^(?!\s*$).+">
+                <mat-error *ngIf="form.get('nombre').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+                <mat-error *ngIf="form.get('nombre').hasError('pattern')"> {{ constants.campoNoVacio }} </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div fxFlex="50">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.valor }}" formControlName="valor" 
+                [(ngModel)]="cuadrante.valor" autocomplete="off" type="text" 
+                required pattern="^(?!\s*$).+">
+                <mat-error *ngIf="form.get('valor').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+                <mat-error *ngIf="form.get('valor').hasError('pattern')"> {{ constants.campoNoVacio }} </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+        </div>  
+      </mat-card-content>
+
+      <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+      <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+        <button type="button" (click)="onBack()" mat-button color="warn" class="m-1" >
+          <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }} 
+        </button>
+        <button type="button" class="m-1" mat-raised-button color="primary" (click)="create()" *sigmaIsGranted="constants.permiso_administracion_cuadrante_create" 
+         [disabled]="!form.valid" >
+          <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</div>

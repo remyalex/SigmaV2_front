@@ -1,0 +1,87 @@
+<div fxLayout="column">
+  <div class="flex-p">
+    <mat-card class="p-0 mat-card">
+      <mat-card-header fxLayoutAlign="center">
+        <mat-card-subtitle>
+          <h2>{{ constants.crear }} Registro formulas mezcla laboratorio</h2>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+        <h5>{{ constants.informacionCampoObligatorio }}</h5>
+      </div>
+
+      <mat-card-content class="p-16 m-0" [formGroup]="form">
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+          <div fxFlex>
+            <div fxLayout.xs="column" fxLayout.sm="column">
+              <sigma-form-select [path]="constants.path_lista_tipo_mezcla" placeholder="{{ constants.tipoMezcla }}"
+                required="true" formControlName="tipoMezcla" [(ngModel)]="formula.tipoMezcla">
+              </sigma-form-select>
+            </div>
+          </div>
+
+          <div fxFlex>
+            <div fxLayout.xs="column" fxLayout.sm="column">
+              <sigma-form-select [path]="constants.path_lista_especificacion"
+                placeholder="{{ constants.especificacion }}" required="true" formControlName="especificacion"
+                [(ngModel)]="formula.especificacion">
+              </sigma-form-select>
+            </div>
+          </div>
+
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" class="mb-10">
+
+          <div fxFlex>
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <sigma-form-input [placeholder]="constants.masaUnitaria" formControlName="masaUnitaria"
+                [(ngModel)]="formula.masaUnitaria">
+              </sigma-form-input>
+            </div>
+          </div>
+
+          <div fxFlex="70">
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+              <div fxFlex>
+                <sigma-form-calendar [objeto]="formula" [(ngModel)]="formula.fechaInicial" [type]="'calendar'"
+                  [placeholder]="constants.fechaInicial" [maxTarget]="'fechaFinal'" formControlName="fechaInicial">
+                </sigma-form-calendar>
+              </div>
+
+              <div fxFlex>
+                <sigma-form-calendar [objeto]="formula" [(ngModel)]="formula.fechaFinal" [type]="'calendar'"
+                  [placeholder]="constants.fechaFinal" [minTarget]="'fechaInicial'" formControlName="fechaFinal">
+                </sigma-form-calendar>
+              </div>
+            </div>  
+          </div>
+
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+          <div fxFlex.lg="50" fxFlex.md="50" fxFlex="100">
+            <sigma-form-upload-file formControlName="soporte" placeholder="Cargar Soporte" [sizeFile]="20"
+              [(ngModel)]="formula.soporte" [accept]="'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'">
+            </sigma-form-upload-file>
+          </div>
+        </div>
+
+      </mat-card-content>
+
+      <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+      <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+        <button type="button" (click)="onBack()" mat-button color="warn" class="m-1">
+          <mat-icon class="m-1">close</mat-icon> Cancelar
+        </button>
+        <button type="button" class="m-1" mat-raised-button color="primary" (click)="onSubmit()"
+          [disabled]="!form.valid || disabledBtnSave">
+          <mat-icon class="m-1">save</mat-icon> Guardar
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</div>

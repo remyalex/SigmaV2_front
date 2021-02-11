@@ -1,0 +1,45 @@
+<h2 mat-dialog-title>{{ constants.programar_mantenimiento }}</h2>
+
+<mat-dialog-content [formGroup]="form">
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <sigma-form-select [path]="constants.path_administracion_tipomantenimiento" [(ngModel)]="newMantenimiento.tipo"
+        formControlName="tipo" placeholder="{{ constants.tipoMantenimiento }}" listBy="descripcion">
+      </sigma-form-select>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <!--<mat-form-field class="w-100">
+        <input matInput [matDatepicker]="picker" [placeholder]="constants.fechaInicio" [min]="minDate" readonly
+          formControlName="fechaInicio">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-icon matSuffix class="hover-element-pointer" color="warn" (click)="clearInputCalendar()">
+          delete
+        </mat-icon>
+      </mat-form-field>-->
+      <sigma-form-calendar formControlName="fechaInicio" [minTarget]="'fechaMin'" [type]="'calendar'"
+        [placeholder]="constants.fechaInicio" [(ngModel)]="fechaInicio" [objeto]="newMantenimiento">
+      </sigma-form-calendar>
+    </div>
+
+    <div fxFlex>
+      <sigma-form-select [path]="constants.path_administracion_talleres" [(ngModel)]="newMantenimiento.taller"
+        formControlName="taller" placeholder="{{ constants.taller }}" *ngIf="showTaller">
+      </sigma-form-select>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button class="m-1" mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+  </button>
+  <button class="m-1" mat-raised-button color="primary" (click)="save()" [disabled]="disableSubmit">
+    <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+  </button>
+</mat-dialog-actions>

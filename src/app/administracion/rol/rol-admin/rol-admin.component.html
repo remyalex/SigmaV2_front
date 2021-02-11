@@ -1,0 +1,15 @@
+<div fxLayout="column" fxLayout.gt-sm="row wrap">
+    <div fxFlex="100" class="flex-p">
+        <mat-card>
+            <mat-card-content>
+                <div fxLayoutAlign="end">
+                    <button *sigmaIsGranted="constants.administracion_rol_create" mat-raised-button color="primary" class="m-1 mb-10" (click)="create();">
+                        <mat-icon class="m-1">note_add</mat-icon> Crear Nuevo
+                    </button>
+                </div>        
+                <sigma-administracion-rol-list></sigma-administracion-rol-list>        
+            </mat-card-content>
+
+        </mat-card>
+    </div>
+</div>

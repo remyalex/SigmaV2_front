@@ -1,0 +1,23 @@
+<h2 mat-dialog-title>Adicionar Fotos</h2>
+
+<div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+  <h5>{{ constants.informacionCampoObligatorio }}</h5>
+</div>
+
+
+<mat-dialog-content [formGroup]="form">
+  <sigma-form-upload-file formControlName="archivo" [(ngModel)]="foto.archivo"
+    [placeholder]="constants.fotos" [accept]="'image/*'" [showFile]="true">
+  </sigma-form-upload-file>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button class="m-1" mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> Cancelar
+  </button>
+  <button class="m-1" mat-raised-button color="primary" appPrevenirMultiplesClicks (clearClick)="save()" [disabled]="!foto.archivo.id">
+    <mat-icon class="m-1">save</mat-icon> Guardar
+  </button>
+</mat-dialog-actions>

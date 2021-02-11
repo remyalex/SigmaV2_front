@@ -1,0 +1,177 @@
+<div>
+  <div>
+    <mat-card-header fxLayoutAlign="center">
+      <mat-card-subtitle>
+        <h2>Disponibilidad lugares</h2>
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+      <div fxFlex>
+        <form fxLayout="column" (ngSubmit)="search()">
+          <mat-form-field class="w-50" >
+            <input matInput [placeholder]="constants.lugarNombre" id="lugarNombre" [(ngModel)]="criteria.lugarNombre"
+              name="numeroInterno" type="text" />
+            </mat-form-field>
+        </form>
+      </div>
+      <div fxFlex>
+        <div fxLayout="row" fxLayout.lt-md="column">
+          <div fxFlex fxLayoutAlign="end">
+            <button fxFlex.sm="50" fxFlex.xs="50" type="submit" mat-raised-button color="primary" class="m-1"
+              (click)="search()">
+              <mat-icon>search</mat-icon> {{ constants.buscar }}
+            </button>
+            <button fxFlex.sm="50" fxFlex.xs="50" (click)="clear()" mat-raised-button color="warn" class="m-1">
+              <mat-icon>clear</mat-icon> {{ constants.limpiar }}
+            </button>
+          </div>
+          <div fxFlex>
+            <button fxFlex.sm="50" fxFlex.xs="50" [disabled]="dataSource.totalElements$.source['_value'] <= 0"
+              layout="row" mat-raised-button color="primary" class="m-1" (click)="exportAsXLSX()"
+              *sigmaIsGranted="constants.permiso_administracion_lugardisponibilidad_export">
+              <mat-icon>get_app</mat-icon>
+              {{ constants.exportar }}
+              <mat-icon *ngIf="cargandoExcel">
+                <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+              </mat-icon>
+            </button>
+            <button fxFlex.sm="50" fxFlex.xs="50" mat-raised-button color="primary" class="m-1" (click)="importar()">
+              <mat-icon>cloud_upload</mat-icon>
+              Importar
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </div>
+</div>
+
+<div class="mat-elevation-z8">
+  <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center">
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+  <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+    <mat-icon class="m-1">sms_failed</mat-icon>
+    <h4> {{dataSource.errorMessage$ | async}}</h4>
+  </div>
+
+  <mat-table class="col-x" #table [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort>
+
+    <ng-container matColumnDef="activo">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.activo }} </mat-header-cell>
+      <mat-cell *matCellDef="let lugardisponibilidad" [attr.data-label]="constants.activo">
+        <span class="dev-color-red" [hidden]="lugardisponibilidad.activo">{{ constants.no }}</span>
+        <span class="dev-color-green" [hidden]="!lugardisponibilidad.activo">{{ constants.si }}</span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="fechaDesde">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaDesde }} </mat-header-cell>
+      <mat-cell *matCellDef="let lugardisponibilidad" [attr.data-label]="constants.fechaDesde">
+        {{ lugardisponibilidad.fechaDesde}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="fechaHasta">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.fechaHasta }} </mat-header-cell>
+      <mat-cell *matCellDef="let lugardisponibilidad" [attr.data-label]="constants.fechaHasta">
+        {{lugardisponibilidad.fechaHasta}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.id }} </mat-header-cell>
+      <mat-cell *matCellDef="let lugardisponibilidad" [attr.data-label]="constants.id">
+        {{lugardisponibilidad.id}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="intervalo">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.intervalo }} </mat-header-cell>
+      <mat-cell *matCellDef="let lugardisponibilidad" [attr.data-label]="constants.intervalo">
+        {{lugardisponibilidad.intervalo}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="lugarId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.lugarId }} </mat-header-cell>
+      <mat-cell *matCellDef="let lugardisponibilidad" [attr.data-label]="constants.lugarId">
+        {{ lugardisponibilidad.lugar ? lugardisponibilidad.lugar.valor : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="tipoAsignacionId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.tipoAsignacionId }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let lugardisponibilidad" [attr.data-label]="constants.tipoAsignacionId">
+        {{ lugardisponibilidad.tipoAsignacion ? lugardisponibilidad.tipoAsignacion.valor : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="turnoId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.turnoId }} </mat-header-cell>
+      <mat-cell *matCellDef="let lugardisponibilidad" [attr.data-label]="constants.turnoId">
+        {{ lugardisponibilidad.turno ? lugardisponibilidad.turno.valor : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="tipo">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.tipo }} </mat-header-cell>
+      <mat-cell *matCellDef="let lugardisponibilidad" [attr.data-label]="constants.tipo">
+        {{ lugardisponibilidad.lugar ? lugardisponibilidad.lugar.tipoLugar ? lugardisponibilidad.lugar.tipoLugar.valor : '' : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="origen">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.origen }} </mat-header-cell>
+      <mat-cell *matCellDef="let lugardisponibilidad" [attr.data-label]="constants.origen">
+        {{ lugardisponibilidad.lugar ? lugardisponibilidad.lugar.origenLugar ? lugardisponibilidad.lugar.origenLugar.valor : '' : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="nombre">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.nombre }} </mat-header-cell>
+      <mat-cell *matCellDef="let lugardisponibilidad" [attr.data-label]="constants.nombre">
+        {{ lugardisponibilidad.lugar ? lugardisponibilidad.lugar.nombre : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="descripcion">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.descripcion }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let lugardisponibilidad" [attr.data-label]="constants.descripcion">
+        {{ lugardisponibilidad.lugar ? lugardisponibilidad.lugar.descripcion : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="direccion">
+      <mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="true"> {{ constants.direccion }} </mat-header-cell>
+      <mat-cell *matCellDef="let lugardisponibilidad" [attr.data-label]="constants.direccion">
+        {{ lugardisponibilidad.lugar ? lugardisponibilidad.lugar.direccion : '' }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+      <mat-cell *matCellDef="let lugardisponibilidad" [attr.data-label]="constants.acciones">
+        <button mat-raised-button color="primary" (click)="detail(lugardisponibilidad)" class="m-1"
+          *sigmaIsGranted="constants.permiso_administracion_lugardisponibilidad_view">
+          <mat-icon matTooltip="Detalles" matTooltipPosition="above">open_in_new</mat-icon>
+        </button>
+        <button mat-raised-button color="primary" (click)="edit(lugardisponibilidad)" class="m-1"
+          *sigmaIsGranted="constants.permiso_administracion_lugardisponibilidad_update">
+          <mat-icon matTooltip="Editar" matTooltipPosition="above">edit</mat-icon>
+        </button>
+        <button mat-raised-button color="warn" (click)="delete(lugardisponibilidad)" class="m-1"
+          *sigmaIsGranted="constants.permiso_administracion_lugardisponibilidad_delete">
+          <mat-icon matTooltip="Eliminar" matTooltipPosition="above">delete</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size"
+    [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+</div>

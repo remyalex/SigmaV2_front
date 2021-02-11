@@ -1,0 +1,152 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+<div fxLayout="column" *ngIf="!processing">
+  <div fxLayout="row" class="mt-10 mb-10">
+    <div class="liner_top" fxFlex>
+        <h3>{{ constants.crear }} Gestión Social adelantada</h3>
+    </div>
+  </div>
+
+  <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+    <h5>{{ constants.informacionCampoObligatorio }}</h5>
+  </div>
+
+  <mat-card-content class="p-16" [hidden]="submitted" [formGroup]="form">
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+
+      <div fxFlex>    
+        <div fxFlex="100%" f xLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.tipoIntervencion }}" formControlName='tipoIntervencion'
+            [value]="mantenimiento.diagnostico.priorizacion.tipoIntervencion.descripcion"
+            [readonly]="true">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div fxFlex>
+        <div fxFlex="100%" f xLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.otroTipoIntervencion }}" formControlName='otroTipoIntervencion'
+            [value]="mantenimiento.diagnostico.priorizacion.tipoIntervencion.descripcion" [readonly]="true">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div fxFlex>
+        <div fxFlex="100%" f xLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.fecha }}" formControlName='fechaRegistro'
+            [value]="gestionSocial.fechaRegistro"
+            [readonly]="true">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div fxFlex>
+        <div fxFlex="100%" f xLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.localidadad }}" formControlName='localidad'
+            [value]="mantenimiento.localidad.nombre " [readonly]="true">
+          </mat-form-field>
+        </div>
+      </div>
+
+    </div>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+
+      <div fxFlex>    
+        <div fxFlex="100%" f xLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.upla }}" formControlName='upla'
+            [value]="mantenimiento.upla.nombre"  [readonly]="true">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div fxFlex>
+        <div fxFlex="100%" f xLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.barrio }}" formControlName='barrio'                 
+            [value]="mantenimiento.barrio.nombre"  [readonly]="true">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div fxFlex>
+        <div fxFlex="100%" f xLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.nomenclatura }}" formControlName='nomenclatura'
+            [value]="mantenimiento.desde + ' No ' + mantenimiento.hasta"  [readonly]="true">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div fxFlex>
+        <div fxFlex="100%" f xLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.frenteObra }}" formControlName='frenteObra'
+            [(ngModel)]="frenteObra" [readonly]="true">
+          </mat-form-field>
+        </div>
+      </div>
+
+    </div>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+
+      <div fxFlex="24">    
+        <div fxFlex="100%" f xLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.pk }}" formControlName='pk'                
+            [value]="mantenimiento.pk"  [readonly]="true">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div fxFlex="24">
+        <div fxFlex="100%" f xLayout.xs="column" fxLayout.sm="column">
+          <mat-form-field class="w-100">
+            <input matInput placeholder="{{ constants.civ }}" formControlName='civ'                
+            [value]="mantenimiento.civ"  [readonly]="true">
+          </mat-form-field>
+        </div>
+      </div>
+
+    </div>
+
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+      <div fxFlex>
+        <sigma-form-textarea [placeholder]="constants.accionesAdelantadas" formControlName="accionesAdelantadas"
+          [(ngModel)]="gestionSocial.accionesAdelantadas" rows="5">
+        </sigma-form-textarea>
+      </div>
+
+    </div>
+
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+      <div class="w-100" fxFlex>
+        <mat-checkbox formControlName="activo" name="activo" id="activo" disabled hidden>Estado</mat-checkbox>
+      </div>
+    </div>
+  </mat-card-content>
+
+
+  <div fxLayout="row" fxLayoutAlign="end">
+    <mat-divider></mat-divider>
+    <div class="pt-16">
+      <button mat-button color="warn" class="m-1" (click)="onBack()">
+        <mat-icon class="m-1">close</mat-icon>{{ constants.cancelar }}
+      </button>
+      <button mat-raised-button color="primary" class="m-1" (click)="onSubmit()" [disabled]="disableSubmit"
+        *sigmaIsGranted="constants.encuesta_satisfaccion_create">
+        <mat-icon class="m-1">save</mat-icon>{{ constants.guardar }}
+      </button>
+    </div>
+  </div>
+</div>

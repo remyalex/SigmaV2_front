@@ -1,0 +1,429 @@
+<div fxLayout="column" class="fixed-seccion">
+  <div fxFlex="100" class="flex-p">
+    <mat-card *ngIf="currentAction == constants.currentAction.list">
+      <mat-card-header fxLayoutAlign="center">
+        <mat-card-subtitle>
+          <h2>{{ constants.historialMantenimiento }}</h2>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div fxLayout="column">
+          <div fxFlex="100" class="flex-p">
+            <form fxLayout="column">
+              <div *ngIf="!consultaAvanzadaActiva">
+                <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap.lt-lg="0" fxLayoutGap="10px">
+                  <div fxFlex>
+                    <mat-form-field class="w-100">
+                      <input matInput placeholder="PK" id="pk" [(ngModel)]="criteria.pk" name="pk" />
+                    </mat-form-field>
+                  </div>
+                  <div fxFlex>
+                    <sigma-form-select [path]="constants.path_mejoramiento_lista_tipoSolicitud"
+                      [(ngModel)]="criteria.tipoSolicitud" name="origen" placeholder="Origen" [listBy]="'descripcion'">
+                    </sigma-form-select>
+                  </div>
+
+                  <div fxFlex>
+                    <sigma-form-select [path]="constants.path_mejoramiento_lista_estadopk"
+                      [(ngModel)]="criteria.estadoPk" name="estadoPk" placeholder="Estado de PK"
+                      [listBy]="'descripcion'">
+                    </sigma-form-select>
+                  </div>
+
+                  <div fxFlex>
+                    <!--<sigma-form-select [path]="constants.path_mejoramiento_lista_zonas" [(ngModel)]="criteria.zona" (selectionChange)="cambioZona($event.value)" 
+                      name="zona" placeholder="Zona" [listBy]="'descripcion'">
+                    </sigma-form-select>-->
+                    <mat-form-field class="w-100">
+                      <mat-select [placeholder]="'Zona'" (selectionChange)="cambioZona($event.value)"
+                        [(ngModel)]="criteria.zona" [ngModelOptions]="{standalone: true}" name="zona">
+                        <mat-option>Seleccionar</mat-option>
+                        <mat-option *ngFor="let zona of zonas" [value]="zona">
+                          {{zona.nombre}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+
+                  <div fxFlex>
+                    <!--<sigma-form-select [path]="constants.path_mejoramiento_lista_localidades"
+                      [(ngModel)]="criteria.localidad" name="localidad" placeholder="Localidad"
+                      [listBy]="'descripcion'">
+                    </sigma-form-select>-->
+                    <mat-form-field class="w-100">
+                      <mat-select [placeholder]="'Localidad'" (selectionChange)="cambioLocalidad($event.value)"
+                        [(ngModel)]="criteria.localidad" [ngModelOptions]="{standalone: true}" name="localidad">
+                        <mat-option>Seleccionar</mat-option>
+                        <mat-option *ngFor="let localidad of localidades" [value]="localidad">
+                          {{localidad.nombre}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+
+
+                </div>
+                <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap.lt-lg="0" fxLayoutGap="10px">
+
+                  <div fxFlex>
+                    <!--<sigma-form-select [path]="constants.path_mejoramiento_lista_barrios" [(ngModel)]="criteria.barrio"
+                      name="barrio" placeholder="Barrio" [listBy]="'descripcion'">
+                    </sigma-form-select>-->
+                    <mat-form-field class="w-100">
+                      <mat-select [placeholder]="'Barrio'" [(ngModel)]="criteria.barrio"
+                        [ngModelOptions]="{standalone: true}" name="barrio">
+                        <mat-option>Seleccionar</mat-option>
+                        <mat-option *ngFor="let barrio of barrios" [value]="barrio">
+                          {{barrio.nombre}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+
+                  <div fxFlex>
+                    <!--<sigma-form-select [path]="constants.path_mejoramiento_lista_upla" [(ngModel)]="criteria.upla"
+                      name="upla" placeholder="UPZ" [listBy]="'descripcion'">
+                    </sigma-form-select>
+                    <sigma-form-select [path]="constants.path_mejoramiento_lista_upz" [(ngModel)]="criteria.upz"
+                      name="upz" placeholder="UPZ" [listBy]="'descripcion'">
+                    </sigma-form-select>-->
+                    <mat-form-field class="w-100">
+                      <mat-select [placeholder]="'UPZ'" [(ngModel)]="criteria.upla" [ngModelOptions]="{standalone: true}"
+                        name="upla">
+                        <mat-option>Seleccionar</mat-option>
+                        <mat-option *ngFor="let upla of upzs" [value]="upla">
+                          {{upla.nombre}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+
+                  <div fxFlex>
+                    <sigma-form-select [path]="constants.path_mejoramiento_lista_tipoIntervencion"
+                      [(ngModel)]="criteria.tipoIntervencion" name="tipoIntervencion" placeholder="Tipo de intervención"
+                      [listBy]="'descripcion'">
+                    </sigma-form-select>
+                  </div>
+
+                  <div fxFlex>
+                    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap.lt-md="0" fxLayoutGap="10px">
+
+                      <div fxFlex>
+                        <sigma-form-calendar [(ngModel)]="criteria.fechaInicio" [objeto]="criteria"
+                          [maxTarget]="'fechaFin'" [placeholder]="constants.fechaInicio"
+                          [type]="constants.datepicker.types.calendar" [ngModelOptions]="{standalone: true}">
+                        </sigma-form-calendar>
+                      </div>
+                      <div fxFlex>
+                        <sigma-form-calendar [(ngModel)]="criteria.fechaFin" [objeto]="criteria"
+                          [minTarget]="'fechaInicio'" [placeholder]="constants.fechaFin"
+                          [type]="constants.datepicker.types.calendar" [ngModelOptions]="{standalone: true}">
+                        </sigma-form-calendar>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="consultaAvanzadaActiva">
+                <div *ngFor="let query of queries; let key = index" fxLayout="row" fxLayout.lt-md="column"
+                  fxLayoutGap.lt-md="0" fxLayoutGap="10px">
+                  <div fxFlex>
+                    <button mat-raised-button class="m-1" color="primary" (click)="agregarQuery(key + 1)">
+                      <mat-icon>add</mat-icon>
+                    </button>
+                    <button mat-raised-button class="m-1" color="warn" (click)="eliminarQuery(key)">
+                      <mat-icon>remove</mat-icon>
+                    </button>
+                  </div>
+
+                  <div fxFlex>
+                    <mat-form-field class="w-100" *ngIf="key > 0">
+                      <mat-label>{{ constants.andOr }}</mat-label>
+                      <mat-select [(ngModel)]="query.type" [ngModelOptions]="{standalone: true}"
+                        (selectionChange)="changeQuery()">
+                        <mat-option *ngFor="let item of condiciones.condiciones;" [value]="item">
+                          {{ item.name }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+
+                  <div fxFlex>
+                    <mat-form-field class="w-100">
+                      <mat-label>{{ constants.campo }}</mat-label>
+                      <mat-select [(ngModel)]="query.campo" (selectionChange)="changeCampo(query)"
+                        [ngModelOptions]="{standalone: true}" required="true">
+                        <mat-option *ngFor="let item of campos.campos;" [value]="item">
+                          {{ item.name }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+
+                  <div fxFlex>
+                    <mat-form-field class="w-100">
+                      <mat-label>{{ constants.operador }}</mat-label>
+                      <mat-select [(ngModel)]="query.operador" [ngModelOptions]="{standalone: true}"
+                        (selectionChange)="changeQuery()" required="true">
+                        <mat-option *ngFor="let item of acciones.acciones;" [value]="item">
+                          {{ item.name }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+
+                  <div fxFlex>
+                    <div *ngIf="query.show" class="w-100">
+                      <sigma-form-input *ngIf="query.campo.type == constants.text" placeholder="{{ constants.valor }}"
+                        required="true" [(ngModel)]="query.value" (ngModelChange)="changeQuery()"
+                        [ngModelOptions]="{standalone: true}">
+                      </sigma-form-input>
+
+                      <sigma-form-number *ngIf="query.campo.type == constants.number" [placeholder]="constants.valor"
+                        required="true" [(ngModel)]="query.value" (ngModelChange)="changeQuery()" [numericInput]="false"
+                        [ngModelOptions]="{standalone: true}">
+                      </sigma-form-number>
+
+                      <sigma-form-select *ngIf="query.campo.type == constants.list" [path]="query.campo.url"
+                        name="selectList" [placeholder]="constants.valor" [(ngModel)]="query.value"
+                        [listBy]="'descripcion'" (ngModelChange)="changeQuery()" required="true"
+                        [ngModelOptions]="{standalone: true}">
+                      </sigma-form-select>
+
+                      <sigma-form-calendar *ngIf="query.campo.type == constants.date"
+                        [type]="constants.datepicker.types.calendar" [placeholder]="constants.valor"
+                        [(ngModel)]="query.value" (ngModelChange)="changeQuery()" required="true"
+                        [ngModelOptions]="{standalone: true}">
+                      </sigma-form-calendar>
+                    </div>
+                  </div>
+                </div>
+
+                <div fxLayoutAlign="end">
+                  <button mat-raised-button color="primary" (click)="agregarQuery()">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                </div>
+
+                <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap.lt-md="0" fxLayoutGap="10px">
+                  <div fxFlex>
+                    <mat-form-field class="w-100">
+                      <b>{{ constants.where }} </b>
+                      <textarea rows="1" matInput id="query" [(ngModel)]="criteria.query" name="query" readonly="true"
+                        [disabled]="true">
+                      </textarea>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap.lt-md="0" fxLayoutGap="10px">
+                <button type="submit" mat-raised-button color="primary" class="m-1" (click)="search()"
+                  [disabled]="consultaAvanzadaActiva && searchDisabled">
+                  <mat-icon>search</mat-icon> {{ constants.buscar }}
+                </button>
+                <button (click)="consultaAvanzadaActiva ? clearAvanzada() : clear()" mat-raised-button color="warn"
+                  class="m-1">
+                  <mat-icon>clear</mat-icon> {{ constants.limpiar }}
+                </button>
+                <button [disabled]="dataSource.totalElements$.source['_value'] <= 0" layout="row" mat-raised-button
+                  color="primary" class="m-1" (click)="exportAsXLSX()">
+                  <mat-icon>get_app</mat-icon>
+                  {{ constants.exportar }}
+                  <mat-icon *ngIf="cargandoExcel">
+                    <mat-spinner color="accent" [diameter]="20"></mat-spinner>
+                  </mat-icon>
+                </button>
+                <button type="submit" mat-raised-button class="m-1" (click)="activarBusquedaAvanzada()">
+                  <mat-icon>subtitles</mat-icon> {{labelBotonActivarBusquedaAvanzada}}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <div class="mat-elevation-z8">
+        <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center">
+          <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+        </div>
+
+        <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+          <mat-icon class="m-1">sms_failed</mat-icon>
+          <h4> {{dataSource.errorMessage$ | async}}</h4>
+        </div>
+
+        <mat-table #table class="col-x" [dataSource]="dataSource" matSort
+          [style.display]="(dataSource.loading$ | async) ? 'none' : 'block'">
+          <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+
+          <ng-container matColumnDef="pk">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.pk }} </mat-header-cell>
+            <mat-cell *matCellDef="let historial" [attr.data-label]="constants.pk"
+              (click)="localizarMantenimientoMapa(historial)">
+              {{historial.pk}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="mantenimientoId">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Mantenimiento </mat-header-cell>
+            <mat-cell *matCellDef="let historial" [attr.data-label]="'Mantenimiento'">
+              {{historial.mantenimientoId}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="civ">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>{{ constants.civ }}</mat-header-cell>
+            <mat-cell *matCellDef="let historial" [attr.data-label]="constants.civ">
+              {{historial.civ}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="enSeguimiento">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ constants.enSeguimiento }}</mat-header-cell>
+            <mat-cell *matCellDef="let historial" [attr.data-label]="constants.enSeguimiento">
+              <span class="dev-color-red" [hidden]="historial.enSeguimiento">{{ constants.no }}</span>
+              <span class="dev-color-green" [hidden]="!historial.enSeguimiento">{{ constants.si }}</span>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="estadoPkNombre">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>{{ constants.estadoPk }}</mat-header-cell>
+            <mat-cell *matCellDef="let historial" [attr.data-label]="constants.estadoPk">
+              {{ historial.estadoPkNombre }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="indicePriorizacion">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>{{ constants.indicePriorizacion }}</mat-header-cell>
+            <mat-cell *matCellDef="let historial" [attr.data-label]="constants.indicePriorizacion">
+              {{ historial.indicePriorizacion }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="tipoMallaNombre">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>{{ constants.tipoMalla }}</mat-header-cell>
+            <mat-cell *matCellDef="let historial" [attr.data-label]="constants.tipoMalla">
+              {{ historial.tipoMallaNombre }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="actividadAgrupada">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>{{ constants.actividadAgrupada }}</mat-header-cell>
+            <mat-cell *matCellDef="let historial" [attr.data-label]="constants.actividadAgrupada">
+              {{ historial.actividadAgrupada }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="usuarioNombre">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>{{ constants.responsable }}</mat-header-cell>
+            <mat-cell *matCellDef="let historial" [attr.data-label]="constants.responsable">
+              {{ historial.usuarioNombre }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="tieneRutasTransporte">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>{{ constants.tieneRutasTransporte }}</mat-header-cell>
+            <mat-cell *matCellDef="let historial" [attr.data-label]="constants.tieneRutasTransporte">
+              <span class="dev-color-red" [hidden]="historial.tieneRutasTransporte">{{ constants.no }}</span>
+              <span class="dev-color-green" [hidden]="!historial.tieneRutasTransporte">{{ constants.si }}</span>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="usoViaNombre">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>{{ constants.usoViaId }}</mat-header-cell>
+            <mat-cell *matCellDef="let historial" [attr.data-label]="constants.usoViaId">
+              {{ historial.usoViaNombre }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="localidadNombre">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>{{ constants.localidad }}</mat-header-cell>
+            <mat-cell *matCellDef="let historial" [attr.data-label]="constants.localidad">
+              {{ historial.localidadNombre }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="fechaInicio">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>{{ constants.fecha }}</mat-header-cell>
+            <mat-cell *matCellDef="let historial" [attr.data-label]="constants.fecha">
+              {{ historial.fechaInicio }} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="acciones">
+            <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+            <mat-cell *matCellDef="let mantenimiento" [attr.data-label]="constants.acciones">
+              <div fxLayout.lt-md="row" fxLayout.lt-xl="column">
+                <div fxFlex>
+                  <button *ngIf="mantenimiento.diagnosticoId !== null && mantenimiento.diagnosticoId !== 0"
+                    mat-raised-button color="primary" (click)="diagnosticar(mantenimiento)" class="m-1"
+                    matTooltip="{{ constants.vistaDiagnostico }}" matTooltipPosition="above">
+                    <mat-icon>visibility</mat-icon>
+                  </button>
+                  <button *ngIf="mantenimiento.tieneIntervencion > 0" mat-raised-button color="accent" (click)="verificar(mantenimiento, mantenimiento)" class="m-1"
+                    matTooltip="{{ constants.vistaVerificacion }}" matTooltipPosition="above">
+                    <mat-icon>visibility</mat-icon>
+                  </button>
+                  <button
+                    *ngIf="mantenimiento.tieneHistoricoDocumento !== null && mantenimiento.tieneHistoricoDocumento"
+                    mat-raised-button color="primary" (click)="documentos(mantenimiento)" class="m-1"
+                    matTooltip="{{ constants.historialDocumento}}" matTooltipPosition="above">
+                    <mat-icon>library_books</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </mat-cell>
+          </ng-container>
+
+          <mat-row *matRowDef="let row; columns: columns"></mat-row>
+        </mat-table>
+
+        <mat-paginator #paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size"
+          [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+      </div>
+    </mat-card>
+
+    <mat-card *ngIf="currentAction == constants.currentAction.detalleDiagnosticar">
+      <div fxLayout="row" fxLayout.lt-md="column">
+        <div fxLayoutAlign="start" fxFlex>
+          <button mat-stroked-button color="primary" class="m-1 mb-10" (click)="closeAccion()">
+            <mat-icon>arrow_back_ios</mat-icon>
+            {{ constants.atras }}
+          </button>
+        </div>
+      </div>
+      <sigma-ver-diagnostico [mantenimiento]="mantenimiento" [mostrarButtonsBackCancelar]="false">
+      </sigma-ver-diagnostico>
+    </mat-card>
+
+    <mat-card *ngIf="currentAction == constants.currentAction.detalleVisitaIntervencion">
+      
+      <div fxLayout="row" fxLayout.lt-md="column">
+        <div fxLayoutAlign="start" fxFlex>
+          <button mat-stroked-button color="primary" class="m-1 mb-10" (click)="closeAccion()">
+            <mat-icon>arrow_back_ios</mat-icon>
+            {{ constants.atras }}
+          </button>
+        </div>
+      </div>
+      <sigma-visita-verificacion-admin-detail [mostrarButtonsBackCancelar]="false"
+        *ngIf="mantenimientoFromCondicion != undefined && mantenimientoFromCondicion != null"
+        [(mantenimiento)]="mantenimientoFromCondicion">
+      </sigma-visita-verificacion-admin-detail>
+
+      <div *ngIf="mantenimientoFromCondicion == undefined || mantenimientoFromCondicion == null" class="msj_no_results"
+        fxLayout="row" fxLayoutAlign="center center">
+        <mat-icon class="m-1">sms_failed</mat-icon>
+        <h4> No se encontró información de visita de verificación</h4>
+      </div>
+
+    </mat-card>
+
+    <mat-card *ngIf="currentAction == constants.currentAction.historicoDocumento">
+      <div fxLayout="row" fxLayout.lt-md="column">
+        <div fxLayoutAlign="start" fxFlex>
+          <button mat-stroked-button color="primary" class="m-1 mb-10" (click)="closeAccion()">
+            <mat-icon>arrow_back_ios</mat-icon>
+            {{ constants.atras }}
+          </button>
+        </div>
+      </div>
+      <sigma-historial-mantenimiento-documento [mantenimiento]="mantenimiento">
+      </sigma-historial-mantenimiento-documento>
+    </mat-card>
+
+
+  </div>
+</div>

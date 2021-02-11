@@ -1,0 +1,51 @@
+<mat-form-field fxFlex="100%">
+  
+  <input 
+    #input 
+    matInput 
+    [placeholder]="placeholder" 
+    class="hover-element-pointer" 
+    [owlDateTimeTrigger]="target"
+    [owlDateTime]="target" 
+    [formControl]="control" 
+    (dateTimeChange)="changeValue($event)" 
+    [max]="maxDate" 
+    [min]="minDate"
+    [required]="required"
+    readonly>
+  
+  <mat-icon *ngIf="type == constants.datepicker.types.timer" matSuffix 
+    [owlDateTimeTrigger]="target" class="hover-element-pointer">
+    access_time
+  </mat-icon>
+  <mat-icon *ngIf="type == constants.datepicker.types.calendar" matSuffix 
+    [owlDateTimeTrigger]="target" class="hover-element-pointer">
+    calendar_today
+  </mat-icon>
+  <mat-icon *ngIf="type == constants.datepicker.types.fullCalendar" matSuffix 
+    [owlDateTimeTrigger]="target" class="hover-element-pointer">
+    calendar_today
+  </mat-icon>
+  <mat-icon matSuffix *ngIf="!control.disabled" class="hover-element-pointer" color="warn" (click)="clearInputCalendar()">
+    delete
+  </mat-icon>
+  <owl-date-time [pickerType]="type" #target="owlDateTime"></owl-date-time>
+
+  <mat-error *ngFor="let error of basicErrors">
+    <mat-error *ngIf="control.hasError(error.name)">
+      {{ error.message }}
+    </mat-error>
+  </mat-error>
+</mat-form-field>
+
+<!--<sigma-date-picker 
+  formControlName="control" -> (Obligatorio, hace la conexión con el controlador)
+  [(ngModel)]="modelo" -> (Obligatorio, el binding con el modelo)
+  [objeto]="objeto" -> (Opcional, en caso de querer validar fechas máximas y mínimas en los inputs)
+  [maxTarget]="'atributo'" -> (Valor opcional, sirve de validación)
+  [minTarget]="'atributo'" -> (Valor opcional, sirve de validación)
+  [type]="type" -> (Opcional disponibles (timer|calendar|fullCalendar, valor establecido 'Calendar')
+  [placeholder]="texto" -> (Opcional, campo para el label)
+  [errors]="[{name: 'error', message: 'mensaje'}]" -> (Opcional, en caso de necesaitar agregar nuevos errores al control)
+>
+</sigma-date-picker>-->

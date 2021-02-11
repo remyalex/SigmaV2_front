@@ -1,0 +1,87 @@
+<div fxLayout="column">
+  <div class="flex-p">
+    <mat-card class="p-0 mat-card">
+      <mat-card-header fxLayoutAlign="center">
+        <mat-card-subtitle>
+          <h2>{{ constants.crear }} {{ constants.titulo }}</h2>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+        <h5>{{ constants.informacionCampoObligatorio }}</h5>
+      </div>
+
+      <mat-card-content class="p-16 m-0" [formGroup]="form"
+        *sigmaIsGranted="constants.permiso_administracion_formatoseccioncampo_create">
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.descripcion }}" formControlName="descripcion"
+                [(ngModel)]="formatoseccioncampo.descripcion" autocomplete="off" type="text" required
+                pattern="^(?!\s*$).+">
+              <mat-error *ngIf="form.get('descripcion').hasError('required')"> {{ constants.campoRequerido }}
+              </mat-error>
+              <mat-error *ngIf="form.get('descripcion').hasError('maxlength')"> {{ constants.longitud_maxima }} 250
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.nombre }}" formControlName="nombre"
+                [(ngModel)]="formatoseccioncampo.nombre" autocomplete="off" type="text" required pattern="^(?!\s*$).+">
+              <mat-error *ngIf="form.get('nombre').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+              <mat-error *ngIf="form.get('nombre').hasError('maxlength')"> {{ constants.longitud_maxima }} 100
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div fxFlex>
+            <mat-form-field class="w-100">
+              <input matInput placeholder="{{ constants.orden }}" formControlName="orden"
+                [(ngModel)]="formatoseccioncampo.orden" autocomplete="off" type="text" required [numericInput]="true"
+                (keyup)="patternString($event)" pattern="[0-9]*">
+              <mat-error *ngIf="form.get('orden').hasError('required')"> {{ constants.campoRequerido }} </mat-error>
+              <mat-error *ngIf="form.get('orden').hasError('max')"> {{ constants.longitud_maxima }} 4 </mat-error>
+              <mat-error *ngIf="form.get('orden').hasError('pattern')"> Solo se permiten valores numericos </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <div class="w-100">
+              <sigma-form-select [path]="constants.path_administracion_formatoseccioncampo_tipoCampoFormatoId"
+                placeholder="{{ constants.tipoCampoFormatoId }}" formControlName="tipoCampoFormatoId"
+                [(ngModel)]="formatoseccioncampo.tipoCampoFormato" required="true">
+              </sigma-form-select>
+            </div>
+          </div>
+          <div fxFlex>
+            <div class="w-100">
+              <sigma-form-select [path]="constants.path_administracion_formatoseccioncampo_listaId"
+                placeholder="{{ constants.listaId }}" formControlName="listaId" [(ngModel)]="formatoseccioncampo.lista" 
+                [listBy]="'nombre'">
+              </sigma-form-select>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+      <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+        <button class="m-1" type="button" (click)="onBack()" mat-button color="warn">
+          <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+        </button>
+        <button class="m-1" type="button" mat-raised-button color="primary" (click)="onSubmit()"
+          [disabled]="disableSubmit" *sigmaIsGranted="constants.permiso_administracion_formatoseccioncampo_create">
+          <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+        </button>
+      </div>
+
+    </mat-card>
+  </div>
+</div>

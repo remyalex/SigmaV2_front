@@ -1,0 +1,161 @@
+<div [formGroup]="form" *sigmaIsGranted="constants.mejoramiento_diseino_create">
+  <div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+    <h5>{{ constants.informacionCampoObligatorio }}</h5>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column">
+    <div fxLayoutAlign="start" fxFlex>
+      <button mat-stroked-button color="primary" class="m-1 mb-10" (click)="onBack()">
+        <mat-icon>arrow_back_ios</mat-icon>
+        {{ constants.atras }}
+      </button>
+    </div>
+  </div>
+
+  <mat-card-content class="p-0">
+    <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px" fxLayoutGap.lt-md="0">
+      <div fxFlex>
+        <mat-form-field class="w-100">
+          <input matInput placeholder="{{ constants.apiques }}" [(ngModel)]="disenio.apiques" formControlName="apiques"
+            autocomplete="off" type="text" required>
+          <mat-error *ngIf="form.get('apiques').hasError('maxlength')"> {{ constants.longitud_maxima }} 2
+          </mat-error>
+        </mat-form-field>
+
+        <div fxFlex="20" fxLayoutAlign="center center">
+          <button type="button" (click)="mostrarResultadosApiques()" mat-raised-button color="primary" class="m-1" title="Resultados de apique">
+            <mat-icon class="m-1">move_to_inbox</mat-icon>
+          </button>
+        </div>
+      </div>
+      <div fxFlex>
+        <mat-form-field class="w-100">
+          <mat-select disabled placeholder="{{ constants.aforos }}" [(ngModel)]="disenio.aforos"
+            formControlName="aforos">
+            <mat-option>Seleccione</mat-option>
+            <mat-option *ngFor="let item of options" [value]="item.value"> {{ item.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div fxFlex="20" fxLayoutAlign="center center">
+          <button type="button" (click)="mostrarResultadosAforos()" mat-raised-button color="primary" class="m-1" title="Resultados de aforo">
+            <mat-icon class="m-1">save_alt</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+
+  <div fxLayout="column wrap" fxLayoutGap="10px" class="mb-10">
+    <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px">
+      <div fxFlex>
+        <mat-card class="p-0 c-mod">
+          <mat-card-header>
+            <h3 mat-subheader>Consulta de redes</h3>
+          </mat-card-header>
+          <mat-card-content class="p-16">
+            <div class="w-100 mb-10">
+              <sigma-form-upload-file #sigmaFormUploadFileRedes placeholder="" [ngModel]="consultaRedes"
+                [accept]="'application/pdf,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'"
+                formControlName="consultaRedes" (ngModelChange)="onChangeArchivoRedes($event)" [multiple]="true">
+              </sigma-form-upload-file>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div fxFlex>
+        <mat-card class="p-0 c-mod">
+          <mat-card-header>
+            <h3 mat-subheader>Modulación de losas</h3>
+          </mat-card-header>
+          <mat-card-content class="p-16">
+            <div class="w-100 mb-10">
+              <sigma-form-upload-file placeholder="" [(ngModel)]="modulacionLosas"
+                (ngModelChange)="secuenceField('modulacionLosas', $event)" formControlName="modulacionLosas">
+              </sigma-form-upload-file>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div fxFlex>
+        <mat-card class="p-0 c-mod">
+          <mat-card-header>
+            <h3 mat-subheader>Levantamiento topografico</h3>
+          </mat-card-header>
+          <mat-card-content class="p-16">
+            <div class="w-100 mb-10">
+              <sigma-form-upload-file placeholder="" [(ngModel)]="leventamientoTopografico"
+                (ngModelChange)="secuenceField('leventamientoTopografico', $event)"
+                formControlName="levantamientoTopografico"></sigma-form-upload-file>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="10px">
+      <div fxFlex>
+        <mat-card class="p-0 c-mod">
+          <mat-card-header>
+            <h3 mat-subheader>Ficha evaluación estructural</h3>
+          </mat-card-header>
+          <mat-card-content class="p-16">
+            <div class="w-100 mb-10">
+              <sigma-form-upload-file placeholder="" [(ngModel)]="fichaEstructural"
+                (ngModelChange)="secuenceField('fichaEstructural', $event)" formControlName="evaluacionEstructural">
+              </sigma-form-upload-file>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div fxFlex>
+        <mat-card class="p-0 c-mod">
+          <mat-card-header>
+            <h3 mat-subheader>Información del diseño</h3>
+          </mat-card-header>
+          <mat-card-content class="p-16">
+            <div class="mb-10" fxLayout="row" fxLayoutGap="10px">
+              <div fxFlex>
+                <sigma-form-upload-file placeholder="" style="min-width: 100%;" [(ngModel)]="informacionDiseino"
+                  (ngModelChange)="secuenceField('informacionDiseino', $event)" formControlName="informacionDisenio">
+                </sigma-form-upload-file>
+              </div>
+              <div fxFlex="20" fxLayoutAlign="center center">
+                <button type="button" (click)="actionChangeDisenioInformacion(disenio,mantenimiento)"
+                  mat-raised-button color="primary" class="m-1">
+                  <mat-icon class="m-1">edit</mat-icon>
+                </button>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div fxFlex>
+        <mat-card class="p-0 c-mod">
+          <mat-card-header>
+            <h3 mat-subheader>Otros documentos</h3>
+          </mat-card-header>
+          <mat-card-content class="p-16">
+            <div class="w-100 mb-10">
+              <sigma-form-upload-file #sigmaFormUploadFileOtros placeholder="" [ngModel]="otrosDocumentos" [multiple]="true"
+                (ngModelChange)="onChangeArchivoOtrosDocumentos($event)" formControlName="otrosDocumentos">
+              </sigma-form-upload-file>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="end" class="pt-16">
+    <mat-divider></mat-divider>
+    <div class="mt-10">
+      <button type="button" (click)="onBack()" mat-button color="warn" class="m-1">
+        <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+      </button>
+      <button type="button" [disabled]="disableSubmit" class="m-1"  mat-raised-button color="primary" (click)="onSubmit()">
+        <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+      </button>
+    </div>
+  </div>
+</div>

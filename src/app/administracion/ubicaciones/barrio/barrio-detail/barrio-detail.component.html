@@ -1,0 +1,60 @@
+<h2 mat-dialog-title>{{ constants.detalle }}</h2>
+
+<mat-dialog-content *sigmaIsGranted="constants.permiso_administracion_barrio_detail">
+  <mat-list>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.id }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ barrio.id }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.nombre }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ barrio.nombre }}
+        </div>
+      </div>
+    </mat-list-item>
+
+     
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.valor }}</b>:
+        </div>
+        <div fxFlex="60">
+          {{ barrio.valor }}
+        </div>
+      </div>
+    </mat-list-item>
+
+    <mat-list-item class="detail-item">
+      <div class="w-100" fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex>
+          <b>{{ constants.activo }}</b>:
+        </div>
+        <div class="p-tab" fxFlex="60">
+          <span class="dev-color-red" [hidden]="barrio.activo">{{ constants.no }}</span>
+          <span class="dev-color-green" [hidden]="!barrio.activo">{{ constants.si }}</span>
+        </div>
+      </div>
+    </mat-list-item>
+  
+  </mat-list>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cerrar }}</button>
+</mat-dialog-actions>

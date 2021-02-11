@@ -1,0 +1,86 @@
+<div *ngIf="processing" fxLayout="column" fxLayoutAlign="center center">
+  <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+</div>
+
+
+<div fxLayout="column" *ngIf="!processing">
+  <div class="flex-p">
+    <mat-card class="p-0 mat-card">
+      <mat-card-header fxLayoutAlign="center">
+        <mat-card-subtitle>
+          <h2>{{ constants.editar }} Acta vecindad - volante</h2>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <div class="msj_obligatorio" fxLayout="row" fxLayoutAlign="start">
+        <h5>{{ constants.informacionCampoObligatorio }}</h5>
+      </div>
+
+      <mat-card-content class="p-16 m-0" [formGroup]="form">
+        <input type="hidden" formControlName="id" [(ngModel)]="actaVolanteResidente.id">
+        <input type="hidden" formControlName="actaVolanteId" [(ngModel)]="actaVolanteResidente.actaVolanteId">
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <mat-checkbox formControlName="activo" [(ngModel)]="actaVolanteResidente.activo" name="activo" id="activo">
+              {{ constants.activo }}
+            </mat-checkbox>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <sigma-form-input [placeholder]="constants.propietario" formControlName="propietario"
+              [(ngModel)]="actaVolanteResidente.propietario" [maxlength]="255">
+            </sigma-form-input>
+          </div>
+
+          <div fxFlex>
+            <sigma-form-input [placeholder]="constants.direccion" formControlName="direccion"
+              [(ngModel)]="actaVolanteResidente.direccion" [maxlength]="255">
+            </sigma-form-input>
+          </div>
+        </div>
+
+        <!--<div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">-->
+        <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            <sigma-form-number [placeholder]="constants.telefono" formControlName="telefono"
+              [(ngModel)]="actaVolanteResidente.telefono" [maxlength]="19">
+            </sigma-form-number>
+          </div>
+          <div fxFlex>
+            <sigma-form-input [placeholder]="constants.fechaRegistro" formControlName="fechaRegistro"
+              [(ngModel)]="actaVolanteResidente.fechaRegistro" [readonly]="true">
+            </sigma-form-input>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+          <div fxFlex>
+            {{ constants.volanteEntregado }}
+              <mat-radio-group  [(ngModel)]="actaVolanteResidente.volanteEntregado"
+                formControlName="volanteEntregado">
+                <mat-radio-button [value]="true">Si</mat-radio-button>
+                <mat-radio-button [value]="false">No</mat-radio-button>
+              </mat-radio-group>
+          </div>
+        </div>
+
+      </mat-card-content>
+
+      <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+      <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+        <button mat-button class="m-1" color="warn" (click)="close()">
+          <mat-icon class="m-1">close</mat-icon> Cancelar
+        </button>
+        <button mat-raised-button class="m-1" color="primary" (click)="onSubmit()" [disabled]="disableSubmit">
+          <mat-icon class="m-1">save</mat-icon> Guardar
+        </button>
+      </div>
+
+    </mat-card>
+
+  </div>
+</div>

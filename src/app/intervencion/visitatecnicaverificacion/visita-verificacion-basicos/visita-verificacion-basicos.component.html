@@ -1,0 +1,192 @@
+<div fxLayout="column" [formGroup]="form">
+  <div class="flex-p">
+    <!-- <mat-card class="p-0 mat-card"> -->
+      <mat-card-header fxLayoutAlign="center">
+        <mat-card-subtitle>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content class="p-16 m-0">
+
+        <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+          <div class="item" fxFlex="25%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.localidad }}"
+                  [value]="mantenimiento.localidad ? mantenimiento.localidad.nombre : '' " name="localidad" readonly>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="item" fxFlex="25%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.upla }}"
+                  [value]="mantenimiento.upla ? mantenimiento.upla.nombre : '' "  name="upla" readonly>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="item" fxFlex="25%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.barrio }}"
+                  [value]="mantenimiento.barrio ? mantenimiento.barrio.nombre : '' " name="barrio"  readonly>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="item" fxFlex="25%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.nInforme }}"  formControlName="nroActa"
+                [(ngModel)]="mantenimiento.intervenciones[0].nroActa" readonly>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        
+        <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+          <div class="item" fxFlex="50%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.direccion }}" 
+                [value]="mantenimiento.ejeVial + ' ' + mantenimiento.desde + ' ' + mantenimiento.hasta " name="direccion" readonly>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="item" fxFlex="25%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.via }}" 
+                [value]="mantenimiento.ejeVial " name="direccion" readonly>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="item" fxFlex="25%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.fechaVisita }}" [value]="mantenimiento.intervenciones[0].fechaVisita" name="fechaVisita"  readonly>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      
+        <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+          <div class="item" fxFlex="25%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.desde }}" [value]="mantenimiento.desde" name="desde" readonly>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="item" fxFlex="25%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.hasta }}" [value]="mantenimiento.hasta" name="hasta" readonly>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="item" fxFlex="25%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.civ }}" [value]="mantenimiento.civ" name="civ"  readonly>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="item" fxFlex="25%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <sigma-form-select [path]="constants.path_intervencion_tipoEjecucion" [disabled]= "!isEditable"
+                  placeholder="{{ constants.tipoEjecucion }}" formControlName="tipoEjecucion"
+                  [(ngModel)]="mantenimiento.intervenciones[0].tipoEjecucion" [listBy]="'descripcion'">
+                </sigma-form-select>
+            </div>
+          </div>
+        </div>
+
+        <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+          <div class="item" fxFlex="25%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.pk }}" [value]="mantenimiento.pk" name="pk" readonly>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="item" fxFlex="25%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.areaPk }}" [value]="mantenimiento.area" name="areaPk"  readonly>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="item" fxFlex="25%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <sigma-form-select #tipoViaComponente [path]="constants.path_intervencion_tipoVia" [disabled]= "!isEditable"
+                placeholder="{{ constants.tipoVia }}" formControlName="tipoVia"
+                [(ngModel)]="mantenimiento.tipoVia" [listBy]="'descripcion'">
+              </sigma-form-select>
+            </div>
+          </div>
+
+          <div class="item" fxFlex="25%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <sigma-form-select [path]="constants.path_intervencion_clase" [disabled]= "!isEditable"
+                placeholder="{{ constants.clase }}" formControlName="clase"
+                [(ngModel)]="mantenimiento.clase" [listBy]="'descripcion'">
+              </sigma-form-select>
+            </div>
+          </div>
+
+        </div> 
+
+        <div fxLayout fxLayout.xs="column" fxLayoutGap="20px" fxLayoutGap.xs="0">
+          <div class="item" fxFlex="33%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+                <sigma-form-select [path]="constants.path_intervencion_tipoSuperficie" [disabled]= "!isEditable"
+                  placeholder="{{ constants.tipoSuperficie }}" formControlName="tipoSuperficie"
+                  [(ngModel)]="mantenimiento.intervenciones[0].tipoSuperficie" [listBy]="'descripcion'">
+                </sigma-form-select>
+            </div>
+          </div>
+
+          <div class="item" fxFlex="33%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+              <mat-form-field class="w-100">
+                <input matInput placeholder="{{ constants.responsable }}"
+                  [value]="this.mantenimiento.intervenciones[0].responsable ? this.mantenimiento.intervenciones[0].responsable.nombres + ' ' + this.mantenimiento.intervenciones[0].responsable.apellidos  : ''"
+                  name="responsable"  readonly>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="item" fxFlex="33%">
+            <div class="item" fxFlex="100%" fxLayout.xs="column" fxLayout.sm="column">
+                <sigma-form-select [path]="constants.path_intervencion_rutasTransporte" [disabled]= "!isEditable"
+                  placeholder="{{ constants.rutasTransportes }}" formControlName="rutaTransporte"
+                  [(ngModel)]="mantenimiento.intervenciones[0].rutaTransporte" [listBy]="'descripcion'">
+                </sigma-form-select>
+            </div>
+          </div>
+
+        </div>
+
+      </mat-card-content>
+
+      <mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+      <div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+        <button type="button" [disabled]="!isEditable || loading" class="m-1" mat-raised-button color="primary" (click)="onSubmit()">
+          <mat-icon class="m-1">save</mat-icon> {{ constants.guardarSeccion }}
+        </button>
+      </div>
+    <!-- </mat-card> -->
+  </div>
+</div>

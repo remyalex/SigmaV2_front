@@ -1,0 +1,16 @@
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+$umv-primary: mat-palette($mat-blue, 800, 300, 900);
+$umv-accent: mat-palette($mat-orange, A200, A100, A400);
+$umv-warn: mat-palette($mat-deep-orange, A700);
+
+$umv-theme: mat-light-theme($umv-primary, $umv-accent, $umv-warn);
+
+@include angular-material-theme($umv-theme);
+
+
+$primary-color:#004064;
+$secundary-color: #b95219;
+$accent-color: #4192c0;

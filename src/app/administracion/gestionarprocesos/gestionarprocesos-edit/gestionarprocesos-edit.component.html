@@ -1,0 +1,35 @@
+<div fxLayout="column">
+  <div class="flex-p">
+    <!-- <mat-card class="p-0 mat-card"> -->
+      <mat-card-header fxLayoutAlign="center">
+        <mat-card-subtitle>
+          <h2>{{ constants.seleccionarGestionProcesos }}</h2>
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content class="m-0">
+        <mat-tab-group>
+          <mat-tab label="Mantenimiento">
+            <mantenimiento-info [mant]='mantenimiento'></mantenimiento-info>
+          </mat-tab>
+          <mat-tab label="Gestión">
+            <sigma-mantenimiento-records [mantId]='mantenimiento.id'></sigma-mantenimiento-records>
+          </mat-tab>
+          <mat-tab label="Documentos">
+            <documentos-proceso [mantId]='mantenimiento.id'></documentos-proceso>
+          </mat-tab>
+          <mat-tab label="Acciones">
+            <acciones-gestionarprocesos [mant]='mantenimiento'></acciones-gestionarprocesos>
+          </mat-tab>
+        </mat-tab-group>
+      </mat-card-content>
+    <!-- </mat-card> -->
+  </div>
+</div>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button class="m-1" mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cerrar }}
+  </button>
+</mat-dialog-actions>

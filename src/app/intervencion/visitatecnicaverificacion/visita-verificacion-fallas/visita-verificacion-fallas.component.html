@@ -1,0 +1,118 @@
+<div class="row">
+  <div fxLayoutAlign="end" class="mb-10">
+    <button mat-raised-button color="primary" class="m-1" (click)="viewDisenioInfo()">
+      <mat-icon class="m-1">visibility</mat-icon>{{ constants.consultarDisenio }}
+    </button>
+  </div>
+</div>
+
+<div class="mat-elevation-z8 mb-10">
+  <div *ngIf="loader" fxLayout="column" fxLayoutAlign="center center">
+    <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+  </div>
+  <div *ngIf="noInfoToShow" class="msj_no_results" fxLayout="row" fxLayoutAlign="center center">
+    <mat-icon class="m-1">sms_failed</mat-icon>
+    <h4> {{ constants.noResultados}}</h4>
+  </div>
+
+  <mat-table #table class="col-x" [dataSource]="dataSource" [hidden]="!noInfoToShow || !loader" 
+  matSort (matSortChange) = "sortData($event)">
+
+    <ng-container matColumnDef="numero">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Numero </mat-header-cell>
+      <mat-cell *matCellDef="let falla" [attr.data-label]="'Numero'">
+        {{falla.numero}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Id </mat-header-cell>
+      <mat-cell *matCellDef="let falla" [attr.data-label]="'id'">
+        {{ falla.id }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="distancia">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Distancia </mat-header-cell>
+      <mat-cell *matCellDef="let falla" [attr.data-label]="'Distancia'">
+        {{ falla.distancia }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="tipoFalla">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo Falla </mat-header-cell>
+      <mat-cell *matCellDef="let falla" [attr.data-label]="'tipoFalla'">
+        {{ falla.tipoFalla?.descripcion }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="tipoSuperficie">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo Superficie </mat-header-cell>
+      <mat-cell *matCellDef="let falla" [attr.data-label]="'tipoSuperficie'">
+        {{ falla.tipoSuperficie?.descripcion }}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="longitud">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Longitud </mat-header-cell>
+      <mat-cell *matCellDef="let falla" [attr.data-label]="'longitud'">
+        {{falla.longitud | number}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="ancho">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Ancho </mat-header-cell>
+      <mat-cell *matCellDef="let falla" [attr.data-label]="'ancho'">
+        {{falla.ancho | number}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="areaFalla">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Area de falla </mat-header-cell>
+      <mat-cell *matCellDef="let falla" [attr.data-label]="'areaFalla'">        
+        {{falla.areaFalla | number}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="espesor">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Espesor </mat-header-cell>
+      <mat-cell *matCellDef="let falla" [attr.data-label]="'espesor'">
+        {{falla.espesor | number}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="volumen">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Volumen </mat-header-cell>
+      <mat-cell *matCellDef="let falla" [attr.data-label]="'volumen'">
+        {{falla.volumen | number}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="tipoIntervencion">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo Intervención </mat-header-cell>
+      <mat-cell *matCellDef="let falla" [attr.data-label]="'tipoIntervencion'">
+        {{falla.tipoIntervencion?.descripcion}}
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="acciones">
+      <mat-header-cell *matHeaderCellDef> {{ constants.acciones }} </mat-header-cell>
+      <mat-cell *matCellDef="let falla; let i = index;" [attr.data-label]="constants.acciones">
+        <button mat-raised-button  color="primary" (click)="fallaEdit(falla, i)" class="m-1" [disabled]= "!isEditable || loading">
+          <mat-icon>create</mat-icon>
+        </button>
+      </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: columns;"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [length]="lengthList" [pageSize]="criteria.size" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<div fxLayout="row" fxLayoutAlign="end" class="flex-p">
+  <button type="button" class="m-1" mat-raised-button color="primary" (click)="guardarTodo()" [disabled]= "!isEditable || loading">
+    <mat-icon class="m-1">save</mat-icon> {{ constants.guardarSeccion }}
+  </button>
+</div>

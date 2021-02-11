@@ -1,0 +1,16 @@
+.sigma-img {  
+    width: 100%;
+    max-width:fit-content;
+    height: auto;    
+    margin: 1em 0;
+}
+@media (max-width: 1366px){
+    .sigma-img{
+        margin: 0.5em 0;
+    } 
+}
+@media (max-width: 960px){
+    .sigma-img{
+        max-width: 335px;
+    } 
+}

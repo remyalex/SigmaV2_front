@@ -1,0 +1,19 @@
+<h2 mat-dialog-title>Confirmando acción</h2>
+
+<h3 mat-dialog-title>¿Desea cancelar la edición del formulario ?</h3>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button>
+    <mat-icon class="m-1">close</mat-icon> No
+  </button>
+  <button mat-raised-button color="primary" (click)="yes()">
+    <mat-icon class="m-1">check_circle_outline</mat-icon> Si
+  </button>
+  <button mat-button class="m-1" color="warn" (click)="close()">
+  </button>
+  <button mat-raised-button class="m-1" color="primary" (click)="yes()">
+    <mat-icon class="m-1">check_circle_outline</mat-icon> Si
+  </button>
+</mat-dialog-actions>

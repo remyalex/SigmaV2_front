@@ -1,0 +1,65 @@
+<h2 mat-dialog-title>{{ constants.editar }} Información del Personal - Mano de obra</h2>
+
+<mat-dialog-content [formGroup]="form">
+  <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+    <div fxFlex>
+      <app-sigma-autocomplete [label]="constants.numeroIdentificacion" [value]="cuadrillaPersonalModel.persona.identificacion" [labelparametro1]="'IDENTIFICACION'"
+        (selectItem)="itemSeleccionado($event)" [path]="constants.path_administracion_persona"
+        [searchBy]="'identificacion'" [numericInput]="true"
+        [required]="true">
+      </app-sigma-autocomplete>
+    </div>
+  </div>
+
+  <div class="mb-10" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput formControlName="nombresApellidos" [(ngModel)]="nombresApellidos"
+          placeholder="{{constants.nombreApellidos}}" required readonly/>
+        <mat-error *ngIf="form.get('nombresApellidos').hasError('required')">
+          {{ constants.campoRequerido }} </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div fxFlex>
+      <mat-form-field class="w-100">
+        <input matInput formControlName="porcentajeJornada" (keyup)="patternString('porcentajeJornada', $event)"
+          [(ngModel)]="cuadrillaPersonalModel.porcentajeJornada" placeholder="{{constants.porcentajeJornada}}"
+          [numericInput]="true" required />
+        <mat-error *ngIf="form.get('porcentajeJornada').hasError('required')">
+          {{ constants.campoRequerido }} </mat-error>
+        <mat-error *ngIf="form.get('porcentajeJornada').hasError('max')">
+          {{ constants.avanceDiarioErrorMsj }} . </mat-error>
+        <mat-error *ngIf="form.get('porcentajeJornada').hasError('pattern')">
+          Solo se permiten valores númericos. </mat-error>
+      </mat-form-field>
+    </div>
+
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="10px">
+    <div fxFlex>
+      <sigma-form-calendar formControlName="horarioLlegada" [objeto]="cuadrillaPersonalModel"
+        [(ngModel)]="cuadrillaPersonalModel.horaLlegada" [type]="'timer'" [placeholder]="constants.horarioLlegada">
+      </sigma-form-calendar>
+    </div>
+
+    <div fxFlex>
+      <sigma-form-calendar formControlName="horarioSalida" [objeto]="cuadrillaPersonalModel"
+        [(ngModel)]="cuadrillaPersonalModel.horaSalida" [type]="'timer'" [placeholder]="constants.horarioSalida">
+      </sigma-form-calendar>
+    </div>
+
+  </div>
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button type="button" (click)="onBack()" mat-button color="warn" class="m-1">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+  </button>
+  <button type="button" [disabled]="enviada || enviando" class="m-1" mat-raised-button color="primary" (click)="onSubmit()">
+    <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+  </button>
+</mat-dialog-actions>

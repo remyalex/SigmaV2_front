@@ -1,0 +1,18 @@
+<h2 mat-dialog-title>Adicionar archivo</h2>
+
+<mat-dialog-content [formGroup]="form">
+  <sigma-form-upload-file formControlName="archivo" [(ngModel)]="actaAfiche.archivo"
+    [placeholder]="constants.archivo" [accept]="'application/pdf'" [showFile]="false" [sizeFile]="20">
+  </sigma-form-upload-file>
+</mat-dialog-content> 
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button mat-button color="warn" (click)="close()">
+    <mat-icon class="m-1">close</mat-icon> Cancelar
+  </button>
+  <button mat-raised-button color="primary" (click)="save()" [disabled]="!actaAfiche.archivo.id">
+    <mat-icon class="m-1">save</mat-icon> Guardar
+  </button>
+</mat-dialog-actions>

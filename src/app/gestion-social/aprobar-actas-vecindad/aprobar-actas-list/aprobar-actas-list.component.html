@@ -1,0 +1,75 @@
+<div fxLayout="column">
+    <div [hidden]="currentAction != 'list'" class="flex-p">
+        <mat-card>
+            <mat-card-header fxLayoutAlign="center">
+                <mat-card-subtitle>
+                    <h2>Consultar Actas de Vecindad</h2>
+                </mat-card-subtitle>
+            </mat-card-header>
+
+            <mat-card-content class="flex-p">
+                <div class="mat-elevation-z8">
+                    <div *ngIf="dataSource.loading$ | async" fxLayout="column" fxLayoutAlign="center center">
+                        <mat-spinner [diameter]="50" color="primary"></mat-spinner>
+                    </div>
+                    <div *ngIf="dataSource.error$ | async" class="msj_no_results" fxLayout="row"
+                        fxLayoutAlign="center center">
+                        <mat-icon class="m-1">sms_failed</mat-icon>
+                        <h4> {{ dataSource.errorMessage$ | async }}</h4>
+                    </div>
+                    <mat-table #table [dataSource]="dataSource" [hidden]="dataSource.loading$" matSort>
+
+                        <ng-container matColumnDef="consecutivoAprobacion">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Número consecutivo </mat-header-cell>
+                            <mat-cell *matCellDef="let acta" data-label="Numero consecutivo">
+                                {{ acta.consecutivoAprobacion }}
+                            </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="cantidadPK">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Cantidad de PKs</mat-header-cell>
+                            <mat-cell *matCellDef="let acta" data-label="Cantidad"> 1 </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="fechaAprobacion">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha aprobación</mat-header-cell>
+                            <mat-cell *matCellDef="let acta" data-label="Fecha aprobación">
+                                {{ acta.fechaAprobacion }} </mat-cell>
+                        </ng-container>
+
+                        <ng-container matColumnDef="acciones">
+                            <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+                            <mat-cell *matCellDef="let acta" data-label="Acciones">
+                                <button *sigmaIsGranted="constants.actas_vecindad_update" mat-raised-button
+                                    color="primary" (click)="attach(acta)" class="m-1">
+                                    <mat-icon>cloud_upload</mat-icon>
+                                </button>
+                                <button *sigmaIsGranted="constants.aprobar_actas_export" [disabled]="disabledReport"
+                                    mat-raised-button color="primary" (click)="exportarPDF(acta)" class="m-1">
+                                    <mat-icon>cloud_download</mat-icon>
+                                </button>
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: columns"></mat-row>
+
+                    </mat-table>
+                    <mat-paginator #paginator [length]="dataSource.totalElements$ | async" [pageSize]="criteria.size"
+                        [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons ></mat-paginator>
+                </div>
+            </mat-card-content>
+
+            <mat-divider></mat-divider>
+
+            <div fxLayout="row" fxLayoutAlign="end" class="pt-16">
+                <button type="button" class="m-1" (click)="onBack()" mat-button color="warn">
+                    <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+                </button>
+            </div>
+        </mat-card>
+    </div>
+    <div *ngIf="currentAction === 'attach'">
+        <app-aprobar-actas-attach (irAtras)="accionIrAtras()" (goToHome)="goToHome()"></app-aprobar-actas-attach>
+    </div>
+</div>

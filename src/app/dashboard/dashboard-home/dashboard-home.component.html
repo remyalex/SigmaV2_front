@@ -1,0 +1,43 @@
+<!-- <dashboard-info-cards></dashboard-info-cards>
+
+<div fxLayout="row wrap">
+    <div fxFlex="100" fxFlex.gt-sm="50" class="flex-p">
+        <dashboard-todo></dashboard-todo>
+    </div>
+    <div fxFlex="100" fxFlex.gt-sm="50" class="flex-p"> 
+        <dashboard-analytics></dashboard-analytics>
+    </div>
+</div>
+ -->
+<div fxLayout="row wrap">
+    <div *ngFor="let item of componente" fxFlex="100" fxFlex.gt-sm="50" class="flex-p" [hidden]="!item.render">
+        <mat-card>
+            <div *ngIf="item.url.includes('http')">
+                <mat-card-header fxLayoutAlign="center">
+                    <mat-card-subtitle>
+                        <h2>{{item.titulo}}</h2>
+                    </mat-card-subtitle>
+                </mat-card-header>
+            </div> 
+            <mat-card-content *ngIf="item.tipo == 'externa'">
+                <iframe width="100%" height="390px" [src]="item.url | safeResourceUrl">
+                </iframe>
+            </mat-card-content>
+
+            <mat-card-content *ngIf="item.tipo == 'interna'">
+                <sigma-dashboard-view-url [urlInterna]="item.url" (renderComponent)="renderComponent($event, item)">
+                </sigma-dashboard-view-url>
+            </mat-card-content>
+
+            <!-- <div *ngIf="currentAction=='work'"> -->
+            <mat-divider></mat-divider>
+            
+            <mat-card-actions  *ngIf="item.urlVerMas!=null && item.urlVerMas != ''" align="end">
+                <button color="primary" mat-raised-button (click)="ver_mas(item)">
+                    <i class="material-icons">
+                        add_circle_outline
+                    </i> Ver más </button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+</div>

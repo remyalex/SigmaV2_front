@@ -1,0 +1,90 @@
+<h2 mat-dialog-title>{{ constants.editar }} {{ constants.titulo }}</h2>
+
+<div class="msj_obligatorio mb-10" fxLayout="row" fxLayoutAlign="start">
+  <h5>{{ constants.informacionCampoObligatorio }}</h5>
+</div>
+
+<mat-dialog-content [formGroup]="form" *sigmaIsGranted="constants.permiso_produccion_insumo_existencia_update">
+
+  <input type="hidden" formControlName="id" [(ngModel)]="registro.id">
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div class="item" fxFlex="50%">
+      <sigma-form-calendar formControlName="fechaInicial" [(ngModel)]="registro.fechaInicial" [objeto]="registro"
+        [maxTarget]="'fecha'" [maxTarget]="'fechaFinal'" [placeholder]="constants.fechaInicial" [type]="constants.datepicker.types.calendar">
+      </sigma-form-calendar>
+    </div>
+    <div class="item" fxFlex="50%">
+      <sigma-form-calendar  formControlName="fechaFinal" [(ngModel)]="registro.fechaFinal" [objeto]="registro"
+        [maxTarget]="'fecha'" [minTarget]="'fechaInicial'"  [placeholder]="constants.fechaFinal" [type]="constants.datepicker.types.calendar">
+      </sigma-form-calendar>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+      <div fxFlex="60">
+        <sigma-form-select [path]="constants.path_produccion_insumo_existencia_insumoId"
+          [(ngModel)]="registro.insumo" formControlName="insumo" listBy="nombre"
+          placeholder="{{ constants.insumo }}">
+        </sigma-form-select>
+      </div>
+      <div fxFlex>
+        <p>{{ constants.unidadMedida }}:</p>
+        <p>{{ registro.insumo && registro.insumo.unidadMedida && 
+        registro.insumo.unidadMedida.descripcion ? registro.insumo.unidadMedida.descripcion : '' }}</p>
+      </div>
+  </div>
+
+    <div fxFlex>
+      <sigma-form-select [path]="contratoPath" listBy="numeroContrato" 
+        [(ngModel)]="registro.contrato" 
+        formControlName="contrato" placeholder="{{ constants.contrato }}">
+      </sigma-form-select>
+    </div>
+  </div>
+
+  <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px" fxLayoutGap.lt-md="0">
+    <div fxFlex>
+      <sigma-form-number formControlName="inventarioInicial" 
+        [ngModel]="registro.inventarioInicial" [numericInput]="true" 
+        (ngModelChange)="setInventarioInicial($event)"
+        [placeholder]="constants.inventarioInicial">
+      </sigma-form-number>
+    </div>
+    <div fxFlex>
+      <sigma-form-number formControlName="cantidadEntrada" 
+        [ngModel]="registro.cantidadEntrada" [numericInput]="true" 
+        (ngModelChange)="setCantidadEntrada($event)"
+         [placeholder]="constants.cantidadEntrada">
+      </sigma-form-number>
+    </div>
+
+    <div fxFlex>
+      <sigma-form-number formControlName="cantidadSalida" 
+        [ngModel]="registro.cantidadSalida"
+        (ngModelChange)="setCantidadSalida($event)"
+        [placeholder]="constants.cantidadSalida">
+      </sigma-form-number>
+    </div>
+    <div fxFlex>
+      <sigma-form-number formControlName="inventarioFinal" 
+        [ngModel]="registro.inventarioFinal" [readonly]="true"
+        [placeholder]="constants.inventarioFinal">
+      </sigma-form-number>
+    </div>
+  </div>
+
+</mat-dialog-content>
+
+<mat-divider class="mat-divider mat-divider-horizontal"></mat-divider>
+
+<mat-dialog-actions align="end">
+  <button type="button" (click)="close()" mat-button color="warn" class="m-1">
+    <mat-icon class="m-1">close</mat-icon> {{ constants.cancelar }}
+  </button>
+  <button type="button" class="m-1" mat-raised-button color="primary" (click)="onSubmit()" [disabled]="disableSubmit"
+    *sigmaIsGranted="constants.permiso_produccion_insumo_existencia_update">
+    <mat-icon class="m-1">save</mat-icon> {{ constants.guardar }}
+  </button>
+</mat-dialog-actions>
