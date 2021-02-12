@@ -22,9 +22,17 @@ export class AuthInterceptor implements HttpInterceptor {
         let authReq = req;
         const token = this.token.getToken();
         if (token != null) {
+            //TODO: Include or merge/unify hostApi & hostApi2
             if (req.url.indexOf(this.urlApp) > -1) {
                 authReq = req.clone({ headers: req.headers.set(TOKEN_HEADER_KEY, 'Bearer ' + token) });
             }
+            /*TODO: if (request.method === 'POST') {
+              request = request.clone({
+                setHeaders: {
+                  'Access-Control-Allow-Origin': '*'
+                }
+              });
+            */
         }
         return next.handle(authReq);
     }

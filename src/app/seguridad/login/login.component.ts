@@ -90,6 +90,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
       this.loginInfo = new AuthLoginInfo(this.form.value);
       this.authService.attemptAuth(this.loginInfo).subscribe(
         data => {
+          //TODO: get token from response (data) headers.
           this.tokenStorage.saveToken(data.token);
 
           forkJoin(

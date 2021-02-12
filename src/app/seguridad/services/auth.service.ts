@@ -35,10 +35,14 @@ export class AuthService {
     this.loginUrl = appSettings.settings.hostApi2 + '/api/usuario/login';
     //this.loginUrl = appSettings.settings.hostApi + '/api/auth/login';
     this.menusUrl = appSettings.settings.hostApi + '/api/usuario/menu';
+    //this.menusUrl = appSettings.settings.hostApi2 + '/api/externo/consume';
 
   }
 
   attemptAuth(credentials: AuthLoginInfo): Observable<JwtResponse> {
+    /*TODO: set Response model accordin to hostApi2 ("respuesta": {<userObject>})
+            -response Not Token (JwtResponse) -> token in response headers
+    */
     return this.http.post<JwtResponse>(this.loginUrl, credentials, httpOptions);
   }
 
