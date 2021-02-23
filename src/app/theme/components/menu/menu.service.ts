@@ -25,7 +25,7 @@ export class MenuService {
    * Método encargado de gestionar la actuaización del menú
    */
   public updateMenu() {
-    this.getVerticalMenuItems();
+    this.getMenuItems();
   }
 
 
@@ -40,12 +40,14 @@ export class MenuService {
   ) { }
 
   /** Método encargado de obtener los items del menú seleccionado */
-  public getVerticalMenuItems(): void {
+  public getMenuItems(): any {
     const menuData = this.tokenStore.getStorage(this.tokenStore.MENU);
 
-    this.menu = (menuData.filter((menu: any) => menu.activo));
-    this.menuSubject.next(this.menu);
-    this.tokenStore.saveMenus(this.menu);
+    //this.menu = (menuData.filter((menu: any) => menu.registroActivo == "SI"));
+    this.menu = menuData;
+    //this.menuSubject.next(this.menu);
+    //this.tokenStore.saveMenus(this.menu);
+    return this.menu;
   }
 
   /**

@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Menu } from '../../theme/components/menu/menu.model';
 const TOKEN_KEY = 'token';
-const PK_KEY = 'id';
+const PK_KEY = 'id_usuario';
 const ID_KEY = 'identificacion';
-const USERNAME_KEY = 'usuario';
-const NAME_KEY = 'nombres';
+const USERNAME_KEY = 'login';
+const NAME_KEY = 'nombre';
 const LAST_NAME_KEY = "apellidos"
 const PHONE_KEY = "telefono";
 const MENU_KEY = "menus";

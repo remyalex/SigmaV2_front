@@ -88,24 +88,27 @@ export class LoginComponent implements OnInit, AfterViewInit {
       this.validacion = true;
       this.disabledBtn_Login = true;
       this.loginInfo = new AuthLoginInfo(this.form.value);
+      //this.loginInfo.usuario = this.form.value;
       this.authService.attemptAuth(this.loginInfo).subscribe(
-        data => {
+        (data:any) => {
           //TODO: get token from response (data) headers.
-          this.tokenStorage.saveToken(data.token);
+          //console.log('el token jeder:',data.headers.get('token'));
+          this.tokenStorage.saveToken(data.headers.get('token'));
+          //console.log('usuario id: ',data.body.respuesta);
+          let userInfo = {
+            usuario: data.body.respuesta[0].login,
+            json:JSON.stringify({
+              "idUsuario": data.body.respuesta[0].id_usuario,
+              "usuario": data.body.respuesta[0].login,
+              "menu":{"idMenu":1}
+            }),
+            url: "http://129.213.171.5:8080/Caliope-backend/api/menu/listarMenuUsuarioT"
+          };
 
-          forkJoin(
-            this.profileService.getProfile(),
-            this.profileService.getUserPermisos(),
-            this.authService.getUserMenus(),
-          ).subscribe(([perfil, permisos, menu]) => {
-            if (permisos.length <= 0) {
-              permisos = [];
-            }
-
-            permisos = permisos.map((permiso: any) => permiso.nombre);
-            this.tokenStorage.savePayload(this.tokenStorage.PERFIL, window.btoa(JSON.stringify(perfil)));
-            this.tokenStorage.savePayload(this.tokenStorage.PERMISOS, window.btoa(JSON.stringify(permisos)));
-            this.tokenStorage.savePayload(this.tokenStorage.MENU, window.btoa(JSON.stringify(menu)));
+          this.authService.getUserMenus(JSON.stringify(userInfo)).subscribe((menu) => {
+            this.tokenStorage.savePayload(this.tokenStorage.PERFIL, window.btoa(JSON.stringify(data.body.respuesta[0])));
+            this.tokenStorage.savePayload(this.tokenStorage.PERMISOS, window.btoa(JSON.stringify(userInfo)));
+            this.tokenStorage.savePayload(this.tokenStorage.MENU, window.btoa(JSON.stringify(menu.body.respuesta[0].json)));
 
             this.appSettings.settings.loadingSpinner = true;
             this.router.navigate(['/administracion/dashboard/home']);

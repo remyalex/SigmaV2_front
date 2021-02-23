@@ -18,7 +18,8 @@ import { Router, Event, NavigationEnd } from '@angular/router';
 export class SidenavComponent implements OnInit {
   @ViewChild('sidenavPS') sidenavPS: PerfectScrollbarComponent;
   public userImage = '../assets/img/users/user.jpg';
-  public menuItems: Array<any>;
+  public items: Array<any>;
+  public menuItems: any;
   public settings: Settings;
   nombreUsuario: string;
   usuario: string;
@@ -40,7 +41,7 @@ export class SidenavComponent implements OnInit {
 
     this.settings = this.appSettings.settings;
 
-    router.events.subscribe((event: Event) => {
+    /*router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
         // this.removeAllActiveLinks();
         // this.closeSubMenus();
@@ -70,7 +71,7 @@ export class SidenavComponent implements OnInit {
           this.activarMenuHijo(event);
         }
       }
-    });
+    });*/
 
   }
 
@@ -105,22 +106,66 @@ export class SidenavComponent implements OnInit {
 
   /** Método encargado de inicializar el componente */
   ngOnInit() {
-    this.menuService.getVerticalMenuItems();
-    this.menuService.menu$
-      .pipe(distinctUntilChanged())
-      .subscribe((data: any) => {
-        console.log('menu:',data);
-        let inArray = ['MEJORAMIENTO','INTERVENCIÓN'];
-
-        if (JSON.stringify(this.menuItems) !== JSON.stringify(data)) {
-          this.menuItems = (data.filter((menu: any) => menu.activo && inArray.includes(menu.titulo)));
-          setTimeout(this.mostrarMenuPadre, 2000, data);
-        }
-      });
-
-    this.nombreUsuario = this.tokenService.getNombres() + ' ' + this.tokenService.getApellidos();
+    this.menuItems = this.menuService.getMenuItems();
+    this.consultarMenu();
+    this.nombreUsuario = this.tokenService.getNombres();
     this.usuario = this.tokenService.getUsuario();
   }
+
+  getMenuItems = ( items: Array<any> ) => {
+          return items.map( itm => {
+              const obj = {
+                  label: itm.nombre
+              };
+
+              if ( itm.url && (!itm.tabMenuList || !itm.tabMenuList.length ) ) {
+                  if(itm.url.indexOf('http') != -1){
+                      obj['url'] = [itm.url];
+                      obj['target'] = '_blank';
+                  }else{
+                      obj['routerLink'] = [itm.url];
+                  }
+
+                  obj['icon'] = 'pi pi-fw pi-file';
+                  obj['rolMenu'] = itm.tabRolMenuList;
+                  //obj['command'] = (event) => { this.clickItem(event); }
+              }
+
+              if ( !itm.url && (!itm.tabMenuList || !itm.tabMenuList.length ) ) {
+                  obj['icon'] = 'pi pi-fw pi-ban';
+              }
+
+              if ( itm.tabMenuList && itm.tabMenuList.length ) {
+                  obj['items'] = this.getMenuItems( itm.tabMenuList );
+              }
+
+              return obj;
+          } );
+      }
+
+      private consultarMenu() {
+          const menu = JSON.parse(this.menuItems);
+          console.log("menus:", menu);
+          if ( menu.menulist && menu.menulist.length ) {
+              const menusource = menu.menulist[0].tabMenuList;
+              const menuItems = this.getMenuItems( menusource );
+              console.log("menuitems:", menuItems);
+              this.items = menuItems;
+
+              /*this.items.push(
+                  {
+                      label: 'Cerrar sesion',
+                      icon: 'pi pi-fw pi-sign-out',
+                      command: () => {
+                          this.cerrarSesion();
+                          // this.router.navigate(['/login']);
+                      }
+                  }
+              );*/
+
+
+          }
+      }
 
   /** Método encargado de eliminar todos los links activos */
   public removeAllActiveLinks() {

@@ -38,15 +38,8 @@ export abstract class MenuBase {
         this.router = router;
     }
     actualizarMenuVertical()  {
-        forkJoin(
-            this.profileService.getUserPermisos(),
-            this.authService.getUserMenus(),
-          ).subscribe(([ permisos, menu]) => {
-            if (permisos.length <= 0) {
-              permisos = [];
-            }
-            permisos = permisos.map((permiso: any) => permiso.nombre);
-            this.tokenStorage.savePayload(this.tokenStorage.PERMISOS, window.btoa(JSON.stringify(permisos)));
+
+        this.authService.getUserMenus(this.tokenStorage.PERFIL).subscribe((menu) => {
             this.tokenStorage.savePayload(this.tokenStorage.MENU, window.btoa(JSON.stringify(menu)));
             this.servicio.refreshMenu();
             this.snackBar.open('¡Se actualizaron los datos con exito!', 'X', {

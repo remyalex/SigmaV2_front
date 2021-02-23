@@ -51,6 +51,7 @@ import { WorkflowModule } from './workflow/workflow.module';
 import { ProduccionModule } from './produccion/produccion.module';
 import { GestionSocialModule } from './gestion-social/gestion-social.module';
 import { MatTableModule, MatSortModule } from '@angular/material';
+import { PanelMenuModule } from 'primeng/panelmenu';
 
 @NgModule({
   declarations: [
@@ -90,6 +91,7 @@ import { MatTableModule, MatSortModule } from '@angular/material';
     GestionSocialModule,
     WorkflowModule,
     CalendarModule.forRoot(),
+    PanelMenuModule
   ],
   entryComponents: [
     VerticalMenuComponent

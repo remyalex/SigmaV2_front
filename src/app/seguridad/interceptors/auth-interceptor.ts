@@ -11,27 +11,30 @@ const TOKEN_HEADER_KEY = 'Authorization';
 export class AuthInterceptor implements HttpInterceptor {
 
     private urlApp: string;
+    private urlApp2: string;
 
     constructor(private token: TokenStorageService,
         private appSettings: AppSettings) {
 
         this.urlApp = appSettings.settings.hostApi;
+        this.urlApp2 = appSettings.settings.hostApi2;
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler) {
         let authReq = req;
+        if (req.method === 'POST') {
+          authReq = req.clone({
+            headers:  req.headers.set('Access-Control-Allow-Origin', '*')
+          });
+        }
         const token = this.token.getToken();
         if (token != null) {
             //TODO: Include or merge/unify hostApi & hostApi2
-            if (req.url.indexOf(this.urlApp) > -1) {
+            if (req.url.indexOf(this.urlApp) > -1 || req.url.indexOf(this.urlApp2) > -1) {
                 authReq = req.clone({ headers: req.headers.set(TOKEN_HEADER_KEY, 'Bearer ' + token) });
             }
-            /*TODO: if (request.method === 'POST') {
-              request = request.clone({
-                setHeaders: {
-                  'Access-Control-Allow-Origin': '*'
-                }
-              });
+            /*TODO:
+
             */
         }
         return next.handle(authReq);

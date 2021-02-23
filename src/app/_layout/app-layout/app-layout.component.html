@@ -3,8 +3,7 @@
     [class.fixed-header]="settings.fixedHeader" [class.horizontal-menu]="settings.menu == 'horizontal'"
     [class.compact]="settings.menuType == 'compact'" [class.mini]="settings.menuType == 'mini'">
     <mat-sidenav-container>
-        <mat-sidenav *ngIf="settings.menu == 'vertical'" [opened]="settings.sidenavIsOpened"
-            [mode]="(settings.sidenavIsPinned) ? 'side' : 'over'" #sidenav class="sidenav mat-elevation-z6">
+        <mat-sidenav [mode]="'side'" #sidenav class="sidenav mat-elevation-z6">
             <app-sidenav></app-sidenav>
         </mat-sidenav>
         <mat-sidenav-content id="main" perfectScrollbar [disabled]="settings.fixedHeader"
@@ -35,7 +34,7 @@
                 <div class="fixed-map">
                     <sigma-visor-mapa></sigma-visor-mapa>
                 </div>
-                
+
                 <router-outlet></router-outlet>
             </div>
             <div #backToTop fxLayout="row" fxLayoutAlign="center center" class="back-to-top" (click)="scrollToTop()">

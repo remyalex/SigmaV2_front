@@ -7,10 +7,12 @@ import { AuthLoginInfo } from '../models/auth-login-info';
 import { Menu } from '../../theme/components/menu/menu.model';
 import { AppSettings } from 'src/app/app.settings';
 import { TokenStorageService } from './token-storage.service';
+import { Profile } from "../models/profile";
 
 /** Constante usada para identificar el encabezado de la peticion http como JSon */
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+  observe: 'response' as 'events'
 };
 
 
@@ -34,20 +36,20 @@ export class AuthService {
     }
     this.loginUrl = appSettings.settings.hostApi2 + '/api/usuario/login';
     //this.loginUrl = appSettings.settings.hostApi + '/api/auth/login';
-    this.menusUrl = appSettings.settings.hostApi + '/api/usuario/menu';
+    this.menusUrl = appSettings.settings.hostApi2 + '/api/externo/consume';
     //this.menusUrl = appSettings.settings.hostApi2 + '/api/externo/consume';
 
   }
 
-  attemptAuth(credentials: AuthLoginInfo): Observable<JwtResponse> {
+  attemptAuth(credentials: AuthLoginInfo): Observable<any> {
     /*TODO: set Response model accordin to hostApi2 ("respuesta": {<userObject>})
             -response Not Token (JwtResponse) -> token in response headers
     */
-    return this.http.post<JwtResponse>(this.loginUrl, credentials, httpOptions);
+    return this.http.post<any>(this.loginUrl, credentials, httpOptions);
   }
 
-  getUserMenus(): Observable<Menu[]> {
-    return this.http.get<Menu[]>(this.menusUrl);
+  getUserMenus(userInfo: string): Observable<any> {
+    return this.http.post<any>(this.menusUrl, userInfo, httpOptions);
   }
 
   validGuardMenu(guard) {

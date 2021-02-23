@@ -1,5 +1,5 @@
 export class JwtResponse {
-    token: string;
-    type: string;
-    expire: number;
+    respuesta: [any];
+    orden: any;
+    codError: number;
 }
