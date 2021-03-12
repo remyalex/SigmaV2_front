@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CalendarModule } from 'angular-calendar';
-import { ScheduleComponent } from './schedule/schedule.component';
-import { ScheduleDialogComponent } from './schedule/schedule-dialog/schedule-dialog.component';
+//import { ScheduleComponent } from './schedule/schedule.component';
+//import { ScheduleDialogComponent } from './schedule/schedule-dialog/schedule-dialog.component';
 import localeEsCo from '@angular/common/locales/es';
 import { registerLocaleData } from '@angular/common';
-import { VisModule } from '../../../node_modules/ngx-vis';
+//import { VisModule } from '../../../node_modules/ngx-vis';
 
 registerLocaleData(localeEsCo);
 
@@ -44,16 +44,25 @@ import {
   MatTooltipModule,
   MatStepperModule,
 } from '@angular/material';
-
+import { NotFoundComponent } from './not-found/not-found.component';
+import { NotAccessComponent } from './not-access/not-access.component';
+import { SharedRoutingModule } from './shared.routing';
+import { SafeResourceUrl } from '../dashboard/safeResourceUrl.pipe';
+/*
+import { SigmaFormAutocompleteComponent } from './component/sigma-form-autocomplete/sigma-form-autocomplete.component';
+import { SigmaAutocompleteComponent } from './sigma-autocomplete/sigma-autocomplete.component';
+import { SigmaInputComponent } from './sigma-input/sigma-input.component';
+import { SigmaFormInputComponent } from './component/sigma-form-input/sigma-form-input.component';
+import { SigmaSendMailComponent } from './component/sigma-send-mail/sigma-send-mail.component';
+import { SigmaFormEmailComponent } from './component/sigma-form-email/sigma-form-email.component';
+import { SigmaSelectComponent } from './sigma-select/sigma-select.component';
+import { SigmaFormSelectComponent } from './component/sigma-form-select/sigma-form-select.component';
+import { UpperDirective } from './directives/directiva-mayus';
 import { SigmaListComponent } from './sigma-list/sigma-list.component';
 import { SigmaGeneralListComponent } from './sigma-general-list/sigma-general-list.component';
 import { SigmaDetailComponent } from './sigma-detail/sigma-detail.component';
-import { SigmaAutocompleteComponent } from './sigma-autocomplete/sigma-autocomplete.component';
 import { SigmaConfirmComponent } from './sigma-confirm/sigma-confirm.component';
 import { SigmaFileUploadComponent } from './sigma-file-upload/sigma-file-upload.component';
-import { NotFoundComponent } from './not-found/not-found.component';
-import { UpperDirective } from './directives/directiva-mayus';
-import { NotAccessComponent } from './not-access/not-access.component';
 import { SigmaShowFileComponent } from './sigma-show-file/sigma-show-file.component';
 import { DualListComponent } from './dual-list/dual-list.component';
 import { SigmaSelectComponent } from './sigma-select/sigma-select.component';
@@ -70,9 +79,8 @@ import { SigmaFormSelectComponent } from './component/sigma-form-select/sigma-fo
 import { SigmaFormInputComponent } from './component/sigma-form-input/sigma-form-input.component';
 import { SigmaFormNumberComponent } from './component/sigma-form-number/sigma-form-number.component';
 import { SigmaFormCalendarComponent } from './component/sigma-form-calendar/sigma-form-calendar.component';
-import { SigmaFormAutocompleteComponent } from './component/sigma-form-autocomplete/sigma-form-autocomplete.component';
 import { SigmaFormUploadFileComponent } from './component/sigma-form-upload-file/sigma-form-upload-file.component';
-import { SafeResourceUrl } from '../dashboard/safeResourceUrl.pipe';
+
 import { SigmaMantenimientoRecordsComponent } from './component/sigma-mantenimiento-records/sigma-mantenimiento-records.component';
 import { SigmaGraphicProcessComponent } from './sigma-graphic-process/sigma-graphic-process.component';
 import { SigmaGraphicAllProcessComponent } from './sigma-graphic-allProcess/sigma-graphic-allprocess.component';
@@ -95,7 +103,6 @@ import { SeleccionTransicionComponent } from './component/seleccion-transicion/s
 import { SigmaSumatoriasComponent } from './component/sigma-sumatorias/sigma-sumatorias.component';
 import { DefaultIntl } from './models/default-intl.model';
 import { FotoDiagnosticoPkComponent } from './component/foto-diagnostico-pk/foto-diagnostico-pk.component';
-import { SharedRoutingModule } from './shared.routing';
 import { SigmaFormSelectDescValorComponent } from './component/sigma-form-select-desc-valor/sigma-form-select-desc-valor.component';
 import { SigmaSendMailComponent } from './component/sigma-send-mail/sigma-send-mail.component';
 import { MailService } from './component/sigma-send-mail/services/mail.service';
@@ -107,7 +114,7 @@ import { SigmaFormTextareaComponent } from './component/sigma-form-textarea/sigm
 import { SigmaConfirmFormatToExportComponent } from './component/sigma-confirm-format-to-export/sigma-confirm-format-to-export.component';
 import { SigmaFormWebcamComponent } from './component/sigma-form-webcam/sigma-form-webcam.component';
 import { WebcamModule } from 'ngx-webcam';
-
+*/
 @NgModule({
   imports: [
     CommonModule,
@@ -146,11 +153,11 @@ import { WebcamModule } from 'ngx-webcam';
     FormsModule,
     ReactiveFormsModule,
     CalendarModule,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule,
-    VisModule,
     SharedRoutingModule,
-    WebcamModule
+    //OwlDateTimeModule,
+    //OwlNativeDateTimeModule,
+    //VisModule,
+    //WebcamModule
   ],
   exports: [
     FlexLayoutModule,
@@ -185,49 +192,23 @@ import { WebcamModule } from 'ngx-webcam';
     MatToolbarModule,
     MatTooltipModule,
     MatStepperModule,
-    SigmaListComponent,
-    SigmaDetailComponent,
-    SigmaAutocompleteComponent,
-    SigmaConfirmComponent,
-    UpperDirective,
-    SigmaGeneralListComponent,
-    SigmaFileUploadComponent,
-    SigmaShowFileComponent,
-    ScheduleComponent,
-    SigmaBusquedaComponent,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule,
-    DualListComponent,
-    SigmaImageComponent,
-    SigmaProcesoDetalleComponent,
-    SigmaSelectComponent,
-    SigmaFormSelectDescValorComponent,
-    NumericInputDirective,
-    PrevenirMultiplesClicksDirective,
-    SigmaDatePickerComponent,
-    SigmaFormEmailComponent,
-    SigmaFormSelectComponent,
-    SigmaFormSelectMultiLabelsComponent,
-    SigmaFormInputComponent,
-    SigmaFormNumberComponent,
-    SigmaFormCalendarComponent,
-    SigmaFormAutocompleteComponent,
-    SigmaFormUploadFileComponent,
     SafeResourceUrl,
-    SigmaMantenimientoRecordsComponent,
-    SigmaActividadDocumentosListComponent,
-    VisorMapaComponent,
-    GridMantenimientosComponent,
-    SeleccionTransicionComponent,
-    SigmaSumatoriasComponent,
-    FotoDiagnosticoPkComponent,
+    /*
+    SigmaInputComponent,
+    SigmaFormInputComponent,
+    SigmaAutocompleteComponent,
+    SigmaFormAutocompleteComponent,
     SigmaSendMailComponent,
-    ObjectFormComponent,
-    ArrayTableComponent,
-    SigmaChartTableroControlSigComponent,
-    SigmaFormTextareaComponent,
-    SigmaFormWebcamComponent
+    SigmaFormEmailComponent,
+    SigmaSelectComponent,
+    SigmaFormSelectComponent,*/
   ],
+  declarations: [
+    NotFoundComponent,
+    NotAccessComponent,
+    SafeResourceUrl,
+  ],
+  /*
   declarations: [
     SigmaListComponent,
     SigmaConfirmComponent,
@@ -299,7 +280,7 @@ import { WebcamModule } from 'ngx-webcam';
     { provide: OwlDateTimeIntl, useClass: DefaultIntl },
     ScheduleComponent,
     MailService
-  ]
+  ]*/
 })
 
 export class SharedModule { }

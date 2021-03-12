@@ -25,7 +25,7 @@ export class DashboardHomeComponent implements OnInit {
     private appSettings: AppSettings,
     private router: Router,
   ) {
-    const widgets_url_service = this.appSettings.settings.hostApi + '/api/administracion/widget/';
+    /*const widgets_url_service = this.appSettings.settings.hostApi + '/api/administracion/widget/';
     this.componente = [];
     this.http.get(widgets_url_service)
       .subscribe((arg: any) => {
@@ -33,16 +33,17 @@ export class DashboardHomeComponent implements OnInit {
           return { ...item, ...this.interna_externa(item.url), ...{ render: true } };
         });
       });
+    */
   }
 
   /** Método encargado de inicializar el componente */
   ngOnInit() {
-    this.componente = this.componente.map((item: any) => {
+    /*this.componente = this.componente.map((item: any) => {
       return { ...item, ...this.interna_externa(item.url) }
-    });
+    });*/
   }
 
-  /** Método encargado de redireccionar a la página correspondiente 
+  /** Método encargado de redireccionar a la página correspondiente
    * del item seleccionado
    * @param item objeto item seleccionado
   */
@@ -68,7 +69,7 @@ export class DashboardHomeComponent implements OnInit {
     };
   }
 
-  /** Método encargado de recibir URL de Items y retornar el tipo 
+  /** Método encargado de recibir URL de Items y retornar el tipo
    * 'externa' o 'interna'
    * @param path objeto con tiene ruta URL
   */

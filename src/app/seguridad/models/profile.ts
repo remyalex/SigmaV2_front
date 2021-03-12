@@ -11,7 +11,7 @@ export class Profile {
 export class Profile {
     id: number;
     identificacion: string;
-    nombres: string;
+    nombre: string;
     apellidos: string;
     usuario: string;
     correo: string;

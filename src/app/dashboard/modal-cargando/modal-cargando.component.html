@@ -1,0 +1,25 @@
+<span></span>
+<app-modalr [titulo]="'Cargando'" (cerrar)="cerrarModalEvt()" *ngIf="mostrarModal" >
+  <b>Estamos procesando su solicitud</b>
+
+  <mat-card>
+    <mat-card-content>
+      <h2 *ngIf = "!progreso"class="example-h2">Procesando</h2>
+      <h2 *ngIf = "progreso && porcentajeProgreso < 100">Subiendo</h2>
+      <h3 *ngIf = "progreso && porcentajeProgreso >= 100">Esperando respuesta <img  src="assets/Loading_icon.gif" width="25" height="25">	</h3>
+      <div class = "contenedor-spinner">
+        <mat-progress-spinner
+          [color]="primary"
+          [mode]="progreso?'determinate':'indeterminate'"
+          [value]="porcentajeProgreso">
+        </mat-progress-spinner>
+        <h2 class="txt-porcentaje-progreso" *ngIf = "progreso">
+          {{porcentajeProgreso | number:'1.0-0'}}%
+        </h2>
+      </div>
+
+    </mat-card-content>
+
+  </mat-card>
+
+</app-modalr>

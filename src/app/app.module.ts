@@ -31,7 +31,7 @@ import { AppLayoutComponent } from './_layout/app-layout/app-layout.component';
 import { SiteFooterComponent } from './_layout/site-footer/site-footer.component';
 import { SiteHeaderComponent } from './_layout/site-header/site-header.component';
 import { SiteLayoutComponent } from './_layout/site-layout/site-layout.component';
-import { AdministracionModule } from './administracion/administracion.module';
+//import { AdministracionModule } from './administracion/administracion.module';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { SiteModule } from './site/site.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -46,13 +46,14 @@ import { CalendarModule } from 'angular-calendar';
 import { LoaderComponent } from './shared/component/loader/loader.component';
 import { LoaderService } from './shared/component/loader/loader.service';
 import { LoaderInterceptor } from './shared/component/loader/loader.interceptor';
+import { MatTableModule, MatSortModule } from '@angular/material';
+import { PanelMenuModule } from 'primeng/panelmenu';
+/*
 import { MejoramientoModule } from './mejoramiento/mejoramiento.module';
 import { WorkflowModule } from './workflow/workflow.module';
 import { ProduccionModule } from './produccion/produccion.module';
 import { GestionSocialModule } from './gestion-social/gestion-social.module';
-import { MatTableModule, MatSortModule } from '@angular/material';
-import { PanelMenuModule } from 'primeng/panelmenu';
-
+*/
 @NgModule({
   declarations: [
     AppComponent,
@@ -68,7 +69,7 @@ import { PanelMenuModule } from 'primeng/panelmenu';
     SiteFooterComponent,
     SiteHeaderComponent,
     SiteLayoutComponent,
-    LoaderComponent,
+    LoaderComponent
   ],
   imports: [
     AppRoutingModule,
@@ -84,12 +85,12 @@ import { PanelMenuModule } from 'primeng/panelmenu';
     SiteModule,
     SharedModule,
     SeguridadModule,
-    AdministracionModule,
+    //AdministracionModule,
     DashboardModule,
-    MejoramientoModule,
-    ProduccionModule,
-    GestionSocialModule,
-    WorkflowModule,
+    //MejoramientoModule,
+    //ProduccionModule,
+    //GestionSocialModule,
+    //WorkflowModule,
     CalendarModule.forRoot(),
     PanelMenuModule
   ],

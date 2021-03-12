@@ -1,0 +1,32 @@
+Unused dependencies
+* @agm/core
+* @types/arcgis-js-api
+* @types/vis
+* hammerjs
+* html2canvas
+* leaflet-map
+* ng-chartjs
+* ng2-dragula
+* ngx-pagination
+* ngx-quill
+* primeicons
+* quill
+* react
+* react-dom
+* rxjs-compat
+* tslib
+Unused devDependencies
+* @angular/compiler-cli
+* @angular/language-service
+* @types/jasmine
+* @types/jasminewd2
+Missing dependencies
+* src: ./src/app/app.settings.ts
+* mixins: ./src/app/theme/styles/_rtl.scss
+* menu-level-padding: ./src/app/theme/styles/_rtl.scss
+* variables: ./src/app/theme/styles/_theme-reset.scss
+* theme-reset: ./src/app/theme/styles/_theme-reset.scss
+* mat-core: ./src/app/theme/styles/_theme.scss
+* skins: ./src/app/theme/styles/_theme.scss
+* angular-material-theme: ./src/app/theme/styles/_theme.scss
+* calendar-utils: ./src/app/administracion/personadisponibilidad/personadisponibilidad-edit/personadisponibilidad-edit.component.ts

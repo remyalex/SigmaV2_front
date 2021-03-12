@@ -1,0 +1,179 @@
+<mat-accordion>
+  <mat-expansion-panel #seccionEncabezado>
+      <mat-expansion-panel-header>
+          <mat-panel-title class="field-min-width">
+              Encabezado
+          </mat-panel-title>
+          <mat-panel-description>
+              <a class="botonPdf" type="button" mat-icon-button color="primary" (click)="verReporte()">
+                  <mat-icon aria-label="VER REPORTE PDF" >picture_as_pdf</mat-icon>
+              </a>
+          </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <mat-form-field class="field-min-width" floatLabel="always">
+          <mat-select placeholder="Localidad" #localidad id="localidad" name="localidad" [(ngModel)]="solMantenimientoVial.idLocalidad"
+              disabled>
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let localidadVal of localidades" [value]="localidadVal.idTipo">
+                  {{localidadVal.valor}} - {{localidadVal.descripcion | primeraMayuscula}}
+              </mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="field-min-width" floatLabel="always">
+          <mat-select placeholder="UPZ" #upz id="upz" name="upz" [(ngModel)]="solMantenimientoVial.idUpz" disabled>
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let upzVal of upzs" [value]="upzVal.idTipo">
+                  {{upzVal.valor}} - {{upzVal.descripcion | primeraMayuscula}}
+              </mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="field-min-width" floatLabel="always">
+          <mat-select placeholder="Barrio" #barrio id="barrio" name="barrio" [(ngModel)]="solMantenimientoVial.idBarrio" disabled>
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let barrioVal of barrios" [value]="barrioVal.idTipo">
+                  {{barrioVal.valor}} - {{barrioVal.descripcion | primeraMayuscula}}
+              </mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="field-min-width" floatLabel="always">
+          <input matInput placeholder="CIV" #barrio id="civ" name="civ" [(ngModel)]="solMantenimientoVial.civ" disabled>
+      </mat-form-field>
+
+      <mat-form-field class="field-min-width" floatLabel="always">
+          <input matInput placeholder="PK ID" #barrio id="pkid" name="pkid" [(ngModel)]="solMantenimientoVial.pkIdCalzada" disabled>
+      </mat-form-field>
+
+      <mat-form-field class="field-min-width" floatLabel="always">
+          <input matInput placeholder="Eje vial" #ejeVial id="ejeVial" name="ejeVial" [(ngModel)]="solMantenimientoVial.ejeVial" disabled>
+      </mat-form-field>
+
+      <mat-form-field class="field-min-width" floatLabel="always">
+          <input matInput placeholder="Desde" #ejeVialDesde id="ejeVialDesde" name="ejeVialDesde" [(ngModel)]="solMantenimientoVial.desde" disabled>
+      </mat-form-field>
+
+      <mat-form-field class="field-min-width" floatLabel="always">
+              <input matInput placeholder="Hasta" #ejeVialHasta id="ejeVialHasta" name="ejeVialHasta" [(ngModel)]="solMantenimientoVial.hasta" disabled>
+      </mat-form-field>
+
+      <mat-form-field class="field-min-width" floatLabel="always">
+          <mat-select placeholder="Zona EAB-ESP" #zonaEabEsp id="zonaEabEsp" name="zonaEabEsp" [(ngModel)]="solMantenimientoVial.idZonaEabEsp"
+              disabled>
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let zonaEABVal of zonasEAB" [value]="zonaEABVal.idTipo">
+                  {{zonaEABVal.valor}} - {{zonaEABVal.descripcion}}
+              </mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="field-min-width" floatLabel="always">
+          <input matInput placeholder="Fecha visita" #fechaVisitaTecnica id="fechaVisitaTecnica" name="fechaVisitaTecnica" [ngModel]="solMantenimientoVial.fechaVisitaTecnica | date: 'dd/MM/yyyy'"
+              disabled>
+      </mat-form-field>
+
+      <mat-form-field class="field-min-width" floatLabel="always">
+          <mat-select placeholder="Sección vial" #tipoSeccionVial id="tipoSeccionVial" name="tipoSeccionVial" [(ngModel)]="solMantenimientoVial.idTipoSeccionVial"
+              disabled>
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let tipoSeccionVialVal of tiposSeccionVial" [value]="tipoSeccionVialVal.idTipo">
+                  {{tipoSeccionVialVal.valor}} - {{tipoSeccionVialVal.descripcion | primeraMayuscula}}
+              </mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="field-min-width" floatLabel="always">
+          <input matInput placeholder="Solicitud / Fecha" #solicitudFecha id="solicitudFecha" name="solicitudFecha" [ngModel]="solMantenimientoVial.solicitudFecha| date: 'dd/MM/yyyy'"
+              disabled>
+      </mat-form-field>
+
+      <mat-form-field class="field-min-width" floatLabel="always">
+          <mat-select placeholder="Origen" #origen id="origen" name="origen" [(ngModel)]="solMantenimientoVial.idTipoOrigen" disabled>
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let tipoOrigenVal of tiposOrigen" [value]="tipoOrigenVal.idTipo">
+                  {{tipoOrigenVal.valor}} - {{tipoOrigenVal.descripcion | primeraMayuscula}}
+              </mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="field-min-width" floatLabel="always">
+          <mat-select placeholder="Uso de la Vía" #usoVial id="usoVial" name="usoVial" [(ngModel)]="solMantenimientoVial.idTipoUsoVia"
+              disabled>
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let usoVia of usosVia" [value]="usoVia.idTipo">
+                  {{usoVia.valor}} - {{usoVia.descripcion | primeraMayuscula}}
+              </mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="field-min-width" floatLabel="always">
+          <mat-select placeholder="Tipo malla vial" #tipoMallaVial id="tipoMallaVial" name="tipoMallaVial" [(ngModel)]="solMantenimientoVial.idTipoMalla"
+          disabled>
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let tipoMalla of tiposMalla" [value]="tipoMalla.idTipo">
+                  {{tipoMalla.valor}}
+              </mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="field-min-width" floatLabel="always">
+          <mat-select placeholder="¿Tiene rutas de transporte?" #usoVial id="rutasTransporte" name="rutasTransporte" [(ngModel)]="solMantenimientoVial.rutasTransporte"
+              disabled>
+              <mat-option>--</mat-option>
+              <mat-option value="SI">Si</mat-option>
+              <mat-option value="NO">No</mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="field-min-width" floatLabel="always">
+          <mat-select placeholder="Transitabilidad" #usoVial id="idTipoTransitabilidad" name="idTipoTransitabilidad" [(ngModel)]="solMantenimientoVial.idTipoTransitabilidad"
+              disabled>
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let transitabilidad of transitabilidadValores" [value]="transitabilidad.idTipo">
+                  {{transitabilidad.valor}} - {{transitabilidad.descripcion | primeraMayuscula}}
+              </mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="field-min-width" floatLabel="always">
+          <input matInput placeholder="Área(m2)" #areapk="ngModel" id="areapk" [name]="areapk" [(ngModel)]="solMantenimientoVial.areaPk"
+              disabled>
+
+      </mat-form-field>
+
+      <mat-form-field class="field-min-width" floatLabel="always">
+          <input matInput placeholder="Ancho(m)" #anchoPk id="anchoPk" name="anchoPk" [(ngModel)]="solMantenimientoVial.anchoPk" disabled>
+      </mat-form-field>
+
+      <mat-form-field class="field-min-width" floatLabel="always">
+          <mat-select placeholder="Programa" #programa id="programa" name="programa" [(ngModel)]="solMantenimientoVial.idTipoPrograma"
+              disabled>
+              <mat-option>--</mat-option>
+              <mat-option *ngFor="let programa of programas" [value]="programa.idTipo">
+                  {{programa.valor}} - {{programa.descripcion | primeraMayuscula}}
+              </mat-option>
+          </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="field-min-width" floatLabel="always">
+      <mat-select placeholder="Tipo superficie" #tiposuperficie id="tipoSuperficie" name="tipoSuperficie" [(ngModel)]="solMantenimientoVial.idTipoSuperficie" disabled>
+          <mat-option>--</mat-option>
+          <mat-option *ngFor="let tipoSuperficie of tiposSuperficieMantenimientoVial" [value]="tipoSuperficie.idTipo">
+              {{tipoSuperficie.valor}} - {{tipoSuperficie.descripcion}}
+          </mat-option>
+      </mat-select>
+      </mat-form-field>
+
+
+      <mat-form-field class="field-min-width" floatLabel="always">
+          <input matInput placeholder="PCI" #PCI id="pci" name="pci" [(ngModel)]="solMantenimientoVial.pci" disabled>
+      </mat-form-field>
+
+      <mat-form-field class="field-min-width" floatLabel="always">
+          <input matInput placeholder="Índice priorización" #indicePriorizacion id="indicePriorizacion" name="anchoPk" [(ngModel)]="solMantenimientoVial.indicePriorizacion" disabled>
+      </mat-form-field>
+
+  <mat-accordion>
+    

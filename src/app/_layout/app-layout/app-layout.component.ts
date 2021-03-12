@@ -43,13 +43,13 @@ export class AppLayoutComponent implements OnInit, AfterViewInit {
   }
 
   /** Método encargado de inicializar el componente */
-  ngOnInit() { 
-    this.getCapas();
+  ngOnInit() {
+    //this.getCapas();
   }
   ngAfterViewInit() {
     setTimeout(() => {
       this.settings.loadingSpinner = false;
-      this.verificaVisibilidadMapa();
+      //this.verificaVisibilidadMapa();
     }, 5000);
   }
 

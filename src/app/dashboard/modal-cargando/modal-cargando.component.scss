@@ -1,0 +1,10 @@
+.contenedor-spinner{
+    position: relative;
+    display: inline-block;
+}
+.txt-porcentaje-progreso{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%)
+}

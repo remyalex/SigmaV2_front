@@ -1,0 +1,44 @@
+
+<app-modalr [titulo]="'Autoprogramar diagnóstico'" (cerrar)="autoprogPK()" (cancel)="cancelarAutoprog()" *ngIf="solMant" [btnOk]="mostrarBotonOk()"
+    [btnCancel]="true">
+    <app-modal-cargando #modalCargando></app-modal-cargando>
+
+    <ul>
+        <li *ngIf="pkAutoprogamable && !pkFueraRango">
+            <b>Seguro desea cargar diagnóstico del PK: {{solMant.pkIdCalzada}} a su asignación?</b>
+            <ul>
+                <li>
+                    <span>CIV:</span> {{solMant.civ}}
+                </li>
+                <li>
+                    <span>Eje vial:</span> {{solMant.ejeVial}}
+                </li>
+                <li>
+                    <span>Desde:</span> {{solMant.desde}}
+                </li>
+                <li>
+                    <span>Hasta:</span> {{solMant.hasta}}
+                </li>
+                <li>
+                    <mat-divider></mat-divider>
+                    <mat-select placeholder="Origen" #origen id="origen" name="origen" [(ngModel)]="tipoOrigenSeleccionado">
+                        <mat-option>--</mat-option>
+                        <mat-option *ngFor="let tipoOrigenVal of tiposOrigenFiltrado" [value]="tipoOrigenVal.idTipo">
+                            {{tipoOrigenVal.valor}} - {{tipoOrigenVal.descripcion | titlecase}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-divider></mat-divider>
+                </li>
+                <!--li [hidden]="tipoOrigenSeleccionado!=371">
+                    <app-buscar-radicado #buscarRadicado [tipoRad]="tipoRad"></app-buscar-radicado>
+                </li-->
+            </ul>
+        </li>
+        <li *ngIf="!pkAutoprogamable || pkFueraRango">
+            <b *ngIf="!pkAutoprogamable">El PKs {{solMant.pkIdCalzada}} tiene una gestión en curso.</b>
+            <br/>
+            <b *ngIf="pkFueraRango">El PKs {{solMant.pkIdCalzada}} esta fuera de su rango de Localidad.</b>
+        </li>
+    </ul>
+</app-modalr>
+<div #mapViewNode></div>

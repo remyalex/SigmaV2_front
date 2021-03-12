@@ -1,0 +1,32 @@
+.field-full-width {
+  width: 100%;
+}
+.field-min-width {
+  min-width: 150px;
+  max-width: 350px;
+width: 100%;
+}
+
+@media only screen and (max-width: 500px) {
+
+	.contenedorIntervTotal{
+    left: unset!important;
+    margin-left: unset!important;
+
+	}
+
+}
+
+.contenedorIntervTotal{
+  position: relative;
+  left:50%;
+  margin-left: -25%
+}
+
+.title-area {
+
+  background: #fff none repeat scroll 0 0;
+  box-shadow: 1px 0 3px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  margin: 24px;
+}

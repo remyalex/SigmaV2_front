@@ -100,6 +100,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
             json:JSON.stringify({
               "idUsuario": data.body.respuesta[0].id_usuario,
               "usuario": data.body.respuesta[0].login,
+              "sistema":10001,
               "menu":{"idMenu":1}
             }),
             url: "http://129.213.171.5:8080/Caliope-backend/api/menu/listarMenuUsuarioT"
